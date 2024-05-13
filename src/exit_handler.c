@@ -1,23 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstadd_front_bonus.c                            :+:      :+:    :+:   */
+/*   exit_handler.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/14 11:19:03 by fdessoy-          #+#    #+#             */
-/*   Updated: 2023/11/14 11:19:06 by fdessoy-         ###   ########.fr       */
+/*   Created: 2024/05/13 13:49:55 by fdessoy-          #+#    #+#             */
+/*   Updated: 2024/05/13 14:43:50 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
-void	ft_lstadd_front(t_list **lst, t_list *new)
+void	error_exit(int num)
 {
-	if (lst)
-	{
-		if (*lst)
-			new -> next = *lst;
-		*lst = new;
-	}
+	if (num == 1)
+		ft_putstr_fd(ERR, 2);
+	else if (num == 69)
+		ft_putstr_fd(EXIT, 2);
+	exit(1);
 }
+
+// // this is the error handler for allocations later
+// void	error_alloc(char **array, int num)

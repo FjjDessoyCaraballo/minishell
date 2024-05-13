@@ -14,7 +14,7 @@ CFLAGS = -Wall -Wextra -Werror -g -I${HOME}/.brew/opt/readline/include
 INCFLAGS = -Iincludes -Ilibft/includes
 
 # Main project files
-SRC_FILES = main.c
+SRC_FILES = main.c exit_handler.c init.c line_handler.c
 
 # Object files
 OBJ_FILES = $(SRC_FILES:.c=.o)

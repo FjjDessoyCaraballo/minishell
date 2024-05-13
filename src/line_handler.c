@@ -1,29 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   line_handler.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/13 10:12:51 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/05/13 15:12:38 by fdessoy-         ###   ########.fr       */
+/*   Created: 2024/05/13 12:23:49 by fdessoy-          #+#    #+#             */
+/*   Updated: 2024/05/13 13:52:07 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int main(int argc, char **argv, char **env)
+// readline malloc's a new buffer every time.
+void	sniff_line(t_data *data)
 {
-	t_data	data;
-	
-	(void)argv;
-	initializer(&data, env);
-	if (argc == 1)
-	{
-		while (666)
-			sniff_line(&data);
-	}
-	else
-		ft_putstr_fd(ERR_ARG, 2);
-	return (0);
+	data->line_read = readline("[My heart shell go on] ");
+	if (!data->line_read)
+		error_exit(69);
+	if (data->line_read || *data->line_read)
+		add_history(data->line_read);
 }
