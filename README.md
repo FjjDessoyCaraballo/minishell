@@ -1,5 +1,7 @@
 # minishell
 
+
+## instructions for branching
 1. git clone repo
 2. git checkout -b 'BranchName'
 3. git status
