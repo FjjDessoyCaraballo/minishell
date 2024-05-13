@@ -58,7 +58,7 @@ SRC =	ft_bzero.c\
 		ft_str.c\
 		ft_unsig_nbr.c\
 		get_next_line.c\
-		get_next_line_utils.c
+		get_next_line_utils.c\
 
 
 CFLAGS = -Wall -Wextra  -MMD -g #-Werror

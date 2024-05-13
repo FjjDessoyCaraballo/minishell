@@ -1,4 +1,3 @@
-# Compiler
 CC = cc
 
 #Directories
@@ -7,8 +6,11 @@ OBJ_DIR = obj
 LIBFT_DIR = libft
 VPATH = src:libft:includes
 
+# Readline flags
+O_FLAGS = -lreadline -L${HOME}/.brew/opt/readline/lib
+
 # Compiler flags
-CFLAGS = -Wall -Wextra -Werror -g
+CFLAGS = -Wall -Wextra -Werror -g -I${HOME}/.brew/opt/readline/include
 INCFLAGS = -Iincludes -Ilibft/includes
 
 # Main project files
@@ -33,7 +35,7 @@ all: $(NAME)
 	$(CC) $(CFLAGS) $(INCFLAGS) $(LIBFT_INC) -g -c $< -o $@
 
 $(NAME): $(OBJ_FILES) $(LIBFT)
-	$(CC) $(CFLAGS) $(OBJ_FILES) $(LIBFT_LINK) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJ_FILES) $(LIBFT_LINK) -o $(NAME) $(O_FLAGS)
 	@echo "\033[1;33m[✔] Compiling push_swap...\033[0m"
 
 $(LIBFT): $(LIBFT_MAKEFILE)
