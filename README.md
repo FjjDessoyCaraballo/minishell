@@ -2,7 +2,7 @@
 
 
 ## instructions for branching
-1. git clone repo
+```1. git clone repo
 2. git checkout -b 'BranchName'
 3. git status
 4. git add (files)
@@ -13,3 +13,4 @@
 9. git merge BranchName
 10. git push
 11. git checkout BranchName
+```
