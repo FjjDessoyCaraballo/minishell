@@ -10,11 +10,11 @@ VPATH = src:libft:includes
 O_FLAGS = -lreadline -L${HOME}/.brew/opt/readline/lib
 
 # Compiler flags
-CFLAGS = -Wall -Wextra -Werror -g -I${HOME}/.brew/opt/readline/include
+CFLAGS = -Wall -Wextra -Werror -I${HOME}/.brew/opt/readline/include -g #-fsanitize=address
 INCFLAGS = -Iincludes -Ilibft/includes
 
 # Main project files
-SRC_FILES = main.c exit_handler.c init.c line_handler.c
+SRC_FILES = main.c exit_handler.c init.c line_handler.c ll_utils.c
 
 # Object files
 OBJ_FILES = $(SRC_FILES:.c=.o)
