@@ -39,4 +39,13 @@ This project is meant to replicate some basic core parts of bash shell.
 2. Made the headerfile minishell.h. Added some structs that will definitely change throughout the project.
 3. Currently the project is/was able to initialize the readline() without any extra functionalities.
 4. In total, four files have been added: init.c, exit_handler.c, line_handler.c, and main.c. Project had to come a halt because copying the env into a linked list became a bit troublesome.
+
+14.05.2024
+1. Extracted envp into a linked list, now all elements of the envp are accessible and easily managed for the future while still mantaining the original envp.
+2. Extracted the binaries folders path to a variable in the t_data struct into the char pointer bin. This will be useful later when looking for executable binaries and trying to pipe them.
+
+15.05.2024
+1. Added built-ins: env and pwd. Right now the lines are not being parsed, so there cannot be spaces before the instructions. There is urgent need to parse the line extracted by readline().
+2. ENV is properly printing the envp into the STDOUT. During the parsing it might be neccessary to parse out empty spaces.
+3. PWD is being printed into the STDOUT. During the parsing it might be neccessary to parse out the empty spaces.
 ```

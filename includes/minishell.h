@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/05/14 16:41:08 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/05/15 14:44:16 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,7 @@
 # define ERR "Error\n"
 # define EXIT "Exit\n"
 # define ERR_ARG "Wrong number of arguments, Karen\n"
-# define BRAZIL "\e[1;32m[B\e[1;33mR\e[1;34mA\e[1;32mZ\e[1;33mI\e[1;34mL \e[1;32mS\e[1;33mH\e[1;34mE\e[1;32mL\e[1;33mL] "
-
+# define PATH_MAX 1024
 
 /*************************************************/
 /* structs ***************************************/
@@ -55,6 +54,7 @@ typedef struct s_data
 	int		exit_status;
 	int		pipe;
 	char	*bin;
+	int		dummy;
 	// need to insert pids, tokens, and commands
 	char	*line_read;
 	t_env	*envll;
@@ -78,14 +78,16 @@ void	error_exit(int num);
 
 /* in line_handler.c */
 int		sniff_line(t_data *data);
-// int		line_parsing(t_data *data, char *line);
+// int		line_parsing(t_data *data, char *line); // future parsing
 
 /* in ll_utils.c */
 t_env	*ft_listnew(void *content);
 void	ft_listadd_back(t_env **lst, t_env *new);
 t_env	*ft_list_last(t_env *lst);
 
-/* printers.c */
-void	print_env(t_env **env_ll); // DELETE FOR THE LOVE OF GOD
+/* in built_ins.c */
+void	built_ins(t_data *data, t_env *env_ll);
+void	print_env(t_env *env_ll);
+void	print_pwd(t_env *env_ll);
 
 #endif
