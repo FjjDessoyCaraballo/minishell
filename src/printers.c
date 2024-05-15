@@ -1,38 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   printers.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/13 10:12:51 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/05/14 15:53:12 by fdessoy-         ###   ########.fr       */
+/*   Created: 2024/05/14 15:03:23 by fdessoy-          #+#    #+#             */
+/*   Updated: 2024/05/14 15:04:07 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int main(int argc, char **argv, char **env)
+void	print_env(t_env **env_ll)
 {
-	t_data	data;
-	t_env	*env_ll;
-	
-	(void)argv;
-	env_ll = NULL;
-	initializer(&data, &env_ll, env);
-	ft_printf("%s", data.bin);
-	if (argc == 1)
+	t_env	*tmp;
+
+	tmp = *env_ll;
+	while (tmp)
 	{
-		while (666)
-		{
-			if (sniff_line(&data) == 0)
-			{
-				printf("exit\n");
-				break ;
-			}
-		}
+		ft_printf("%s\n", tmp->content);
+		tmp = tmp->next;
 	}
-	else
-		ft_putstr_fd(ERR_ARG, 2);
-	return (0);
 }

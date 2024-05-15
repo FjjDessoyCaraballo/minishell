@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 09:30:58 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/05/14 10:39:09 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/05/14 13:19:44 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ t_env	*ft_listnew(void *content)
 {
 	t_env	*node;
 
-	
 	node = (t_env *)malloc(sizeof(t_env));
 	if (!node)
 		return (NULL);
