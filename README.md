@@ -48,4 +48,8 @@ This project is meant to replicate some basic core parts of bash shell.
 1. Added built-ins: env and pwd. Right now the lines are not being parsed, so there cannot be spaces before the instructions. There is urgent need to parse the line extracted by readline().
 2. ENV is properly printing the envp into the STDOUT. During the parsing it might be neccessary to parse out empty spaces.
 3. PWD is being printed into the STDOUT. During the parsing it might be neccessary to parse out the empty spaces.
+
+17.05.2024
+1. Added built-ins: exit. It frees the linked list and exits. Functions responsible for it is called get_the_hell_out() in built_ins.c.
+2. 
 ```
