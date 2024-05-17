@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 09:30:58 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/05/14 13:19:44 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/05/17 16:10:38 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,4 +49,16 @@ t_env	*ft_list_last(t_env *lst)
 		lst = lst->next;
 	}
 	return (lst);
+}
+
+void	free_ll(t_env *env_ll)
+{
+	t_env	*tmp;
+	
+	while (env_ll != NULL)
+	{
+		tmp = env_ll;
+		env_ll = env_ll->next;
+		free(tmp);
+	}
 }

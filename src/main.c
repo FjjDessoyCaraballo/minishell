@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:12:51 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/05/15 14:18:13 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/05/17 16:23:10 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ int main(int argc, char **argv, char **env)
 	(void)argv;
 	env_ll = NULL;
 	initializer(&data, &env_ll, env);
-	// ft_printf("%s", data.bin);
 	if (argc == 1)
 	{
 		while (666)
