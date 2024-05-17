@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 14:18:24 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/05/17 16:22:21 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/05/17 18:18:23 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ void	built_ins(t_data *data, t_env *env_ll)
 		print_pwd(env_ll);
 	if (!ft_strncmp(data->line_read, "exit", 4))
 		get_the_hell_out(env_ll);
+	if (!ft_strncmp(data->line_read, "echo", 4))
+		yodeling(data->line_read);
 	else
 		return ;
 }
@@ -60,4 +62,13 @@ void	get_the_hell_out(t_env *env_ll)
 {
 	free_ll(env_ll);
 	exit(0);
+}
+/* this one will likely change after tokenization */
+/* echo -n has an extra space in the output. Needs fixing.*/
+void	yodeling(char *echoes)
+{
+	if (!ft_strncmp(echoes, "echo -n", 7))
+		ft_printf("%s", echoes + 7);
+	else
+		ft_printf("%s\n", echoes + 5);
 }
