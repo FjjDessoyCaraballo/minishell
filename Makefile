@@ -15,7 +15,7 @@ INCFLAGS = -Iincludes -Ilibft/includes
 
 # Main project files
 SRC_FILES = main.c exit_handler.c init.c line_handler.c ll_utils.c\
-			built_ins.c
+			built_ins.c built_ins2.c
 
 # Object files
 OBJ_FILES = $(SRC_FILES:.c=.o)

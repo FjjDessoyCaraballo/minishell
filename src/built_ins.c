@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 14:18:24 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/05/17 18:18:23 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/05/17 19:08:14 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,10 +65,31 @@ void	get_the_hell_out(t_env *env_ll)
 }
 /* this one will likely change after tokenization */
 /* echo -n has an extra space in the output. Needs fixing.*/
+/* TEMPORARY FIX: splitting echo with flag */
+/* The temporary fix looks too good, can we keep it? */
+/* altho it needs to handle spaces at the end of strings */
 void	yodeling(char *echoes)
 {
+	static char	**echo_nnl = NULL;
+	int			i;
+	int			flag = 0;
+/*we should make a flag for whenever we have whitespace at the
+end of the string. Otherwise we are printing everything with the
+white space missing.*/
+	
+	i = 0;
 	if (!ft_strncmp(echoes, "echo -n", 7))
-		ft_printf("%s", echoes + 7);
+	{
+		echo_nnl = ft_split(echoes, ' ');
+		while (echo_nnl[i + 2])
+		{
+			ft_printf("%s", echo_nnl[i + 2]);
+			if (echo_nnl[i + 3] != NULL)
+				ft_printf(" ");	
+			i++;
+		}
+		free_array(echo_nnl);
+	}
 	else
 		ft_printf("%s\n", echoes + 5);
 }
