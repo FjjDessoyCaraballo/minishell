@@ -16,6 +16,8 @@ This project is meant to replicate some basic core parts of bash shell.
 - 42-profile: [https://profile.intra.42.fr/users/fdessoy-](https://profile.intra.42.fr/users/fdessoy-)
 
 ## Instructions for branching
+ALWAYS remember to pull from main to have the latest version of minishell before continuing your work. At the same time, always remember to only push to main directory when the program is properly working. AVOID PUSHING FAULTY PROGRAM AT ALL COSTS!
+
 ```1. git clone repo
 2. git checkout -b 'BranchName'
 3. git status
@@ -73,5 +75,5 @@ Week 1 (week 20 of 2024)
 20.05.2024
 1. Fixed the echo command with the no newline flag (-n);
 2. Added a TO DO list in the README;
-3. We have started to learn about branching, but still no progress in 
+3. We have started to learn about branching. We created two different branches to work independently in each branch. Felipe's branch is THICC_BRANCH and Leo's branch is Ginger_branch.
 ```
