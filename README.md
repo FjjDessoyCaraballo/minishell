@@ -29,10 +29,28 @@ This project is meant to replicate some basic core parts of bash shell.
 11. git checkout BranchName
 ```
 
-## Log:
+## TO DO (aka DA PLAN):
+1. Parse the line given to readline()
+	1.1. Turn everything into lowercase;
+	1.2. No whites;
+	1.3. No special characters;
+2. Tokenization;
+3. Built-ins
+	3.1. echo (with -n) DONE;
+	3.2. cd;
+	3.3. pwd DONE;
+	3.4. export;
+	3.5. unset;
+	3.6. env DONE;
+	3.7. exit DONE;
+4. Piping;
+5. Handle $?;
+6. CTRL-C + CTRL-D + CTRL-\;
+7. Environment variables ($ expands values);
 
-```Week 1 (week 20 of 2024)
-
+## Capn' Log:
+```
+Week 1 (week 20 of 2024)
 13.05.2024
 
 1. Made the Makefile. This specific Makefile had to be done differently from other that we previously did, because the readline() package had to be installed using brew.
