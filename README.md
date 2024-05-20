@@ -69,5 +69,9 @@ Week 1 (week 20 of 2024)
 
 17.05.2024
 1. Added built-ins: exit. It frees the linked list and exits. Functions responsible for it is called get_the_hell_out() in built_ins.c.
-2. 
+
+20.05.2024
+1. Fixed the echo command with the no newline flag (-n);
+2. Added a TO DO list in the README;
+3. We have started to learn about branching, but still no progress in 
 ```
