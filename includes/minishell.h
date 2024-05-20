@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/05/17 18:20:53 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/05/20 15:48:37 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@
 /*************************************************/
 typedef struct s_env
 {
+	int				dummy;
 	char			*content;
 	struct s_env	*next;
 	struct s_env	*prev;
@@ -54,6 +55,7 @@ typedef struct s_data
 	int		exit_status;
 	int		pipe;
 	char	*bin;
+	char	*home_pwd;
 	int		dummy;
 	// need to insert pids, tokens, and commands
 	char	*line_read;
@@ -94,6 +96,9 @@ void	get_the_hell_out(t_env *env_ll);
 void	yodeling(char *echoes);
 
 /* in built_ins2.c */
-
+void	shell_cd(t_data *data, t_env *env_ll);
+char	*go_path_or_home(t_data *data, char *path);
+char	*get_home(t_env *env_ll);
+// char	*update_env_cd(t_data *data, t_env *env_ll);
 
 #endif

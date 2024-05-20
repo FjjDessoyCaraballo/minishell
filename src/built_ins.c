@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 14:18:24 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/05/20 10:11:09 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/05/20 14:32:58 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ void	built_ins(t_data *data, t_env *env_ll)
 		get_the_hell_out(env_ll);
 	if (!ft_strncmp(data->line_read, "echo", 4))
 		yodeling(data->line_read);
+	if (!ft_strncmp(data->line_read, "cd", 2))
+		shell_cd(data, env_ll);
 	else
 		return ;
 }
