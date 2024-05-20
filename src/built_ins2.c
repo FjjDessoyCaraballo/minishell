@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 18:20:14 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/05/20 16:17:20 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/05/20 16:57:25 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,21 +21,24 @@ void	shell_cd(t_data *data, t_env *env_ll)
 	if (!data->home_pwd)
 		return ;
 	old_cwd = getcwd(NULL, 0);
-	path = go_path_or_home(data, data->line_read + 3); // probably need to split this one
+	path = data->line_read + 2;
+	go_home(data, path); // probably need to split this one
 	// update_env_cd(data, env_ll);
-	printf("home_pwd: %s\n", data->home_pwd);
-	printf("old_cwd: %s\n", old_cwd);
+	printf("home_pwd:%s\n", data->home_pwd);
+	printf("old_cwd:%s\n", old_cwd);
 	printf("come back later, we are working on it\n");
 }
-char	*go_path_or_home(t_data *data, char *path)
+void	go_home(t_data *data, char *path)
 {
-	data->dummy = 0;
-	if (!ft_strncmp(path, "", 1))
-		return (data->home_pwd);
-	// if (ft_strncmp(path, "..", 2))
-	// 	return 
-	ft_printf("%s\n", path);
-	return (path);
+	int	status = 0;
+	
+	if (!ft_isalnum((*path)))
+		path = NULL;
+	printf("path in go_home:%s\n", path);
+	if (!path)
+		status = chdir(data->home_pwd); // NOT UPDATING SO DONT TRY PWD
+	printf("value of home_pwd:%s\n", data->home_pwd);
+	printf("value of status:%d\n", status);
 }
 
 char	*get_home(t_env *env_ll)
@@ -45,8 +48,8 @@ char	*get_home(t_env *env_ll)
 	tmp = env_ll;
 	while (env_ll->next != NULL)
 	{
-		if (!ft_strncmp(env_ll->content, "OLDPWD=", 7))
-			return (env_ll->content + 7);
+		if (!ft_strncmp(env_ll->content, "HOME=", 5))
+			return (env_ll->content + 5);
 		env_ll = env_ll->next;		
 	}
 	env_ll = tmp;
