@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 14:18:24 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/05/22 14:12:37 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/05/22 16:32:16 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	built_ins(t_data *data, t_env *env_ll)
 	else if (!ft_strncmp(data->line_read, "echo", 4))
 		yodeling(data->line_read);
 	else if (!ft_strncmp(data->line_read, "cd", 2))
-		shell_cd(data, env_ll);
+		shell_cd(data->line_read + 2, data, env_ll);
 	else if (!ft_strncmp(data->line_read, "export", 6))
 		export(data->line_read + 6, env_ll);
 	else
