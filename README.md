@@ -86,5 +86,5 @@ Week 1 (week 20 of 2024)
 22.05.2024
 1. Upon closer inspection to the behavior of the CD built-in, it is not susceptible to changes while unsetting variables from ENV; Therefore, for architectural, integrity, and replication reasons, pwd is being initialized into a variable in the data struct. Check for perm_pwd for a pwd that should be always available;
 2. Apparently, the envp can be unset and should still work with the basic builtins. this may call for two parallel envp's when piping;
-
+3. CD is working with arguments, but now the sole CD is not working;
 ```
