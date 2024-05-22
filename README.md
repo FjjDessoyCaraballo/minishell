@@ -76,4 +76,15 @@ Week 1 (week 20 of 2024)
 1. Fixed the echo command with the no newline flag (-n);
 2. Added a TO DO list in the README;
 3. We have started to learn about branching. We created two different branches to work independently in each branch. Felipe's branch is THICC_BRANCH and Leo's branch is Ginger_branch.
+4. Started working on the command 'cd' and it is working in the basic form: when you input just 'cd', it takes you to the $HOME/home (data->home_pwd). Next step is to update env so PWD will give the actual position and then work to go up and down directories;
+
+21.05.2024
+1. The plan for today is to deliver at least the cd command fully working. The biggest challenge might be making the "cd .." command work;
+2. The solution to "cd .." might rely on concatenation of the current path and deduction the current position and giving back the path until the last (second to last?) backslash;
+3. At the end of the day, cd was unreliable and had to start from scratch;
+
+22.05.2024
+1. Upon closer inspection to the behavior of the CD built-in, it is not susceptible to changes while unsetting variables from ENV; Therefore, for architectural, integrity, and replication reasons, pwd is being initialized into a variable in the data struct. Check for perm_pwd for a pwd that should be always available;
+2. Apparently, the envp can be unset and should still work with the basic builtins. this may call for two parallel envp's when piping;
+
 ```

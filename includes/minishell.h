@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/05/20 16:36:57 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/05/22 14:11:19 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ typedef struct s_data
 	int		exit_status;
 	int		pipe;
 	char	*bin;
+	char	*path;
 	char	*home_pwd;
 	int		dummy;
 	// need to insert pids, tokens, and commands
@@ -84,6 +85,7 @@ int		sniff_line(t_data *data);
 
 /* in ll_utils.c */
 t_env	*ft_listnew(void *content);
+char	*get_home(t_env *env_ll);
 void	ft_listadd_back(t_env **lst, t_env *new);
 t_env	*ft_list_last(t_env *lst);
 void	free_ll(t_env *env_ll);
@@ -91,14 +93,14 @@ void	free_ll(t_env *env_ll);
 /* in built_ins.c */
 void	built_ins(t_data *data, t_env *env_ll);
 void	print_env(t_env *env_ll);
-void	print_pwd(t_env *env_ll);
+void	print_pwd(void);
 void	get_the_hell_out(t_env *env_ll);
 void	yodeling(char *echoes);
 
 /* in built_ins2.c */
 void	shell_cd(t_data *data, t_env *env_ll);
-void	go_home(t_data *data, char *path);
-char	*get_home(t_env *env_ll);
-// char	*update_env_cd(t_data *data, t_env *env_ll);
+char	*get_cwd(t_env *env_ll);
+void	export(char *cargo, t_env *env_ll);
+void	print_export(t_env *env_ll);
 
 #endif

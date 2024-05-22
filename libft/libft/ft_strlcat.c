@@ -3,35 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strlcat.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 11:39:22 by fdessoy-          #+#    #+#             */
-/*   Updated: 2023/11/07 11:57:49 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/05/21 11:22:05 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-
-char	*ft_strncat(char *dest, const char *src, unsigned int nb)
-{
-	unsigned int	i;
-	unsigned int	j;
-
-	i = 0;
-	j = 0;
-	while (dest[i] != '\0')
-	{
-		i++;
-	}
-	while (src[j] != '\0' && j < nb)
-	{
-		dest[i] = src[j];
-		i++;
-		j++;
-	}
-	dest[i] = '\0';
-	return (dest);
-}
 
 size_t	ft_strlcat(char *dst, const char *src, size_t n)
 {

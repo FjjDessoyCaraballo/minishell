@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 09:30:58 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/05/17 16:10:38 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/05/21 11:51:07 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,21 @@ t_env	*ft_listnew(void *content)
 	node->content = content;
 	node->next = NULL;
 	return (node);
+}
+
+char	*get_home(t_env *env_ll)
+{
+	t_env	*tmp;
+
+	tmp = env_ll;
+	while (env_ll->next != NULL)
+	{
+		if (!ft_strncmp(env_ll->content, "HOME=", 5))
+			return (env_ll->content + 5);
+		env_ll = env_ll->next;		
+	}
+	env_ll = tmp;
+	return (NULL);
 }
 
 void	ft_listadd_back(t_env **lst, t_env *new)
