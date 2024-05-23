@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 14:18:24 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/05/22 16:32:16 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/05/23 12:55:41 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	built_ins(t_data *data, t_env *env_ll)
 	else if (!ft_strncmp(data->line_read, "pwd", 3))
 		print_pwd();
 	else if (!ft_strncmp(data->line_read, "exit", 4))
-		get_the_hell_out(env_ll);
+		get_the_hell_out(env_ll, ft_atoi(data->line_read + 5));
 	else if (!ft_strncmp(data->line_read, "echo", 4))
 		yodeling(data->line_read);
 	else if (!ft_strncmp(data->line_read, "cd", 2))
@@ -67,10 +67,10 @@ void	print_pwd(void)
 }
 /* this might need to be updated after we start piping */
 /* when checking for leaks, remember that readline() may leak and its ok*/
-void	get_the_hell_out(t_env *env_ll)
+void	get_the_hell_out(t_env *env_ll, int num)
 {
 	free_ll(env_ll);
-	exit(0);
+	exit(num);
 }
 /* this one will likely change after tokenization */
 void	yodeling(char *echoes)

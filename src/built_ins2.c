@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 18:20:14 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/05/22 16:52:12 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/05/22 16:59:52 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,33 +72,3 @@ void	print_export(t_env *env_ll)
 	}
 	env_ll = tmp;
 }
-// char	*get_cwd(t_env *env_ll)
-// {
-// 	t_env	*tmp;
-
-// 	tmp = env_ll;
-// 	while (env_ll->next != NULL)
-// 	{
-// 		if (!ft_strncmp("PWD=", env_ll->content, 4))
-// 			return (env_ll->content + 4);			
-// 		env_ll = env_ll->next;
-// 	}
-// 	env_ll = tmp;
-// 	return (NULL);
-// }
-	// char	*new_pwd;
-	// char	*old_pwd;
-	
-	// env_ll->dummy = 0;
-	// old_pwd = getcwd(NULL, 0);
-	// new_pwd = data->line_read + 2;
-	// if (!new_pwd[3]) // simple cd no arguments
-	// {
-	// 	if (chdir(data->home_pwd) == -1)
-	// 		ft_putstr_fd(ERR, 2);
-	// 	printf("we've reached home\n");
-	// 	// export(old_pwd);
-	// 	// export(new_pwd);
-	// }
-	// printf("perm_cwd: %s\npath: %s\nline_read: %s\n", old_pwd, new_pwd, data->line_read);
-	// printf("come back later, we are working on it\n");
