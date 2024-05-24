@@ -17,16 +17,17 @@ This project is meant to replicate some basic core parts of bash shell.
 
 ## Instructions for branching
 ```1. git clone repo
-2. git checkout -b 'BranchName'
-3. git status
+2. git checkout 'BranchName' (NB: use -b to create a new branch)
+3. git status (optional)
 4. git add (files)
 5. git commit -m "comment"
-6. git pull origin main
+6. git push (in your branch)
 7. git checkout main
-8. git pull
-9. git merge BranchName
-10. git push
-11. git checkout BranchName
+8. git pull (in main)
+9. git merge 'BranchName'
+10. git commit -m "comment"
+11. git push
+12. git checkout BranchName
 ```
 
 ## TO DO (aka DA PLAN):
