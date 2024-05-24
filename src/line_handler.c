@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 12:23:49 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/05/20 12:21:30 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/05/23 13:37:45 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,3 @@ int	sniff_line(t_data *data)
 		add_history(data->line_read);
 	return (1);
 }
-
-// void		line_parsing(char *line)
-// {
-// 	return ;
-// }

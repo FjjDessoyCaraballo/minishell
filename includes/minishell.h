@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/05/22 16:31:29 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/05/23 13:58:42 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ void	free_ll(t_env *env_ll);
 void	built_ins(t_data *data, t_env *env_ll);
 void	print_env(t_env *env_ll);
 void	print_pwd(void);
-void	get_the_hell_out(t_env *env_ll);
+void	get_the_hell_out(t_env *env_ll, int num);
 void	yodeling(char *echoes);
 
 /* in built_ins2.c */
