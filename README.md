@@ -39,7 +39,7 @@ ALWAYS remember to pull from main to have the latest version of minishell before
 2. Tokenization;
 3. Built-ins
 	3.1. echo (with -n) DONE;
-	3.2. cd;
+	3.2. cd DONE;
 	3.3. pwd DONE;
 	3.4. export;
 	3.5. unset;
