@@ -22,6 +22,7 @@ SRC =	ft_bzero.c\
 		ft_strdup.c\
 		ft_strlcat.c\
 		ft_strlcpy.c\
+		ft_strncat.c\
 		ft_strlen.c\
 		ft_strncmp.c\
 		ft_strnstr.c\
