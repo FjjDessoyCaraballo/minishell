@@ -33,22 +33,22 @@ ALWAYS remember to pull from main to have the latest version of minishell before
 
 ## TO DO (aka DA PLAN):
 1. Parse the line given to readline()
-	1.1. Turn everything into lowercase
-	1.2. No whites
-	1.3. No special characters
-2. Tokenization;
-3. Built-ins
-	3.1. echo (with -n) DONE
-	3.2. cd DONE
-	3.3. pwd DONE
-	3.4. export
-	3.5. unset
-	3.6. env DONE
-	3.7. exit DONE
-4. Piping
-5. Handle $?
-6. CTRL-C + CTRL-D + CTRL-\
-7. Environment variables ($ expands values)
+	- Turn everything into lowercase
+ 	- No whites
+  	- No special characters
+3. Tokenization;
+4. Built-ins
+	- echo (with -n) DONE
+ 	- cd DONE
+	- pwd DONE
+ 	- export
+  	- unset
+   	- env DONE
+   	- exit DONE
+6. Piping
+7. Handle $?
+8. CTRL-C + CTRL-D + CTRL-\
+9. Environment variables ($ expands values)
 
 ## Capn' Log:
 ```
