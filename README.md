@@ -4,8 +4,8 @@
 This project is meant to replicate some basic core parts of bash shell.
 
 ## Usage:
-1. Initialize the program with ```./minishell```;
-2. Utilize the shell as you would use a proper shell.
+1. Initialize the program with ```./minishell```
+2. Utilize the shell as you would use a proper shell
 
 ## Result:
 - Status: <span style="color:red">Incomplete</span>
@@ -33,22 +33,22 @@ ALWAYS remember to pull from main to have the latest version of minishell before
 
 ## TO DO (aka DA PLAN):
 1. Parse the line given to readline()
-	1.1. Turn everything into lowercase;
-	1.2. No whites;
-	1.3. No special characters;
+	1.1. Turn everything into lowercase
+	1.2. No whites
+	1.3. No special characters
 2. Tokenization;
 3. Built-ins
-	3.1. echo (with -n) DONE;
-	3.2. cd DONE;
-	3.3. pwd DONE;
-	3.4. export;
-	3.5. unset;
-	3.6. env DONE;
-	3.7. exit DONE;
-4. Piping;
-5. Handle $?;
-6. CTRL-C + CTRL-D + CTRL-\;
-7. Environment variables ($ expands values);
+	3.1. echo (with -n) DONE
+	3.2. cd DONE
+	3.3. pwd DONE
+	3.4. export
+	3.5. unset
+	3.6. env DONE
+	3.7. exit DONE
+4. Piping
+5. Handle $?
+6. CTRL-C + CTRL-D + CTRL-\
+7. Environment variables ($ expands values)
 
 ## Capn' Log:
 ```
