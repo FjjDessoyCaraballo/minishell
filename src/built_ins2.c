@@ -5,12 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/17 18:20:14 by fdessoy-          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2024/05/22 16:58:16 by fdessoy-         ###   ########.fr       */
-=======
-/*   Updated: 2024/05/23 17:30:06 by fdessoy-         ###   ########.fr       */
->>>>>>> thicc_branch
+/*   Created: 2024/07/08 15:26:27 by fdessoy-          #+#    #+#             */
+/*   Updated: 2024/07/08 15:30:47 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +27,11 @@ void	shell_cd(char *path, t_data *data, t_env *env_ll)
 	env_ll->dummy = 1;
 	data->dummy = 1;
     curr_pwd = getcwd(NULL, 0);
-    if (curr_pwd == NULL)
+    if (!curr_pwd)
+	{
         free(curr_pwd);
+		return ;
+	}
 	path = ft_strtrim(path, "cd ");
 	new_pwd = ft_strsjoin(curr_pwd, path, '/');
 	free(path);
