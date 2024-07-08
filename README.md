@@ -31,24 +31,24 @@ ALWAYS remember to pull from main to have the latest version of minishell before
 11. git checkout BranchName
 ```
 
-## TO DO (aka DA PLAN):
-1. Parse the line given to readline()
+## DA PLAN:
+1. Parse the line given to readline() (Bruno and Leo?)
 	- Turn everything into lowercase
  	- No whites
   	- No special characters
-3. Tokenization;
-4. Built-ins
+3. Tokenization (Waleed)
+4. Built-ins (Felipe)
 	- echo (with -n) DONE
  	- cd DONE
 	- pwd DONE
- 	- export
+ 	- export 1/2 DONE
   	- unset
    	- env DONE
    	- exit DONE
-6. Piping
-7. Handle $?
-8. CTRL-C + CTRL-D + CTRL-\
-9. Environment variables ($ expands values)
+6. Piping (Felipe)
+7. Handle $? (Felipe)
+8. CTRL-C + CTRL-D + CTRL-\ (Bruno or Leo)
+9. Environment variables ($ expands values) (everyone at certain point)
 
 ## Capn' Log:
 ```
@@ -92,4 +92,8 @@ Week 1 (week 20 of 2024)
 
 23.05.2024
 1. Fixed exit and not it takes an integer to represent exit status number. For example, if user inputs 'exit 1', when the user later inputs '$?' it will get that exit number;
+
+08.07.2024
+1. Fixed if statement in built-ins2.c that was not guarding the empty cur_pwd, and now bultin-in returns in case of failure of getcwd();
+2. Assembled team to finally properly quickstart the project. We have divided the work load and agreed on specifics on how to work. There is still a need to go over git commands and properly understand branches before letting everyone to go to work independently;
 ```
