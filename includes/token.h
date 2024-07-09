@@ -1,7 +1,7 @@
 #ifndef TOKEN_H
 # define TOKEN_H
 
-/*****************************************
+/*******************************************
  * enum assign types
  * 0. echo,cd,pwd...
  * 1. PATH=,ls, grep, chmod...
