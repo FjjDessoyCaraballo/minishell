@@ -60,6 +60,7 @@ typedef struct s_data
 	char	*home_pwd;
 	int		dummy;
 	// need to insert pids, tokens, and commands
+	t_token *token;
 	char	*line_read;
 	t_env	*envll;
 }	t_data;
