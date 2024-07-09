@@ -31,11 +31,12 @@ typedef	enum e_type{
  * id = index of the token
  * next = points to the next token
  */
+
 typedef struct s_token{
 	t_type	*type;
 	char	*value;
 	int		id;
-	s_token	*next;
+	struct s_token	*next;
 }		t_token;
 
 # endif
