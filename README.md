@@ -32,6 +32,25 @@ ALWAYS remember to pull from main to have the latest version of minishell before
 ```
 
 ## DA PLAN:
+1. Tokenization (Waleed)
+    - convert input command line into a linked list
+        - built-ins
+            - echo (with -n)
+            - cd
+            - pwd
+            - export
+            - unset
+            - env
+            - exit
+        - commands
+        - arguments
+        - pipe
+        - Redirection Operators
+            - "<"
+            - ">"
+            - "<<"
+            - ">>"
+        - single and double quotes
 1. Parse the line given to readline() (Bruno and Leo?)
 	- Turn everything into lowercase
  	- No whites
