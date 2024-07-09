@@ -18,7 +18,8 @@ This project is meant to replicate some basic core parts of bash shell.
 ## Instructions for branching
 ALWAYS remember to pull from main to have the latest version of minishell before continuing your work. At the same time, always remember to only push to main directory when the program is properly working. AVOID PUSHING FAULTY PROGRAM AT ALL COSTS!
 
-```1. git clone repo
+```
+1. git clone repo
 2. git checkout -b 'BranchName'
 3. git status
 4. git add (files)
