@@ -6,12 +6,14 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 14:18:24 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/05/23 17:30:01 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/10 11:55:26 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/* this whole function is very case sensitive and the pointers given 
+as arguments should be replaced immidiately after tokenization */
 void	built_ins(t_data *data, t_env *env_ll)
 {
 	data->home_pwd = get_home(env_ll);
@@ -27,6 +29,8 @@ void	built_ins(t_data *data, t_env *env_ll)
 		shell_cd(data->line_read, data, env_ll);
 	else if (!ft_strncmp(data->line_read, "export", 6))
 		export(data->line_read + 6, env_ll);
+	else if (!ft_strncmp(data->line_read, "unset", 5))
+		unset(data->line_read + 6, env_ll);
 	else
 		return ;
 }

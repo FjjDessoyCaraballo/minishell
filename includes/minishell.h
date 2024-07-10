@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/05/23 13:58:42 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/10 11:41:29 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,5 +104,6 @@ void	shell_cd(char *path, t_data *data, t_env *env_ll);
 char	*get_cwd(t_env *env_ll);
 void	export(char *cargo, t_env *env_ll);
 void	print_export(t_env *env_ll);
+void	unset(char *str, t_env *env_ll);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 15:26:27 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/08 15:30:47 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/10 11:56:14 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	export(char *cargo, t_env *env_ll)
 		print_export(env_ll);
 }
 // when someone types EXPORT only, it prints all env variables
-// IN ALPHABETICAL ORDER!!! <- still needs to be implemented
+// IN ALPHABETICAL ORDER!!! <- still needs to be implemented (not really necessary)
 void	print_export(t_env *env_ll)
 {
 	t_env	*tmp;
@@ -69,4 +69,29 @@ void	print_export(t_env *env_ll)
 		env_ll = env_ll->next;
 	}
 	env_ll = tmp;
+	tmp = NULL;
+}
+
+/* this function unsets whatever argument given after unset in the command line */
+void	unset(char *str, t_env *env_ll)
+{
+	t_env	*tmp;
+
+	if (!*str)
+		return ;
+	else
+	{
+		tmp = env_ll;
+		while (env_ll->next != NULL)
+		{
+			// printf("str: %s\nenv_ll->content: %s\n", str, env_ll->content);
+			if (!ft_strncmp(str, env_ll->content, ft_strlen(str)))
+			{
+				printf("we arrived into the clause\n");
+			}
+			env_ll = env_ll->next;
+		}
+		env_ll = tmp;
+		tmp = NULL;
+	}
 }
