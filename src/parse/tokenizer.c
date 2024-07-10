@@ -2,7 +2,10 @@
 
 void	ft_builtin_check(char* token)
 {
-	if (ft_strcmp(token,"echo") == 0)
+	if (ft_strcmp(token,"echo") == 0 || ft_strcmp(token, "cd") == 0 ||
+			ft_strcmp(token, "pwd") == 0 || ft_strcmp(token, "export") == 0 ||
+			ft_strcmp(token, "unset") == 0|| ft_strcmp(token, "env") == 0 ||
+			ft_strcmp(token, "exit") == 0)
 		printf("token:[%s]\n", token);
 	/*else if (strcmp(token, "getenv") == 0)
 	{
