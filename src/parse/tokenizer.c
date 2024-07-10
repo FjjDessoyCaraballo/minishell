@@ -4,21 +4,21 @@
 void	ft_builtin_check(char* token)
 {
 	if (strcmp(token,"echo") == 0)
-		printf("found echo!\n");
+		printf("token:%s\n", token);
 	else if (strcmp(token,"cd") == 0)
-		printf("found cd!\n");
+		printf("token:%s\n", token);
 	else if (strcmp(token,"pwd") == 0)
-		printf("found pwd!\n");
+		printf("token:%s\n", token);
 	else if (strcmp(token,"export") == 0)
-		printf("found export!\n");
+		printf("token:%s\n", token);
 	else if (strcmp(token,"unset") == 0)
-		printf("found unset!\n");
+		printf("token:%s\n", token);
 	else if (strcmp(token, "env") == 0)
-		printf("found env!\n");
+		printf("token:%s\n", token);
 	else if (strcmp(token, "exit") == 0)
-		printf("found exit!\n");
+		printf("token:%s\n", token);
 	else if (strcmp(token, "\"") == 0)
-		printf("found \"!\n");
+		printf("token:%s\n", token);
 	else
 		printf("Unknown command :(%s)\n", token);
 }
@@ -51,18 +51,18 @@ char *ft_strtok(char *str, const char *delim)
     // Determine token boundaries
     index = 0;
     while (target[index] && (!ft_charinstr(target[index], delim)))
-        index++;
+		index++;
     token = ft_substr(target, 0, index);
     target += index;
     return token;
 }
 
-void line_tokenization(char *lineread)
+void line_tokenization(t_data *data)
 {
     char *token;
     const char *delimiters = "  \t\n";
 
-    token = ft_strtok(lineread, delimiters);
+    token = ft_strtok(data->line_read, delimiters);
     while (token != NULL)
     {
 		ft_builtin_check(token);// this command print shit, you can comment it
