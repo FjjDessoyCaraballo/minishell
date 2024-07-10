@@ -23,46 +23,6 @@ void	ft_builtin_check(char* token)
 		printf("Unknown command:[%s]\n", token);
 }
 
-int		ft_charinstr(char c,const char *str)
-{
-	while (*str)
-	{
-		if (c == *str)
-			return (1);
-		str++;
-	}
-	return (0);
-}
-
-char *ft_strtok(char *str, const char *delim)
-{
-    static char *target;
-    char *token;
-    int index = 0;
-
-    if (str)
-        target = str; 
-    if (!target || *target == '\0')
-        return NULL;
-
-    // Skip leading delimiters
-    while (*target && ft_charinstr(*target, delim))
-	{
-        target++;
-		if(*target == '\0')
-			return NULL;
-	}
-    // Determine token boundaries
-    index = 0;
-    while (target[index] && (!ft_charinstr(target[index], delim)))
-		index++;
-    token = ft_substr(target, 0, index);
-    target += index;
-	while (*target && ft_charinstr(*target, delim))
-		target++;
-    return token;
-}
-
 void line_tokenization(t_data *data)
 {
     char *token;
