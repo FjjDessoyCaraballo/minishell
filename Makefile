@@ -14,8 +14,17 @@ CFLAGS = -Wall -Wextra -Werror -I${HOME}/.brew/opt/readline/include -g #-fsaniti
 INCFLAGS = -Iincludes -Ilibft/includes
 
 # Main project files
-SRC_FILES = main.c exit_handler.c init.c line_handler.c ll_utils.c\
-			built_ins.c built_ins2.c
+SRC_FILES = main.c\
+			exit_handler.c\
+			init.c\
+			line_handler.c\
+			ll_utils.c\
+			built_ins.c\
+			built_ins2.c\
+			src/parse/tokenizer.c\
+			src/parse/ft_strtok.c\
+			src/parse/init_token.c\
+			src/parse/token_test.c\
 
 # Object files
 OBJ_FILES = $(SRC_FILES:.c=.o)
