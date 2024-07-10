@@ -1,6 +1,7 @@
 #ifndef TOKEN_H
 # define TOKEN_H
 
+# include "minishell.h"
 /*******************************************
  * enum assign types
  * 0. echo,cd,pwd...
@@ -42,7 +43,7 @@ typedef struct s_token{
 /*****************************************
  * in parse/tokenizer.c
  */
-void	line_tokenization(char *lineread);
+void	line_tokenization(t_data *data);
 char	*ft_strtok(char *str, const char *delim);
 int		ft_charinstr(char c, const char *str);
 
