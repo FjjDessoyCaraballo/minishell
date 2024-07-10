@@ -1,24 +1,16 @@
 #include "../../includes/minishell.h"
 
-
 void	ft_builtin_check(char* token)
 {
-	if (strcmp(token,"echo") == 0)
+	if (ft_strcmp(token,"echo") == 0)
 		printf("token:[%s]\n", token);
-	else if (strcmp(token,"cd") == 0)
-		printf("token:[%s]\n", token);
-	else if (strcmp(token,"pwd") == 0)
-		printf("token:[%s]\n", token);
-	else if (strcmp(token,"export") == 0)
-		printf("token:[%s]\n", token);
-	else if (strcmp(token,"unset") == 0)
-		printf("token:[%s]\n", token);
-	else if (strcmp(token, "env") == 0)
-		printf("token:[%s]\n", token);
-	else if (strcmp(token, "exit") == 0)
-		printf("token:[%s]\n", token);
-	else if (strcmp(token, "\"") == 0)
-		printf("token:[%s]\n", token);
+	/*else if (strcmp(token, "getenv") == 0)
+	{
+		char *path_env = getenv("PATH");
+		if (!path_env)
+			printf("");
+		printf("LOOK A PATH\n\n %s", path_env);
+	}*/
 	else
 		printf("Unknown command:[%s]\n", token);
 }
