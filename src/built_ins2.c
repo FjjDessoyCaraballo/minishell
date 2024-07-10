@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 15:26:27 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/10 11:56:14 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/10 15:03:30 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,22 +76,29 @@ void	print_export(t_env *env_ll)
 void	unset(char *str, t_env *env_ll)
 {
 	t_env	*tmp;
+	t_env	*del;
 
-	if (!*str)
+	if (!*str || !env_ll || !str)
 		return ;
-	else
+	tmp = env_ll;
+	if (!ft_strncmp(str, env_ll->content, ft_strlen(str)))
 	{
-		tmp = env_ll;
-		while (env_ll->next != NULL)
-		{
-			// printf("str: %s\nenv_ll->content: %s\n", str, env_ll->content);
-			if (!ft_strncmp(str, env_ll->content, ft_strlen(str)))
-			{
-				printf("we arrived into the clause\n");
-			}
-			env_ll = env_ll->next;
-		}
-		env_ll = tmp;
-		tmp = NULL;
+		del = env_ll;
+		// env_ll = env_ll->next;
+		free(del);
+		return ;
 	}
+	while (env_ll->next != NULL)
+	{
+		if (!ft_strncmp(str, env_ll->next->content, ft_strlen(str)))
+		{
+			del = env_ll->next;
+			env_ll->next = env_ll->next->next;
+			free(del);
+			return ;
+		}
+		env_ll = env_ll->next;
+	}
+	env_ll = tmp;
+	tmp = NULL;
 }
