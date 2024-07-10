@@ -39,4 +39,11 @@ typedef struct s_token{
 	struct s_token	*next;
 }		t_token;
 
+/*****************************************
+ * in parse/tokenizer.c
+ */
+void	line_tokenization(char *lineread);
+char	*ft_strtok(char *str, const char *delim);
+int		ft_charinstr(char c, const char *str);
+
 # endif
