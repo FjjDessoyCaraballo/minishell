@@ -2,6 +2,8 @@
 # define TOKEN_H
 
 # include "minishell.h"
+
+typedef struct s_data t_data;
 /*******************************************
  * enum assign types
  * 0. echo,cd,pwd...
