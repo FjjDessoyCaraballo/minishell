@@ -59,4 +59,10 @@ int		ft_strcmp(char *s1, char *s2);
  * in parse/init_token.c
  */
 t_token* init_token();
+
+/*****************************************
+ * in parse/token_test.c
+ */
+void print_tokens(t_data *data);
+
 # endif
