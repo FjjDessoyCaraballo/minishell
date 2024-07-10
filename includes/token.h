@@ -26,6 +26,7 @@ typedef	enum e_type{
 	L_SINGLE_Q = 6,
 	F_DOUBLE_Q = 7,
 	L_DOUBLE_Q = 8,
+	UNKNOWN = 404,
 }			t_type;
 
 /*******************************************
@@ -36,7 +37,7 @@ typedef	enum e_type{
  */
 
 typedef struct s_token{
-	t_type	*type;
+	t_type	type;
 	char	*value;
 	int		id;
 	struct s_token	*next;
@@ -53,4 +54,9 @@ void	line_tokenization(t_data *data);
 char	*ft_strtok(char *str, const char *delim);
 int		ft_charinstr(char c, const char *str);
 int		ft_strcmp(char *s1, char *s2);
+
+/*****************************************
+ * in parse/init_token.c
+ */
+t_token* init_token();
 # endif

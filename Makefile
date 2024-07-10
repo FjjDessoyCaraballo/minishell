@@ -23,6 +23,7 @@ SRC_FILES = main.c\
 			built_ins2.c\
 			src/parse/tokenizer.c\
 			src/parse/ft_strtok.c\
+			src/parse/init_token.c
 
 # Object files
 OBJ_FILES = $(SRC_FILES:.c=.o)
