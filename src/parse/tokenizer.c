@@ -42,18 +42,24 @@ char *ft_strtok(char *str, const char *delim)
 
     if (str)
         target = str; 
-    if (*target == '\0')
+    if (!target || *target == '\0')
         return NULL;
 
     // Skip leading delimiters
     while (*target && ft_charinstr(*target, delim))
+	{
         target++;
+		if(*target == '\0')
+			return NULL;
+	}
     // Determine token boundaries
     index = 0;
     while (target[index] && (!ft_charinstr(target[index], delim)))
 		index++;
     token = ft_substr(target, 0, index);
     target += index;
+	while (*target && ft_charinstr(*target, delim))
+		target++;
     return token;
 }
 
