@@ -69,3 +69,11 @@ ALWAYS remember to pull from main to have the latest version of minishell before
 7. Handle $? (Felipe)
 8. CTRL-C + CTRL-D + CTRL-\ (Bruno or Leo)
 9. Environment variables ($ expands values) (everyone at certain point)
+
+## Acronyms
+
+1. env_ll - environment linked list (any time you see ll, it means linked list);
+2. len - length;
+3. i - index;
+4. str - string;
+5. pwd - print working directory;

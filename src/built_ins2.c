@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 15:26:27 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/08 15:30:47 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/11 10:33:36 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	export(char *cargo, t_env *env_ll)
 		print_export(env_ll);
 }
 // when someone types EXPORT only, it prints all env variables
-// IN ALPHABETICAL ORDER!!! <- still needs to be implemented
+// IN ALPHABETICAL ORDER!!! <- still needs to be implemented (not really necessary)
 void	print_export(t_env *env_ll)
 {
 	t_env	*tmp;
@@ -69,4 +69,36 @@ void	print_export(t_env *env_ll)
 		env_ll = env_ll->next;
 	}
 	env_ll = tmp;
+	tmp = NULL;
+}
+
+/* this function unsets whatever argument given after unset in the command line */
+void	unset(char *str, t_env **env_ll)
+{
+	t_env	*tmp;
+	t_env	*del;
+
+	if (!*str || !*env_ll || !str || !env_ll)
+		return ;
+	tmp = *env_ll;
+	if (!ft_strncmp(str, tmp->content, ft_strlen(str)))
+	{
+		*env_ll = tmp->next;
+		(*env_ll)->prev = NULL;
+		free(tmp);
+		return ;
+	}
+	while (tmp->next != NULL)
+	{
+		if (!ft_strncmp(str, tmp->next->content, ft_strlen(str)))
+		{
+			del = tmp->next;
+			tmp->next = tmp->next->next;
+			free(del);
+			return ;
+		}
+		tmp = tmp->next;
+	}
+	*env_ll = tmp;
+	tmp = NULL;
 }

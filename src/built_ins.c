@@ -6,27 +6,31 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 14:18:24 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/05/23 17:30:01 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/11 10:30:03 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	built_ins(t_data *data, t_env *env_ll)
+/* this whole function is very case sensitive and the pointers given 
+as arguments should be replaced immidiately after tokenization */
+void	built_ins(t_data *data, t_env **env_ll)
 {
-	data->home_pwd = get_home(env_ll);
+	data->home_pwd = get_home((*env_ll));
 	if (!ft_strncmp(data->line_read, "env", 3))
-		print_env(env_ll);
+		print_env((*env_ll));
 	else if (!ft_strncmp(data->line_read, "pwd", 3))
 		print_pwd();
 	else if (!ft_strncmp(data->line_read, "exit", 4))
-		get_the_hell_out(env_ll, ft_atoi(data->line_read + 5));
+		get_the_hell_out((*env_ll), ft_atoi(data->line_read + 5));
 	else if (!ft_strncmp(data->line_read, "echo", 4))
 		yodeling(data->line_read);
 	else if (!ft_strncmp(data->line_read, "cd", 2))
-		shell_cd(data->line_read, data, env_ll);
+		shell_cd(data->line_read, data, (*env_ll));
 	else if (!ft_strncmp(data->line_read, "export", 6))
-		export(data->line_read + 6, env_ll);
+		export(data->line_read + 6, (*env_ll));
+	else if (!ft_strncmp(data->line_read, "unset", 5))
+		unset(data->line_read + 6, env_ll);
 	else
 		return ;
 }

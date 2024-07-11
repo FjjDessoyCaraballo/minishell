@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/05/23 13:58:42 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/11 10:30:24 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ t_env	*ft_list_last(t_env *lst);
 void	free_ll(t_env *env_ll);
 
 /* in built_ins.c */
-void	built_ins(t_data *data, t_env *env_ll);
+void	built_ins(t_data *data, t_env **env_ll);
 void	print_env(t_env *env_ll);
 void	print_pwd(void);
 void	get_the_hell_out(t_env *env_ll, int num);
@@ -104,5 +104,6 @@ void	shell_cd(char *path, t_data *data, t_env *env_ll);
 char	*get_cwd(t_env *env_ll);
 void	export(char *cargo, t_env *env_ll);
 void	print_export(t_env *env_ll);
+void	unset(char *str, t_env **env_ll);
 
 #endif
