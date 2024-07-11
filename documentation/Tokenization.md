@@ -16,10 +16,10 @@ it ensures that each command, argument and operator is identified correctly
 
 ## The token structure
 so far the struct has 4 variables:
-- **Value**: will hold the string of the tokenized command line.
-- **type**  : enum that defines what type of token(e.g, command, builtin...) <- it returns number that's already defined in enum.
+- **Value**   : will hold the string of the tokenized command line.
+- **type**    : enum that defines what type of token(e.g, command, builtin...) <- it returns number that's already defined in enum.
 - **id**      : an integer holds the index or position of the token.
-- **next**  : this will point to the next token the last token will point to null just like any linked list
+- **next**    : this will point to the next token the last token will point to null just like any linked list
 ## How to use the tokens
 ```
 void    print_tokens(t_data *data) // the token struct is in the data struct
