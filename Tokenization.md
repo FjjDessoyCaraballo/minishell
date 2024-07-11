@@ -10,7 +10,7 @@ it ensures that each command, argument and operator is identified correctly
 - Identifying tokens: the input string is analyzed to find arguments, operators and commands that are separated by delimiters.
 - Generating token list: The identified tokens are stored in a linked list of structures in the data structure.
 
-![image](https://github.com/Torutu/minishell/assets/120149333/ddb8fd5f-d343-4da8-b070-0277146f293c)
+![image](https://github.com/Torutu/minishell/assets/120149333/57f188a6-f103-4384-888e-748149dd41e8)
 
 
 
