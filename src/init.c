@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 12:38:16 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/05/22 10:48:25 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/11 14:04:06 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ char	*bin_extract(char *path)
 		return (NULL);
 	while (path)
 	{
-		if (ft_strncmp(path, "PATH=", 5) == 0)
+		if (!ft_strncmp(path, "PATH=", 5))
 			return (path + 5);
 		i++;
 	}

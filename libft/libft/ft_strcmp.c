@@ -1,25 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   line_handler.c                                     :+:      :+:    :+:   */
+/*   ft_strcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/13 12:23:49 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/05/23 13:37:45 by fdessoy-         ###   ########.fr       */
+/*   Created: 2024/07/11 14:06:10 by fdessoy-          #+#    #+#             */
+/*   Updated: 2024/07/11 14:18:06 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "libft.h"
 
-int	sniff_line(t_data *data)
+int	ft_strcmp(char *s1, char *s2)
 {
-	data->line_read = readline("[I can't believe this is not shell] ");
-	if (!data->line_read)
-		return (0);
-	line_tokenization(data);
-	// line_parsing(data->line_read); // LEO'S PART
-	if (data->line_read || *data->line_read)
-		add_history(data->line_read);
-	return (1);
+	int	i;
+
+	i = 0;
+	while (s1[i] && s1[i] == s2[i])
+		i++;
+	return (s1[i] - s2[i]);
 }
