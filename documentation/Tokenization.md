@@ -10,7 +10,7 @@ it ensures that each command, argument and operator is identified correctly
 - Identifying tokens: the input string is analyzed to find arguments, operators and commands that are separated by delimiters.
 - Generating token list: The identified tokens are stored in a linked list of structures in the data structure.
 
-![[Pasted image 20240711234609.png]]
+![Pasted image 20240711234609](https://github.com/user-attachments/assets/ad996c31-6f8b-4afb-99ed-fd30014f353f)
 
 <!-- uncomment to use it in obsidian ![[Tokenization visualized.canvas]] -->
 
@@ -37,7 +37,7 @@ void    print_tokens(t_data *data) // the token struct is in the data struct
 
 in that function we used the token's data to be printed for us in the terminal which will create a very similar output to the previous example
 
-![[Pasted image 20240712001525.png]]
+![Pasted image 20240712001525](https://github.com/user-attachments/assets/eaf8af56-ba68-439a-8050-c8fb053de34e)
 
 you can have your token struct separately but it is better to have all your variables and structs be in one large data struct so you only add as little parameters as possible in your function and just create a local copy of the variable you want to use.
 
