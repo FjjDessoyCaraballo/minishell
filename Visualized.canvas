@@ -1,0 +1,17 @@
+{
+	"nodes":[
+		{"id":"5e89af189c2d6e4a","x":186,"y":121,"width":159,"height":60,"type":"text","text":"Tokenization"},
+		{"id":"81bc466948adf7cb","x":-664,"y":362,"width":440,"height":224,"type":"text","text":"```\nstruct_token = \n{\n\tchar *value        = \"echo\" \n\tenum type          = \"BUILTIN\"\n\tint id             = \"0\"    \n\tstruct_token next  = next_token\n}\n```"},
+		{"id":"348d0285fc845ad6","x":-181,"y":362,"width":420,"height":224,"type":"text","text":"```\nstruct_token = \n{\n\tchar *value        = \"Hello\" \n\tenum type          = \"ARGUMENT\"\n\tint id             = \"1\"    \n\tstruct_token next  = next_token\n}\n```"},
+		{"id":"382924d863c477e2","x":759,"y":362,"width":460,"height":224,"type":"text","text":"```\nstruct_token = \n{\n\tchar *value        = \"!\" \n\tenum type          = \"ARGUMENT\"\n\tint id             = \"3\"    \n\tstruct_token token = next\n}\n```"},
+		{"id":"96d1f677238f40ec","x":286,"y":362,"width":432,"height":224,"type":"text","text":"```\nstruct_token = \n{\n\tchar *value        = \"World\" \n\tenum type          = \"ARGUMENT\"\n\tint id             = \"2\"    \n\tstruct_token next  = next_token\n}\n```"},
+		{"id":"6f83020e5a4b8b8d","x":76,"y":-80,"width":379,"height":120,"type":"text","text":"from the command line\n```\nMinishell>> echo Hello World !\n```"}
+	],
+	"edges":[
+		{"id":"09042f38d1c9e7ca","fromNode":"6f83020e5a4b8b8d","fromSide":"bottom","toNode":"5e89af189c2d6e4a","toSide":"top"},
+		{"id":"15ddc4e11b54193c","fromNode":"5e89af189c2d6e4a","fromSide":"bottom","toNode":"81bc466948adf7cb","toSide":"top"},
+		{"id":"5ec3c14bdc32ab9c","fromNode":"81bc466948adf7cb","fromSide":"right","toNode":"348d0285fc845ad6","toSide":"left"},
+		{"id":"b20f983e801e8511","fromNode":"348d0285fc845ad6","fromSide":"right","toNode":"96d1f677238f40ec","toSide":"left"},
+		{"id":"c67c34f8de9f855b","fromNode":"96d1f677238f40ec","fromSide":"right","toNode":"382924d863c477e2","toSide":"left"}
+	]
+}
