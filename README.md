@@ -12,8 +12,13 @@ This project is meant to replicate some basic core parts of bash shell.
 - Result: <span style="color:red">0%</span>
 
 ## Contact: 
+Felipe
 - 42-email: fdessoy-@student.hive.fi
 - 42-profile: [https://profile.intra.42.fr/users/fdessoy-](https://profile.intra.42.fr/users/fdessoy-)
+Waleed
+- 42-email: walnaimi@student.hive.fi
+- 42-profile: https://profile.intra.42.fr/users/walnaimi
+- discord: torutu.
 
 ## Instructions for branching
 ALWAYS remember to pull from main to have the latest version of minishell before continuing your work. At the same time, always remember to only push to main directory when the program is properly working. AVOID PUSHING FAULTY PROGRAM AT ALL COSTS!
