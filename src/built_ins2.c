@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 15:26:27 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/10 15:03:30 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/11 10:33:36 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,32 +73,32 @@ void	print_export(t_env *env_ll)
 }
 
 /* this function unsets whatever argument given after unset in the command line */
-void	unset(char *str, t_env *env_ll)
+void	unset(char *str, t_env **env_ll)
 {
 	t_env	*tmp;
 	t_env	*del;
 
-	if (!*str || !env_ll || !str)
+	if (!*str || !*env_ll || !str || !env_ll)
 		return ;
-	tmp = env_ll;
-	if (!ft_strncmp(str, env_ll->content, ft_strlen(str)))
+	tmp = *env_ll;
+	if (!ft_strncmp(str, tmp->content, ft_strlen(str)))
 	{
-		del = env_ll;
-		// env_ll = env_ll->next;
-		free(del);
+		*env_ll = tmp->next;
+		(*env_ll)->prev = NULL;
+		free(tmp);
 		return ;
 	}
-	while (env_ll->next != NULL)
+	while (tmp->next != NULL)
 	{
-		if (!ft_strncmp(str, env_ll->next->content, ft_strlen(str)))
+		if (!ft_strncmp(str, tmp->next->content, ft_strlen(str)))
 		{
-			del = env_ll->next;
-			env_ll->next = env_ll->next->next;
+			del = tmp->next;
+			tmp->next = tmp->next->next;
 			free(del);
 			return ;
 		}
-		env_ll = env_ll->next;
+		tmp = tmp->next;
 	}
-	env_ll = tmp;
+	*env_ll = tmp;
 	tmp = NULL;
 }

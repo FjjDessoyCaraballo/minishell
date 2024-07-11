@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:12:51 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/05/20 10:20:13 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/11 10:31:35 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int main(int argc, char **argv, char **env)
 				printf("exit\n");
 				break ;
 			}
-			built_ins(&data, env_ll);
+			built_ins(&data, &env_ll);
 		}
 	}
 	else
