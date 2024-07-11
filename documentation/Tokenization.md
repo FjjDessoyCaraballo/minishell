@@ -28,7 +28,7 @@ void    print_tokens(t_data *data) // the token struct is in the data struct
         while (token != NULL)
         {
                 printf("token value:[%s]\n", token->value);
-	            printf("token type:[%i]\n", token->type);
+		printf("token type:[%i]\n", token->type);
                 printf("id:[%i]\n", token->id);
                 token = token->next; //move to the next struct or NULL if last one
         }
