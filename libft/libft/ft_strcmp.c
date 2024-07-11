@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 14:06:10 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/11 14:07:03 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/11 14:18:06 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	ft_strcmp(char *s1, char *s2)
 	int	i;
 
 	i = 0;
-	while (s[1] && s1[i] == s2[i])
+	while (s1[i] && s1[i] == s2[i])
 		i++;
 	return (s1[i] - s2[i]);
 }
