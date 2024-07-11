@@ -15,6 +15,7 @@ This project is meant to replicate some basic core parts of bash shell.
 Felipe
 - 42-email: fdessoy-@student.hive.fi
 - 42-profile: [https://profile.intra.42.fr/users/fdessoy-](https://profile.intra.42.fr/users/fdessoy-)
+
 Waleed
 - 42-email: walnaimi@student.hive.fi
 - 42-profile: https://profile.intra.42.fr/users/walnaimi
