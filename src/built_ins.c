@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 14:18:24 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/11 17:15:37 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/11 17:29:22 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	built_ins(t_data *data, t_env **env_ll)
 	else if (!ft_strncmp(token->value, "pwd", 3))
 		print_pwd();
 	else if (!ft_strncmp(token->value, "exit", 4))
-		get_the_hell_out((*env_ll), ft_atoi(token->value));
+		get_the_hell_out((*env_ll), ft_atoi(token->value + 5));
 	else if (!ft_strncmp(token->value, "echo", 4))
 		yodeling(token->value);
 	else if (!ft_strncmp(token->value, "cd", 2))
@@ -33,7 +33,7 @@ void	built_ins(t_data *data, t_env **env_ll)
 	else if (!ft_strncmp(token->value, "export", 6))
 		export(token->value, (*env_ll));
 	else if (!ft_strncmp(token->value, "unset", 5))
-		unset(token->value, env_ll);
+		unset(token->value + 6, env_ll);
 	else
 		return ;
 }
@@ -64,6 +64,7 @@ void	print_pwd(void)
 void	get_the_hell_out(t_env *env_ll, int num)
 {
 	free_ll(env_ll);
+	printf("exit\n");
 	exit(num);
 }
 /* this one will likely change after tokenization */

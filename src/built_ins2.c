@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 15:26:27 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/11 10:33:36 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/11 17:20:35 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ void	unset(char *str, t_env **env_ll)
 	if (!ft_strncmp(str, tmp->content, ft_strlen(str)))
 	{
 		*env_ll = tmp->next;
-		(*env_ll)->prev = NULL;
+		// (*env_ll)->prev = NULL;
 		free(tmp);
 		return ;
 	}
