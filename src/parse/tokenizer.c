@@ -15,7 +15,6 @@ void	ft_builtin_check(char* token, t_token* current_token)
 	{
 		current_token->value = ft_strdup(token);
 		current_token->type = FLAG;
-		printf("@@@@  %d  @@@@\n",current_token->id);
 	}
 
 	else
