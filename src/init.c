@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 12:38:16 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/11 14:04:06 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/12 14:57:56 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,15 +62,3 @@ void	initializer(t_data *data, t_env **env_ll, char **env)
 	find_bin(env_ll, data);
 	data->pipe = 0;
 }
-
-// void	print_env(t_env **env_ll)
-// {
-// 	t_env	*tmp;
-
-// 	tmp = *env_ll;
-// 	while (tmp)
-// 	{
-// 		ft_printf("%s\n", tmp->content);
-// 		tmp = tmp->next;
-// 	}
-// }

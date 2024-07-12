@@ -6,25 +6,22 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 14:18:24 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/12 11:38:42 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/12 15:04:23 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 /* This part is taking the tokens and taking the argument just after it. */
-void	built_ins(t_data *data, t_env **env_ll)
+void	built_ins(t_data *data, t_token *token, t_env **env_ll)
 {
-	t_token *token = data->token;
-
-	token->value = data->line_read;
 	data->home_pwd = get_home((*env_ll));
 	if (!ft_strncmp(token->value, "env", 3))
 		data->status = print_env((*env_ll));
 	else if (!ft_strncmp(token->value, "pwd", 3))
 		data->status = print_pwd();
 	else if (!ft_strncmp(token->value, "exit", 4))
-		get_the_hell_out(data, (*env_ll));
+		get_the_hell_out(data, ft_atoi(token->value + 5), (*env_ll));
 	else if (!ft_strncmp(token->value, "echo", 4))
 		data->status = yodeling(token->value);
 	else if (!ft_strncmp(token->value, "cd", 2))
@@ -35,7 +32,6 @@ void	built_ins(t_data *data, t_env **env_ll)
 		data->status = unset(token->value + 6, env_ll);
 	else
 		return ;
-	
 }
 /* The printing of the environment changes in conformity to the use of
 export and unset. The command 'env' itself does not take arguments.
@@ -68,28 +64,25 @@ int	print_pwd(void)
 }
 /* This is the exit function, it needs to take, if inputted,
 an exit code that was manually inserted after exit */
-void	get_the_hell_out(t_data *data, t_env *env_ll)
+void	get_the_hell_out(t_data *data, int exit_code, t_env *env_ll)
 {
 	free_ll(env_ll);
 	printf("exit\n");
-	exit(data->status);
+	if (exit_code)
+		exit(exit_code);
+	exit(data->status); // I think this is not right
 }
 
 int	yodeling(char *echoes)
 {
-	if (!ft_strcmp(echoes, "echo -n")) // it was ft_strncmp before
+	if (!ft_strncmp(echoes, "echo -n", 7))
 	{
 		ft_printf("%s", echoes + 8);
 		return (SUCCESS);
 	}
-	else if (!ft_strcmp(echoes, "echo")) // it was ft_strncmp before
-	{
-		ft_printf("%s\n", echoes + 5);
-		return (SUCCESS);
-	}
 	else
 	{
-		printf("\n");
+		ft_printf("%s\n", echoes + 5);
 		return (SUCCESS);
 	}
 	return (FAILURE);
