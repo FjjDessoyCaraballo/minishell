@@ -6,14 +6,13 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 14:18:24 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/11 17:13:40 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/12 11:38:42 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/* this whole function is very case sensitive and the pointers given 
-as arguments should be replaced immidiately after tokenization */
+/* This part is taking the tokens and taking the argument just after it. */
 void	built_ins(t_data *data, t_env **env_ll)
 {
 	t_token *token = data->token;
@@ -21,28 +20,32 @@ void	built_ins(t_data *data, t_env **env_ll)
 	token->value = data->line_read;
 	data->home_pwd = get_home((*env_ll));
 	if (!ft_strncmp(token->value, "env", 3))
-		print_env((*env_ll));
+		data->status = print_env((*env_ll));
 	else if (!ft_strncmp(token->value, "pwd", 3))
-		print_pwd();
+		data->status = print_pwd();
 	else if (!ft_strncmp(token->value, "exit", 4))
-		get_the_hell_out((*env_ll), ft_atoi(token->value));
+		get_the_hell_out(data, (*env_ll));
 	else if (!ft_strncmp(token->value, "echo", 4))
-		yodeling(token->value);
+		data->status = yodeling(token->value);
 	else if (!ft_strncmp(token->value, "cd", 2))
-		shell_cd(token->value, data, (*env_ll));
+		data->status = shell_cd(token->value, data);
 	else if (!ft_strncmp(token->value, "export", 6))
-		export(token->value, (*env_ll));
+		data->status = export(token->value + 6, (*env_ll));
 	else if (!ft_strncmp(token->value, "unset", 5))
-		unset(token->value, env_ll);
+		data->status = unset(token->value + 6, env_ll);
 	else
 		return ;
+	
 }
-/* all of the builtins depend on simple syntax right now
+/* The printing of the environment changes in conformity to the use of
+export and unset. The command 'env' itself does not take arguments.
 Exempli Gratia: $> env || $> pwd (no white spaces or anything like caps)*/
-void	print_env(t_env *env_ll)
+int	print_env(t_env *env_ll)
 {
 	t_env	*tmp;
 
+	if (!env_ll)
+		return (FAILURE);
 	tmp = env_ll;
 	while (tmp)
 	{
@@ -50,27 +53,44 @@ void	print_env(t_env *env_ll)
 		tmp = tmp->next;
 	}
 	env_ll = tmp;
+	return (SUCCESS);
 }
 
-void	print_pwd(void)
+int	print_pwd(void)
 {
 	char	*pwd;
 	
 	pwd = getcwd(NULL, 0);
+	if (!pwd)
+		return (FAILURE);
 	printf("%s\n", pwd);
+	return (SUCCESS);
 }
-/* this might need to be updated after we start piping */
-/* when checking for leaks, remember that readline() may leak and its ok*/
-void	get_the_hell_out(t_env *env_ll, int num)
+/* This is the exit function, it needs to take, if inputted,
+an exit code that was manually inserted after exit */
+void	get_the_hell_out(t_data *data, t_env *env_ll)
 {
 	free_ll(env_ll);
-	exit(num);
+	printf("exit\n");
+	exit(data->status);
 }
-/* this one will likely change after tokenization */
-void	yodeling(char *echoes)
+
+int	yodeling(char *echoes)
 {
-	if (!ft_strncmp(echoes, "echo -n", 7))
+	if (!ft_strcmp(echoes, "echo -n")) // it was ft_strncmp before
+	{
 		ft_printf("%s", echoes + 8);
-	else
+		return (SUCCESS);
+	}
+	else if (!ft_strcmp(echoes, "echo")) // it was ft_strncmp before
+	{
 		ft_printf("%s\n", echoes + 5);
+		return (SUCCESS);
+	}
+	else
+	{
+		printf("\n");
+		return (SUCCESS);
+	}
+	return (FAILURE);
 }

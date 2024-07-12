@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/11 10:30:24 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/12 11:39:09 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@
 # define EXIT "Exit\n"
 # define ERR_ARG "Wrong number of arguments, Karen\n"
 # define PATH_MAX 1024
+# define SUCCESS 0
+# define FAILURE 1
 
 /*************************************************/
 /* structs ***************************************/
@@ -58,7 +60,7 @@ typedef struct s_data
 	char	*bin;
 	char	*path;
 	char	*home_pwd;
-	int		dummy;
+	int		status;
 	// need to insert pids, tokens, and commands
 	t_token *token;
 	char	*line_read;
@@ -71,6 +73,9 @@ typedef struct s_data
 
 /* in main.c */
 //usually I leave main.c alone. Its a style choice.
+
+/* in execution.c */
+int	execution(t_data *data, t_env **env_ll);
 
 /* in init.c */
 void	ll_env(t_env **env_ll, char **env);
@@ -94,16 +99,15 @@ void	free_ll(t_env *env_ll);
 
 /* in built_ins.c */
 void	built_ins(t_data *data, t_env **env_ll);
-void	print_env(t_env *env_ll);
-void	print_pwd(void);
-void	get_the_hell_out(t_env *env_ll, int num);
-void	yodeling(char *echoes);
+int		print_env(t_env *env_ll);
+int		print_pwd(void);
+void	get_the_hell_out(t_data *data, t_env *env_ll);
+int		yodeling(char *echoes);
 
 /* in built_ins2.c */
-void	shell_cd(char *path, t_data *data, t_env *env_ll);
-char	*get_cwd(t_env *env_ll);
-void	export(char *cargo, t_env *env_ll);
-void	print_export(t_env *env_ll);
-void	unset(char *str, t_env **env_ll);
+int		shell_cd(char *path, t_data *data);
+int		export(char *cargo, t_env *env_ll);
+int		print_export(t_env *env_ll);
+int		unset(char *str, t_env **env_ll);
 
 #endif
