@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 14:18:24 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/11 17:29:22 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/12 10:04:31 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,16 +24,16 @@ void	built_ins(t_data *data, t_env **env_ll)
 		print_env((*env_ll));
 	else if (!ft_strncmp(token->value, "pwd", 3))
 		print_pwd();
-	else if (!ft_strncmp(token->value, "exit", 4))
-		get_the_hell_out((*env_ll), ft_atoi(token->value + 5));
-	else if (!ft_strncmp(token->value, "echo", 4))
-		yodeling(token->value);
-	else if (!ft_strncmp(token->value, "cd", 2))
-		shell_cd(token->value, data, (*env_ll));
-	else if (!ft_strncmp(token->value, "export", 6))
-		export(token->value, (*env_ll));
-	else if (!ft_strncmp(token->value, "unset", 5))
-		unset(token->value + 6, env_ll);
+	else if (!ft_strncmp(data->line_read, "exit", 4))
+		get_the_hell_out((*env_ll), ft_atoi(data->line_read + 5));
+	else if (!ft_strncmp(data->line_read, "echo", 4))
+		yodeling(data->line_read);
+	else if (!ft_strncmp(data->line_read, "cd", 2))
+		shell_cd(data->line_read, data, (*env_ll));
+	else if (!ft_strncmp(data->line_read, "export", 6))
+		export(data->line_read + 6, (*env_ll));
+	else if (!ft_strncmp(data->line_read, "unset", 5))
+		unset(data->line_read + 6, env_ll);
 	else
 		return ;
 }
