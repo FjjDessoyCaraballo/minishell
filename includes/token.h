@@ -26,6 +26,7 @@ typedef	enum e_type{
 	L_SINGLE_Q = 6,
 	F_DOUBLE_Q = 7,
 	L_DOUBLE_Q = 8,
+	FLAG = 9,
 	UNKNOWN = 404,
 }			t_type;
 

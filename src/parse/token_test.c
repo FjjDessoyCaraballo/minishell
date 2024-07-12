@@ -14,7 +14,9 @@ void	print_tokens(t_data *data)
 	t_token *token = data->token;
 	while (token != NULL)
 	{
-		printf("token value:[%s]\ntoken type:[%i]\nid:[%i]\n\n", token->value, token->type, token->id);
+		printf("token value:[%s]\n", token->value);
+		printf("token type:[%i]\n", token->type);
+		printf("id:[%i]\n", token->id);
 		token = token->next;
 	}
 }
