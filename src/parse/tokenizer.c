@@ -3,9 +3,11 @@
 void chunky_checker(char *token,t_token *current_token)
 {
 	ft_builtin_check(token, current_token);
-	if(current_token->prev != NULL && current_token->prev->type == BUILTIN && current_token->id == 1)
+	if(current_token->prev != NULL && current_token->prev->type == BUILTIN && current_token->id == 1
+			&& (ft_strcmp(current_token->prev->value,"echo" ) == 0))
 	{
-		printf("looking for flag\n");
+		if (ft_strcmp(current_token->value, "-n") == 0)
+			current_token->type = FLAG;
 	}
 }
 
@@ -35,5 +37,5 @@ void line_tokenization(t_data *data)
 		}
     }
 	data->token = first_node;
-	//print_tokens(data);
+	print_tokens(data);
 }
