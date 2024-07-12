@@ -42,12 +42,14 @@ typedef struct s_token{
 	char	*value;
 	int		id;
 	struct s_token	*next;
+	struct s_token  *prev;
 }		t_token;
 
 /*****************************************
  * in parse/tokenizer.c
  */
 void	line_tokenization(t_data *data);
+void	chunky_checker(char *token, t_token *current_token);
 
 /*****************************************
  * in parse/ft_strtok.c
@@ -60,6 +62,11 @@ int		ft_strcmp(char *s1, char *s2);
  * in parse/init_token.c
  */
 t_token* init_token();
+
+/*****************************************
+ * in src/parse/chunky_check.c
+ */
+void	ft_builtin_check(char *token, t_token *current_token);
 
 /*****************************************
  * in parse/token_test.c

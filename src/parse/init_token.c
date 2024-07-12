@@ -9,5 +9,6 @@ t_token* init_token()
 	token->value = NULL;
 	token->id = 0;
 	token->next = NULL;
+	token->prev = NULL;
 	return token;
 }
