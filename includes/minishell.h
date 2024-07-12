@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/12 11:39:09 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/12 15:03:18 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@
 /*************************************************/
 typedef struct s_env
 {
-	int				dummy;
 	char			*content;
 	struct s_env	*next;
 	struct s_env	*prev;
@@ -98,10 +97,10 @@ t_env	*ft_list_last(t_env *lst);
 void	free_ll(t_env *env_ll);
 
 /* in built_ins.c */
-void	built_ins(t_data *data, t_env **env_ll);
+void	built_ins(t_data *data, t_token *token, t_env **env_ll);
 int		print_env(t_env *env_ll);
 int		print_pwd(void);
-void	get_the_hell_out(t_data *data, t_env *env_ll);
+void	get_the_hell_out(t_data *data, int exit_code, t_env *env_ll);
 int		yodeling(char *echoes);
 
 /* in built_ins2.c */
