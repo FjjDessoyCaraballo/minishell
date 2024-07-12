@@ -88,3 +88,4 @@ ALWAYS remember to pull from main to have the latest version of minishell before
 3. i - index;
 4. str - string;
 5. pwd - print working directory;
+6. cwd - current working directory;
