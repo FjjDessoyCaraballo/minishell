@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 14:18:24 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/12 11:38:42 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/12 14:07:30 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,19 +77,14 @@ void	get_the_hell_out(t_data *data, t_env *env_ll)
 
 int	yodeling(char *echoes)
 {
-	if (!ft_strcmp(echoes, "echo -n")) // it was ft_strncmp before
+	if (!ft_strncmp(echoes, "echo -n", 7))
 	{
 		ft_printf("%s", echoes + 8);
 		return (SUCCESS);
 	}
-	else if (!ft_strcmp(echoes, "echo")) // it was ft_strncmp before
-	{
-		ft_printf("%s\n", echoes + 5);
-		return (SUCCESS);
-	}
 	else
 	{
-		printf("\n");
+		ft_printf("%s\n", echoes + 5);
 		return (SUCCESS);
 	}
 	return (FAILURE);
