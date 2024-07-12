@@ -21,6 +21,7 @@ SRC_FILES = main.c\
 			ll_utils.c\
 			built_ins.c\
 			built_ins2.c\
+			execution.c\
 			src/parse/tokenizer.c\
 			src/parse/ft_strtok.c\
 			src/parse/init_token.c\

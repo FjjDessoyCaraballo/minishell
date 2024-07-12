@@ -6,39 +6,38 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 15:26:27 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/12 10:04:01 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/12 11:37:38 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 // suscetible to changes after parsing commands from line
 // removed get_cwd() and inserted into initialization (check README)
-void	shell_cd(char *path, t_data *data, t_env *env_ll)
+int	shell_cd(char *path, t_data *data)
 {
 	char	*new_pwd;
 	char	*curr_pwd;
 
-	if (!path[0])
+	if (!path[0]) // not working
 	{
 		chdir(data->home_pwd);
-		return ;
+		return (SUCCESS);
 	}
 	new_pwd = NULL;
-	env_ll->dummy = 1;
-	data->dummy = 1;
     curr_pwd = getcwd(NULL, 0);
     if (!curr_pwd)
 	{
         free(curr_pwd);
-		return ;
+		return (FAILURE);
 	}
 	path = ft_strtrim(path, "cd ");
 	new_pwd = ft_strsjoin(curr_pwd, path, '/');
 	free(path);
 	chdir(new_pwd);
+	return (SUCCESS);
 }
 /* This will leak if we don't figure out the array freeing */
-void	export(char *cargo, t_env *env_ll)
+int	export(char *cargo, t_env *env_ll)
 {
 	t_env	*tmp;
 	char	**exp_list;
@@ -53,14 +52,20 @@ void	export(char *cargo, t_env *env_ll)
 		ft_listadd_back(&env_ll, ft_listnew(exp_list[i++]));
 	env_ll = tmp;
 	if (!cargo[0])
+	{
 		print_export(env_ll);
+		return (SUCCESS);
+	}
+	return (SUCCESS);
 }
 // when someone types EXPORT only, it prints all env variables
 // IN ALPHABETICAL ORDER!!! <- still needs to be implemented (not really necessary)
-void	print_export(t_env *env_ll)
+int	print_export(t_env *env_ll)
 {
 	t_env	*tmp;
 
+	if (!env_ll)
+		return (FAILURE);
 	tmp = env_ll;
 	while (env_ll->next != NULL)
 	{
@@ -70,23 +75,23 @@ void	print_export(t_env *env_ll)
 	}
 	env_ll = tmp;
 	tmp = NULL;
+	return (SUCCESS);
 }
 
 /* this function unsets whatever argument given after unset in the command line */
-void	unset(char *str, t_env **env_ll)
+int	unset(char *str, t_env **env_ll)
 {
 	t_env	*tmp;
 	t_env	*del;
 
 	if (!*str || !*env_ll || !str || !env_ll)
-		return ;
+		return (FAILURE);
 	tmp = *env_ll;
 	if (!ft_strncmp(str, tmp->content, ft_strlen(str)))
 	{
 		*env_ll = tmp->next;
-		// (*env_ll)->prev = NULL;
 		free(tmp);
-		return ;
+		return (SUCCESS);
 	}
 	while (tmp->next != NULL)
 	{
@@ -95,10 +100,11 @@ void	unset(char *str, t_env **env_ll)
 			del = tmp->next;
 			tmp->next = tmp->next->next;
 			free(del);
-			return ;
+			return (SUCCESS);
 		}
 		tmp = tmp->next;
 	}
 	*env_ll = tmp;
 	tmp = NULL;
+	return (SUCCESS);
 }
