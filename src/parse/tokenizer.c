@@ -10,6 +10,14 @@ void	ft_builtin_check(char* token, t_token* current_token)
 		current_token->value = ft_strdup(token);
 		current_token->type = BUILTIN;
 	}
+
+	else if (current_token->id == 1 && ft_strcmp(token, "-n") == 0)
+	{
+		current_token->value = ft_strdup(token);
+		current_token->type = FLAG;
+		printf("@@@@  %d  @@@@\n",current_token->id);
+	}
+
 	else
 	{
 		current_token->value = ft_strdup(token);
@@ -28,8 +36,8 @@ void line_tokenization(t_data *data)
     token = ft_strtok(data->line_read, delimiters);
     while (token != NULL)
     {
-		ft_builtin_check(token, current_token);
 		current_token->id = id;
+		ft_builtin_check(token, current_token);
         token = ft_strtok(NULL, delimiters);
 		if(token != NULL)
 		{
