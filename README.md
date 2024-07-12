@@ -25,6 +25,10 @@ Bruno
 - 42-email: bposa@student.hive.fi
 - 42-profile: https://profile.intra.42.fr/users/bposa
 
+Leo
+- 42-email: lstorey@student.hive.fi
+- 42-profile: https://profile.intra.42.fr/users/lstorey
+
 ## Instructions for branching
 ALWAYS remember to pull from main to have the latest version of minishell before continuing your work. At the same time, always remember to only push to main directory when the program is properly working. AVOID PUSHING FAULTY PROGRAM AT ALL COSTS!
 
