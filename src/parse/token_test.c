@@ -9,26 +9,7 @@
  *		-in the while loop it will preform the function (in this case printf).
  *		-then we move to the next node of the token linked list with token = token->next.
  */
-/*void	print_tokens(t_data *data)
-{
-	t_token *token = data->token;
-	while (token != NULL)
-	{
-		printf("token value:[%s]\n", token->value);
-		printf("token type:[%i]\n", token->type);
-		printf("id:[%i]\n", token->id);
-		if(token->next == NULL)
-			break;
-		token = token->next;
-	}
-	while (token != NULL)
-	{
-		printf("prev token value:[%s]\n", token->prev->value);
-		printf("prev token type:[%i]\n", token->prev->type);
-		printf("prev id:[%i]\n", token->prev->id);
-		token = token->prev;
-	}
-}*/
+
 void print_tokens(t_data *data)
 {
     t_token *token = data->token;
@@ -49,9 +30,9 @@ void print_tokens(t_data *data)
 	token = last_token;
     while (token != NULL)
     {
-        printf("prev token value:[%s]\n", token->value);
+       /*printf("prev token value:[%s]\n", token->value);
         printf("prev token type:[%i]\n", token->type);
-        printf("prev id:[%i]\n", token->id);
+        printf("prev id:[%i]\n", token->id);*/
         token = token->prev;
     }
 }

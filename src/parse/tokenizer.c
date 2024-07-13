@@ -1,14 +1,24 @@
 #include "../../includes/minishell.h"
 
-void chunky_checker(char *token,t_token *current_token)
+int chunky_checker(char *token,t_token *current_token,t_data *data)
 {
-	ft_builtin_check(token, current_token);
-	if(current_token->prev != NULL && current_token->prev->type == BUILTIN && current_token->id == 1
-			&& (ft_strcmp(current_token->prev->value,"echo" ) == 0))
+	if(ft_builtin_check(token, current_token, data->builtins) == SUCCESS)
+		return(SUCCESS);
+	if(current_token->prev != NULL && current_token->prev->type == BUILTIN && ft_strcmp(token,"-n") == SUCCESS)
 	{
-		if (ft_strcmp(current_token->value, "-n") == 0)
-			current_token->type = FLAG;
+		current_token->type = FLAG;
+		current_token->value = "-n";
+		return (SUCCESS);
 	}
+	if(ft_command_check(token, current_token, data->bin) == SUCCESS)
+		return(SUCCESS);
+	if(ft_pipe_check(token, current_token) == SUCCESS)
+		return(SUCCESS);
+	if(ft_redirect_op_check(token, current_token, data->redirect) == SUCCESS)
+		return(SUCCESS);
+	if(ft_argument_check(token, current_token) == SUCCESS)
+		return(SUCCESS);
+	return(FAILURE);
 }
 
 void line_tokenization(t_data *data)
@@ -20,12 +30,18 @@ void line_tokenization(t_data *data)
 	t_token *prev_token = NULL;
 	int id = 0;
 
+	char *builtins[] = {"echo","cd","pwd","export","unset","env","exit",NULL};
+	data->builtins = builtins;
+
+	char *redirect[] = {">",">>","<","<<", NULL};
+	data->redirect = redirect;
+
     token = ft_strtok(data->line_read, delimiters);
     while (token != NULL)
     {
 		current_token->id = id;
 		current_token->prev = prev_token;
-		chunky_checker(token, current_token);
+		chunky_checker(token, current_token, data);
         token = ft_strtok(NULL, delimiters);
 		if(token != NULL)
 		{
