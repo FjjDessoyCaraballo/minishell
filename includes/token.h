@@ -37,6 +37,7 @@ typedef	enum e_type{
 typedef struct s_token{
 	t_type	type;
 	char	*value;
+	char	*path;
 	int		id;
 	struct s_token	*next;
 	struct s_token  *prev;
@@ -78,5 +79,6 @@ void	print_tokens(t_data *data);
  * in src/parse/check_utils.c
  *****************************************/
 char *loop_path_for_binary(char *binary, char **paths);
+char *ft_strndup(const char *s, size_t n);
 
 # endif
