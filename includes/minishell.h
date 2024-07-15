@@ -17,6 +17,7 @@
 /* User defined headers **************************/
 /*************************************************/
 # include "libft.h"
+# include "../libft/includes/libft.h" // <- just to silence the nvim errors
 # include "token.h"
 
 /*************************************************/
@@ -62,6 +63,8 @@ typedef struct s_data
 	int		status;
 	// need to insert pids, tokens, and commands
 	t_token *token;
+	char	**builtins;
+	char	**redirect;
 	char	*line_read;
 	t_env	*envll;
 }	t_data;
