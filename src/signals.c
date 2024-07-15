@@ -6,7 +6,7 @@
 /*   By: lstorey <lstorey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 10:37:35 by lstorey           #+#    #+#             */
-/*   Updated: 2024/07/15 12:28:53 by lstorey          ###   ########.fr       */
+/*   Updated: 2024/07/15 12:59:58 by lstorey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	handler(int sig)
     }
     else if (sig == SIGQUIT)
     {
-        printf("\nCaught signal %d (Ctrl-\\). Dumping core and exiting...\n", sig);
+        printf("\nCaught signal %d (Ctrl-\\).Clearing history and exiting...\n", sig);
         clear_history();
         signal(sig, SIG_DFL);  
         kill(getpid(), sig);
