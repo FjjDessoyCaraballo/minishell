@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 12:38:16 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/12 14:57:56 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/15 16:04:14 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,11 @@ char	*bin_extract(char *path)
 
 void	initializer(t_data *data, t_env **env_ll, char **env)
 {
+	data = malloc(sizeof(t_data));
+	if (!data)
+		exit(1); // might need to specify error for this
 	ll_env(env_ll, env);
 	find_bin(env_ll, data);
+		
 	data->pipe = 0;
 }

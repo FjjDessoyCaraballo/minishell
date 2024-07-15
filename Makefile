@@ -22,13 +22,15 @@ SRC_FILES = main.c\
 			built_ins.c\
 			built_ins2.c\
 			execution.c\
+			signals.c\
+			ll_utils2.c\
 			src/parse/tokenizer.c\
 			src/parse/ft_strtok.c\
 			src/parse/init_token.c\
 			src/parse/token_test.c\
 			src/parse/chunky_check.c\
 			src/parse/check_utils.c\
-			signals.c\
+
 
 # Object files
 OBJ_FILES = $(SRC_FILES:.c=.o)

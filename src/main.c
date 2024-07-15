@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lstorey <lstorey@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:12:51 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/15 12:46:21 by lstorey          ###   ########.fr       */
+/*   Updated: 2024/07/15 15:45:43 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ int main(int argc, char **argv, char **env)
 	signal(SIGQUIT, SIG_IGN);
 	env_ll = NULL;
 	data.status = 0;
+	data.env = NULL;
 	initializer(&data, &env_ll, env);
 	if (argc == 1)
 	{
