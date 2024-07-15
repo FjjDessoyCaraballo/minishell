@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/15 15:56:13 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/15 17:29:20 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,25 +34,22 @@ int	execution(t_data *data, t_env **env_ll)
 	return (SUCCESS);
 }
 
+// execve() second argument has to be an array of the command and its flags
 int lonely_execution(t_data *data, t_token *token, t_env **env_ll)
 {
-	int		i;
 	char	*path;
-
-	i = 0;
-	env_arr_updater(data, (*env_ll));
-	printf("token->value: %s\n", token->value);
-	while (data->binary_paths[i])
+	
+	env_arr_updater(data, env_ll);
+	path = access_path(data->binary_paths, token->value);
+	data->cmd = ft_split(token->value, ' ');
+	if (!path)
+		return (127);
+	if (execve(path, data->cmd, data->env) == -1)
 	{
-		path = access_path(data->binary_paths, token->value);
-		if (!path)
-			return (127);
-		if (execve(path, &token->value, data->env) == -1)
-		{
-			ft_putstr_fd("Command not found: \n", 2);
-			ft_putendl_fd(token->value, 2);
-			return (127);
-		}
+		printf("we got here\n");
+		ft_putstr_fd("Command not found: \n", 2);
+		ft_putendl_fd(token->value, 2);
+		return (127);
 	}
 	return (SUCCESS);
 }
@@ -63,6 +60,7 @@ char	*access_path(char **path, char *cmd)
 	char	*curr_path;
 
 	i = 0;
+
 	while (path[i])
 	{
 		curr_path = ft_strsjoin(path[i], cmd, '/');
@@ -71,7 +69,7 @@ char	*access_path(char **path, char *cmd)
 			if (!access(curr_path, X_OK))
 			{
 				free_array(path);
-				return (ft_strrchr(curr_path, '/'));
+				return (curr_path);
 			}
 			ft_putstr_fd("Command not found: ", 2);
 			ft_putendl_fd(cmd, 2);
