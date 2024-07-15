@@ -68,7 +68,7 @@ ALWAYS remember to pull from main to have the latest version of minishell before
         - single and double quotes.
 1. Parse the line given to readline() (Bruno and Leo?)
 	- Turn everything into lowercase
- 	- No whites
+ 	- No white spaces
   	- No special characters
 3. Tokenization (Waleed)
 4. Built-ins (Felipe)
@@ -82,6 +82,8 @@ ALWAYS remember to pull from main to have the latest version of minishell before
 6. Piping (Felipe)
 7. Handle $? (Felipe)
 8. CTRL-C + CTRL-D + CTRL-\ (Bruno or Leo)
+    - CTRL + C working correctly
+    - CTRL + \ is ignored on the top level of minishell, needs to work in the child processes
 9. Environment variables ($ expands values) (Bruno, and everyone at certain point)
 
 

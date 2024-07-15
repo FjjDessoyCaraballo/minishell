@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lstorey <lstorey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/12 15:03:18 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/15 12:14:32 by lstorey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ typedef struct s_data
 	t_env	*envll;
 }	t_data;
 
+
 /*************************************************/
 /* functions *************************************/
 /*************************************************/
@@ -111,5 +112,8 @@ int		shell_cd(char *path, t_data *data);
 int		export(char *cargo, t_env *env_ll);
 int		print_export(t_env *env_ll);
 int		unset(char *str, t_env **env_ll);
+
+/* signals.c */
+void	handler(int sig);
 
 #endif
