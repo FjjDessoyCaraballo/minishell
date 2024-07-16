@@ -60,5 +60,8 @@ void line_tokenization(t_data *data)
 		}
     }
 	data->token = first_node;
-	print_tokens(data);
+
+	data->cmd_a = tokens_to_array(data->token);
+	//print_tokens(data);
+	print_cmd(data->cmd_a);
 }

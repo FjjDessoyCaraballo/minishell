@@ -14,7 +14,7 @@
 
 int	sniff_line(t_data *data)
 {
-	data->line_read = readline("[I can't believe this is not shell] ");
+	data->line_read = readline("🤓: ");
 	if (!data->line_read)
 		return (0);
 	line_tokenization(data);
