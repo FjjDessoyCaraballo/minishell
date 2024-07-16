@@ -18,7 +18,7 @@ int	shell_cd(char *path, t_data *data)
 	char	*new_pwd;
 	char	*curr_pwd;
 
-	if (!path[0]) // not working
+	if (ft_strlen(path) == 2)
 	{
 		chdir(data->home_pwd);
 		return (SUCCESS);
