@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/15 17:29:20 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/16 15:35:01 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 - pipes;
 - redirections;
 
-Execution should probably depend on what we find in the line. 
+Execution should happen within child process, otherwise it quits the whole thang.
 Therefore, iteration might be neccessary for either single execution or builtin
 */
 int	execution(t_data *data, t_env **env_ll)
@@ -27,14 +27,58 @@ int	execution(t_data *data, t_env **env_ll)
 
 	token = data->token;
 	token->value = data->line_read;
-	if (token->type == BUILTIN)
-		built_ins(data, token, env_ll);
-	else if (token->type == COMMAND)
-		data->exit_status = lonely_execution(data, token, env_ll);
+	
+	while (token != NULL)
+	{ 
+		if (token->type != PIPE || token->type != REDIRECT || token->next == NULL)
+			built_ins(data, token, env_ll);
+		else
+		{
+			data->fd = how_many_children(data, token) + 1;
+			if (!data->fd)
+				return (FAILURE);	
+			data->status = crack_pipe(data, token);
+		
+		}
+		token = token->next;
+	}
 	return (SUCCESS);
 }
 
-// execve() second argument has to be an array of the command and its flags
+int	crack_pipe(t_data *data, t_token *token) // environment pointer will probably come back here
+{
+	int		i;
+	pid_t	pids[data->processes];
+
+	if (pipe(data->fd) == -1)
+	{
+		perror("Plumbing error: ");
+		// gotta close FDs
+		return (141);
+	}
+	i = 0;
+	while (i < data->processes)
+	{
+		pids[i] = fork();
+		if (pids[i] < 0)
+		{
+			if (i == (data->processes - 1))
+				waitpid(pids[0], &data->status, 0);
+			else
+				waitpid(pids[i + 1], &data->status, 0);
+			close_all_fds(data->fd);
+			return (127);
+		}
+		i++;
+	}
+	//DUMMY USE OF TOKEN
+	if (token->next->next->next->next->type == UNKNOWN)
+		close_all_fds(data->fd);
+	return (FAILURE);
+}
+
+
+/* execve() second argument has to be an array of the command and its flags */
 int lonely_execution(t_data *data, t_token *token, t_env **env_ll)
 {
 	char	*path;
@@ -53,32 +97,5 @@ int lonely_execution(t_data *data, t_token *token, t_env **env_ll)
 	}
 	return (SUCCESS);
 }
-
-char	*access_path(char **path, char *cmd)
-{
-	int		i;
-	char	*curr_path;
-
-	i = 0;
-
-	while (path[i])
-	{
-		curr_path = ft_strsjoin(path[i], cmd, '/');
-		if (!access(curr_path, F_OK))
-		{
-			if (!access(curr_path, X_OK))
-			{
-				free_array(path);
-				return (curr_path);
-			}
-			ft_putstr_fd("Command not found: ", 2);
-			ft_putendl_fd(cmd, 2);
-		}
-		free(curr_path);
-		i++;
-	}
-	return (NULL);
-}
-
 
 

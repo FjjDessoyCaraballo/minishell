@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/15 17:26:44 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/16 15:32:51 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,8 @@ typedef struct s_data
 {
 	char 	**env;
 	int		exit_status;
-	int		pipe;
+	int		processes;
+	int		*fd;
 	char	*bin;
 	char	*path;
 	char	**binary_paths;
@@ -79,10 +80,16 @@ typedef struct s_data
 /* in main.c */
 //usually I leave main.c alone. Its a style choice.
 
+
 /* in execution.c */
 int		execution(t_data *data, t_env **env_ll);
-char	*access_path(char **path, char *cmd);
+int		crack_pipe(t_data *data, t_token *token);
 int 	lonely_execution(t_data *data, t_token *token, t_env **env_ll);
+
+/* in execution_utils.c */
+void	close_all_fds(int *fd);
+int		*how_many_children(t_data *data, t_token *token);
+char	*access_path(char **path, char *cmd);
 
 /* in init.c */
 void	ll_env(t_env **env_ll, char **env);
