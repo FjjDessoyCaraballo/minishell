@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/15 15:13:25 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/15 17:26:44 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ typedef struct s_data
 	char	**binary_paths;
 	char	*home_pwd;
 	int		status;
+	char	**cmd;
 	// need to insert pids, tokens, and commands
 	t_token *token;
 	char	**builtins;
@@ -103,7 +104,8 @@ t_env	*ft_list_last(t_env *lst);
 void	free_ll(t_env *env_ll);
 
 /* in ll_utils2.c */
-void	env_arr_updater(t_data *data, t_env *env_ll);
+void	env_arr_updater(t_data *data, t_env **env_ll);
+int		ll_size(t_env **env_ll);
 
 /* in built_ins.c */
 void	built_ins(t_data *data, t_token *token, t_env **env_ll);
