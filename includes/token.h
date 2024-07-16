@@ -80,5 +80,8 @@ void	print_tokens(t_data *data);
  *****************************************/
 char *loop_path_for_binary(char *binary, char **paths);
 char *ft_strndup(const char *s, size_t n);
-
+/*****************************************
+ * in src/parse/freedom.c
+ * ***************************************/
+void free_my_boi(char **paths);
 # endif

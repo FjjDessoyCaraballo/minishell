@@ -28,6 +28,7 @@ SRC_FILES = main.c\
 			src/parse/token_test.c\
 			src/parse/chunky_check.c\
 			src/parse/check_utils.c\
+			src/parse/freedom.c\
 
 # Object files
 OBJ_FILES = $(SRC_FILES:.c=.o)

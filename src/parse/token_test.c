@@ -21,7 +21,8 @@ void print_tokens(t_data *data)
         printf("token value:[%s]\n", token->value);
         printf("token type:[%i]\n", token->type);
         printf("id:[%i]\n", token->id);
-		printf("token path:[%s]\n", token->path);
+		if(token->path != NULL)
+			printf("token path:[%s]\n", token->path);
         if (token->next == NULL) // Stop at the last token
             last_token = token;
         token = token->next;

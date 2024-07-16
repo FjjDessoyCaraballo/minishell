@@ -4,19 +4,26 @@ int chunky_checker(char *token,t_token *current_token,t_data *data)
 {
 	if(ft_builtin_check(token, current_token, data->builtins) == SUCCESS)
 		return(SUCCESS);
-	if(current_token->prev != NULL && current_token->prev->type == BUILTIN && ft_strcmp(token,"-n") == SUCCESS)
+	else if(current_token->prev != NULL && current_token->prev->type == BUILTIN && ft_strcmp(token,"-n") == SUCCESS)
 	{
 		current_token->type = FLAG;
 		current_token->value = "-n";
 		return (SUCCESS);
 	}
-	if(ft_command_check(token, current_token, data->bin) == SUCCESS)
+	else if(ft_command_check(token, current_token, data->bin) == SUCCESS)
 		return(SUCCESS);
-	if(ft_pipe_check(token, current_token) == SUCCESS)
+	else if(current_token->prev != NULL && (current_token->prev->type == COMMAND || current_token->prev->type == FLAG)
+			&& token[0] == '-')
+	{
+		current_token->type = FLAG;
+		current_token->value = ft_strdup(token);
 		return(SUCCESS);
-	if(ft_redirect_op_check(token, current_token, data->redirect) == SUCCESS)
+	}
+	else if(ft_pipe_check(token, current_token) == SUCCESS)
 		return(SUCCESS);
-	if(ft_argument_check(token, current_token) == SUCCESS)
+	else if(ft_redirect_op_check(token, current_token, data->redirect) == SUCCESS)
+		return(SUCCESS);
+	else if(ft_argument_check(token, current_token) == SUCCESS)
 		return(SUCCESS);
 	return(FAILURE);
 }

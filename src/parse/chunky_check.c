@@ -37,27 +37,16 @@ int ft_command_check(char *token, t_token *current_token, char *bin_paths)
         }
         else
         {
-            // If no '/' found, assume the token itself is the command name
             current_token->path = NULL;
             current_token->value = strdup(executable_path);
         }
 
         current_token->type = COMMAND;
-
-        // Free the paths array
-        for (int i = 0; paths[i]; i++)
-            free(paths[i]);
-        free(paths);
-
+		free_my_boi(paths);
         free(executable_path);  // Free the allocated path
         return SUCCESS;
     }
-
-    // Free the paths array if no match was found
-    for (int i = 0; paths[i]; i++)
-        free(paths[i]);
-    free(paths);
-
+	free_my_boi(paths);
     return FAILURE;
 }
 
