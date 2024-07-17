@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/17 16:25:15 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/17 16:27:53 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,14 +101,38 @@ void	plumber_kindergarten(t_data *data, t_token *token, int child)
 	while (token != NULL)
 	{
 		if (token->type == COMMAND) // this needs to check if its the last, first or middle child
-			dup_fds(data, token->value)
+			dup_fds(data, child, token)
 		tmp = tmp->next;
 	}
 	tmp = NULL;
 	return ;
 }
 
-void	dup_fds(t_data *data, int cmd)// this needs to check if its the last, first or middle child
+// PROTOTYPE!!!
+void	dup_fds(t_data *data, int child, t_token *token)// this needs to check if its the last, first or middle child
+{
+	if (child == 0)
+	{
+		open_infile(data);
+		dup2_or_exit(data, data->in_fd, STDIN_FILENO);
+		dup2_or_exit(data, data->pipe_fd[1], STDOUT_FILENO);
+		close_open_fds(data);
+	}
+	else if (child == data->nb_cmds - 1)
+	{
+		open_outfile(data);
+		dup2_or_exit(data, data->read_end, STDIN_FILENO);
+		dup2_or_exit(data, data->out_fd, STDOUT_FILENO);
+		close_open_fds(data);
+	}
+	else
+	{
+		dup2_or_exit(data, data->read_end, STDIN_FILENO);
+		dup2_or_exit(data, data->pipe_fd[1], STDOUT_FILENO);
+		close_open_fds(data);
+	}
+}
+
 
 /* execve() second argument has to be an array of the command and its flags */
 int lonely_execution(t_data *data, t_token *token, t_env **env_ll)
