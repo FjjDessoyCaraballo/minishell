@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/17 13:58:28 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/17 16:25:15 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,36 +39,44 @@ int	execution(t_data *data, t_env **env_ll)
 
 	token = data->token;
 	token->value = data->line_read;
-		
-	// printf("token->value: %s\ntoken->type: %i\n", token->value, token->type);
-	if (token->type == BUILTIN)
-		return (built_ins(data, token, env_ll));
-	else if (token->type == ARGUMENT)
-		return (err_pipes(token->value, 127));
-	while (token != NULL)
-	{		
-		if (token->type == COMMAND)
-		{
-			data->fd = how_many_children(data, token);
-			if (data->fd == 0)
-				return (FAILURE);	
-			data->status = crack_pipe(data, token);
-		}
-		token = token->next;
+	how_many_children(data, token);
+	if (token->type == COMMAND || (token->type == ARGUMENT
+		&& token->next->type == REDIRECT) || token->type == REDIRECT)
+	{
+		data->status = crack_pipe(data, token);
 	}
+	data->status = built_in_or_garbage(data, env_ll, token);
+	if (data->status != 0)
+		return (data->status);
 	return (148);
 }
+
+int	built_in_or_garbage(t_data *data, t_env **env_ll, t_token *token)
+{
+	t_token *tmp;
+	
+	tmp = token;
+	while (tmp != NULL)
+	{
+		if (token->type == BUILTIN)
+			return (built_ins(data, token, env_ll));
+		else if (token->type == ARGUMENT)
+			return (err_pipes(token->value, 127));
+		tmp = tmp->next;
+	}
+	return (0);
+}
+		// printf("token->value: %s\ntoken->type: %i\n", token->value, token->type);
 
 int	crack_pipe(t_data *data, t_token *token) // we're getting inside children
 {
 	int		i;
-	pid_t	pids[data->processes];
-
+	pid_t	pids[data->nb_cmds];
 
 	i = 0;
-	while (i < data->processes)
+	while (i < data->nb_cmds)
 	{
-		if (pipe(data->fd) == -1)
+		if (pipe(data->pipe_fd) == -1)
 			return (err_pipes("Broken pipe\n", 141));
 		pids[i] = fork();
 		if (pids[i] < 0)
@@ -77,19 +85,30 @@ int	crack_pipe(t_data *data, t_token *token) // we're getting inside children
 			return (err_pipes("Failed to fork\n", -1));
 		}
 		if (pids[i] == 0)
-			plumber_kindergarten(data, token);
+			plumber_kindergarten(data, token, i);
+		data->read_end = data->pipe_fd[0];
+		close(data->pipe_fd[1]);
 		i++;
 	}
 	return (FAILURE);
 }
 
-void	plumber_kindergarten(t_data *data, t_token *token)
+void	plumber_kindergarten(t_data *data, t_token *token, int child)
 {
-	// execute stuff so the children can die
-	data->status = 1;
-	token->value = "";
+	t_token	*tmp;
+
+	tmp = token;
+	while (token != NULL)
+	{
+		if (token->type == COMMAND) // this needs to check if its the last, first or middle child
+			dup_fds(data, token->value)
+		tmp = tmp->next;
+	}
+	tmp = NULL;
 	return ;
 }
+
+void	dup_fds(t_data *data, int cmd)// this needs to check if its the last, first or middle child
 
 /* execve() second argument has to be an array of the command and its flags */
 int lonely_execution(t_data *data, t_token *token, t_env **env_ll)

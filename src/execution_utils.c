@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 15:29:42 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/17 13:58:11 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/17 16:14:09 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,10 @@ char	*access_path(char **path, char *cmd)
 	return (NULL);
 }
 
-int	*how_many_children(t_data *data, t_token *token)
+void	how_many_children(t_data *data, t_token *token)
 {
-	int		*fd;
 	int		cmds;
+	int		*fd;
 	t_token	*tmp;
 	
 	cmds = 0;
@@ -53,11 +53,10 @@ int	*how_many_children(t_data *data, t_token *token)
 		tmp = tmp->next;
 	}
 	tmp = NULL;
-	// fd = (int *)malloc(sizeof(int) * (cmds * 2));
-	// if (!fd)
-	// 	return (err_pipes(MALLOC, 0));
-	data->processes = cmds;
-	return (fd);
+	data->fd = (int *)malloc(sizeof(int) * (cmds * 2));
+	if (!data->fd)
+		return ;
+	data->nb_cmds = cmds;
 }
 
 
@@ -79,3 +78,6 @@ int	err_pipes(char *msg, int err_code)
 		ft_printf("%s: command not found\n", msg);
 	return (err_code);
 }
+
+	// fds = (cmds * 2);
+	// data->fd = (int *)fds;
