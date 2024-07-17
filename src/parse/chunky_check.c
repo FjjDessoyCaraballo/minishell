@@ -30,28 +30,38 @@ int	ft_builtin_check(char *token, t_token *current_token, char **builtins)
 		return (FAILURE);
 }
 
-int		ft_command_check(char *token, t_token *current_token, char *bin_paths)
+int ft_command_check(char *token, t_token *current_token, char *bin_paths)
 {
-	if (current_token->type != UNKNOWN)
-		return FAILURE;
+    if (current_token->type != UNKNOWN)
+        return FAILURE;
 
-	char **paths = ft_split(bin_paths, ':');
-	char *executable_path = loop_path_for_binary(token, paths);
-	if (executable_path != NULL)
-	{
-		current_token->value = executable_path;
-		current_token->type = COMMAND;
-		return(SUCCESS);
-	}
-	else
-	{
-		int i = 0;
-		while(paths[i])
-			free(paths[i++]);
-		free(paths);
-		return(FAILURE);
-	}
+    char **paths = ft_split(bin_paths, ':');
+    char *executable_path = loop_path_for_binary(token, paths);
+    if (executable_path != NULL)
+    {
+        // Find the last '/' character to separate the path and name
+        char *last_slash = strrchr(executable_path, '/');
+        if (last_slash)
+        {
+            int path_len = last_slash - executable_path + 1;
+            current_token->path = ft_strndup(executable_path, path_len);
+            current_token->value = ft_strdup(last_slash + 1);
+        }
+        else
+        {
+            current_token->path = NULL;
+            current_token->value = strdup(executable_path);
+        }
+
+        current_token->type = COMMAND;
+		free_my_boi(paths);
+        free(executable_path);  // Free the allocated path
+        return SUCCESS;
+    }
+	free_my_boi(paths);
+    return FAILURE;
 }
+
 
 int ft_pipe_check(char *token, t_token *current_token)
 {

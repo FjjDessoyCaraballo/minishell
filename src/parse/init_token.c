@@ -19,6 +19,7 @@ t_token* init_token()
 		return NULL;
 	token->type = UNKNOWN;
 	token->value = NULL;
+	token->path = NULL;
 	token->id = 0;
 	token->next = NULL;
 	token->prev = NULL;

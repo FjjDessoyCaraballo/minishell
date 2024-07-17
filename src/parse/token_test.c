@@ -33,6 +33,8 @@ void print_tokens(t_data *data)
         printf("token value:[%s]\n", token->value);
         printf("token type:[%i]\n", token->type);
         printf("id:[%i]\n", token->id);
+		if(token->path != NULL)
+			printf("token path:[%s]\n", token->path);
         if (token->next == NULL) // Stop at the last token
             last_token = token;
         token = token->next;
@@ -49,3 +51,16 @@ void print_tokens(t_data *data)
     }
 }
 
+void print_cmd(char **cmd_a)
+{
+    if (cmd_a == NULL) {
+        printf("cmd_a is NULL\n");
+        return;
+    }
+	int i = 0;
+	while(cmd_a[i])
+	{
+		printf("[%s]\n", cmd_a[i]);
+		i++;
+	}
+}
