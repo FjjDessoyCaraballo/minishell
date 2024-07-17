@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 12:38:16 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/12 14:57:56 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/15 17:10:14 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,5 +60,6 @@ void	initializer(t_data *data, t_env **env_ll, char **env)
 {
 	ll_env(env_ll, env);
 	find_bin(env_ll, data);
-	data->pipe = 0;
+	ft_bzero(data, 0);
+	data->binary_paths = ft_split(data->bin, ':');
 }

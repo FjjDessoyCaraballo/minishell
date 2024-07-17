@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/12 15:03:18 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/15 17:26:44 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,10 @@ typedef struct s_data
 	int		pipe;
 	char	*bin;
 	char	*path;
+	char	**binary_paths;
 	char	*home_pwd;
 	int		status;
+	char	**cmd;
 	// need to insert pids, tokens, and commands
 	t_token *token;
 	char	**builtins;
@@ -70,6 +72,7 @@ typedef struct s_data
 	t_env	*envll;
 }	t_data;
 
+
 /*************************************************/
 /* functions *************************************/
 /*************************************************/
@@ -78,7 +81,9 @@ typedef struct s_data
 //usually I leave main.c alone. Its a style choice.
 
 /* in execution.c */
-int	execution(t_data *data, t_env **env_ll);
+int		execution(t_data *data, t_env **env_ll);
+char	*access_path(char **path, char *cmd);
+int 	lonely_execution(t_data *data, t_token *token, t_env **env_ll);
 
 /* in init.c */
 void	ll_env(t_env **env_ll, char **env);
@@ -91,7 +96,6 @@ void	error_exit(int num);
 
 /* in line_handler.c */
 int		sniff_line(t_data *data);
-// int		line_parsing(t_data *data, char *line); // future parsing
 
 /* in ll_utils.c */
 t_env	*ft_listnew(void *content);
@@ -99,6 +103,10 @@ char	*get_home(t_env *env_ll);
 void	ft_listadd_back(t_env **lst, t_env *new);
 t_env	*ft_list_last(t_env *lst);
 void	free_ll(t_env *env_ll);
+
+/* in ll_utils2.c */
+void	env_arr_updater(t_data *data, t_env **env_ll);
+int		ll_size(t_env **env_ll);
 
 /* in built_ins.c */
 void	built_ins(t_data *data, t_token *token, t_env **env_ll);
@@ -112,5 +120,8 @@ int		shell_cd(char *path, t_data *data);
 int		export(char *cargo, t_env *env_ll);
 int		print_export(t_env *env_ll);
 int		unset(char *str, t_env **env_ll);
+
+/* signals.c */
+void	handler(int sig);
 
 #endif
