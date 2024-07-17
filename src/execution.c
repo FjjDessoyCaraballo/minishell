@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/17 13:47:54 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/17 13:58:28 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,8 @@ int	execution(t_data *data, t_env **env_ll)
 	{		
 		if (token->type == COMMAND)
 		{
-			data->fd = how_many_children(data, token) + 1;
-			if (!data->fd)
+			data->fd = how_many_children(data, token);
+			if (data->fd == 0)
 				return (FAILURE);	
 			data->status = crack_pipe(data, token);
 		}
@@ -68,7 +68,6 @@ int	crack_pipe(t_data *data, t_token *token) // we're getting inside children
 	i = 0;
 	while (i < data->processes)
 	{
-		// if parse_cmds(token);
 		if (pipe(data->fd) == -1)
 			return (err_pipes("Broken pipe\n", 141));
 		pids[i] = fork();

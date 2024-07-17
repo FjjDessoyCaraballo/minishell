@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 15:29:42 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/17 13:24:34 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/17 13:58:11 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,22 +41,22 @@ char	*access_path(char **path, char *cmd)
 int	*how_many_children(t_data *data, t_token *token)
 {
 	int		*fd;
-	int		processes;
+	int		cmds;
 	t_token	*tmp;
 	
-	processes = 0;
+	cmds = 0;
 	tmp = token;
 	while (tmp != NULL)
 	{
-		if (tmp->type == PIPE)
-			processes++;
+		if (tmp->type == COMMAND)
+			cmds++;
 		tmp = tmp->next;
 	}
-	fd = (int *)malloc(sizeof(int) * (processes + 1));
-	if (!fd)
-		return (NULL);
-	data->processes = processes + 1;
 	tmp = NULL;
+	fd = (int *)malloc(sizeof(int) * (cmds * 2));
+	if (!fd)
+		return (err_pipes(MALLOC, 0));
+	data->processes = cmds;
 	return (fd);
 }
 

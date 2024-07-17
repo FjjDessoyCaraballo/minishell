@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/17 13:33:43 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/17 13:54:45 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@
 /*************************************************/
 //Errors
 # define ERR "Error\n"
+# define MALLOC "Malloc failure\n"
 # define EXIT "Exit\n"
 # define ERR_ARG "Wrong number of arguments, Karen\n"
 # define PATH_MAX 1024
