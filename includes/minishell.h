@@ -67,6 +67,7 @@ typedef struct s_data
 	t_token *token;
 	char	**builtins;
 	char	**redirect;
+	char	**cmd_a;
 	char	*line_read;
 	t_env	*envll;
 }	t_data;
