@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 15:29:42 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/16 15:30:24 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/17 13:24:34 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,4 +71,11 @@ void	close_all_fds(int *fd)
 		close(fd[i]);
 		i++;
 	}
+}
+
+int	err_pipes(char *msg, int err_code)
+{
+	if (*msg)
+		ft_printf("%s: command not found\n", msg);
+	return (err_code);
 }

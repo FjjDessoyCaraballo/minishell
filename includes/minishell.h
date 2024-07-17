@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/16 15:32:51 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/17 13:33:43 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,9 +85,11 @@ typedef struct s_data
 /* in execution.c */
 int		execution(t_data *data, t_env **env_ll);
 int		crack_pipe(t_data *data, t_token *token);
+void	plumber_kindergarten(t_data *data, t_token *token);
 int 	lonely_execution(t_data *data, t_token *token, t_env **env_ll);
 
 /* in execution_utils.c */
+int		err_pipes(char *msg, int err_code);
 void	close_all_fds(int *fd);
 int		*how_many_children(t_data *data, t_token *token);
 char	*access_path(char **path, char *cmd);
@@ -116,7 +118,7 @@ void	env_arr_updater(t_data *data, t_env **env_ll);
 int		ll_size(t_env **env_ll);
 
 /* in built_ins.c */
-void	built_ins(t_data *data, t_token *token, t_env **env_ll);
+int		built_ins(t_data *data, t_token *token, t_env **env_ll);
 int		print_env(t_env *env_ll);
 int		print_pwd(void);
 void	get_the_hell_out(t_data *data, int exit_code, t_env *env_ll);

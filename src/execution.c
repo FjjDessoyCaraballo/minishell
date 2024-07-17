@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/16 15:35:01 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/17 13:47:54 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,62 +21,76 @@
 Execution should happen within child process, otherwise it quits the whole thang.
 Therefore, iteration might be neccessary for either single execution or builtin
 */
+
+		// else if ((token->type == COMMAND) || (token->type == BUILTIN
+		// 	&& token->next->type == PIPE) || (token->type == BUILTIN
+		// 	&& token->next->type == FLAG && token->next->next->type == PIPE))
+
+	// if (token->next == NULL)
+	// 	return (err_pipes(NULL, 148));
+
+// if (token->type != PIPE || token->type != REDIRECT || token->next == NULL
+// 			|| (token->type == BUILTIN && token->next == NULL) || token->type != COMMAND)
+
+			
 int	execution(t_data *data, t_env **env_ll)
 {
     t_token	*token;
 
 	token = data->token;
 	token->value = data->line_read;
-	
+		
+	// printf("token->value: %s\ntoken->type: %i\n", token->value, token->type);
+	if (token->type == BUILTIN)
+		return (built_ins(data, token, env_ll));
+	else if (token->type == ARGUMENT)
+		return (err_pipes(token->value, 127));
 	while (token != NULL)
-	{ 
-		if (token->type != PIPE || token->type != REDIRECT || token->next == NULL)
-			built_ins(data, token, env_ll);
-		else
+	{		
+		if (token->type == COMMAND)
 		{
 			data->fd = how_many_children(data, token) + 1;
 			if (!data->fd)
 				return (FAILURE);	
 			data->status = crack_pipe(data, token);
-		
 		}
 		token = token->next;
 	}
-	return (SUCCESS);
+	return (148);
 }
 
-int	crack_pipe(t_data *data, t_token *token) // environment pointer will probably come back here
+int	crack_pipe(t_data *data, t_token *token) // we're getting inside children
 {
 	int		i;
 	pid_t	pids[data->processes];
 
-	if (pipe(data->fd) == -1)
-	{
-		perror("Plumbing error: ");
-		// gotta close FDs
-		return (141);
-	}
+
 	i = 0;
 	while (i < data->processes)
 	{
+		// if parse_cmds(token);
+		if (pipe(data->fd) == -1)
+			return (err_pipes("Broken pipe\n", 141));
 		pids[i] = fork();
 		if (pids[i] < 0)
 		{
-			if (i == (data->processes - 1))
-				waitpid(pids[0], &data->status, 0);
-			else
-				waitpid(pids[i + 1], &data->status, 0);
-			close_all_fds(data->fd);
-			return (127);
+			close(data->fd[i]);
+			return (err_pipes("Failed to fork\n", -1));
 		}
+		if (pids[i] == 0)
+			plumber_kindergarten(data, token);
 		i++;
 	}
-	//DUMMY USE OF TOKEN
-	if (token->next->next->next->next->type == UNKNOWN)
-		close_all_fds(data->fd);
 	return (FAILURE);
 }
 
+void	plumber_kindergarten(t_data *data, t_token *token)
+{
+	// execute stuff so the children can die
+	data->status = 1;
+	token->value = "";
+	return ;
+}
 
 /* execve() second argument has to be an array of the command and its flags */
 int lonely_execution(t_data *data, t_token *token, t_env **env_ll)
