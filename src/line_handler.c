@@ -14,12 +14,8 @@
 
 int	sniff_line(t_data *data)
 {
-<<<<<<< HEAD
-	data->line_read = readline("🤓: ");
-=======
 	data->line_read = \
 	readline("\e[45m[I can't believe this is not shell]\e[0m ");
->>>>>>> b6a25bb71a7cb3350356b6d3c250c8971cb53451
 	if (!data->line_read)
 		return (0);
 	line_tokenization(data);
