@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/17 16:17:00 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/17 16:57:18 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,8 @@ typedef struct s_data
 	char	*path;
 	char	**binary_paths;
 	int		pipe_fd[2];
+	int		fd_in;
+	int		fd_out
 	char	*home_pwd;
 	int		status;
 	char	**cmd;
@@ -87,7 +89,9 @@ typedef struct s_data
 /* in execution.c */
 int		execution(t_data *data, t_env **env_ll);
 int		crack_pipe(t_data *data, t_token *token);
-int	built_in_or_garbage(t_data *data, t_env **env_ll, t_token *token);
+void	open_fdin(t_data *data);
+void	open_fdout(t_data *data);
+int		built_in_or_garbage(t_data *data, t_env **env_ll, t_token *token);
 void	plumber_kindergarten(t_data *data, t_token *token);
 int 	lonely_execution(t_data *data, t_token *token, t_env **env_ll);
 
