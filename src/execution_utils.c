@@ -53,9 +53,9 @@ int	*how_many_children(t_data *data, t_token *token)
 		tmp = tmp->next;
 	}
 	tmp = NULL;
-	fd = (int *)malloc(sizeof(int) * (cmds * 2));
-	if (!fd)
-		return (err_pipes(MALLOC, 0));
+	// fd = (int *)malloc(sizeof(int) * (cmds * 2));
+	// if (!fd)
+	// 	return (err_pipes(MALLOC, 0));
 	data->processes = cmds;
 	return (fd);
 }
