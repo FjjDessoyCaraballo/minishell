@@ -4,7 +4,7 @@
 # include "minishell.h"
 
 typedef struct s_data t_data;
-
+typedef struct s_env t_env;
 /*******************************************
  * enum assign types
  * 0. echo,cd,pwd...
@@ -46,7 +46,7 @@ typedef struct s_token{
 /*****************************************
  * in src/parse/tokenizer.c
  *****************************************/
-void	line_tokenization(t_data *data);
+void	line_tokenization(t_data *data, t_env **env_ll);
 int		chunky_checker(char *token, t_token *current_token, t_data *data);
 
 /*****************************************
