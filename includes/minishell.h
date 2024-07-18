@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/17 16:57:18 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/18 12:18:25 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@
 # include <stdlib.h>
 # include <sys/wait.h>
 # include <unistd.h>
+# include <errno.h>
+# include <fcntl.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 
@@ -38,6 +40,12 @@
 # define ERR "Error\n"
 # define MALLOC "Malloc failure\n"
 # define EXIT "Exit\n"
+# define NO_FILE 1
+# define DIRECOTRY 69
+# define FILE_PERMISSION_DENIED 2
+# define PERMISSION_DENIED 126
+# define COMMAND_NOT_FOUND 127
+// # define EXEC_NOT_FOUND -2
 # define ERR_ARG "Wrong number of arguments, Karen\n"
 # define PATH_MAX 1024
 # define SUCCESS 0
