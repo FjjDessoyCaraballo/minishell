@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 14:19:20 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/18 15:02:48 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/18 15:30:18 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,26 +14,24 @@
 
 void	dup_fds(t_data *data, int child, t_token *token) // this needs to check if its the last, first or middle child
 {
-	if (child == 0)
+	if (child != 0 || data->nb_cmds == 1)
 	{
-		if (token->prev->type == ARGUMENT)
-			open_fdout(data, token->prev->value); // THIS CONSIDERS THAT WE HAVE AN INFILE
+		dup2(data->pipe_fd[0], STDIN_FILENO);
+		dup2(data->pipe_fd[1], STDOUT_FILENO);
+		close_fds(data);
+	}	
+	if (child == 0 && token->next->type == ARGUMENT)
+	{
+		open_fdin(data, token->prev->value); // THIS CONSIDERS THAT WE HAVE AN INFILE
 		dup2(data->fd_in, STDIN_FILENO);
 		dup2(data->pipe_fd[1], STDOUT_FILENO);
 		close_fds(data);
 	}
-	else if (child == data->nb_cmds) // there was a -1
+	else if (child == data->nb_cmds && token->next->type == ARGUMENT) // there was a -1
 	{
-		if (token->next->type == REDIRECT || token->next->type == ARGUMENT)
-			open_fdout(data, token->next->value); // THIS CONSIDERS THAT WE HAVE OUTFILES
+		open_fdout(data, token->next->value); // THIS CONSIDERS THAT WE HAVE OUTFILES
 		dup2(data->read_end, STDIN_FILENO);
 		dup2(data->fd_out, STDOUT_FILENO);
-		close_fds(data);
-	}
-	else
-	{
-		dup2(data->read_end, STDIN_FILENO);
-		dup2(data->pipe_fd[1], STDOUT_FILENO);
 		close_fds(data);
 	}
 }

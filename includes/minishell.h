@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/18 15:01:54 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/18 15:49:46 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,9 +94,9 @@ typedef struct s_data
 
 /* in execution.c */
 int		execution(t_data *data, t_env **env_ll);
-int		crack_pipe(t_data *data, t_token *token);
+int		crack_pipe(t_data *data, t_token *token, t_env **env_ll);
 int		built_in_or_garbage(t_data *data, t_env **env_ll, t_token *token);
-void	plumber_kindergarten(t_data *data, t_token *token, int child);
+void	plumber_kindergarten(t_data *data, t_token *token, t_env **env_ll, int child);
 
 /* in execution_utils.c */
 int		err_pipes(char *msg, int err_code);
@@ -131,7 +131,7 @@ t_env	*ft_list_last(t_env *lst);
 void	free_ll(t_env *env_ll);
 
 /* in ll_utils2.c */
-void	env_arr_updater(t_data *data, t_env **env_ll);
+char	**env_arr_updater(t_env **env_ll);
 int		ll_size(t_env **env_ll);
 
 /* in built_ins.c */
