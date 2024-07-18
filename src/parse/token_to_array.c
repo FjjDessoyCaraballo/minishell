@@ -28,6 +28,6 @@ char **tokens_to_array(t_token *token_list) {
     }
     array[index] = NULL; // Terminate the array with NULL
 
-    return array;
+    return (array);
 }
 

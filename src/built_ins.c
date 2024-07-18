@@ -3,35 +3,37 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 14:18:24 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/12 15:04:23 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/17 13:34:57 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 /* This part is taking the tokens and taking the argument just after it. */
-void	built_ins(t_data *data, t_token *token, t_env **env_ll)
+int	built_ins(t_data *data, t_token *token, t_env **env_ll)
 {
+	int	status;
+
+	status = 0;
 	data->home_pwd = get_home((*env_ll));
 	if (!ft_strncmp(token->value, "env", 3))
-		data->status = print_env((*env_ll));
+		status = print_env((*env_ll));
 	else if (!ft_strncmp(token->value, "pwd", 3))
-		data->status = print_pwd();
+		status = print_pwd();
 	else if (!ft_strncmp(token->value, "exit", 4))
 		get_the_hell_out(data, ft_atoi(token->value + 5), (*env_ll));
 	else if (!ft_strncmp(token->value, "echo", 4))
-		data->status = yodeling(token->value);
+		status = yodeling(token->value);
 	else if (!ft_strncmp(token->value, "cd", 2))
-		data->status = shell_cd(token->value, data);
+		status = shell_cd(token->value, data);
 	else if (!ft_strncmp(token->value, "export", 6))
-		data->status = export(token->value + 6, (*env_ll));
+		status = export(token->value + 6, (*env_ll));
 	else if (!ft_strncmp(token->value, "unset", 5))
-		data->status = unset(token->value + 6, env_ll);
-	else
-		return ;
+		status = unset(token->value + 6, env_ll);
+	return (status);
 }
 /* The printing of the environment changes in conformity to the use of
 export and unset. The command 'env' itself does not take arguments.
