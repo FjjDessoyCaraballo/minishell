@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/18 14:23:31 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/18 15:03:40 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ int	execution(t_data *data, t_env **env_ll)
 	token = data->token;
 	token->value = data->line_read;
 	how_many_children(data, token);
+	printf("we are here\n");
 	if (token->type == COMMAND || (token->type == ARGUMENT
 		&& token->next->type == REDIRECT) || token->type == REDIRECT)
 	{

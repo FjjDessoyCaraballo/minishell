@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/18 14:22:51 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/18 15:01:54 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ char	*access_path(char **path, char *cmd);
 void	dup_fds(t_data *data, int child, t_token *token);
 void	open_fdin(t_data *data, char *infile);
 void	open_fdout(t_data *data, char *outfile);
-void	close_open_fds(t_data *data);
+void	close_fds(t_data *data);
 void	exit_child(char *file, int err_code);
 
 /* in init.c */
