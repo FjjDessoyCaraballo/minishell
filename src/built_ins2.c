@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 15:26:27 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/12 11:37:38 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/17 15:36:31 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ int	print_export(t_env *env_ll)
 	t_env	*tmp;
 
 	if (!env_ll)
-		return (FAILURE);
+		return (SUCCESS);
 	tmp = env_ll;
 	while (env_ll->next != NULL)
 	{
@@ -85,7 +85,7 @@ int	unset(char *str, t_env **env_ll)
 	t_env	*del;
 
 	if (!*str || !*env_ll || !str || !env_ll)
-		return (FAILURE);
+		return (SUCCESS);
 	tmp = *env_ll;
 	if (!ft_strncmp(str, tmp->content, ft_strlen(str)))
 	{
