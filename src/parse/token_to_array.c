@@ -5,16 +5,14 @@ char **tokens_to_array(t_token *token_list) {
     int count = 0;
     t_token *current = token_list;
     while (current != NULL) {
-        if (current->type == COMMAND || current->type == FLAG) {
+        if (current->type == COMMAND || current->type == FLAG)
             count++;
-        }
         current = current->next;
     }
 
     // Step 2: Allocate memory for char ** array
     char **array = (char **)malloc((count + 1) * sizeof(char *));
     if (array == NULL) {
-        fprintf(stderr, "Memory allocation failed\n");
         return NULL;
     }
 

@@ -30,6 +30,7 @@
 # include <unistd.h>
 # include <readline/history.h>
 # include <readline/readline.h>
+# include <stdbool.h>
 
 /*************************************************/
 /* macro *****************************************/
@@ -95,7 +96,7 @@ char	*bin_extract(char *path);
 void	error_exit(int num);
 
 /* in line_handler.c */
-int		sniff_line(t_data *data, t_env **env_ll);
+int		sniff_line(t_data *data);
 
 /* in ll_utils.c */
 t_env	*ft_listnew(void *content);

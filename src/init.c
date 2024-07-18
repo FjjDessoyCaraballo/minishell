@@ -62,4 +62,5 @@ void	initializer(t_data *data, t_env **env_ll, char **env)
 	find_bin(env_ll, data);
 	ft_bzero(data, 0);
 	data->binary_paths = ft_split(data->bin, ':');
+	data->envll = *env_ll; //to make sure the data->envll points to the initialized env_ll
 }

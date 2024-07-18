@@ -12,13 +12,13 @@
 
 #include "../includes/minishell.h"
 
-int	sniff_line(t_data *data, t_env **env_ll)
+int	sniff_line(t_data *data)
 {
 	data->line_read = \
 	readline("\e[45m[I can't believe this is not shell]\e[0m ");
 	if (!data->line_read)
 		return (0);
-	line_tokenization(data, env_ll);
+	line_tokenization(data);
 	if (data->line_read || *data->line_read)
 		add_history(data->line_read);
 	return (1);

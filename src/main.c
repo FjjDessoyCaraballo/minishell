@@ -30,7 +30,7 @@ int main(int argc, char **argv, char **env)
 	{
 		while (666)
 		{
-			if (sniff_line(data, &env_ll) == 0)
+			if (sniff_line(data) == 0)
 			{
 				printf("exit\n");
 				break ;
