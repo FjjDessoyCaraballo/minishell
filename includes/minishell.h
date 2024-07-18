@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/15 17:26:44 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/18 15:49:46 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@
 # include <stdlib.h>
 # include <sys/wait.h>
 # include <unistd.h>
+# include <errno.h>
+# include <fcntl.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 
@@ -36,7 +38,14 @@
 /*************************************************/
 //Errors
 # define ERR "Error\n"
+# define MALLOC "Malloc failure\n"
 # define EXIT "Exit\n"
+# define NO_FILE 1
+# define DIRECOTRY 69
+# define FILE_PERMISSION_DENIED 2
+# define PERMISSION_DENIED 126
+# define COMMAND_NOT_FOUND 127
+// # define EXEC_NOT_FOUND -2
 # define ERR_ARG "Wrong number of arguments, Karen\n"
 # define PATH_MAX 1024
 # define SUCCESS 0
@@ -55,11 +64,15 @@ typedef struct s_env
 typedef struct s_data
 {
 	char 	**env;
-	int		exit_status;
-	int		pipe;
+	int		nb_cmds;
+	int		read_end;
+	int		*fd;
 	char	*bin;
 	char	*path;
 	char	**binary_paths;
+	int		pipe_fd[2];
+	int		fd_in;
+	int		fd_out;
 	char	*home_pwd;
 	int		status;
 	char	**cmd;
@@ -77,13 +90,26 @@ typedef struct s_data
 /* functions *************************************/
 /*************************************************/
 
-/* in main.c */
-//usually I leave main.c alone. Its a style choice.
+// int 	lonely_execution(t_data *data, t_token *token, t_env **env_ll);
 
 /* in execution.c */
 int		execution(t_data *data, t_env **env_ll);
+int		crack_pipe(t_data *data, t_token *token, t_env **env_ll);
+int		built_in_or_garbage(t_data *data, t_env **env_ll, t_token *token);
+void	plumber_kindergarten(t_data *data, t_token *token, t_env **env_ll, int child);
+
+/* in execution_utils.c */
+int		err_pipes(char *msg, int err_code);
+void	close_all_fds(int *fd);
+void	how_many_children(t_data *data, t_token *token);
 char	*access_path(char **path, char *cmd);
-int 	lonely_execution(t_data *data, t_token *token, t_env **env_ll);
+
+/* in execution_utils2.c */
+void	dup_fds(t_data *data, int child, t_token *token);
+void	open_fdin(t_data *data, char *infile);
+void	open_fdout(t_data *data, char *outfile);
+void	close_fds(t_data *data);
+void	exit_child(char *file, int err_code);
 
 /* in init.c */
 void	ll_env(t_env **env_ll, char **env);
@@ -105,11 +131,11 @@ t_env	*ft_list_last(t_env *lst);
 void	free_ll(t_env *env_ll);
 
 /* in ll_utils2.c */
-void	env_arr_updater(t_data *data, t_env **env_ll);
+char	**env_arr_updater(t_env **env_ll);
 int		ll_size(t_env **env_ll);
 
 /* in built_ins.c */
-void	built_ins(t_data *data, t_token *token, t_env **env_ll);
+int		built_ins(t_data *data, t_token *token, t_env **env_ll);
 int		print_env(t_env *env_ll);
 int		print_pwd(void);
 void	get_the_hell_out(t_data *data, int exit_code, t_env *env_ll);
