@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 15:29:42 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/17 16:14:09 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/18 14:24:47 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ char	*access_path(char **path, char *cmd)
 void	how_many_children(t_data *data, t_token *token)
 {
 	int		cmds;
-	int		*fd;
 	t_token	*tmp;
 	
 	cmds = 0;
@@ -58,7 +57,6 @@ void	how_many_children(t_data *data, t_token *token)
 		return ;
 	data->nb_cmds = cmds;
 }
-
 
 void	close_all_fds(int *fd)
 {

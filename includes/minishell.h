@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/18 12:18:25 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/18 14:22:51 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ typedef struct s_data
 	char	**binary_paths;
 	int		pipe_fd[2];
 	int		fd_in;
-	int		fd_out
+	int		fd_out;
 	char	*home_pwd;
 	int		status;
 	char	**cmd;
@@ -90,24 +90,26 @@ typedef struct s_data
 /* functions *************************************/
 /*************************************************/
 
-/* in main.c */
-//usually I leave main.c alone. Its a style choice.
-
+// int 	lonely_execution(t_data *data, t_token *token, t_env **env_ll);
 
 /* in execution.c */
 int		execution(t_data *data, t_env **env_ll);
 int		crack_pipe(t_data *data, t_token *token);
-void	open_fdin(t_data *data);
-void	open_fdout(t_data *data);
 int		built_in_or_garbage(t_data *data, t_env **env_ll, t_token *token);
-void	plumber_kindergarten(t_data *data, t_token *token);
-int 	lonely_execution(t_data *data, t_token *token, t_env **env_ll);
+void	plumber_kindergarten(t_data *data, t_token *token, int child);
 
 /* in execution_utils.c */
 int		err_pipes(char *msg, int err_code);
 void	close_all_fds(int *fd);
 void	how_many_children(t_data *data, t_token *token);
 char	*access_path(char **path, char *cmd);
+
+/* in execution_utils2.c */
+void	dup_fds(t_data *data, int child, t_token *token);
+void	open_fdin(t_data *data, char *infile);
+void	open_fdout(t_data *data, char *outfile);
+void	close_open_fds(t_data *data);
+void	exit_child(char *file, int err_code);
 
 /* in init.c */
 void	ll_env(t_env **env_ll, char **env);
