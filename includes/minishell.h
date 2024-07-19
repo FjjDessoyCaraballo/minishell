@@ -32,6 +32,7 @@
 # include <fcntl.h>
 # include <readline/history.h>
 # include <readline/readline.h>
+# include <stdbool.h>
 
 /*************************************************/
 /* macro *****************************************/

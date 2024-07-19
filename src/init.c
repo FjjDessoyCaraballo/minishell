@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 12:38:16 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/15 17:10:14 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/19 17:22:07 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,10 +56,28 @@ char	*bin_extract(char *path)
 	return (NULL);
 }
 
+/*void print_binary_paths(t_data *data)
+{
+    if (!data->binary_paths)
+    {
+        printf("Binary paths are NULL\n");
+        return;
+    }
+
+    printf("Binary paths:\n");
+    for (int i = 0; data->binary_paths[i] != NULL; i++)
+    {
+        printf("Path %d: %s\n", i, data->binary_paths[i]);
+    }
+}*/
+
+
 void	initializer(t_data *data, t_env **env_ll, char **env)
 {
 	ll_env(env_ll, env);
 	find_bin(env_ll, data);
 	ft_bzero(data, 0);
 	data->binary_paths = ft_split(data->bin, ':');
+	data->envll = *env_ll; //to make sure the data->envll points to the initialized env_ll
+	//print_binary_paths(data);
 }
