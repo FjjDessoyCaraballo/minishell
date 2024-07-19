@@ -70,7 +70,6 @@ int		ft_builtin_check(char *token, t_token *current_token, char **builtins);
 int		ft_command_check(char *token, t_token *current_token, t_data *data);
 int		ft_pipe_check(char *token, t_token *current_token);
 int		ft_redirect_op_check(char *token, t_token *current_token, char **redirect);
-
 int		ft_argument_check(char *token, t_token *current_token);
 
 /*****************************************
