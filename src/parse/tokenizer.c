@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/15 17:34:16 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/15 17:34:17 by fdessoy-         ###   ########.fr       */
+/*   Created: 2024/07/15 17:34:16 by walnaimi          #+#    #+#             */
+/*   Updated: 2024/07/19 16:03:35 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,8 @@ int chunky_checker(char *token,t_token *current_token,t_data *data)
 	if (ft_strcmp(token, "$?") == 0)
 	{
 		current_token->type = ENVVAR;
-		current_token->value = ft_itoa(data->exit_status);
+		current_token->value = ft_itoa(data->status);
 		printf("%s\n", current_token->value);
-		data->exit_status = 0;
 		return SUCCESS;
 	}
 	else if(token[0] == '$')
@@ -47,7 +46,7 @@ int chunky_checker(char *token,t_token *current_token,t_data *data)
 		current_token->value = "-n";
 		return (SUCCESS);
 	}
-	if(ft_command_check(token, current_token, data->bin) == SUCCESS)
+	if(ft_command_check(token, current_token, data) == SUCCESS)
 		return(SUCCESS);
 	else if(current_token->prev != NULL && (current_token->prev->type == COMMAND || current_token->prev->type == FLAG)
 			&& token[0] == '-')

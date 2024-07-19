@@ -34,7 +34,7 @@ Therefore, iteration might be neccessary for either single execution or builtin
 	// if (token->type == COMMAND || (token->type == ARGUMENT
 	// 	&& token->next->type == REDIRECT) || token->type == REDIRECT)
 
-			
+/*			
 int	execution(t_data *data, t_env **env_ll)
 {
     t_token	*token;
@@ -48,6 +48,33 @@ int	execution(t_data *data, t_env **env_ll)
 	if (data->status != 0)
 		return (data->status);
 	return (148);
+}
+*/
+
+int    execution(t_data *data, t_env **env_ll)
+{
+    t_token    *token;
+    //t_token *head;
+    
+    token = data->token;
+    //head = token;
+    // token->value = data->line_read;
+    // if (!(ft_strcmp(token->value, "|")))
+    //     data->cmd_a = ft_split(token->value, '|');
+    // else
+    //     data->cmd_a = ft_split(token->value, ' ');
+    /*while (head)
+    {
+        printf("head->value: %s\n", head->value);
+        head = head->next;
+    }*/
+    how_many_children(data, token);
+    if (token->type == COMMAND)
+        data->status = crack_pipe(data, token, env_ll);
+    data->status = built_in_or_garbage(data, env_ll, token);
+    if (data->status != 0)
+        return (data->status);
+    return (148);
 }
 
 int	built_in_or_garbage(t_data *data, t_env **env_ll, t_token *token)
