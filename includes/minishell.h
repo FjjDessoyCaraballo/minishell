@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/18 15:49:46 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/19 16:03:07 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,14 +138,14 @@ int		ll_size(t_env **env_ll);
 int		built_ins(t_data *data, t_token *token, t_env **env_ll);
 int		print_env(t_env *env_ll);
 int		print_pwd(void);
-void	get_the_hell_out(t_data *data, int exit_code, t_env *env_ll);
-int		yodeling(char *echoes);
+void	get_the_hell_out(t_data *data, t_token *token, t_env *env_ll);
+int		yodeling(t_token *token);
 
 /* in built_ins2.c */
-int		shell_cd(char *path, t_data *data);
-int		export(char *cargo, t_env *env_ll);
+int		shell_cd(t_token *token, t_data *data);
+int		export(t_token *token, t_env *env_ll);
 int		print_export(t_env *env_ll);
-int		unset(char *str, t_env **env_ll);
+int		unset(t_token *token, t_env **env_ll);
 
 /* signals.c */
 void	handler(int sig);
