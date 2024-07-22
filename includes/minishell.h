@@ -6,7 +6,11 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2024/07/22 12:16:52 by fdessoy-         ###   ########.fr       */
+=======
+/*   Updated: 2024/07/22 13:10:45 by fdessoy-         ###   ########.fr       */
+>>>>>>> main
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +36,7 @@
 # include <fcntl.h>
 # include <readline/history.h>
 # include <readline/readline.h>
+# include <stdbool.h>
 
 /*************************************************/
 /* macro *****************************************/

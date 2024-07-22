@@ -6,11 +6,11 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 14:18:24 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/19 15:51:37 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/22 13:07:10 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../includes/minishell.h"
 
 /* This part is taking the tokens and taking the argument just after it. */
 int	built_ins(t_data *data, t_token *token, t_env **env_ll)

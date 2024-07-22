@@ -2,9 +2,9 @@
 # define TOKEN_H
 
 # include "minishell.h"
-
+# include <stdbool.h>
 typedef struct s_data t_data;
-
+typedef struct s_env t_env;
 /*******************************************
  * enum assign types
  * 0. echo,cd,pwd...
@@ -23,6 +23,7 @@ typedef	enum e_type{
 	PIPE = 4,
 	REDIRECT = 5,
 	FLAG = 6,
+	ENVVAR = 7,
 	UNKNOWN = 404,
 }			t_type;
 
@@ -39,6 +40,7 @@ typedef struct s_token{
 	char	*value;
 	char	*path;
 	int		id;
+	bool	echoed;
 	struct s_token	*next;
 	struct s_token  *prev;
 }		t_token;
@@ -67,7 +69,7 @@ t_token* init_token();
  * in src/parse/chunky_check.c
  *****************************************/
 int		ft_builtin_check(char *token, t_token *current_token, char **builtins);
-int		ft_command_check(char *token, t_token *current_token, char *bin_paths);
+int		ft_command_check(char *token, t_token *current_token, t_data *data);
 int		ft_pipe_check(char *token, t_token *current_token);
 int		ft_redirect_op_check(char *token, t_token *current_token, char **redirect);
 int		ft_argument_check(char *token, t_token *current_token);
@@ -77,17 +79,25 @@ int		ft_argument_check(char *token, t_token *current_token);
  *****************************************/
 void	print_tokens(t_data *data);
 void	print_cmd(char **cmd_a);
+
 /*****************************************
  * in src/parse/check_utils.c
  *****************************************/
 char *loop_path_for_binary(char *binary, char **paths);
 char *ft_strndup(const char *s, size_t n);
+
 /*****************************************
  * in src/parse/freedom.c
  * ***************************************/
 void free_my_boi(char **paths);
+
 /******************************************
  * in src/parse/token_to_array.c
  * ****************************************/
 char **tokens_to_array(t_token *token_list);
+
+/*******************************************
+ * in src/parse/ft-getenv.c
+ * *****************************************/
+char *ft_getenv(const char *token, t_env *env_ll);
 # endif

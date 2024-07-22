@@ -3,10 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   chunky_check.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
+<<<<<<< HEAD
 /*   Created: 2024/07/15 17:33:52 by fdessoy-          #+#    #+#             */
 /*   Updated: 2024/07/22 12:46:16 by fdessoy-         ###   ########.fr       */
+=======
+/*   Created: 2024/07/15 17:33:52 by walnaimi          #+#    #+#             */
+/*   Updated: 2024/07/19 17:38:57 by walnaimi         ###   ########.fr       */
+>>>>>>> main
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +35,32 @@ int	ft_builtin_check(char *token, t_token *current_token, char **builtins)
 		return (FAILURE);
 }
 
-int ft_command_check(char *token, t_token *current_token, char *bin_paths)
+void print_binary_paths(t_data *data)
+{
+    for (int i = 0; data->binary_paths[i] != NULL; i++)
+    {
+        printf("Path %d: %s\n", i, data->binary_paths[i]);
+    }
+
+	if (!data->binary_paths)
+    {
+        printf("Binary paths are NULL\n");
+        return;
+    }
+}
+
+int ft_command_check(char *token, t_token *current_token, t_data *data)
 {
     if (current_token->type != UNKNOWN)
         return FAILURE;
+<<<<<<< HEAD
     char **paths = ft_split(bin_paths, ':');
+=======
+
+    char **paths = ft_split(data->bin, ':');
+	//char **paths = data->binary_paths;
+	//print_binary_paths(data);
+>>>>>>> main
     char *executable_path = loop_path_for_binary(token, paths);
     if (executable_path != NULL)
     {
