@@ -34,7 +34,7 @@ int chunky_checker(char *token,t_token *current_token,t_data *data)
 			printf("\n");
 			return FAILURE;
 	}
-	else if(ft_builtin_check(token, current_token, data->builtins) == SUCCESS)
+	else if(current_token->id == 0 && ft_builtin_check(token, current_token, data->builtins) == SUCCESS)
 	{
 		if (ft_strcmp(current_token->value, "echo") == SUCCESS)
 			current_token->echoed = true;
@@ -46,7 +46,7 @@ int chunky_checker(char *token,t_token *current_token,t_data *data)
 		current_token->value = "-n";
 		return (SUCCESS);
 	}
-	if(ft_command_check(token, current_token, data) == SUCCESS)
+	if(current_token->id == 0 && ft_command_check(token, current_token, data) == SUCCESS)
 		return(SUCCESS);
 	else if(current_token->prev != NULL && (current_token->prev->type == COMMAND || current_token->prev->type == FLAG)
 			&& token[0] == '-')
