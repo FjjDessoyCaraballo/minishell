@@ -44,4 +44,8 @@ Week 1 (week 20 of 2024)
 08.07.2024
 1. Fixed if statement in built-ins2.c that was not guarding the empty cur_pwd, and now bultin-in returns in case of failure of getcwd();
 2. Assembled team to finally properly quickstart the project. We have divided the work load and agreed on specifics on how to work. There is still a need to go over git commands and properly understand branches before letting everyone to go to work independently;
+
+15.7.2024
+1. Set up signal handler on first level of shell (ctrl + c, ctrl + \)
+2. ctrl + \ is ignored on first level, but still need to set it to execute while in child processes
 ```

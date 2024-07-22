@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/11 10:30:24 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/22 13:10:45 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 /* User defined headers **************************/
 /*************************************************/
 # include "libft.h"
+# include "../libft/includes/libft.h" // <- just to silence the nvim errors
 # include "token.h"
 
 /*************************************************/
@@ -27,24 +28,35 @@
 # include <stdlib.h>
 # include <sys/wait.h>
 # include <unistd.h>
+# include <errno.h>
+# include <fcntl.h>
 # include <readline/history.h>
 # include <readline/readline.h>
+# include <stdbool.h>
 
 /*************************************************/
 /* macro *****************************************/
 /*************************************************/
 //Errors
 # define ERR "Error\n"
+# define MALLOC "Malloc failure\n"
 # define EXIT "Exit\n"
+# define NO_FILE 1
+# define DIRECOTRY 69
+# define FILE_PERMISSION_DENIED 2
+# define PERMISSION_DENIED 126
+# define COMMAND_NOT_FOUND 127
+// # define EXEC_NOT_FOUND -2
 # define ERR_ARG "Wrong number of arguments, Karen\n"
 # define PATH_MAX 1024
+# define SUCCESS 0
+# define FAILURE 1
 
 /*************************************************/
 /* structs ***************************************/
 /*************************************************/
 typedef struct s_env
 {
-	int				dummy;
 	char			*content;
 	struct s_env	*next;
 	struct s_env	*prev;
@@ -53,24 +65,54 @@ typedef struct s_env
 typedef struct s_data
 {
 	char 	**env;
-	int		exit_status;
-	int		pipe;
+	int		nb_cmds;
+	int		read_end;
+	int		*fd;
 	char	*bin;
 	char	*path;
+	char	**binary_paths;
+	int		pipe_fd[2];
+	int		fd_in;
+	int		fd_out;
 	char	*home_pwd;
-	int		dummy;
+	int		status;
+	char	**cmd;
 	// need to insert pids, tokens, and commands
 	t_token *token;
+	char	**builtins;
+	char	**redirect;
+	char	**cmd_a;
 	char	*line_read;
 	t_env	*envll;
 }	t_data;
+
 
 /*************************************************/
 /* functions *************************************/
 /*************************************************/
 
-/* in main.c */
-//usually I leave main.c alone. Its a style choice.
+// int 	lonely_execution(t_data *data, t_token *token, t_env **env_ll);
+
+/* in execution.c */
+int		execution(t_data *data, t_env **env_ll);
+int		multiple_cmds(t_data *data, t_token *token, t_env **env_ll);
+void	single_execution(t_data *data, t_token *token, t_env **env_ll);
+int		built_in_or_garbage(t_data *data, t_env **env_ll, t_token *token);
+void	free_data(t_data *data, char *path, t_env **env);
+void	piped_execution(t_data *data, t_token *token, t_env **env_ll, int child);
+
+/* in execution_utils.c */
+int		err_pipes(char *msg, int err_code);
+void	close_all_fds(int *fd);
+int		how_many_children(t_data *data, t_token *token);
+char	*access_path(char **path, char *cmd);
+
+/* in execution_utils2.c */
+void	dup_fds(t_data *data, int child, t_token *token);
+void	open_fdin(t_data *data, char *infile);
+void	open_fdout(t_data *data, char *outfile);
+void	close_fds(t_data *data);
+void	exit_child(char *file, int err_code);
 
 /* in init.c */
 void	ll_env(t_env **env_ll, char **env);
@@ -83,7 +125,6 @@ void	error_exit(int num);
 
 /* in line_handler.c */
 int		sniff_line(t_data *data);
-// int		line_parsing(t_data *data, char *line); // future parsing
 
 /* in ll_utils.c */
 t_env	*ft_listnew(void *content);
@@ -92,18 +133,24 @@ void	ft_listadd_back(t_env **lst, t_env *new);
 t_env	*ft_list_last(t_env *lst);
 void	free_ll(t_env *env_ll);
 
+/* in ll_utils2.c */
+char	**env_arr_updater(t_env **env_ll);
+int		ll_size(t_env **env_ll);
+
 /* in built_ins.c */
-void	built_ins(t_data *data, t_env **env_ll);
-void	print_env(t_env *env_ll);
-void	print_pwd(void);
-void	get_the_hell_out(t_env *env_ll, int num);
-void	yodeling(char *echoes);
+int		built_ins(t_data *data, t_token *token, t_env **env_ll);
+int		print_env(t_env *env_ll);
+int		print_pwd(void);
+void	get_the_hell_out(t_data *data, t_token *token, t_env *env_ll);
+int		yodeling(t_token *token);
 
 /* in built_ins2.c */
-void	shell_cd(char *path, t_data *data, t_env *env_ll);
-char	*get_cwd(t_env *env_ll);
-void	export(char *cargo, t_env *env_ll);
-void	print_export(t_env *env_ll);
-void	unset(char *str, t_env **env_ll);
+int		shell_cd(t_token *token, t_data *data);
+int		export(t_token *token, t_env *env_ll);
+int		print_export(t_env *env_ll);
+int		unset(t_token *token, t_env **env_ll);
+
+/* signals.c */
+void	handler(int sig);
 
 #endif

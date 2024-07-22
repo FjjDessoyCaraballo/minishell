@@ -3,64 +3,91 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 15:26:27 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/11 17:02:27 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/22 13:07:07 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../includes/minishell.h"
 // suscetible to changes after parsing commands from line
 // removed get_cwd() and inserted into initialization (check README)
-void	shell_cd(char *path, t_data *data, t_env *env_ll)
+int	shell_cd(t_token *token, t_data *data)
 {
 	char	*new_pwd;
 	char	*curr_pwd;
+	// t_token	*head;
 
-	if (!path[0])
+	// head = token;
+	if (token->next == NULL)
 	{
 		chdir(data->home_pwd);
-		return ;
+		return (SUCCESS);
 	}
+	token = token->next; // this should have the path
 	new_pwd = NULL;
-	env_ll->dummy = 1;
-	data->dummy = 1;
     curr_pwd = getcwd(NULL, 0);
     if (!curr_pwd)
 	{
         free(curr_pwd);
-		return ;
+		ft_putstr_fd("The path ahead is block by nothingness\n", 2);
+		return (FAILURE);
 	}
-	path = ft_strtrim(path, "cd ");
-	new_pwd = ft_strsjoin(curr_pwd, path, '/');
-	free(path);
+	new_pwd = ft_strsjoin(curr_pwd, token->value, '/');
 	chdir(new_pwd);
+	return (SUCCESS);
 }
-/* This will leak if we don't figure out the array freeing */
-void	export(char *cargo, t_env *env_ll)
+/* export puts variables declared by user in the env */
+int	export(t_token *token, t_env *env_ll)
 {
 	t_env	*tmp;
 	char	**exp_list;
 	int		i;
+	int		count;
+	t_token	*head;
 	
+	head = token;
+	if (!head->next)
+	{
+		print_export(env_ll);
+		return (SUCCESS);
+	}
+	count = 0;
+	exp_list = NULL;
+	head = head->next;
+	while (head != NULL)
+	{
+		head = head->next;
+		count++;
+	}
+	exp_list = (char **)malloc(sizeof(char *) * (count + 1));
+	head = token->next;
 	i = 0;
-	exp_list = ft_split(cargo, ' ');
-	if (env_ll == NULL)
-		env_ll = ft_listnew(exp_list[i++]);
+	while (head != NULL)
+	{
+		exp_list[i++] = ft_strdup(head->value);
+		head = head->next;
+	}
+	i = 0;
 	tmp = env_ll;
+	if (!env_ll)
+		env_ll = ft_listnew(exp_list[i++]);
+	i = 0;
 	while (exp_list[i])
 		ft_listadd_back(&env_ll, ft_listnew(exp_list[i++]));
 	env_ll = tmp;
-	if (!cargo[0])
-		print_export(env_ll);
+	tmp = NULL;
+	return (SUCCESS);
 }
 // when someone types EXPORT only, it prints all env variables
 // IN ALPHABETICAL ORDER!!! <- still needs to be implemented (not really necessary)
-void	print_export(t_env *env_ll)
+int	print_export(t_env *env_ll)
 {
 	t_env	*tmp;
 
+	if (!env_ll)
+		return (SUCCESS);
 	tmp = env_ll;
 	while (env_ll->next != NULL)
 	{
@@ -70,35 +97,40 @@ void	print_export(t_env *env_ll)
 	}
 	env_ll = tmp;
 	tmp = NULL;
+	return (SUCCESS);
 }
 
 /* this function unsets whatever argument given after unset in the command line */
-void	unset(char *str, t_env **env_ll)
+int	unset(t_token *token, t_env **env_ll)
 {
 	t_env	*tmp;
 	t_env	*del;
+	t_token *head;
 
-	if (!*str || !*env_ll || !str || !env_ll)
-		return ;
+	head = token;
+	if (!head->next || !*env_ll || !env_ll)
+		return (SUCCESS);
 	tmp = *env_ll;
-	if (!ft_strncmp(str, tmp->content, ft_strlen(str)))
+	head = head->next;
+	if (!ft_strncmp(head->value, tmp->content, ft_strlen(head->value)))
 	{
 		*env_ll = tmp->next;
-		(*env_ll)->prev = NULL;
 		free(tmp);
-		return ;
+		return (SUCCESS);
 	}
 	while (tmp->next != NULL)
 	{
-		if (!ft_strncmp(str, tmp->next->content, ft_strlen(str)))
+		if (!ft_strncmp(head->value, tmp->next->content, ft_strlen(head->value)))
 		{
 			del = tmp->next;
 			tmp->next = tmp->next->next;
 			free(del);
-			return ;
+			return (SUCCESS);
 		}
 		tmp = tmp->next;
 	}
 	*env_ll = tmp;
 	tmp = NULL;
+	head = NULL;
+	return (SUCCESS);
 }

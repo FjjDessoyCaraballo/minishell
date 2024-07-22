@@ -15,16 +15,27 @@ INCFLAGS = -Iincludes -Ilibft/includes
 
 # Main project files
 SRC_FILES = main.c\
-			exit_handler.c\
 			init.c\
-			line_handler.c\
+			signals.c\
 			ll_utils.c\
-			built_ins.c\
-			built_ins2.c\
+			ll_utils2.c\
+			line_handler.c\
+			exit_handler.c\
+			src/execution/built_ins.c\
+			src/execution/built_ins2.c\
+			src/execution/execution.c\
+			src/execution/execution_utils.c\
+			src/execution/execution_utils2.c\
 			src/parse/tokenizer.c\
 			src/parse/ft_strtok.c\
 			src/parse/init_token.c\
 			src/parse/token_test.c\
+			src/parse/chunky_check.c\
+			src/parse/check_utils.c\
+			src/parse/freedom.c\
+			src/parse/token_to_array.c\
+			src/parse/getenv.c\
+
 
 # Object files
 OBJ_FILES = $(SRC_FILES:.c=.o)

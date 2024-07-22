@@ -19,7 +19,7 @@ so far the struct has 4 variables:
 - **Value**   : will hold the string of the tokenized command line.
 - **type**    : enum that defines what type of token(e.g, command, builtin...) <- it returns number that's already defined in enum.
 - **id**      : an integer holds the index or position of the token.
-- **next**    : this will point to the next token the last token will point to null just like any linked list
+- **next**    : this will point to the next token, the last token will point to null just like any linked list
 ## How to use the tokens
 ```
 void    print_tokens(t_data *data) // the token struct is in the data struct
@@ -40,7 +40,7 @@ in that function we used the token's data to be printed for us in the terminal w
 ![Pasted image 20240712001525](https://github.com/user-attachments/assets/eaf8af56-ba68-439a-8050-c8fb053de34e)
 
 you can have your token struct separately but it is better to have all your variables and structs be in one large data struct so you only add as little parameters as possible in your function and just create a local copy of the variable you want to use.
-
+(there could be some issues with that but so far I haven't found any)
 
 
 ## pipes, redirections and syntax

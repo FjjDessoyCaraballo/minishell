@@ -21,6 +21,14 @@ Waleed
 - 42-profile: https://profile.intra.42.fr/users/walnaimi
 - discord: torutu.
 
+Bruno
+- 42-email: bposa@student.hive.fi
+- 42-profile: https://profile.intra.42.fr/users/bposa
+
+Leo
+- 42-email: lstorey@student.hive.fi
+- 42-profile: https://profile.intra.42.fr/users/lstorey
+
 ## Instructions for branching
 ALWAYS remember to pull from main to have the latest version of minishell before continuing your work. At the same time, always remember to only push to main directory when the program is properly working. AVOID PUSHING FAULTY PROGRAM AT ALL COSTS!
 
@@ -60,7 +68,7 @@ ALWAYS remember to pull from main to have the latest version of minishell before
         - single and double quotes.
 1. Parse the line given to readline() (Bruno and Leo?)
 	- Turn everything into lowercase
- 	- No whites
+ 	- No white spaces
   	- No special characters
 3. Tokenization (Waleed)
 4. Built-ins (Felipe)
@@ -74,7 +82,10 @@ ALWAYS remember to pull from main to have the latest version of minishell before
 6. Piping (Felipe)
 7. Handle $? (Felipe)
 8. CTRL-C + CTRL-D + CTRL-\ (Bruno or Leo)
-9. Environment variables ($ expands values) (everyone at certain point)
+    - CTRL + C working correctly
+    - CTRL + \ is ignored on the top level of minishell, needs to work in the child processes
+9. Environment variables ($ expands values) (Bruno, and everyone at certain point)
+
 
 ## Acronyms
 
@@ -83,3 +94,4 @@ ALWAYS remember to pull from main to have the latest version of minishell before
 3. i - index;
 4. str - string;
 5. pwd - print working directory;
+6. cwd - current working directory;

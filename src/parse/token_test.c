@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   token_test.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/15 17:34:10 by fdessoy-          #+#    #+#             */
+/*   Updated: 2024/07/22 12:51:51 by fdessoy-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 /*
@@ -9,12 +21,46 @@
  *		-in the while loop it will preform the function (in this case printf).
  *		-then we move to the next node of the token linked list with token = token->next.
  */
-void	print_tokens(t_data *data)
+
+void print_tokens(t_data *data)
 {
-	t_token *token = data->token;
-	while (token != NULL)
+    t_token *token = data->token;
+	t_token *last_token = NULL;
+
+    // Forward traversal to print all tokens
+    while (token != NULL)
+    {
+        printf("token value:[%s]\n", token->value);
+        printf("token type:[%i]\n", token->type);
+        printf("id:[%i]\n", token->id);
+		if(token->path != NULL)
+			printf("token path:[%s]\n", token->path);
+        if (token->next == NULL) // Stop at the last token
+            last_token = token;
+        token = token->next;
+    }
+
+    // Backward traversal to check prev pointers
+	token = last_token;
+    while (token != NULL)
+    {
+       /*printf("prev token value:[%s]\n", token->value);
+        printf("prev token type:[%i]\n", token->type);
+        printf("prev id:[%i]\n", token->id);*/
+        token = token->prev;
+    }
+}
+
+void print_cmd(char **cmd_a)
+{
+    if (cmd_a == NULL) {
+        printf("cmd_a is NULL\n");
+        return;
+    }
+	int i = 0;
+	while(cmd_a[i])
 	{
-		printf("token value:[%s]\ntoken type:[%i]\nid:[%i]\n\n", token->value, token->type, token->id);
-		token = token->next;
+		printf("[%s]\n", cmd_a[i]);
+		i++;
 	}
 }
