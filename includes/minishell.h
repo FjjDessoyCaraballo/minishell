@@ -6,11 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2024/07/22 12:16:52 by fdessoy-         ###   ########.fr       */
-=======
-/*   Updated: 2024/07/22 13:10:45 by fdessoy-         ###   ########.fr       */
->>>>>>> main
+/*   Updated: 2024/07/22 14:02:17 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +96,7 @@ typedef struct s_data
 /* in execution.c */
 int		execution(t_data *data, t_env **env_ll);
 int		multiple_cmds(t_data *data, t_token *token, t_env **env_ll);
-void	single_execution(t_data *data, t_token *token, t_env **env_ll);
+int		single_execution(t_data *data, t_token *token, t_env **env_ll);
 int		built_in_or_garbage(t_data *data, t_env **env_ll, t_token *token);
 void	free_data(t_data *data, char *path, t_env **env);
 void	piped_execution(t_data *data, t_token *token, t_env **env_ll, int child);

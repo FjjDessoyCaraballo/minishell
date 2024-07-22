@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/22 12:49:30 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/22 14:40:05 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,16 +21,17 @@
 Execution should happen within child process, otherwise it quits the whole thang.
 Therefore, iteration might be neccessary for either single execution or builtin
 */	
-static int	token_printer(t_data *data)
+static int	token_printer(t_token *token)
 {
-	int i = 0;
+	t_token *head;
 	
-	while (data->cmd_a[i])
+	head = token;
+	while (head != NULL)
 	{
-		printf("[%s]\n", data->cmd_a[i]);
-		i++;
+		printf("[%s][%i]\n", head->value, head->type);
+		head = head->next;
 	}
-	// head = NULL;
+	head = NULL;
 	return (SUCCESS);
 }
 
@@ -39,13 +40,10 @@ int	execution(t_data *data, t_env **env_ll)
     t_token	*token;
 	
 	token = data->token;
-	token_printer(data);
+	token_printer(token);
 	if (how_many_children(data, token) == 1 && !search_token_type(token, PIPE))
-	{
-		// token_printer(token);
 		single_execution(data, token, env_ll);
-	}
-	if (how_many_children(data, token) > 3 && search_token_type(token, PIPE))
+	if (how_many_children(data, token) > 1 && search_token_type(token, PIPE))
 	{
 		token = find_token(token, COMMAND);
 		data->status = multiple_cmds(data, token, env_ll);
@@ -55,8 +53,6 @@ int	execution(t_data *data, t_env **env_ll)
 		return (data->status);
 	return (148);
 }
-
-
 
 int	built_in_or_garbage(t_data *data, t_env **env_ll, t_token *token)
 {
@@ -126,12 +122,15 @@ void	piped_execution(t_data *data, t_token *token, t_env **env_ll, int child)
 /**
  * This function takes care of executing whole commands with no piping.
  */
-void	single_execution(t_data *data, t_token *token, t_env **env_ll)
+int	single_execution(t_data *data, t_token *token, t_env **env_ll)
 {
 	pid_t	pid;
+	int		status;
 	char	*path;
 	char	**env;
+	char	**command_array;
 
+	command_array = NULL;
 	pid = fork();
 	if (pid < 0)
 	{
@@ -142,16 +141,28 @@ void	single_execution(t_data *data, t_token *token, t_env **env_ll)
 	}
 	else if (pid == 0)
 	{
+		if ((search_token_type(token, FLAG) || search_token_type(token, ARGUMENT))
+		|| (search_token_type(token, FLAG) && search_token_type(token, ARGUMENT)))
+			command_array = tokens_to_array(token);
 		path = ft_strsjoin(token->path, token->value, '/');
 		env = env_arr_updater(env_ll);
-		if (execve(path, data->cmd_a, env) == -1)
+		if (execve(path, command_array, env) == -1)
 		{
+			free_array(command_array);
 			free_array(env);
 			free_data(data, path, env_ll);
 			exit (data->status = err_pipes(token->value, 127));
-		} 
+		}
 	}
-	return ;
+	else
+	{
+		waitpid(pid, &status, 0);
+		if (WIFEXITED(status))
+			return (WEXITSTATUS(status));
+		else
+			return (-1);
+	}
+	return (status);
 }
 
 void	free_data(t_data *data, char *path, t_env **env)

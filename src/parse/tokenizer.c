@@ -5,13 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-<<<<<<< HEAD
-/*   Created: 2024/07/15 17:34:16 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/22 12:41:50 by fdessoy-         ###   ########.fr       */
-=======
 /*   Created: 2024/07/15 17:34:16 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/07/22 13:04:53 by fdessoy-         ###   ########.fr       */
->>>>>>> main
+/*   Updated: 2024/07/22 14:25:45 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,13 +110,9 @@ void line_tokenization(t_data *data)
 
 	data->cmd_a = tokens_to_array(data->token);
 	//print_tokens(data);
-<<<<<<< HEAD
-	// print_cmd(data->cmd_a);
-=======
 	//print_cmd(data->cmd_a);
 	//print_env_ll(data);
 	//(void)env_ll;
->>>>>>> main
 }
 
 /**
@@ -146,7 +137,8 @@ t_token	*find_token(t_token *token, t_type type)
 
 /**
  * this function will search for type of token and return SUCCESS (1) if
- * the command can be found within the token list.
+ * the command can be found within the token list. In case it does not
+ * find the specified type the function returns FAILURE (0).
  */
 int	search_token_type(t_token *token, t_type type)
 {
@@ -155,7 +147,7 @@ int	search_token_type(t_token *token, t_type type)
 	head = token;
 	while (head != NULL)
 	{
-		if (token->type == type)
+		if (head->type == type)
 			return (1);
 		head = head->next;
 	}
