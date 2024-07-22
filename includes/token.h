@@ -21,9 +21,12 @@ typedef	enum e_type{
 	COMMAND = 2,
 	ARGUMENT = 3,
 	PIPE = 4,
-	REDIRECT = 5,
 	FLAG = 6,
 	ENVVAR = 7,
+	RED_IN = 8,
+	RED_OUT = 9,
+	HEREDOC = 10,
+	APPEND = 11,
 	UNKNOWN = 404,
 }			t_type;
 
