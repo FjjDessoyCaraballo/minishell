@@ -5,13 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-<<<<<<< HEAD
 /*   Created: 2024/07/15 17:33:52 by fdessoy-          #+#    #+#             */
 /*   Updated: 2024/07/22 12:46:16 by fdessoy-         ###   ########.fr       */
-=======
-/*   Created: 2024/07/15 17:33:52 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/07/19 17:38:57 by walnaimi         ###   ########.fr       */
->>>>>>> main
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,19 +48,14 @@ int ft_command_check(char *token, t_token *current_token, t_data *data)
 {
     if (current_token->type != UNKNOWN)
         return FAILURE;
-<<<<<<< HEAD
-    char **paths = ft_split(bin_paths, ':');
-=======
-
     char **paths = ft_split(data->bin, ':');
 	//char **paths = data->binary_paths;
 	//print_binary_paths(data);
->>>>>>> main
     char *executable_path = loop_path_for_binary(token, paths);
     if (executable_path != NULL)
     {
         // Find the last '/' character to separate the path and name
-        char *last_slash = strrchr(executable_path, '/');
+        char *last_slash = ft_strrchr(executable_path, '/');
         if (last_slash)
         {
             int path_len = last_slash - executable_path + 1;
@@ -75,7 +65,7 @@ int ft_command_check(char *token, t_token *current_token, t_data *data)
         else
         {
             current_token->path = NULL;
-            current_token->value = strdup(executable_path);
+            current_token->value = ft_strdup(executable_path);
         }
 
         current_token->type = COMMAND;
@@ -108,7 +98,14 @@ int	ft_redirect_op_check(char *token,t_token *current_token, char **redirect)
 		if(ft_strcmp(token,redirect[i]) == SUCCESS)
 		{
 			current_token->value = ft_strdup(token);
-			current_token->type = REDIRECT;
+			if (i == 0)
+				current_token->type = RED_OUT;
+			else if (i == 1)
+				current_token->type = APPEND;
+			else if (i == 2)
+				current_token->type = RED_IN;
+			else
+				current_token->type = HEREDOC;
 			return(SUCCESS);
 		}
 		i++;
