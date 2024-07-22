@@ -6,11 +6,11 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 15:26:27 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/19 16:24:39 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/22 13:07:07 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../includes/minishell.h"
 // suscetible to changes after parsing commands from line
 // removed get_cwd() and inserted into initialization (check README)
 int	shell_cd(t_token *token, t_data *data)

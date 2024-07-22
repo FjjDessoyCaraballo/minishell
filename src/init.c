@@ -6,7 +6,11 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 12:38:16 by fdessoy-          #+#    #+#             */
+<<<<<<< HEAD
+/*   Updated: 2024/07/22 11:05:57 by fdessoy-         ###   ########.fr       */
+=======
 /*   Updated: 2024/07/19 17:22:07 by walnaimi         ###   ########.fr       */
+>>>>>>> main
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +78,8 @@ char	*bin_extract(char *path)
 
 void	initializer(t_data *data, t_env **env_ll, char **env)
 {
+	signal(SIGINT, handler);
+	signal(SIGQUIT, SIG_IGN);
 	ll_env(env_ll, env);
 	find_bin(env_ll, data);
 	ft_bzero(data, 0);

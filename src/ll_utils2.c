@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 11:35:09 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/18 15:50:31 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/22 11:17:34 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ char **env_arr_updater(t_env **env_ll)
 		tmp = tmp->next;
         i++;
     }
+	env[i] = NULL;
     tmp = NULL;
 	return (env);
 }
