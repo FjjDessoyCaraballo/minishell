@@ -5,13 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-<<<<<<< HEAD
 /*   Created: 2024/07/15 17:34:16 by fdessoy-          #+#    #+#             */
 /*   Updated: 2024/07/22 12:41:50 by fdessoy-         ###   ########.fr       */
-=======
-/*   Created: 2024/07/15 17:34:16 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/07/22 13:04:53 by fdessoy-         ###   ########.fr       */
->>>>>>> main
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +18,7 @@ int chunky_checker(char *token,t_token *current_token,t_data *data)
 	{
 		current_token->type = ENVVAR;
 		current_token->value = ft_itoa(data->status);
-		printf("%s\n", current_token->value);
+		//printf("%s\n", current_token->value);
 		return SUCCESS;
 	}
 	else if(token[0] == '$')
@@ -115,13 +110,9 @@ void line_tokenization(t_data *data)
 
 	data->cmd_a = tokens_to_array(data->token);
 	//print_tokens(data);
-<<<<<<< HEAD
-	// print_cmd(data->cmd_a);
-=======
 	//print_cmd(data->cmd_a);
 	//print_env_ll(data);
 	//(void)env_ll;
->>>>>>> main
 }
 
 /**

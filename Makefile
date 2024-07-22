@@ -17,20 +17,12 @@ INCFLAGS = -Iincludes -Ilibft/includes
 SRC_FILES = main.c\
 			init.c\
 			signals.c\
-<<<<<<< HEAD
-			line_handler.c\
-			ll_utils.c\
-			ll_utils2.c\
-			built_ins.c\
-			built_ins2.c\
-=======
 			ll_utils.c\
 			ll_utils2.c\
 			line_handler.c\
 			exit_handler.c\
 			src/execution/built_ins.c\
 			src/execution/built_ins2.c\
->>>>>>> main
 			src/execution/execution.c\
 			src/execution/execution_utils.c\
 			src/execution/execution_utils2.c\
