@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/22 14:02:17 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/22 14:49:32 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ int		execution(t_data *data, t_env **env_ll);
 int		multiple_cmds(t_data *data, t_token *token, t_env **env_ll);
 int		single_execution(t_data *data, t_token *token, t_env **env_ll);
 int		built_in_or_garbage(t_data *data, t_env **env_ll, t_token *token);
-void	free_data(t_data *data, char *path, t_env **env);
+void	free_data(t_data *data, char *path, t_env **env, char **command_array);
 void	piped_execution(t_data *data, t_token *token, t_env **env_ll, int child);
 
 /* in execution_utils.c */

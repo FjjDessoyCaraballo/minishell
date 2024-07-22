@@ -6,11 +6,28 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 15:26:27 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/22 13:07:07 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/22 14:53:40 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+int	built_in_or_garbage(t_data *data, t_env **env_ll, t_token *token)
+{
+	t_token *tmp;
+	
+	tmp = token;
+	while (tmp != NULL)
+	{
+		if (token->type == BUILTIN)
+			return (built_ins(data, token, env_ll));
+		else if (token->type == ARGUMENT)
+			return (err_pipes(token->value, 127));
+		tmp = tmp->next;
+	}
+	return (0);
+}
+
 // suscetible to changes after parsing commands from line
 // removed get_cwd() and inserted into initialization (check README)
 int	shell_cd(t_token *token, t_data *data)

@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/22 14:40:05 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/22 16:20:24 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,10 @@ int	execution(t_data *data, t_env **env_ll)
 	token = data->token;
 	token_printer(token);
 	if (how_many_children(data, token) == 1 && !search_token_type(token, PIPE))
-		single_execution(data, token, env_ll);
+		data->status = single_execution(data, token, env_ll);
 	if (how_many_children(data, token) > 1 && search_token_type(token, PIPE))
 	{
-		token = find_token(token, COMMAND);
+		// token = find_token(token, COMMAND);
 		data->status = multiple_cmds(data, token, env_ll);
 	}
 	data->status = built_in_or_garbage(data, env_ll, token);
@@ -54,49 +54,38 @@ int	execution(t_data *data, t_env **env_ll)
 	return (148);
 }
 
-int	built_in_or_garbage(t_data *data, t_env **env_ll, t_token *token)
-{
-	t_token *tmp;
-	
-	tmp = token;
-	while (tmp != NULL)
-	{
-		if (token->type == BUILTIN)
-			return (built_ins(data, token, env_ll));
-		else if (token->type == ARGUMENT)
-			return (err_pipes(token->value, 127));
-		tmp = tmp->next;
-	}
-	return (0);
-}
-
 int	multiple_cmds(t_data *data, t_token *token, t_env **env_ll) // we're getting inside children
 {
 	int		i;
 	pid_t	pids;
-	t_token	*tmp;
+	int		status;
+	//might need to use a triple pointer here. I don't see how else.
 	
-	tmp = token;
 	i = 0;
-	while (tmp != NULL)
-	{		
+	while (i < data->nb_cmds)
+	{
+		
 		if (pipe(data->pipe_fd) == -1)
 			return (err_pipes("Broken pipe\n", 141));
 		pids = fork();
 		if (pids < 0)
 		{
-			close(data->fd[i]);
+			close(data->pipe_fd[0]);
+			close(data->pipe_fd[1]);
 			return (err_pipes("Failed to fork\n", -1));
 		}
 		if (pids == 0)
 			piped_execution(data, token, env_ll, i);
-		data->read_end = data->pipe_fd[0];
-		if (data->nb_cmds > 1)
+		else
+		{
 			close(data->pipe_fd[1]);
-		tmp = tmp->next;
+			data->read_end = data->pipe_fd[0];
+			waitpid(pids, &status, 0);
+		}
+		// free_array(); // free after turning the nodes into an array
 		i++;
 	}
-	return (FAILURE);
+	return (SUCCESS);
 }
 
 /**
@@ -106,16 +95,19 @@ int	multiple_cmds(t_data *data, t_token *token, t_env **env_ll) // we're getting
 void	piped_execution(t_data *data, t_token *token, t_env **env_ll, int child)
 {
 	char	*path;
+	char	**command_array;
 	char	**env;
 	
 	dup_fds(data, child, token);
+	command_array = NULL;
 	env = env_arr_updater(env_ll);
 	path = ft_strsjoin(token->path, token->value, '/');
-	if (execve(path, tokens_to_array(token), env) == -1)	
+	command_array = ttad(token, 0);
+	if (execve(path, command_array, env) == -1)	
 	{
 		free_array(env);
-		free_data(data, path, env_ll);
-		exit (data->status = err_pipes(token->value, 127));
+		free_data(data, path, env_ll, NULL);
+		exit (127);
 	}
 }
 
@@ -135,23 +127,23 @@ int	single_execution(t_data *data, t_token *token, t_env **env_ll)
 	if (pid < 0)
 	{
 		free_ll((*env_ll));
-		free_data(data, NULL, env_ll);
+		free_data(data, NULL, env_ll, NULL);
 		perror("fork");
 		data->status = -1;
+		return (-1);
 	}
 	else if (pid == 0)
 	{
 		if ((search_token_type(token, FLAG) || search_token_type(token, ARGUMENT))
 		|| (search_token_type(token, FLAG) && search_token_type(token, ARGUMENT)))
-			command_array = tokens_to_array(token);
+			command_array = ttad(token, 0);
 		path = ft_strsjoin(token->path, token->value, '/');
 		env = env_arr_updater(env_ll);
 		if (execve(path, command_array, env) == -1)
 		{
-			free_array(command_array);
 			free_array(env);
-			free_data(data, path, env_ll);
-			exit (data->status = err_pipes(token->value, 127));
+			free_data(data, path, env_ll, command_array);
+			exit (127);
 		}
 	}
 	else
@@ -165,15 +157,12 @@ int	single_execution(t_data *data, t_token *token, t_env **env_ll)
 	return (status);
 }
 
-void	free_data(t_data *data, char *path, t_env **env)
+void	free_data(t_data *data, char *path, t_env **env, char **command_array)
 {
-	int	i;
-
-	i = 0;
-	while (data->binary_paths[i])
-		free(data->binary_paths[i++]);
-	free(data->binary_paths);
+	free_array(data->binary_paths);
 	free_ll(*env);
+	if (command_array)
+		free_array(command_array);
 	if (path)
 		free(path);
 	free(data);
