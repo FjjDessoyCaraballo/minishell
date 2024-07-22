@@ -18,8 +18,9 @@ int	sniff_line(t_data *data)
 	// dprintf(2, "contents of line_Read:%s\n", data->line_read);
 	if (!data->line_read)
 		return (0);
-	line_tokenization(data);
+	//line_tokenization(data);
 	if (data->line_read || *data->line_read)
 		add_history(data->line_read);
+	line_tokenization(data);
 	return (1);
 }

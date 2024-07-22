@@ -12,7 +12,7 @@
 
 #include "../../includes/minishell.h"
 
-int chunky_checker(char *token,t_token *current_token,t_data *data)
+int chunky_checker(char *token,t_token *current_token,t_data *data, bool expand)
 {
 	if (ft_strcmp(token, "$?") == 0)
 	{
@@ -21,14 +21,14 @@ int chunky_checker(char *token,t_token *current_token,t_data *data)
 		//printf("%s\n", current_token->value);
 		return SUCCESS;
 	}
-	else if(token[0] == '$')
+	else if(expand && token[0] == '$')
 	{
 		char *env_value = ft_getenv(token + 1, data->envll);
 			if (env_value)
 		{
-			current_token->type = ENVVAR;
+			current_token->type = ARGUMENT;
 			current_token->value = ft_strdup(env_value);
-			printf("%s\n",current_token->value);
+			//printf("%s\n",current_token->value);
 			return SUCCESS;
 		}
 			printf("\n");
@@ -37,7 +37,7 @@ int chunky_checker(char *token,t_token *current_token,t_data *data)
 	else if(current_token->id == 0 && ft_builtin_check(token, current_token, data->builtins) == SUCCESS)
 	{
 		if (ft_strcmp(current_token->value, "echo") == SUCCESS)
-			current_token->echoed = true;
+			data->echoed = true;
 		return(SUCCESS);
 	}
 	else if(current_token->prev != NULL && current_token->prev->type == BUILTIN && ft_strcmp(token,"-n") == SUCCESS)
@@ -82,6 +82,7 @@ void line_tokenization(t_data *data)
 	t_token *current_token = first_node;
 	t_token *prev_token = NULL;
 	int id = 0;
+	bool expand = true;
 
 	char *builtins[] = {"echo","cd","pwd","export","unset","env","exit",NULL};
 	data->builtins = builtins;
@@ -89,13 +90,13 @@ void line_tokenization(t_data *data)
 	char *redirect[] = {">",">>","<","<<", NULL};
 	data->redirect = redirect;
 
-    token = ft_strtok(data->line_read, delimiters);
+    token = ft_strtok(data->line_read, delimiters, &expand);
     while (token != NULL)
     {
 		current_token->id = id;
 		current_token->prev = prev_token;
-		chunky_checker(token, current_token, data);
-		token = ft_strtok(NULL, delimiters);
+		chunky_checker(token, current_token, data, expand);
+		token = ft_strtok(NULL, delimiters, &expand);
 		//printf("while token\n");
 		if(token != NULL)
 		{

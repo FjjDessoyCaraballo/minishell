@@ -82,6 +82,7 @@ typedef struct s_data
 	char	**builtins;
 	char	**redirect;
 	char	**cmd_a;
+	bool	echoed;
 	char	*line_read;
 	t_env	*envll;
 }	t_data;
