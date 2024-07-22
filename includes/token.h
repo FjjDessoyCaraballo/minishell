@@ -97,7 +97,7 @@ void free_my_boi(char **paths);
 /******************************************
  * in src/parse/token_to_array.c
  * ****************************************/
-char **tokens_to_array(t_token *token_list);
+char **ttad(t_token *token_list, t_type delimiter);
 
 /*******************************************
  * in src/parse/ft-getenv.c

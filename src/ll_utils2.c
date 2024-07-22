@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 11:35:09 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/22 11:17:34 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/22 15:49:16 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@ char **env_arr_updater(t_env **env_ll)
     i = 0;
 	tmp = (*env_ll);
 	size = ll_size(env_ll);
-	env = malloc(sizeof(char **) * size + 1);
-	if (!env)
+	env = malloc(sizeof(char **) * (size + 1)); // + 1
+ 	if (!env)
 	{
 		perror("Failed to allocate memory for data->env\n");
 		return (NULL);

@@ -6,38 +6,30 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 14:19:20 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/22 11:04:47 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/22 15:34:32 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	dup_fds(t_data *data, int child, t_token *token) // this needs to check if its the last, first or middle child
+void dup_fds(t_data *data, int child, t_token *token)
 {
-	if (child != 0 || data->nb_cmds == 1)
+    if (child == 0)
+        dup2(data->pipe_fd[1], STDOUT_FILENO);
+    else if (token->next == NULL)
+        dup2(data->read_end, STDIN_FILENO);
+    else 
 	{
-		dup2(data->pipe_fd[0], STDIN_FILENO);
-		dup2(data->pipe_fd[1], STDOUT_FILENO);
-		close_fds(data);
-	}	
-	if (child == 0 && token->next->type == ARGUMENT)
-	{
-		open_fdin(data, token->prev->value); // THIS CONSIDERS THAT WE HAVE AN INFILE
-		dup2(data->fd_in, STDIN_FILENO);
-		dup2(data->pipe_fd[1], STDOUT_FILENO);
-		close_fds(data);
-	}
-	else if (child == data->nb_cmds && token->next->type == ARGUMENT) // there was a -1
-	{
-		open_fdout(data, token->next->value); // THIS CONSIDERS THAT WE HAVE OUTFILES
-		dup2(data->read_end, STDIN_FILENO);
-		dup2(data->fd_out, STDOUT_FILENO);
-		close_fds(data);
-	}
+        dup2(data->read_end, STDIN_FILENO);
+        dup2(data->pipe_fd[1], STDOUT_FILENO);
+    }
+    close(data->pipe_fd[0]);
+    close(data->pipe_fd[1]);
 }
 
 void	open_fdin(t_data *data, char *infile)
 {
+	errno = 0;	
 	data->fd_in = open(infile, O_RDONLY);
 	if (errno == ENOENT)
 		exit_child(infile, NO_FILE);
@@ -49,6 +41,7 @@ void	open_fdin(t_data *data, char *infile)
 
 void	open_fdout(t_data *data, char *outfile)
 {
+	errno = 0;	
 	data->fd_out = open(outfile, O_WRONLY | O_CREAT | O_APPEND, 0664);
 	if (errno == ENOENT)
 		exit_child(outfile, NO_FILE);
