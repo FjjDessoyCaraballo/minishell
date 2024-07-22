@@ -6,11 +6,11 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 14:19:20 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/18 15:30:18 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/22 11:04:47 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell.h>
+#include "../../includes/minishell.h"
 
 void	dup_fds(t_data *data, int child, t_token *token) // this needs to check if its the last, first or middle child
 {

@@ -6,11 +6,11 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 15:29:42 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/18 14:24:47 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/22 12:17:35 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../includes/minishell.h"
 
 char	*access_path(char **path, char *cmd)
 {
@@ -38,7 +38,7 @@ char	*access_path(char **path, char *cmd)
 	return (NULL);
 }
 
-void	how_many_children(t_data *data, t_token *token)
+int	how_many_children(t_data *data, t_token *token)
 {
 	int		cmds;
 	t_token	*tmp;
@@ -52,10 +52,8 @@ void	how_many_children(t_data *data, t_token *token)
 		tmp = tmp->next;
 	}
 	tmp = NULL;
-	data->fd = (int *)malloc(sizeof(int) * (cmds * 2));
-	if (!data->fd)
-		return ;
 	data->nb_cmds = cmds;
+	return (cmds);
 }
 
 void	close_all_fds(int *fd)
