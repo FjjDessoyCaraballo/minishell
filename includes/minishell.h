@@ -6,7 +6,11 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/19 16:03:07 by fdessoy-         ###   ########.fr       */
+<<<<<<< HEAD
+/*   Updated: 2024/07/22 12:16:52 by fdessoy-         ###   ########.fr       */
+=======
+/*   Updated: 2024/07/22 13:10:45 by fdessoy-         ###   ########.fr       */
+>>>>>>> main
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,14 +99,16 @@ typedef struct s_data
 
 /* in execution.c */
 int		execution(t_data *data, t_env **env_ll);
-int		crack_pipe(t_data *data, t_token *token, t_env **env_ll);
+int		multiple_cmds(t_data *data, t_token *token, t_env **env_ll);
+void	single_execution(t_data *data, t_token *token, t_env **env_ll);
 int		built_in_or_garbage(t_data *data, t_env **env_ll, t_token *token);
-void	plumber_kindergarten(t_data *data, t_token *token, t_env **env_ll, int child);
+void	free_data(t_data *data, char *path, t_env **env);
+void	piped_execution(t_data *data, t_token *token, t_env **env_ll, int child);
 
 /* in execution_utils.c */
 int		err_pipes(char *msg, int err_code);
 void	close_all_fds(int *fd);
-void	how_many_children(t_data *data, t_token *token);
+int		how_many_children(t_data *data, t_token *token);
 char	*access_path(char **path, char *cmd);
 
 /* in execution_utils2.c */
