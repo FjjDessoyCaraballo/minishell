@@ -28,7 +28,7 @@ void    print_tokens(t_data *data) // the token struct is in the data struct
         while (token != NULL)
         {
                 printf("token value:[%s]\n", token->value);
-		printf("token type:[%i]\n", token->type);
+				printf("token type:[%i]\n", token->type);
                 printf("id:[%i]\n", token->id);
                 token = token->next; //move to the next struct or NULL if last one
         }
@@ -43,3 +43,12 @@ you can have your token struct separately but it is better to have all your vari
 
 
 
+## pipes, redirections and syntax
+
+my plan for now is to make each command its own pipe group here's an example
+
+```bash
+ls -la | wc -w
+```
+
+![[pipes.canvas]]
