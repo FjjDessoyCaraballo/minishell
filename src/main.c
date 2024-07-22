@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:12:51 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/19 13:58:56 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/22 11:05:49 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,6 @@ int main(int argc, char **argv, char **env)
 	t_env	*env_ll;
 	
 	(void)argv;
-	signal(SIGINT, handler);
-	signal(SIGQUIT, SIG_IGN);
 	data = malloc(sizeof(t_data));
 	if (!data)
 		exit(1); // might need to specify error for this

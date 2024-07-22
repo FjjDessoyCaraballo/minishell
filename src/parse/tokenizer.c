@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:34:16 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/15 17:34:17 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/22 12:41:50 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,5 +75,43 @@ void line_tokenization(t_data *data)
 
 	data->cmd_a = tokens_to_array(data->token);
 	//print_tokens(data);
-	print_cmd(data->cmd_a);
+	// print_cmd(data->cmd_a);
+}
+
+/**
+ * this function operates in the same fashion as strchr()
+ * by returning a pointer to the token specified by the type
+ * which is given as a second parameter.
+ */
+t_token	*find_token(t_token *token, t_type type)
+{
+	t_token *head;
+
+	head = token;
+	while (head != NULL)
+	{
+		if (type == token->type)
+			return (token);
+		head = head->next;
+	}
+	head = NULL;
+	return (NULL);
+}
+
+/**
+ * this function will search for type of token and return SUCCESS (1) if
+ * the command can be found within the token list.
+ */
+int	search_token_type(t_token *token, t_type type)
+{
+	t_token *head;
+
+	head = token;
+	while (head != NULL)
+	{
+		if (token->type == type)
+			return (1);
+		head = head->next;
+	}
+	return (0);
 }

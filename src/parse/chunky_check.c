@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:33:52 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/15 17:33:53 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/22 12:46:16 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ int ft_command_check(char *token, t_token *current_token, char *bin_paths)
 {
     if (current_token->type != UNKNOWN)
         return FAILURE;
-
     char **paths = ft_split(bin_paths, ':');
     char *executable_path = loop_path_for_binary(token, paths);
     if (executable_path != NULL)
