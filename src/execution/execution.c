@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/22 16:20:24 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/23 17:09:33 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,17 +54,26 @@ int	execution(t_data *data, t_env **env_ll)
 	return (148);
 }
 
-int	multiple_cmds(t_data *data, t_token *token, t_env **env_ll) // we're getting inside children
+
+/**
+ * This is the function that will be used when we get multiple instructions
+ * by pipes. Its still underwork.
+ */
+int	multiple_cmds(t_data *data, t_token *token, t_env **env_ll)
 {
 	int		i;
 	pid_t	pids;
 	int		status;
-	//might need to use a triple pointer here. I don't see how else.
+	char	**all_cmds;
+	char	**env;
 	
 	i = 0;
+	all_cmds = cl_to_array(data, token);
+	if (!all_cmds)
+		return (FAILURE);
+	data->env = env_arr_updater(env_ll);
 	while (i < data->nb_cmds)
 	{
-		
 		if (pipe(data->pipe_fd) == -1)
 			return (err_pipes("Broken pipe\n", 141));
 		pids = fork();
@@ -74,96 +83,128 @@ int	multiple_cmds(t_data *data, t_token *token, t_env **env_ll) // we're getting
 			close(data->pipe_fd[1]);
 			return (err_pipes("Failed to fork\n", -1));
 		}
-		if (pids == 0)
-			piped_execution(data, token, env_ll, i);
-		else
+		if (pids == 0) // child
+			piped_execution(data, all_cmds[i], i);
+		else // parent
 		{
 			close(data->pipe_fd[1]);
 			data->read_end = data->pipe_fd[0];
 			waitpid(pids, &status, 0);
 		}
-		// free_array(); // free after turning the nodes into an array
 		i++;
 	}
 	return (SUCCESS);
 }
-
 /**
- * This is the function that will be used when we get multiple instructions
- * by pipes. Its still underwork.
+ * AT THIS POINT WE WILL HAVE 
  */
-void	piped_execution(t_data *data, t_token *token, t_env **env_ll, int child)
+void	piped_execution(t_data *data, char *instruction, int child)
 {
 	char	*path;
+	char	*file;
 	char	**command_array;
-	char	**env;
-	
-	dup_fds(data, child, token);
-	command_array = NULL;
-	env = env_arr_updater(env_ll);
-	path = ft_strsjoin(token->path, token->value, '/');
-	command_array = ttad(token, 0);
-	if (execve(path, command_array, env) == -1)	
-	{
-		free_array(env);
-		free_data(data, path, env_ll, NULL);
-		exit (127);
-	}
-}
+	int		redirect_flag;
 
-/**
- * This function takes care of executing whole commands with no piping.
- */
-int	single_execution(t_data *data, t_token *token, t_env **env_ll)
-{
-	pid_t	pid;
-	int		status;
-	char	*path;
-	char	**env;
-	char	**command_array;
-
-	command_array = NULL;
-	pid = fork();
-	if (pid < 0)
+	redirect_flag = 0;
+	file = NULL;
+	if (!ft_strcmp(instruction, "<") || !ft_strcmp(instruction, ">"))
 	{
-		free_ll((*env_ll));
-		free_data(data, NULL, env_ll, NULL);
-		perror("fork");
-		data->status = -1;
-		return (-1);
+		if (!ft_strcmp(instruction, ">"))
+			redirect_flag = REDIRECT_OUT;
+		else
+			redirect_flag = REDIRECT_IN;
+		file = find_file(instruction, redirect_flag); // NEED TO FIND A NEW WAY TO FILTER OUT
+		filter_redirect(data, instruction, child, file);
 	}
-	else if (pid == 0)
+	else
+		dup_fds(data, child, 0, file);
+	if (redirect_flag != 0) // need to parse out the redirects
 	{
-		if ((search_token_type(token, FLAG) || search_token_type(token, ARGUMENT))
-		|| (search_token_type(token, FLAG) && search_token_type(token, ARGUMENT)))
-			command_array = ttad(token, 0);
-		path = ft_strsjoin(token->path, token->value, '/');
-		env = env_arr_updater(env_ll);
-		if (execve(path, command_array, env) == -1)
+		command_array = parse_instruction(instruction, redirect_flag); // continue from here
+		if (execve(path, command_array, data->env) == -1)	
 		{
-			free_array(env);
-			free_data(data, path, env_ll, command_array);
+			free_array(command_array);
+			free_array(data->env);
+			free_data(data, path, NULL, NULL);
 			exit (127);
 		}
 	}
-	else
+	else // this can be its own function
 	{
-		waitpid(pid, &status, 0);
-		if (WIFEXITED(status))
-			return (WEXITSTATUS(status));
-		else
-			return (-1);
+		command_array = ft_split(instruction, ' ');	
+		if (checking_access(data, instruction) != 0)
+		{
+			// free stuff
+			free_array(command_array);
+			free_array(data->env);
+			free_data(data, NULL, data->envll, NULL);
+			exit(127);
+		}
+		if (execve(path, command_array, data->env) == -1)	
+		{
+			free_array(command_array);
+			free_array(data->env);
+			free_data(data, path, NULL, NULL);
+			exit (127);
+		}
 	}
-	return (status);
 }
 
-void	free_data(t_data *data, char *path, t_env **env, char **command_array)
+/**
+ * Its necessary to know which redirection we have here and give back the
+ * array organized in the usual fashion of "cmd -flag" for execution.
+ */
+char	**parse_instruction(char *instruction, int redirect_flag)
 {
-	free_array(data->binary_paths);
-	free_ll(*env);
-	if (command_array)
-		free_array(command_array);
-	if (path)
-		free(path);
-	free(data);
+	char	**result;
+	int		i;
+
+	result = ft_split(instruction, ' '); // I STOPPED HERE
 }
+
+/**
+ * Here we want to filter out the file, if there is one. At this point we
+ * should surely have an infile, and maybe an outfile. It is not completely
+ * necessary that we have an outfile, because when we open fd_out in the data
+ * structure there will be an option to create a file of the users choosing.
+ * This does not mean that the redirection will work without an argument, so
+ * it is necessary that the user has inputted a name of a file to be created.
+ */
+char	*find_file(char *instruction, int redirect_flag)
+{
+	char	*file;
+	char	**filter;
+
+	filter = ft_split(instruction, ' ');
+	if (!filter)
+		return (NULL);
+	if (redirect_flag == REDIRECT_IN)
+	{
+		file = ft_strdup(filter[1]);
+		free_array(filter);
+		return (filter[2]);
+	}
+	else if (redirect_flag == REDIRECT_OUT)
+	{
+		file = ft_strdup(filter[3]);
+		free_array(filter);
+		return (file);
+	}
+	return (NULL);
+}
+
+/**
+ * This function rearrenges the command array in case there are redirects.
+ * The flag one is used to identify input redirect;
+ * The flag zero is used to identify output redirect;
+ */
+void	filter_redirect(t_data *data, char *instruction, int child, char *file)
+{
+	if (!ft_strcmp(instruction, "<"))
+		dup_fds(data, child, 1, file);
+	else if (ft_strcmp(instruction, ">"))
+		dup_fds(data, child, 1, file);
+}
+
+
+

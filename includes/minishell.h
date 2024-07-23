@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/22 20:16:40 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/23 16:50:03 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@
 # define ERR "Error\n"
 # define MALLOC "Malloc failure\n"
 # define EXIT "Exit\n"
+# define REDIRECT_OUT 2
+# define REDIRECT_IN 1
 # define NO_FILE 1
 # define DIRECOTRY 69
 # define FILE_PERMISSION_DENIED 2
@@ -96,10 +98,14 @@ typedef struct s_data
 /* in execution.c */
 int		execution(t_data *data, t_env **env_ll);
 int		multiple_cmds(t_data *data, t_token *token, t_env **env_ll);
+void	piped_execution(t_data *data, char *instruction, int child)
+char	**parse_instruction(char *instruction);
+void	filter_redirect(t_data *data, char *instruction, int child, char *file);
+
+/* in execution2.c */
 int		single_execution(t_data *data, t_token *token, t_env **env_ll);
-int		built_in_or_garbage(t_data *data, t_env **env_ll, t_token *token);
-void	free_data(t_data *data, char *path, t_env **env, char **command_array);
-void	piped_execution(t_data *data, t_token *token, t_env **env_ll, int child);
+void	single_child(t_data *data, t_token *token, t_env **env_ll);
+int		single_parent(pid_t pid, int status);
 
 /* in execution_utils.c */
 int		err_pipes(char *msg, int err_code);
@@ -108,11 +114,17 @@ int		how_many_children(t_data *data, t_token *token);
 char	*access_path(char **path, char *cmd);
 
 /* in execution_utils2.c */
-void	dup_fds(t_data *data, int child, t_token *token);
+void 	dup_fds(t_data *data, int child, int fd_flag, char *file)
 void	open_fdin(t_data *data, char *infile);
 void	open_fdout(t_data *data, char *outfile);
 void	close_fds(t_data *data);
 void	exit_child(char *file, int err_code);
+
+/* in execution_utils3.c */
+char	**cl_to_array(t_data *data, t_token *token);
+int		checking_access(t_data *data, char *instruction);
+char	*get_binary(char *instruction);
+void	free_data(t_data *data, char *path, t_env **env, char **command_array);
 
 /* in init.c */
 void	ll_env(t_env **env_ll, char **env);
@@ -145,9 +157,10 @@ void	get_the_hell_out(t_data *data, t_token *token, t_env *env_ll);
 int		yodeling(t_token *token);
 
 /* in built_ins2.c */
+int		built_in_or_garbage(t_data *data, t_env **env_ll, t_token *token);
 int		shell_cd(t_token *token, t_data *data);
-int		export(t_token *token, t_env *env_ll);
-int		print_export(t_env *env_ll);
+int		export(t_token *token, t_env **env_ll);
+int		print_export(t_env **env_ll);
 int		unset(t_token *token, t_env **env_ll);
 
 /* signals.c */

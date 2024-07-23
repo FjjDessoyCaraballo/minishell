@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:33:43 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/19 17:17:49 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/07/23 10:54:10 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,4 +50,21 @@ char	*ft_strndup(const char *s, size_t n)
 	}
 	res[i] = '\0';
 	return (res);
+}
+
+int	how_many_tokens(t_token *token)
+{
+	t_token *head;
+	int		count;
+
+	count = 0;
+	head = token;
+	while (head)
+	{
+		if (token->type == PIPE)
+			head = head->next;
+		count++;
+		head = head->next;	
+	}
+	return (count);
 }

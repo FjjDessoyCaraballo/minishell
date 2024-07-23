@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 15:26:27 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/22 14:53:40 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/23 10:15:03 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,29 +56,30 @@ int	shell_cd(t_token *token, t_data *data)
 	return (SUCCESS);
 }
 /* export puts variables declared by user in the env */
-int	export(t_token *token, t_env *env_ll)
+int	export(t_token *token, t_env **env_ll)
 {
 	t_env	*tmp;
 	char	**exp_list;
 	int		i;
 	int		count;
 	t_token	*head;
-	
+
 	head = token;
 	if (!head->next)
 	{
 		print_export(env_ll);
 		return (SUCCESS);
 	}
-	count = 0;
-	exp_list = NULL;
-	head = head->next;
+	head = token->next;
+	tmp = (*env_ll);
 	while (head != NULL)
 	{
 		head = head->next;
 		count++;
 	}
 	exp_list = (char **)malloc(sizeof(char *) * (count + 1));
+	if (!exp_list)
+		return (FAILURE);
 	head = token->next;
 	i = 0;
 	while (head != NULL)
@@ -86,34 +87,39 @@ int	export(t_token *token, t_env *env_ll)
 		exp_list[i++] = ft_strdup(head->value);
 		head = head->next;
 	}
+	exp_list[i] = NULL;
 	i = 0;
-	tmp = env_ll;
-	if (!env_ll)
-		env_ll = ft_listnew(exp_list[i++]);
+	tmp = (*env_ll);
+	if (!*env_ll)
+		(*env_ll) = ft_listnew(exp_list[i++]);
 	i = 0;
 	while (exp_list[i])
-		ft_listadd_back(&env_ll, ft_listnew(exp_list[i++]));
-	env_ll = tmp;
+		ft_listadd_back(env_ll, ft_listnew(exp_list[i++]));
+	(*env_ll) = tmp;
 	tmp = NULL;
+	// free_array(exp_list);
 	return (SUCCESS);
 }
 // when someone types EXPORT only, it prints all env variables
 // IN ALPHABETICAL ORDER!!! <- still needs to be implemented (not really necessary)
-int	print_export(t_env *env_ll)
+int	print_export(t_env **env_ll)
 {
-	t_env	*tmp;
+	char 	**env_array;
+	int		i;
 
-	if (!env_ll)
+	if (!env_ll || !*env_ll)
 		return (SUCCESS);
-	tmp = env_ll;
-	while (env_ll->next != NULL)
+	env_array = env_arr_updater(env_ll);
+	if (!env_array)
+		return (SUCCESS);
+	i = 0;
+	while (env_array[i])
 	{
 		printf("declare -x ");
-		printf("%s\n", env_ll->content);
-		env_ll = env_ll->next;
+		printf("%s\n", env_array[i]);
+		i++;
 	}
-	env_ll = tmp;
-	tmp = NULL;
+	free_array(env_array);
 	return (SUCCESS);
 }
 
