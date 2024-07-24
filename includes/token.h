@@ -90,21 +90,23 @@ void	print_cmd(char **cmd_a);
 /*****************************************
  * in src/parse/check_utils.c
  *****************************************/
-char *loop_path_for_binary(char *binary, char **paths);
-char *ft_strndup(const char *s, size_t n);
+char	*loop_path_for_binary(char *binary, char **paths);
+char	*ft_strndup(const char *s, size_t n);
+int		how_many_tokens(t_token *token);
 
 /*****************************************
  * in src/parse/freedom.c
  * ***************************************/
-void free_my_boi(char **paths);
+void	free_my_boi(char **paths);
 
 /******************************************
  * in src/parse/token_to_array.c
  * ****************************************/
-char **ttad(t_token *token_list, t_type delimiter);
+char	**ttad(t_token *token_list, t_type delimiter);
 
 /*******************************************
  * in src/parse/ft-getenv.c
  * *****************************************/
-char *ft_getenv(const char *token, t_env *env_ll);
+char	*ft_getenv(const char *token, t_env *env_ll);
+
 # endif

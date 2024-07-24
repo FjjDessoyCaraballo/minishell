@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:34:16 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/22 20:17:10 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/24 09:52:05 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,8 +121,6 @@ void line_tokenization(t_data *data)
 		}
 	}
 	data->token = first_node;
-
-	data->cmd_a = ttad(data->token, 0);
 	//print_tokens(data);
 	//print_cmd(data->cmd_a);
 	//print_env_ll(data);
