@@ -94,7 +94,7 @@ char *ft_strtok(char *str, const char *delim)
 
     return token;
 }*/
-
+/*
 char *ft_strtok(char *str, const char *delim, bool *expand)
 {
     static char *target;
@@ -142,6 +142,64 @@ char *ft_strtok(char *str, const char *delim, bool *expand)
             index--;
         }
         else if (ft_charinstr(target[index], delim))
+        {
+            break;
+        }
+        index++;
+    }
+
+    token = ft_substr(target, 0, index);
+    target += index;
+    return token;
+}
+*/
+char *ft_strtok(char *str, const char *delim, bool *expand)
+{
+    static char *target;
+    char *token;
+    int index = 0;
+    int in_quotes = 0;
+    char quote_char = '\0';
+
+    if (str)
+        target = str;
+    if (!target || *target == '\0')
+        return NULL;
+
+    // Skip leading delimiters
+    while (*target && ft_charinstr(*target, delim))
+    {
+        target++;
+        if (*target == '\0')
+            return NULL;
+    }
+
+    // Token starts here
+    index = 0;
+    while (target[index])
+    {
+        if (in_quotes)
+        {
+            if (target[index] == quote_char)
+            {
+                in_quotes = 0;
+                quote_char = '\0';
+                // Remove quote by skipping it
+                ft_memmove(&target[index], &target[index + 1], strlen(&target[index + 1]) + 1);
+                index--;
+            }
+        }
+        else if (target[index] == '"' || target[index] == '\'')
+        {
+            in_quotes = 1;
+            quote_char = target[index];
+            // Set expand to true if double quotes, false if single quotes
+            *expand = (quote_char == '"');
+            // Remove quote by skipping it
+            ft_memmove(&target[index], &target[index + 1], strlen(&target[index + 1]) + 1);
+            index--;
+        }
+        else if (ft_charinstr(target[index], delim) && !in_quotes)
         {
             break;
         }

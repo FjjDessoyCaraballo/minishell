@@ -53,6 +53,10 @@ typedef struct s_token{
  *****************************************/
 void	line_tokenization(t_data *data);
 int		chunky_checker(char *token, t_token *current_token, t_data *data, bool expand);
+
+/*****************************************
+ * src/parse/helper.c
+ *****************************************/
 t_token	*find_token(t_token *token, t_type type);
 int		search_token_type(t_token *token, t_type type);
 
