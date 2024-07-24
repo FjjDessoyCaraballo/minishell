@@ -6,21 +6,44 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 14:19:20 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/22 15:34:32 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/24 16:10:04 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void dup_fds(t_data *data, int child, t_token *token)
+void dup_fds(t_data *data, int child, int fd_flag, char *file)
 {
-    if (child == 0)
-        dup2(data->pipe_fd[1], STDOUT_FILENO);
-    else if (token->next == NULL)
-        dup2(data->read_end, STDIN_FILENO);
-    else 
+    if (child == 0) // first child
 	{
-        dup2(data->read_end, STDIN_FILENO);
+		if (fd_flag == 1)
+		{
+			open_fdin(data, file);
+			dup2(data->fd_in, STDIN_FILENO);
+			close (data->fd_in);
+		}
+        dup2(data->pipe_fd[1], STDOUT_FILENO);
+	}
+	else if (child == data->nb_cmds) // last child
+    {
+		if (fd_flag == 1)
+		{
+			open_fdout(data, file);
+			dup2(data->fd_out, STDIN_FILENO);
+			close(data->fd_out);
+		}
+	    dup2(data->read_end, STDIN_FILENO);
+	}
+	else 
+	{
+		if (file)
+		{
+			open_fdin(data, file);
+			dup2(data->fd_in, STDIN_FILENO);
+			close (data->fd_in);
+		}
+		else
+        	dup2(data->read_end, STDIN_FILENO);
         dup2(data->pipe_fd[1], STDOUT_FILENO);
     }
     close(data->pipe_fd[0]);
@@ -32,11 +55,20 @@ void	open_fdin(t_data *data, char *infile)
 	errno = 0;	
 	data->fd_in = open(infile, O_RDONLY);
 	if (errno == ENOENT)
+	{
+		close_fds(data);
 		exit_child(infile, NO_FILE);
+	}
 	else if (errno == EACCES)
+	{
+		close_fds(data);
 		exit_child(infile, FILE_PERMISSION_DENIED);
+	}
 	else if (errno == EISDIR)
+	{
+		close_fds(data);
 		exit_child(infile, EISDIR);
+	}
 }
 
 void	open_fdout(t_data *data, char *outfile)

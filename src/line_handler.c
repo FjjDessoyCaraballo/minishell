@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   line_handler.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 12:23:49 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/07/19 17:36:49 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/07/24 09:47:48 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	sniff_line(t_data *data)
 {
-	data->line_read = readline("\e[45m[I can't believe this is not shell]\e[0m ");
+	data->line_read = readline("\e[45m[I can't believe it's not shell]\e[0m ");
 	// dprintf(2, "contents of line_Read:%s\n", data->line_read);
 	if (!data->line_read)
 		return (0);
