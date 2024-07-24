@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/24 16:23:19 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/24 18:40:52 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,11 @@ int	execution(t_data *data, t_env **env_ll)
     t_token	*token;
 	
 	token = data->token;
-	if (how_many_children(data, token) == 1 && !search_token_type(token, PIPE))
+	
+	data-> nb_cmds = how_many_children(token);
+	if (data->nb_cmds == 1 && !search_token_type(token, PIPE))
 		data->status = single_execution(data, token, env_ll);
-	if (how_many_children(data, token) > 1 && search_token_type(token, PIPE))
+	else
 		data->status = multiple_cmds(data, token, env_ll);
 	data->status = built_in_or_garbage(data, env_ll, token);
 	if (data->status != 0)
@@ -60,16 +62,16 @@ int	multiple_cmds(t_data *data, t_token *token, t_env **env_ll)
 	pid_t	pids;
 	int		status;
 	char	**all_cmds;
-	
+
 	i = 0;
 	all_cmds = cl_to_array(token);
 	if (!all_cmds)
 		return (FAILURE);
+	data->env = env_arr_updater(env_ll);
+	if (!data->env)
+		return (FAILURE);
 	while (i < data->nb_cmds)
 	{
-		data->env = env_arr_updater(env_ll);
-		if (!data->env)
-			return (FAILURE);
 		if (pipe(data->pipe_fd) == -1)
 			return (err_pipes("Broken pipe\n", 141));
 		pids = fork();
@@ -84,28 +86,36 @@ int	multiple_cmds(t_data *data, t_token *token, t_env **env_ll)
 		else // parent
 		{
 			close(data->pipe_fd[1]);
+			if (i > 0)
+				close(data->read_end);
 			data->read_end = data->pipe_fd[0];
-			waitpid(pids, &status, 0);
+			
 		}
 		i++;
 	}
-	return (SUCCESS);
+	i = 0;
+	while (i < data->nb_cmds)
+	{
+		waitpid(pids, &status, 0);
+		i++;
+	}
+	
+	return status;
 }
 /**
- * 
+ * Latest 24.07 - Child process 0 runs, but no other child is created after
  */
 void	piped_execution(t_data *data, t_env **envll, char *instruction, int child)
 {
-	char	*path;
 	char	*file;
-	char	**command_array;
 	int		redirect_flag;
+	int		input_fd;
+	int		output_fd;
 
+	
 	redirect_flag = 0;
 	file = NULL;
-	
-	// We need to define the path still. We do not have the path before execve()
-	
+	printf("[child: %i]\n", child);
 	if (!ft_strcmp(instruction, "<") || !ft_strcmp(instruction, ">"))
 	{
 		if (!ft_strcmp(instruction, ">")) // HEREDOC and APPEND needed later
@@ -113,61 +123,52 @@ void	piped_execution(t_data *data, t_env **envll, char *instruction, int child)
 		else
 			redirect_flag = REDIRECT_IN;
 		file = find_file(instruction, redirect_flag);
-		filter_redirect(data, instruction, child, file);
+		// filter_redirect(data, instruction, child, file);
 	}
+	if (child == 0)
+		input_fd = -1;
 	else
-		dup_fds(data, child, 0, file);
+		input_fd = -1;
+	if (child < data->nb_cmds - 1)
+		output_fd = data->pipe_fd[1];
+	else
+		output_fd = -1;
+	dup_fds(data, input_fd, output_fd, redirect_flag, file);
 	if (checking_access(data, instruction) != 0)
 		free_data(data, NULL, envll, NULL);
-	/*#######################################################################*/
+	ft_exec(data, instruction, redirect_flag);
+}
+
+
+void	ft_exec(t_data *data, char *line, int redirect)
+{
+	char	*path;
+	char	**commands;
 	
-	if (redirect_flag != 0) // execution for redirects
+	if (redirect != 0)
+		commands = parse_instruction(line, redirect);
+	else
+		commands = ft_split(line, ' ');
+	if (!commands)
 	{
-		command_array = parse_instruction(instruction, redirect_flag);
-		if (!command_array)
-		{
-			free_array(command_array);
-			free_data(data, NULL, envll, command_array);
-			exit (-1);
-		}
-		if (ft_strchr(command_array[0], '/') != NULL)
-			path = abs_path(command_array[0]);
-		if (!path)
-		{
-			free_data(data, NULL, envll, command_array);
-			exit (1);
-		}
-		else
-			path = loop_path_for_binary(command_array[0], data->binary_paths);
-		if (execve(path, command_array, data->env) == -1)	
-		{
-			free_data(data, path, envll, command_array);
-			exit (127);
-		}
+		free_array(commands);
+		free_data(data, NULL, &data->envll, NULL);
+		exit (-1);
 	}
-	else // execution with no redirections
+	if (ft_strchr(commands[0], '/') != NULL)
+		path = abs_path(commands[0]);
+	if (!path)
 	{
-		command_array = ft_split(instruction, ' ');
-		if (!command_array)
-		{
-			free_array(command_array);
-			free_data(data, NULL, envll, NULL);
-			exit (-1);
-		}
-		if (ft_strchr(command_array[0], '/') != NULL)
-			path = abs_path(command_array[0]);
-		if (!path)
-		{
-			free_data(data, NULL, envll, command_array);
-			exit (1);
-		}
-		else
-			path = loop_path_for_binary(command_array[0], data->binary_paths);
-		if (execve(path, command_array, data->env) == -1)	
-		{
-			free_data(data, path, envll, command_array);
-			exit (127);
-		}
+		free_data(data, NULL, &data->envll, commands);
+		exit (1);
+	}
+	else
+		path = loop_path_for_binary(commands[0], data->binary_paths);
+	if (execve(path, commands, data->env) == -1)	
+	{
+		perror("execve");
+		free_data(data, path, &data->envll, commands);
+		exit (127);
 	}
 }
 

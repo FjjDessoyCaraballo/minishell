@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 15:29:42 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/22 12:17:35 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/24 18:38:30 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ char	*access_path(char **path, char *cmd)
 	return (NULL);
 }
 
-int	how_many_children(t_data *data, t_token *token)
+int	how_many_children(t_token *token)
 {
 	int		cmds;
 	t_token	*tmp;
@@ -52,7 +52,6 @@ int	how_many_children(t_data *data, t_token *token)
 		tmp = tmp->next;
 	}
 	tmp = NULL;
-	data->nb_cmds = cmds;
 	return (cmds);
 }
 
