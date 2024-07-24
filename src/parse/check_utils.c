@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:33:43 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/23 10:54:10 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/24 15:43:14 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,24 +14,24 @@
 
 char *loop_path_for_binary(char *binary, char **paths)
 {
-    char *token_with_path;
-    int i = 0;
-
-    while (paths[i])
-    {
-        token_with_path = ft_strsjoin(paths[i], binary, '/');
-        if (!access(token_with_path, F_OK))
-        {
-            if (!access(token_with_path, X_OK))
-                return token_with_path;
-            else
-                free(token_with_path);
-        }
-        else
-            free(token_with_path);
-        i++;
-    }
-    return NULL;
+	char	*token_with_path;
+	int		i; 
+	
+	i = 0;
+	while (paths[i])
+	{
+		token_with_path = ft_strsjoin(paths[i], binary, '/');
+		if (!access(token_with_path, F_OK))
+		{
+			if (!access(token_with_path, X_OK))
+				return (token_with_path);
+			else
+				free(token_with_path);
+		}
+		free(token_with_path);
+		i++;
+	}
+	return (NULL);
 }
 
 char	*ft_strndup(const char *s, size_t n)

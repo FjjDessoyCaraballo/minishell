@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 14:19:20 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/23 17:08:02 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/24 16:10:04 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ void dup_fds(t_data *data, int child, int fd_flag, char *file)
 		if (fd_flag == 1)
 		{
 			open_fdin(data, file);
-			dup2(data->fd, STDIN_FILENO);
-			close (data->fd);
+			dup2(data->fd_in, STDIN_FILENO);
+			close (data->fd_in);
 		}
         dup2(data->pipe_fd[1], STDOUT_FILENO);
 	}

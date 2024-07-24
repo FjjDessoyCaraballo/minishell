@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:33:52 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/23 12:14:22 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/24 16:22:04 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int ft_command_check(char *token, t_token *current_token, t_data *data)
     if (executable_path != NULL)
     {
         // Find the last '/' character to separate the path and name
-      k
+        char *last_slash = ft_strrchr(executable_path, '/');
         if (last_slash)
         {
             int path_len = last_slash - executable_path + 1;
