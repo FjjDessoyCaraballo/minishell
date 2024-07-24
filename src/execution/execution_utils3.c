@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 10:19:57 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/24 09:42:04 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/24 11:37:37 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,13 +42,19 @@ char **cl_to_array(t_data *data, t_token *token)
 	i = 0;
 	head = token;
 	instruction = ft_strdup("");
+	if (!instruction)
+		return (NULL);
 	while (head)
 	{
 		while (head->type != PIPE)
 		{
 			tmp = ft_strjoin(instruction, head->value);
+			if (!tmp)
+				return (NULL);
 			free(instruction);
 			instruction = ft_strjoin(tmp, " ");
+			if (!instruction)
+				return (NULL);
 			free(tmp);
 			head = head->next;
 		}
@@ -59,6 +65,18 @@ char **cl_to_array(t_data *data, t_token *token)
 	return (pipe_array);
 }
 
+/** checking_access() is mainly a last check for general binaries that
+ * the original shell uses. If the user inputs a binary of his own making
+ * it will fail this check, since it uses the paths that were stablished
+ * in the environment variable.
+ * 
+ * USAGE: pass the struct data and the instruction and it will find the
+ * binary by itself and check for existence (F_OK) and executability (X_OK)
+ * 
+ * RETURN VALUES: checking_access() either returns SUCCESS or FAILURE. If
+ * FAILURE is returned, it means that your binary cannot be found in the
+ * general concatenated paths in the environment pointers.
+ */
 int	checking_access(t_data *data, char *instruction)
 {
 	int		i;
@@ -91,13 +109,18 @@ int	checking_access(t_data *data, char *instruction)
 
 /**
  * At this point we have an instruction that should follow this syntax:
+ * 
  * "cmd -flag argument"
  * "cmd -flag"
  * "cmd argument"
  * "redirection infile flag"
  * "cmd redirection outfile"
+ * 
  * All these cases will have spaces between them that were set manually in
  * cl_to_array function.
+ * 
+ * RETURN VALUES: the function returns the binary upon success. If allocation
+ * fails at some point, it returns NULL and frees memory used in the function.
  */
 char	*get_binary(t_data *data, char *instruction)
 {
@@ -108,32 +131,27 @@ char	*get_binary(t_data *data, char *instruction)
 	if (!ft_strcmp(instruction, "<")) // input case: cmd is the third parameter
 	{
 		split_instruction = ft_split(instruction, " ");
+		if (!split_instruction)
+			return (NULL);
 		binary = ft_strdup(split_instruction[3]);
-		free_array(split_instruction);
+		if (!binary)
+		{
+			free_array(split_instruction);
+			return (NULL);
+		}
 	}
 	else // normal input: cmd is the first parameter
 	{
 		split_instruction = ft_split(instruction, " ");
+		if (!split_instruction)
+			return (NULL);
 		binary = ft_strdup(split_instruction[0]);
-		free_array(split_instruction);
+		if (!binary)
+		{
+			free_array(split_instruction);
+			return (NULL);
+		}
 	}
+	free_array(split_instruction);
 	return (binary);
-}
-/**
- * Frees the shell most used data allocators.
- * USAGE: pass the function the arguments it asks, otherwhise use NULL.
- * data: main data struct for the shell;
- * path: defined and allocated in the execution part;
- * env: our linked list that works as our environment pointer;
- * command_array: variable linked to the execution of single/multiple processes.
- */
-void	free_data(t_data *data, char *path, t_env **env, char **command_array)
-{
-	free_array(data->binary_paths);
-	free_ll(*env);
-	if (command_array)
-		free_array(command_array);
-	if (path)
-		free(path);
-	free(data);
 }

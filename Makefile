@@ -16,6 +16,7 @@ INCFLAGS = -Iincludes -Ilibft/includes
 # Main project files
 SRC_FILES = main.c\
 			init.c\
+			utils.c\
 			signals.c\
 			ll_utils.c\
 			ll_utils2.c\

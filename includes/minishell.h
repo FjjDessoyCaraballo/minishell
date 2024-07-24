@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/23 16:50:03 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/24 11:28:34 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ typedef struct s_data
 /* in execution.c */
 int		execution(t_data *data, t_env **env_ll);
 int		multiple_cmds(t_data *data, t_token *token, t_env **env_ll);
-void	piped_execution(t_data *data, char *instruction, int child)
+void	piped_execution(t_data *data, char *instruction, int child);
 char	**parse_instruction(char *instruction);
 void	filter_redirect(t_data *data, char *instruction, int child, char *file);
 
@@ -114,7 +114,7 @@ int		how_many_children(t_data *data, t_token *token);
 char	*access_path(char **path, char *cmd);
 
 /* in execution_utils2.c */
-void 	dup_fds(t_data *data, int child, int fd_flag, char *file)
+void 	dup_fds(t_data *data, int child, int fd_flag, char *file);
 void	open_fdin(t_data *data, char *infile);
 void	open_fdout(t_data *data, char *outfile);
 void	close_fds(t_data *data);
@@ -124,7 +124,6 @@ void	exit_child(char *file, int err_code);
 char	**cl_to_array(t_data *data, t_token *token);
 int		checking_access(t_data *data, char *instruction);
 char	*get_binary(char *instruction);
-void	free_data(t_data *data, char *path, t_env **env, char **command_array);
 
 /* in init.c */
 void	ll_env(t_env **env_ll, char **env);
@@ -134,6 +133,9 @@ char	*bin_extract(char *path);
 
 /* in exit_handler.c */
 void	error_exit(int num);
+
+/* in utils.c */
+void	free_data(t_data *data, char *path, t_env **env, char **command_array);
 
 /* in line_handler.c */
 int		sniff_line(t_data *data);

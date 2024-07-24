@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/24 09:26:52 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/24 12:40:42 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ int	execution(t_data *data, t_env **env_ll)
 	return (148);
 }
 
-
 /**
  * This is the function that will be used when we get multiple instructions
  * by pipes. Its still underwork.
@@ -98,7 +97,7 @@ int	multiple_cmds(t_data *data, t_token *token, t_env **env_ll)
 	return (SUCCESS);
 }
 /**
- * AT THIS POINT WE WILL HAVE 
+ * 
  */
 void	piped_execution(t_data *data, char *instruction, int child)
 {
@@ -109,20 +108,29 @@ void	piped_execution(t_data *data, char *instruction, int child)
 
 	redirect_flag = 0;
 	file = NULL;
+	
+	// We need to define the path still. We do not have the path before execve()
+	
 	if (!ft_strcmp(instruction, "<") || !ft_strcmp(instruction, ">"))
 	{
-		if (!ft_strcmp(instruction, ">"))
+		if (!ft_strcmp(instruction, ">")) // HEREDOC and APPEND needed later
 			redirect_flag = REDIRECT_OUT;
 		else
 			redirect_flag = REDIRECT_IN;
-		file = find_file(instruction, redirect_flag); // NEED TO FIND A NEW WAY TO FILTER OUT
+		file = find_file(instruction, redirect_flag);
 		filter_redirect(data, instruction, child, file);
 	}
 	else
 		dup_fds(data, child, 0, file);
-	if (redirect_flag != 0) // need to parse out the redirects
+	if (redirect_flag != 0) // execution for redirects
 	{
-		command_array = parse_instruction(instruction, redirect_flag); // continue from here
+		command_array = parse_instruction(instruction, redirect_flag);
+		if (!command_array)
+		{
+			free_array(command_array);
+			free_data(data, path, data->envll, command_array);
+			exit (-1);
+		}
 		if (execve(path, command_array, data->env) == -1)	
 		{
 			free_array(command_array);
@@ -131,22 +139,24 @@ void	piped_execution(t_data *data, char *instruction, int child)
 			exit (127);
 		}
 	}
-	else // this can be its own function
+	else // execution with no redirections
 	{
 		command_array = ft_split(instruction, ' ');	
+		if (!command_array)
+		{
+			free_array(command_array);
+			free_data(data, path, data->envll, NULL);
+			exit (-1);
+		}
 		if (checking_access(data, instruction) != 0)
 		{
 			// free stuff
-			free_array(command_array);
-			free_array(data->env);
-			free_data(data, NULL, data->envll, NULL);
+			free_data(data, NULL, data->envll, command_array);
 			exit(127);
 		}
 		if (execve(path, command_array, data->env) == -1)	
 		{
-			free_array(command_array);
-			free_array(data->env);
-			free_data(data, path, NULL, NULL);
+			free_data(data, path, data->envll, command_array);
 			exit (127);
 		}
 	}
@@ -154,14 +164,68 @@ void	piped_execution(t_data *data, char *instruction, int child)
 
 /**
  * Its necessary to know which redirection we have here and give back the
- * array organized in the usual fashion of "cmd -flag" for execution.
+ * array organized in the usual fashion of "cmd -flag" for execution. We
+ * assume that the index should start at 2 because of the syntax:
+ * %> "< infile cat"
+ * 
+ * For redirect for output, we already have at the index 0 our commands, and
+ * the flags will follow as far as we hit the redirect itself. 
+ * 
+ * The first and second elements of the instruction, inside array_instruction,
+ * MUST be the redirect and file by consequence of our parsing. At this point
+ * we are working with purely validated inputs.
+ * 
+ * Return values: upon success, this function will return an array with only
+ * the commands that will be used in execve(). In case of any failures, the
+ * function returns NULL.
  */
 char	**parse_instruction(char *instruction, int redirect_flag)
 {
-	char	**result;
-	int		i;
+	char	**array_instruction;
+	char	*parsed_cmd;
+	int		index;
 
-	result = ft_split(instruction, ' '); // I STOPPED HERE
+	array_instruction = ft_split(instruction, ' ');
+	if (!array_instruction)
+		return (NULL);
+	parsed_cmd = ft_strdup("");
+	if (!parsed_cmd)
+		return (NULL);
+	if (redirect_flag = REDIRECT_OUT)
+		index = 0;
+	else
+		index = 2;
+	parsed_cmd = redirect_out(array_instruction, parsed_cmd, redirect_flag, index);
+	free_array(array_instruction);
+	array_instruction = ft_split(parsed_cmd, " ");
+	if (!array_instruction)
+	{
+		free_array(array_instruction);
+		return (NULL);
+	}
+	return (array_instruction);
+}
+
+char	*redirect_out(char **array, char *instruction, int flag, int index)
+{
+	char *tmp;
+	
+	
+	while (array[index])
+	{
+		if (ft_strcmp(array[index], ">") && flag == REDIRECT_OUT)
+			break ;
+		tmp = ft_strjoin(instruction, array[index]);
+		if (!tmp)
+			return (NULL);
+		free(instruction);
+		instruction = ft_strjoin(tmp, " ");
+		if (!instruction);
+			return (NULL);
+		free(tmp);
+		index++;
+	}
+	return ()
 }
 
 /**
@@ -171,6 +235,9 @@ char	**parse_instruction(char *instruction, int redirect_flag)
  * structure there will be an option to create a file of the users choosing.
  * This does not mean that the redirection will work without an argument, so
  * it is necessary that the user has inputted a name of a file to be created.
+ * 
+ * Return value: upon completion, the function will return with the name of the
+ * file that was requested. In case of failure, the  function returns NULL.
  */
 char	*find_file(char *instruction, int redirect_flag)
 {
@@ -209,4 +276,76 @@ void	filter_redirect(t_data *data, char *instruction, int child, char *file)
 }
 
 
+
+
+char	**parse_instruction(char *instruction, int redirect_flag)
+// {
+// 	char	**array_instruction;
+// 	char	*new_instruction;
+// 	char	*tmp;
+// 	int		index;
+
+// 	array_instruction = ft_split(instruction, ' ');
+// 	if (!array_instruction)
+// 		return (NULL);
+// 	if (redirect_flag == REDIRECT_IN)
+// 	{
+// 		new_instruction = ft_strdup("");
+// 		index = 2;
+// 		while (array_instruction[index])
+// 		{
+// 			tmp = ft_strjoin(new_instruction, array_instruction[index]);
+// 			if (!tmp)
+// 				return (NULL);
+// 			free(new_instruction);
+// 			new_instruction = ft_strjoin(tmp, " ");
+// 			if (!new_instruction);
+// 				return (NULL);
+// 			free(tmp);
+// 			index++;
+// 		}
+// 		free_array(array_instruction);
+// 		array_instruction = ft_split(new_instruction, " ");
+// 		if (!array_instruction)
+// 		{
+// 			free_array(array_instruction);
+// 			return (NULL);
+// 		}
+// 	}
+// 	else if (redirect_flag == REDIRECT_OUT)
+// 	{
+// 		new_instruction = ft_strdup("");
+// 		if (redirect_flag = REDIRECT_OUT)
+// 			index = 0;
+// 		else
+// 			index = 2;
+// 		while (array_instruction[index])
+// 		{
+// 			if (ft_strcmp(array_instruction[index], ">") && redirect_flag == REDIRECT_OUT)
+// 				break ;
+// 			tmp = ft_strjoin(new_instruction, array_instruction[index]);
+// 			if (!tmp)
+// 				return (NULL);
+// 			free(new_instruction);
+// 			new_instruction = ft_strjoin(tmp, " ");
+// 			if (!new_instruction);
+// 				return (NULL);
+// 			free(tmp);
+// 			index++;
+// 		}
+// 		free_array(array_instruction);
+// 		array_instruction = ft_split(new_instruction, " ");
+// 		if (!array_instruction)
+// 		{
+// 			free_array(array_instruction);
+// 			return (NULL);
+// 		}
+// 	}
+// 	else
+// 	{
+// 		free_array(array_instruction);
+// 		return (NULL);
+// 	}
+// 	return (array_instruction);
+// }
 
