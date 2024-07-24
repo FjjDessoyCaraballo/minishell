@@ -21,7 +21,7 @@
 Execution should happen within child process, otherwise it quits the whole thang.
 Therefore, iteration might be neccessary for either single execution or builtin
 */	
-static int	token_printer(t_token *token)
+/*static int	token_printer(t_token *token)
 {
 	t_token *head;
 	
@@ -33,14 +33,13 @@ static int	token_printer(t_token *token)
 	}
 	head = NULL;
 	return (SUCCESS);
-}
+}*/
 
 int	execution(t_data *data, t_env **env_ll)
 {
     t_token	*token;
 	
 	token = data->token;
-	// token_printer(token);
 	if (how_many_children(data, token) == 1 && !search_token_type(token, PIPE))
 		data->status = single_execution(data, token, env_ll);
 	if (how_many_children(data, token) > 1 && search_token_type(token, PIPE))
@@ -311,4 +310,3 @@ char	*redirect_out(char **array, char *instruction, int flag, int index)
 // 	}
 // 	return (array_instruction);
 // }
-
