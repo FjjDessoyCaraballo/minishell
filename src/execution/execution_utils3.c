@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 10:19:57 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/23 15:50:56 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/24 09:42:04 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,6 @@ char	*get_binary(t_data *data, char *instruction)
 	}
 	else // normal input: cmd is the first parameter
 	{
-		if ()
 		split_instruction = ft_split(instruction, " ");
 		binary = ft_strdup(split_instruction[0]);
 		free_array(split_instruction);

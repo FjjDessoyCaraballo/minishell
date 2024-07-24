@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/23 17:09:33 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/24 09:26:52 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,9 +71,11 @@ int	multiple_cmds(t_data *data, t_token *token, t_env **env_ll)
 	all_cmds = cl_to_array(data, token);
 	if (!all_cmds)
 		return (FAILURE);
-	data->env = env_arr_updater(env_ll);
 	while (i < data->nb_cmds)
 	{
+		data->env = env_arr_updater(env_ll);
+		if (!data->env)
+			return (FAILURE);
 		if (pipe(data->pipe_fd) == -1)
 			return (err_pipes("Broken pipe\n", 141));
 		pids = fork();
