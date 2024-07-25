@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/25 10:36:04 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/25 13:05:48 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,19 +82,32 @@ int	multiple_cmds(t_data *data, t_token *token, t_env **env_ll)
 			return (err_pipes("Failed to fork\n", -1));
 		}
 		if (pids == 0) // child
+		{
 			piped_execution(data, env_ll, all_cmds[i], i);
+			// close_fds(data);
+		}
 		else // parent
 		{
 			// close(data->pipe_fd[1]);
 			if (i > 0)
 				close(data->read_end);
 			data->read_end = data->pipe_fd[0];
-			waitpid(pids, &status, 0);
 		}
+		printf("i is: %i", i);
 		i++;
 	}
-	return status;
+	close_fds(data);
+	
+	i = 0;
+	while (i < data->nb_cmds)
+	{
+		if (waitpid(pids, &status, 0) == -1)
+			perror("waitpid");
+		i++;
+	}
+	return (status);
 }
+
 /**
  * Latest 24.07 - Child process 0 runs, but no other child is created after
  */
@@ -102,10 +115,7 @@ void	piped_execution(t_data *data, t_env **envll, char *instruction, int child)
 {
 	static char	*file;
 	int			redirect_flag;
-	int			input_fd;
-	int			output_fd;
 
-	
 	redirect_flag = 0;
 	if (!ft_strcmp(instruction, "<") || !ft_strcmp(instruction, ">"))
 	{
@@ -116,7 +126,9 @@ void	piped_execution(t_data *data, t_env **envll, char *instruction, int child)
 		file = find_file(instruction, redirect_flag);
 		// filter_redirect(data, instruction, child, file);
 	}
-	dup_fds(data, redirect_flag, file);
+	dup_fds(data, child, redirect_flag, file);
+	close(data->pipe_fd[1]);
+	printf("[child: %i]\n", child);
 	if (checking_access(data, instruction) != 0)
 		free_data(data, NULL, envll, NULL);
 	ft_exec(data, instruction, redirect_flag, child);
