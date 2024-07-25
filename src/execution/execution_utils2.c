@@ -3,40 +3,94 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils2.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 14:19:20 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/22 15:34:32 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/25 15:15:30 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void dup_fds(t_data *data, int child, t_token *token)
+void	dup_fds(t_data *data, int child, int fd_flag, char *file)
 {
-    if (child == 0)
-        dup2(data->pipe_fd[1], STDOUT_FILENO);
-    else if (token->next == NULL)
-        dup2(data->read_end, STDIN_FILENO);
-    else 
+	if (fd_flag == REDIRECT_IN)
 	{
-        dup2(data->read_end, STDIN_FILENO);
-        dup2(data->pipe_fd[1], STDOUT_FILENO);
-    }
-    close(data->pipe_fd[0]);
-    close(data->pipe_fd[1]);
+		open_fdin(data, file);	
+		dup2(data->fd_in, STDIN_FILENO);
+		close(data->fd_in);
+	}
+	else if (fd_flag == REDIRECT_OUT)
+	{
+		open_fdout(data, file);
+		dup2(data->fd_out, STDOUT_FILENO); // was STDIN_FILENO, corrected to STDOUT_FILENO
+		close(data->fd_out);
+	}
+	else
+	{
+		if (child == 0)
+		{
+			printf("first dup\n");
+			dup2(data->pipe_fd[0], STDIN_FILENO);
+		}
+		else
+		{
+			printf("no first\n");
+			dup2(data->read_end, STDIN_FILENO);
+		}
+	}
+	if (child != data->nb_cmds - 1)
+		dup2(data->pipe_fd[1], STDOUT_FILENO); // <<--- this one
+	close(data->pipe_fd[0]);
+	close(data->pipe_fd[1]);
 }
+
+
+// void	dup_fds(t_data *data, int child, int fd_flag, char *file)
+// {
+// 	if (fd_flag == REDIRECT_IN)
+// 	{
+// 		open_fdin(data, file);	
+// 		dup2(data->fd_in, STDIN_FILENO);
+// 		close (data->fd_in);
+// 	}
+// 	else if (fd_flag == REDIRECT_OUT)
+// 	{
+// 		open_fdout(data, file);
+// 		dup2(data->fd_out, STDIN_FILENO);
+// 		close(data->fd_out);
+// 	}
+// 	else
+// 	{
+// 		if (child == 0)
+// 			dup2(data->pipe_fd[0], STDIN_FILENO);
+// 		else
+// 			dup2(data->read_end, STDIN_FILENO);
+// 	}
+//     dup2(data->pipe_fd[1], STDOUT_FILENO); // <---- here we have a problem
+//     close(data->pipe_fd[0]);
+//     close(data->pipe_fd[1]);
+// }
 
 void	open_fdin(t_data *data, char *infile)
 {
 	errno = 0;	
 	data->fd_in = open(infile, O_RDONLY);
 	if (errno == ENOENT)
+	{
+		close_fds(data);
 		exit_child(infile, NO_FILE);
+	}
 	else if (errno == EACCES)
+	{
+		close_fds(data);
 		exit_child(infile, FILE_PERMISSION_DENIED);
+	}
 	else if (errno == EISDIR)
+	{
+		close_fds(data);
 		exit_child(infile, EISDIR);
+	}
 }
 
 void	open_fdout(t_data *data, char *outfile)
@@ -51,19 +105,20 @@ void	open_fdout(t_data *data, char *outfile)
 		exit_child(outfile, EISDIR);
 }
 
-void	close_fds(t_data *data)
+void close_fds(t_data *data)
 {
-	if (data->pipe_fd[0] != -1)
-		close(data->pipe_fd[0]);
-	if (data->pipe_fd[1] != -1)
-		close(data->pipe_fd[1]);
-	if (data->fd_in != -1)
-		close(data->fd_in);
-	if (data->fd_in != -1)
-		close (data->fd_out);
-	if (data->read_end != -1)
-		close(data->read_end);
+    if (data->pipe_fd[0] != -1)
+        close(data->pipe_fd[0]);
+    if (data->pipe_fd[1] != -1)
+        close(data->pipe_fd[1]);
+    if (data->fd_in != -1)
+        close(data->fd_in);
+    if (data->fd_out != -1)
+        close(data->fd_out);
+    if (data->read_end != -1)
+        close(data->read_end);
 }
+
 
 void	exit_child(char *file, int err_code)
 {

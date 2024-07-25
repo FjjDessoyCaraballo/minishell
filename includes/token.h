@@ -43,7 +43,7 @@ typedef struct s_token{
 	char	*value;
 	char	*path;
 	int		id;
-	bool	echoed;
+	bool	expand;
 	struct s_token	*next;
 	struct s_token  *prev;
 }		t_token;
@@ -52,14 +52,18 @@ typedef struct s_token{
  * in src/parse/tokenizer.c
  *****************************************/
 void	line_tokenization(t_data *data);
-int		chunky_checker(char *token, t_token *current_token, t_data *data);
+int		chunky_checker(char *token, t_token *current_token, t_data *data, bool expand);
+
+/*****************************************
+ * src/parse/helper.c
+ *****************************************/
 t_token	*find_token(t_token *token, t_type type);
 int		search_token_type(t_token *token, t_type type);
 
 /*****************************************
  * in src/parse/ft_strtok.c
  *****************************************/
-char	*ft_strtok(char *str, const char *delim);
+char	*ft_strtok(char *str, const char *delim, bool *expand);
 int		ft_charinstr(char c, const char *str);
 int		ft_strcmp(char *s1, char *s2);
 
@@ -86,21 +90,23 @@ void	print_cmd(char **cmd_a);
 /*****************************************
  * in src/parse/check_utils.c
  *****************************************/
-char *loop_path_for_binary(char *binary, char **paths);
-char *ft_strndup(const char *s, size_t n);
+char	*loop_path_for_binary(char *binary, char **paths);
+char	*ft_strndup(const char *s, size_t n);
+int		how_many_tokens(t_token *token);
 
 /*****************************************
  * in src/parse/freedom.c
  * ***************************************/
-void free_my_boi(char **paths);
+void	free_my_boi(char **paths);
 
 /******************************************
  * in src/parse/token_to_array.c
  * ****************************************/
-char **ttad(t_token *token_list, t_type delimiter);
+char	**ttad(t_token *token_list, t_type delimiter);
 
 /*******************************************
  * in src/parse/ft-getenv.c
  * *****************************************/
-char *ft_getenv(const char *token, t_env *env_ll);
+char	*ft_getenv(const char *token, t_env *env_ll);
+
 # endif
