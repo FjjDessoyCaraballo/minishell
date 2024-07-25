@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 15:26:27 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/23 10:15:03 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/25 09:44:17 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,7 @@ int	shell_cd(t_token *token, t_data *data)
 {
 	char	*new_pwd;
 	char	*curr_pwd;
-	// t_token	*head;
 
-	// head = token;
 	if (token->next == NULL)
 	{
 		chdir(data->home_pwd);
@@ -65,6 +63,7 @@ int	export(t_token *token, t_env **env_ll)
 	t_token	*head;
 
 	head = token;
+	count = 0;
 	if (!head->next)
 	{
 		print_export(env_ll);

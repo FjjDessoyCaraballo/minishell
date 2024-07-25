@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/24 18:40:52 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/25 09:50:56 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ int	multiple_cmds(t_data *data, t_token *token, t_env **env_ll)
 			piped_execution(data, env_ll, all_cmds[i], i);
 		else // parent
 		{
-			close(data->pipe_fd[1]);
+			// close(data->pipe_fd[1]);
 			if (i > 0)
 				close(data->read_end);
 			data->read_end = data->pipe_fd[0];
@@ -107,15 +107,13 @@ int	multiple_cmds(t_data *data, t_token *token, t_env **env_ll)
  */
 void	piped_execution(t_data *data, t_env **envll, char *instruction, int child)
 {
-	char	*file;
-	int		redirect_flag;
-	int		input_fd;
-	int		output_fd;
+	static char	*file;
+	int			redirect_flag;
+	int			input_fd;
+	int			output_fd;
 
 	
 	redirect_flag = 0;
-	file = NULL;
-	printf("[child: %i]\n", child);
 	if (!ft_strcmp(instruction, "<") || !ft_strcmp(instruction, ">"))
 	{
 		if (!ft_strcmp(instruction, ">")) // HEREDOC and APPEND needed later
@@ -136,14 +134,14 @@ void	piped_execution(t_data *data, t_env **envll, char *instruction, int child)
 	dup_fds(data, input_fd, output_fd, redirect_flag, file);
 	if (checking_access(data, instruction) != 0)
 		free_data(data, NULL, envll, NULL);
-	ft_exec(data, instruction, redirect_flag);
+	ft_exec(data, instruction, redirect_flag, child);
 }
 
 
-void	ft_exec(t_data *data, char *line, int redirect)
+void	ft_exec(t_data *data, char *line, int redirect, int child) // child is here for debugging
 {
-	char	*path;
-	char	**commands;
+	static char	*path;
+	char		**commands;
 	
 	if (redirect != 0)
 		commands = parse_instruction(line, redirect);
@@ -155,15 +153,16 @@ void	ft_exec(t_data *data, char *line, int redirect)
 		free_data(data, NULL, &data->envll, NULL);
 		exit (-1);
 	}
-	if (ft_strchr(commands[0], '/') != NULL)
+	if (ft_strchr(commands[0], '/') == NULL)
+		path = loop_path_for_binary(commands[0], data->binary_paths);
+	else
 		path = abs_path(commands[0]);
 	if (!path)
 	{
 		free_data(data, NULL, &data->envll, commands);
 		exit (1);
 	}
-	else
-		path = loop_path_for_binary(commands[0], data->binary_paths);
+	printf("[child: %i]\n", child);
 	if (execve(path, commands, data->env) == -1)	
 	{
 		perror("execve");

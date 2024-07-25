@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/24 18:38:46 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/25 09:46:49 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ typedef struct s_data
 int		execution(t_data *data, t_env **env_ll);
 int		multiple_cmds(t_data *data, t_token *token, t_env **env_ll);
 void	piped_execution(t_data *data, t_env **envll, char *instruction, int child);
-void	ft_exec(t_data *data, char *line, int redirect);
+void	ft_exec(t_data *data, char *line, int redirect, int child);
 char	**parse_instruction(char *instruction, int redirect_flag);
 char	*redirect_out(char **array, char *instruction, int flag, int index);
 
