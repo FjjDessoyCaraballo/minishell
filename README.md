@@ -46,8 +46,8 @@ ALWAYS remember to pull from main to have the latest version of minishell before
 11. git checkout BranchName
 ```
 
-## DA PLAN:
-1. Tokenization (Waleed)
+## Process of building the code:
+1. Tokenization
     - convert input command line into a linked list
         - built-ins.
             - echo (with -n)
@@ -66,26 +66,13 @@ ALWAYS remember to pull from main to have the latest version of minishell before
             - "<<"
             - ">>"
         - single and double quotes.
-1. Parse the line given to readline() (Bruno and Leo?)
-	- Turn everything into lowercase
- 	- No white spaces
-  	- No special characters
-3. Tokenization (Waleed)
-4. Built-ins (Felipe)
-	- echo (with -n) DONE
- 	- cd DONE
-	- pwd DONE
- 	- export 1/2 DONE
-  	- unset
-   	- env DONE
-   	- exit DONE
-6. Piping (Felipe)
-7. Handle $? (Felipe)
-8. CTRL-C + CTRL-D + CTRL-\ (Bruno or Leo)
-    - CTRL + C working correctly
-    - CTRL + \ is ignored on the top level of minishell, needs to work in the child processes
-9. Environment variables ($ expands values) (Bruno, and everyone at certain point)
-
+2. single and multiple commands (pipes)
+3. Handle $?
+4. Environment variables ($ expands values)
+5. Signals
+    - CTRL + C
+    - CTRL + \
+    - CTRL + D
 
 ## Acronyms
 
