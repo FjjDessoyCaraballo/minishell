@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/25 09:50:56 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/25 10:36:04 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,17 +89,10 @@ int	multiple_cmds(t_data *data, t_token *token, t_env **env_ll)
 			if (i > 0)
 				close(data->read_end);
 			data->read_end = data->pipe_fd[0];
-			
+			waitpid(pids, &status, 0);
 		}
 		i++;
 	}
-	i = 0;
-	while (i < data->nb_cmds)
-	{
-		waitpid(pids, &status, 0);
-		i++;
-	}
-	
 	return status;
 }
 /**
@@ -123,15 +116,7 @@ void	piped_execution(t_data *data, t_env **envll, char *instruction, int child)
 		file = find_file(instruction, redirect_flag);
 		// filter_redirect(data, instruction, child, file);
 	}
-	if (child == 0)
-		input_fd = -1;
-	else
-		input_fd = -1;
-	if (child < data->nb_cmds - 1)
-		output_fd = data->pipe_fd[1];
-	else
-		output_fd = -1;
-	dup_fds(data, input_fd, output_fd, redirect_flag, file);
+	dup_fds(data, redirect_flag, file);
 	if (checking_access(data, instruction) != 0)
 		free_data(data, NULL, envll, NULL);
 	ft_exec(data, instruction, redirect_flag, child);

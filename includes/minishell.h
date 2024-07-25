@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/25 09:46:49 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/25 10:34:12 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ int		how_many_children(t_token *token);
 char	*access_path(char **path, char *cmd);
 
 /* in execution_utils2.c */
-void	 dup_fds(t_data *data, int input_fd, int output_fd, int fd_flag, char *file);
+void	dup_fds(t_data *data, int fd_flag, char *file);
 void	open_fdin(t_data *data, char *infile);
 void	open_fdout(t_data *data, char *outfile);
 void	close_fds(t_data *data);

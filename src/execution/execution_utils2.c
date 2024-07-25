@@ -3,105 +3,98 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils2.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 14:19:20 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/24 17:45:05 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/25 10:35:41 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void dup_fds(t_data *data, int input_fd, int output_fd, int fd_flag, char *file)
+void	dup_fds(t_data *data, int fd_flag, char *file)
 {
-    if (fd_flag == REDIRECT_IN && file)
-    {
-        open_fdin(data, file);
-        dup2(data->fd_in, STDIN_FILENO);
-        close(data->fd_in);
-    }
-    else if (fd_flag == REDIRECT_OUT && file)
-    {
-        open_fdout(data, file);
-        dup2(data->fd_out, STDOUT_FILENO);
-        close(data->fd_out);
-    }
-	if (input_fd != -1)
-    {
-        if (dup2(input_fd, STDIN_FILENO) == -1)
-        {
-            perror("dup2 input_fd");
-            close_fds(data);
-            exit(EXIT_FAILURE);
-        }
-        close(input_fd);
-    }
-
-    if (output_fd != -1)
-    {
-        if (dup2(output_fd, STDOUT_FILENO) == -1)
-        {
-            perror("dup2 output_fd");
-            close_fds(data);
-            exit(EXIT_FAILURE);
-        }
-        close(output_fd);
-    }
+	if (fd_flag == REDIRECT_IN)
+	{
+		open_fdin(data, file);
+		dup2(data->fd_in, STDIN_FILENO);
+		close (data->fd_in);
+	}
+	else if (fd_flag == REDIRECT_OUT)
+	{
+		open_fdout(data, file);
+		dup2(data->fd_out, STDIN_FILENO);
+		close(data->fd_out);
+	}
+	else
+		dup2(data->pipe_fd[0], STDIN_FILENO);
+    dup2(data->pipe_fd[1], STDOUT_FILENO);
+    close(data->pipe_fd[0]);
+    close(data->pipe_fd[1]);
 }
 
-void open_fdin(t_data *data, char *infile)
+void	open_fdin(t_data *data, char *infile)
 {
-    errno = 0;
-    data->fd_in = open(infile, O_RDONLY);
-    if (data->fd_in == -1)
-    {
-        perror("open fd_in");
-        close_fds(data);
-        exit_child(infile, errno);
-    }
+	errno = 0;	
+	data->fd_in = open(infile, O_RDONLY);
+	if (errno == ENOENT)
+	{
+		close_fds(data);
+		exit_child(infile, NO_FILE);
+	}
+	else if (errno == EACCES)
+	{
+		close_fds(data);
+		exit_child(infile, FILE_PERMISSION_DENIED);
+	}
+	else if (errno == EISDIR)
+	{
+		close_fds(data);
+		exit_child(infile, EISDIR);
+	}
 }
 
-void open_fdout(t_data *data, char *outfile)
+void	open_fdout(t_data *data, char *outfile)
 {
-    errno = 0;
-    data->fd_out = open(outfile, O_WRONLY | O_CREAT | O_APPEND, 0664);
-    if (data->fd_out == -1)
-    {
-        perror("open fd_out");
-        close_fds(data);
-        exit_child(outfile, errno);
-    }
+	errno = 0;	
+	data->fd_out = open(outfile, O_WRONLY | O_CREAT | O_APPEND, 0664);
+	if (errno == ENOENT)
+		exit_child(outfile, NO_FILE);
+	else if (errno == EACCES)
+		exit_child(outfile, FILE_PERMISSION_DENIED);
+	else if (errno == EISDIR)
+		exit_child(outfile, EISDIR);
 }
 
-void close_fds(t_data *data)
+void	close_fds(t_data *data)
 {
-    if (data->pipe_fd[0] != -1)
-        close(data->pipe_fd[0]);
-    if (data->pipe_fd[1] != -1)
-        close(data->pipe_fd[1]);
-    if (data->fd_in != -1)
-        close(data->fd_in);
-    if (data->fd_out != -1)
-        close(data->fd_out);
-    if (data->read_end != -1)
-        close(data->read_end);
+	if (data->pipe_fd[0] != -1)
+		close(data->pipe_fd[0]);
+	if (data->pipe_fd[1] != -1)
+		close(data->pipe_fd[1]);
+	if (data->fd_in != -1)
+		close(data->fd_in);
+	if (data->fd_in != -1)
+		close (data->fd_out);
+	if (data->read_end != -1)
+		close(data->read_end);
 }
 
-void exit_child(char *file, int err_code)
+void	exit_child(char *file, int err_code)
 {
-    ft_putstr_fd(file, 2);
-    ft_putstr_fd(": ", 2);
-    if (err_code == ENOENT)
-        ft_putstr_fd("No such file or directory\n", 2);
-    else if (err_code == EACCES)
-    {
-        ft_putstr_fd("Permission denied\n", 2);
-        err_code = 1;
-    }
-    else if (err_code == EISDIR)
-    {
-        ft_putstr_fd("Is a directory\n", 2);
-        err_code = 1;
-    }
-    exit(err_code);
+	ft_putstr_fd(file, 2);
+	ft_putstr_fd(": ", 2);
+	if (err_code == NO_FILE)
+		ft_putstr_fd("No such file or directory\n", 2);
+	else if (err_code == FILE_PERMISSION_DENIED)
+	{
+		ft_putstr_fd("Permission denied\n", 2);
+		err_code = 1;
+	}
+	else if (err_code == EISDIR)
+	{
+		ft_putstr_fd("Is a directory\n", 2);
+		err_code = 1;
+	}
+	exit(err_code);
 }
