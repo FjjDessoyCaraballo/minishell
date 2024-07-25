@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 15:29:42 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/24 18:38:30 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/25 15:04:27 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,13 @@ int	how_many_children(t_token *token)
 	tmp = token;
 	while (tmp != NULL)
 	{
-		if (tmp->type == COMMAND)
+		if (tmp->type == PIPE)
 			cmds++;
 		tmp = tmp->next;
 	}
+	
 	tmp = NULL;
-	return (cmds);
+	return (cmds + 1);
 }
 
 void	close_all_fds(int *fd)

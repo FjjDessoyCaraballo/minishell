@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 14:19:20 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/25 13:03:36 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/25 15:15:30 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,8 @@ void	dup_fds(t_data *data, int child, int fd_flag, char *file)
 			dup2(data->read_end, STDIN_FILENO);
 		}
 	}
-	printf("hellow\n");
-	dup2(data->pipe_fd[1], STDOUT_FILENO); // <<--- this one
-	printf("here\n");
+	if (child != data->nb_cmds - 1)
+		dup2(data->pipe_fd[1], STDOUT_FILENO); // <<--- this one
 	close(data->pipe_fd[0]);
 	close(data->pipe_fd[1]);
 }

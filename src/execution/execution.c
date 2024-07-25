@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/25 13:05:48 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/25 15:09:57 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,17 @@ Therefore, iteration might be neccessary for either single execution or builtin
 int	execution(t_data *data, t_env **env_ll)
 {
     t_token	*token;
+	t_token *head;
 	
 	token = data->token;
-	
+	head = token;
 	data-> nb_cmds = how_many_children(token);
+	int i = 0;
+	while (head)
+	{
+		printf("token: [%i][%s] type: [%i]\n", i, head->value, head->type);
+		head = head->next;
+	}
 	if (data->nb_cmds == 1 && !search_token_type(token, PIPE))
 		data->status = single_execution(data, token, env_ll);
 	else
@@ -70,6 +77,7 @@ int	multiple_cmds(t_data *data, t_token *token, t_env **env_ll)
 	data->env = env_arr_updater(env_ll);
 	if (!data->env)
 		return (FAILURE);
+	printf("data->nb_cmds: %i\n", data->nb_cmds);
 	while (i < data->nb_cmds)
 	{
 		if (pipe(data->pipe_fd) == -1)
@@ -82,10 +90,7 @@ int	multiple_cmds(t_data *data, t_token *token, t_env **env_ll)
 			return (err_pipes("Failed to fork\n", -1));
 		}
 		if (pids == 0) // child
-		{
 			piped_execution(data, env_ll, all_cmds[i], i);
-			// close_fds(data);
-		}
 		else // parent
 		{
 			// close(data->pipe_fd[1]);
@@ -93,7 +98,6 @@ int	multiple_cmds(t_data *data, t_token *token, t_env **env_ll)
 				close(data->read_end);
 			data->read_end = data->pipe_fd[0];
 		}
-		printf("i is: %i", i);
 		i++;
 	}
 	close_fds(data);
@@ -101,8 +105,7 @@ int	multiple_cmds(t_data *data, t_token *token, t_env **env_ll)
 	i = 0;
 	while (i < data->nb_cmds)
 	{
-		if (waitpid(pids, &status, 0) == -1)
-			perror("waitpid");
+		waitpid(pids, &status, 0);
 		i++;
 	}
 	return (status);
