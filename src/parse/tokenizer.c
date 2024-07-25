@@ -49,7 +49,7 @@ int chunky_checker(char *token,t_token *current_token,t_data *data, bool expand)
 		current_token->value = "-n";
 		return (SUCCESS);
 	}
-	if(current_token->id == 0 && ft_command_check(token, current_token, data) == SUCCESS)
+	 if((current_token->id == 0 || current_token->prev->type == PIPE) && ft_command_check(token, current_token, data) == SUCCESS)
 		return(SUCCESS);
 	else if(current_token->prev != NULL && (current_token->prev->type == COMMAND || current_token->prev->type == FLAG)
 			&& token[0] == '-')
