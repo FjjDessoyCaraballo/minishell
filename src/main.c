@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:12:51 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/26 10:55:37 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/26 12:02:26 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,14 @@ int main(int argc, char **argv, char **env)
 		exit(1); // might need to specify error for this
 	env_ll = NULL;
 	initializer(data, &env_ll, env);
+	exec_status = 0;
 	if (argc == 1)
 	{
 		while (666)
 		{
-			exec_status = 0;
+			
 			exec_status = sniff_line(data);
+			printf("exec status: %i\n", exec_status);
 			if (exec_status == NULL_LINE)
 			{
 				printf("exit\n");
