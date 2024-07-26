@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/25 11:51:53 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/26 11:19:48 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@
 # define REDIRECT_OUT 2
 # define REDIRECT_IN 1
 # define NO_FILE 1
+# define NULL_LINE 5
 # define DIRECOTRY 69
 # define FILE_PERMISSION_DENIED 2
 # define PERMISSION_DENIED 126
@@ -112,7 +113,7 @@ int		single_parent(pid_t pid, int status);
 void	filter_redirect(t_data *data, char *instruction, int child, char *file);
 
 /* in execution_utils.c */
-int		err_pipes(char *msg, int err_code);
+int		err_pipes(char *msg, t_token *token, int err_code);
 void	close_all_fds(int *fd);
 int		how_many_children(t_token *token);
 char	*access_path(char **path, char *cmd);
@@ -145,6 +146,8 @@ void	free_data(t_data *data, char *path, t_env **env, char **command_array);
 
 /* in line_handler.c */
 int		sniff_line(t_data *data);
+int		tokens_parsing(t_token *token);
+int		incorrect_syntax(t_token *token, t_type token_type);
 
 /* in ll_utils.c */
 t_env	*ft_listnew(void *content);

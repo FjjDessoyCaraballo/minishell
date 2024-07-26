@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:12:51 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/25 12:06:08 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/26 10:55:37 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,9 @@
 
 int main(int argc, char **argv, char **env)
 {
-	t_data	*data;
-	t_env	*env_ll;
+	t_data			*data;
+	t_env			*env_ll;
+	int		exec_status;
 	
 	(void)argv;
 	data = malloc(sizeof(t_data));
@@ -27,12 +28,15 @@ int main(int argc, char **argv, char **env)
 	{
 		while (666)
 		{
-			if (sniff_line(data) == 0)
+			exec_status = 0;
+			exec_status = sniff_line(data);
+			if (exec_status == NULL_LINE)
 			{
 				printf("exit\n");
 				break ;
 			}
-			execution(data, &env_ll);
+			else if (exec_status == 0)
+				execution(data, &env_ll);
 		}
 	}
 	else

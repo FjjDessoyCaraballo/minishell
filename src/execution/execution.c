@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/25 15:09:57 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/26 11:19:26 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,8 +100,8 @@ int	multiple_cmds(t_data *data, t_token *token, t_env **env_ll)
 		}
 		i++;
 	}
-	close_fds(data);
-	
+	// this fucks up everything
+	// close_fds(data);
 	i = 0;
 	while (i < data->nb_cmds)
 	{

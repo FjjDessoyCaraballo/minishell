@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 15:29:42 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/25 15:04:27 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/26 11:18:50 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,12 +68,15 @@ void	close_all_fds(int *fd)
 	}
 }
 
-int	err_pipes(char *msg, int err_code)
+int	err_pipes(char *msg, t_token *token, int err_code)
 {
-	if (*msg)
-		ft_printf("%s: command not found\n", msg);
+	if (token)
+	{
+		printf("syntax error near unexpected token: ");
+		printf("`%s'\n", token->value);
+		printf("waleed is gay\n");
+	}
+	if (*msg && !token)
+		printf("%s: command not found\n", msg);
 	return (err_code);
 }
-
-	// fds = (cmds * 2);
-	// data->fd = (int *)fds;
