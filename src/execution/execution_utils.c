@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 15:29:42 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/26 11:18:50 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/26 11:27:49 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,15 +68,13 @@ void	close_all_fds(int *fd)
 	}
 }
 
-int	err_pipes(char *msg, t_token *token, int err_code)
+int	err_pipes(char *msg, int err_code)
 {
-	if (token)
+	if (*msg)
 	{
-		printf("syntax error near unexpected token: ");
-		printf("`%s'\n", token->value);
+		printf("Syntax error near unexpected token: ");
+		printf("`%s'\n", msg);
 		printf("waleed is gay\n");
 	}
-	if (*msg && !token)
-		printf("%s: command not found\n", msg);
 	return (err_code);
 }
