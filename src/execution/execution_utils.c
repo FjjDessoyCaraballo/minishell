@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 15:29:42 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/26 11:27:49 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/26 11:42:35 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ int	err_pipes(char *msg, int err_code)
 	{
 		printf("Syntax error near unexpected token: ");
 		printf("`%s'\n", msg);
-		printf("waleed is gay\n");
+		//printf("waleed is gay\n");
 	}
 	return (err_code);
 }

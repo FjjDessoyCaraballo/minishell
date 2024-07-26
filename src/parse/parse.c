@@ -1,36 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   line_handler.c                                     :+:      :+:    :+:   */
+/*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/13 12:23:49 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/07/26 13:59:39 by walnaimi         ###   ########.fr       */
+/*   Created: 2024/07/26 11:49:16 by walnaimi          #+#    #+#             */
+/*   Updated: 2024/07/26 12:55:48 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-int	sniff_line(t_data *data)
-{
-	int	status;
-
-	status = 0;
-	data->line_read = readline("\e[45m[I can't believe it's not shell]\e[0m ");
-	if (!data->line_read)
-		return (NULL_LINE);
-	//line_tokenization(data);
-	if (data->line_read || *data->line_read)
-		add_history(data->line_read);
-	data->echoed = false;
-	line_tokenization(data);// return values should change
-	// these are ment to stop the tokenization early if an error is found
-	//parse(data);
-	status = tokens_parsing(data->token);
-	return (status);
-}
-
 int	tokens_parsing(t_token *token)
 {
 	if (incorrect_syntax(token, PIPE) == FAILURE
@@ -69,6 +49,17 @@ int	incorrect_syntax(t_token *token, t_type token_type)
 	head = NULL;
 	return (SUCCESS);
 }
+/*
+int parse(t_data *data)
+{
+    int status;
+    status = 0;
+
+    //status = tokens_parsing(data->token);
+    return (status);
+}
+*/
+
 		// if ((head->type == REDIRECT_IN && next_type == COMMAND)
 		// 	|| (head->type == REDIRECT_IN && next_type == REDIRECT_IN)
 		// 	|| (head->type == REDIRECT_IN && next_type == REDIRECT_OUT)
