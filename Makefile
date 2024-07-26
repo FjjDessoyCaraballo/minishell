@@ -38,6 +38,7 @@ SRC_FILES = main.c\
 			src/parse/freedom.c\
 			src/parse/token_to_array.c\
 			src/parse/getenv.c\
+			src/parse/helper.c\
 
 
 # Object files

@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 10:19:57 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/24 16:18:55 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/24 18:18:29 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,25 +44,34 @@ char **cl_to_array(t_token *token)
 	instruction = ft_strdup("");
 	if (!instruction)
 		return (NULL);
-	while (head)
+    while (head) 
 	{
-		while (head->type != PIPE)
+        instruction[0] = '\0';
+        while (head && head->type != PIPE) 
 		{
-			tmp = ft_strjoin(instruction, head->value);
+            tmp = ft_strjoin(instruction, head->value);
 			if (!tmp)
 				return (NULL);
-			free(instruction);
-			instruction = ft_strjoin(tmp, " ");
-			if (!instruction)
+            free(instruction);
+            instruction = tmp;
+            tmp = ft_strjoin(instruction, " ");
+			if (!tmp)
 				return (NULL);
-			free(tmp);
-			head = head->next;
-		}
-		head = head->next; // jumping over the pipe to next command
-		pipe_array[i++] = ft_strdup(instruction);
-		free(instruction);
-	}
-	return (pipe_array);
+            free(instruction);
+            instruction = tmp;
+            head = head->next;
+        }
+        if (instruction[ft_strlen(instruction) - 1] == ' ')
+            instruction[ft_strlen(instruction) - 1] = '\0';
+        pipe_array[i++] = ft_strdup(instruction);
+        if (!pipe_array[i - 1])
+            return (NULL);
+        if (head && head->type == PIPE)
+            head = head->next;
+    }
+    free(instruction);
+    pipe_array[i] = NULL;
+    return (pipe_array);
 }
 
 /** checking_access() is mainly a last check for general binaries that
@@ -183,6 +192,7 @@ char	*abs_path(char *command)
 	char	*path;
 
 	i = 0;
+	
 	while (command[i++])
 	{
 		if (ft_strchr(command, '/') != NULL)
@@ -190,3 +200,47 @@ char	*abs_path(char *command)
 	}
 	return (NULL);
 }
+
+
+// char **cl_to_array(t_token *token)
+// {
+// 	t_token *head;
+// 	char	**pipe_array;
+// 	char	*instruction;
+// 	char	*tmp;
+// 	int		i;
+// 	int		nb_of_instructions;
+	
+// 	nb_of_instructions = how_many_tokens(token);
+// 	pipe_array = (char **)malloc(sizeof(char *) * (nb_of_instructions + 1));
+// 	if (!pipe_array)
+// 		return (NULL);
+// 	i = 0;
+// 	head = token;
+// 	instruction = ft_strdup("");
+// 	if (!instruction)
+// 		return (NULL);
+	
+// 	while (head)
+// 	{
+// 		while (head->type != PIPE)
+// 		{
+// 			printf("head->value: %s\ninstruction: %s\n", head->value, instruction);
+// 			tmp = ft_strjoin(instruction, head->value);
+// 			if (!tmp)
+// 				return (NULL);
+// 			free(instruction);
+// 			instruction = ft_strjoin(tmp, " ");
+// 			if (!instruction)
+// 				return (NULL);
+// 			free(tmp);
+// 			pipe_array[i++] = ft_strdup(instruction);
+// 			head = head->next;
+// 		}
+// 		head = head->next; // jumping over the pipe to next command
+// 		free(instruction);
+// 	}
+// 	printf("we are getting here\n");
+// 	pipe_array[i] = NULL;
+// 	return (pipe_array);
+// }

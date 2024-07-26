@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 10:41:10 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/24 16:09:15 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/24 17:58:12 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,15 +64,15 @@ int	single_parent(pid_t pid, int status)
 			return (-1);
 }
 
-/**
- * This function rearrenges the command array in case there are redirects.
- * The flag one is used to identify input redirect;
- * The flag zero is used to identify output redirect;
- */
-void	filter_redirect(t_data *data, char *instruction, int child, char *file)
-{
-	if (!ft_strcmp(instruction, "<"))
-		dup_fds(data, child, 1, file);
-	else if (ft_strcmp(instruction, ">"))
-		dup_fds(data, child, 1, file);
-}
+// /**
+//  * This function rearrenges the command array in case there are redirects.
+//  * The flag one is used to identify input redirect;
+//  * The flag zero is used to identify output redirect;
+//  */
+// void	filter_redirect(t_data *data, char *instruction, int child, char *file)
+// {
+// 	if (!ft_strcmp(instruction, "<"))
+// 		dup_fds(data, child, 1, file);
+// 	else if (ft_strcmp(instruction, ">"))
+// 		dup_fds(data, child, 1, file);
+// }

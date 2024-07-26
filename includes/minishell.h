@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/24 16:11:30 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/25 11:51:53 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,8 @@ typedef struct s_data
 	char	**builtins;
 	char	**redirect;
 	char	**cmd_a;
+	bool	echoed;
+	bool	echo_flag;
 	char	*line_read;
 	t_env	*envll;
 }	t_data;
@@ -99,6 +101,7 @@ typedef struct s_data
 int		execution(t_data *data, t_env **env_ll);
 int		multiple_cmds(t_data *data, t_token *token, t_env **env_ll);
 void	piped_execution(t_data *data, t_env **envll, char *instruction, int child);
+void	ft_exec(t_data *data, char *line, int redirect, int child);
 char	**parse_instruction(char *instruction, int redirect_flag);
 char	*redirect_out(char **array, char *instruction, int flag, int index);
 
@@ -111,11 +114,11 @@ void	filter_redirect(t_data *data, char *instruction, int child, char *file);
 /* in execution_utils.c */
 int		err_pipes(char *msg, int err_code);
 void	close_all_fds(int *fd);
-int		how_many_children(t_data *data, t_token *token);
+int		how_many_children(t_token *token);
 char	*access_path(char **path, char *cmd);
 
 /* in execution_utils2.c */
-void 	dup_fds(t_data *data, int child, int fd_flag, char *file);
+void	dup_fds(t_data *data, int child, int fd_flag, char *file);
 void	open_fdin(t_data *data, char *infile);
 void	open_fdout(t_data *data, char *outfile);
 void	close_fds(t_data *data);
