@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/26 11:19:48 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/26 11:25:25 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ int		single_parent(pid_t pid, int status);
 void	filter_redirect(t_data *data, char *instruction, int child, char *file);
 
 /* in execution_utils.c */
-int		err_pipes(char *msg, t_token *token, int err_code);
+int		err_pipes(char *msg, int err_code);
 void	close_all_fds(int *fd);
 int		how_many_children(t_token *token);
 char	*access_path(char **path, char *cmd);
