@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils2.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 14:19:20 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/25 15:15:30 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/26 11:49:00 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,9 @@ void	dup_fds(t_data *data, int child, int fd_flag, char *file)
 	else
 	{
 		if (child == 0)
-		{
-			printf("first dup\n");
 			dup2(data->pipe_fd[0], STDIN_FILENO);
-		}
 		else
 		{
-			printf("no first\n");
 			dup2(data->read_end, STDIN_FILENO);
 		}
 	}
@@ -44,33 +40,6 @@ void	dup_fds(t_data *data, int child, int fd_flag, char *file)
 	close(data->pipe_fd[0]);
 	close(data->pipe_fd[1]);
 }
-
-
-// void	dup_fds(t_data *data, int child, int fd_flag, char *file)
-// {
-// 	if (fd_flag == REDIRECT_IN)
-// 	{
-// 		open_fdin(data, file);	
-// 		dup2(data->fd_in, STDIN_FILENO);
-// 		close (data->fd_in);
-// 	}
-// 	else if (fd_flag == REDIRECT_OUT)
-// 	{
-// 		open_fdout(data, file);
-// 		dup2(data->fd_out, STDIN_FILENO);
-// 		close(data->fd_out);
-// 	}
-// 	else
-// 	{
-// 		if (child == 0)
-// 			dup2(data->pipe_fd[0], STDIN_FILENO);
-// 		else
-// 			dup2(data->read_end, STDIN_FILENO);
-// 	}
-//     dup2(data->pipe_fd[1], STDOUT_FILENO); // <---- here we have a problem
-//     close(data->pipe_fd[0]);
-//     close(data->pipe_fd[1]);
-// }
 
 void	open_fdin(t_data *data, char *infile)
 {
@@ -118,7 +87,6 @@ void close_fds(t_data *data)
     if (data->read_end != -1)
         close(data->read_end);
 }
-
 
 void	exit_child(char *file, int err_code)
 {

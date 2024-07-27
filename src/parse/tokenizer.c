@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:34:16 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/26 09:32:27 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/26 12:08:33 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int chunky_checker(char *token,t_token *current_token,t_data *data, bool expand)
 			printf("\n");
 			return FAILURE;
 	}
-	else if(current_token->id == 0 && ft_builtin_check(token, current_token, data->builtins) == SUCCESS)
+	else if(ft_builtin_check(token, current_token, data->builtins) == SUCCESS) //current_token->id == 0 && 
 	{
 		if (ft_strcmp(current_token->value, "echo") == SUCCESS)
 		{
@@ -58,19 +58,19 @@ int chunky_checker(char *token,t_token *current_token,t_data *data, bool expand)
 		current_token->value = ft_strdup(token);
 		return(SUCCESS);
 	}
-	// else if(ft_pipe_check(token, current_token) == SUCCESS)
-	// {
-	// 	if (current_token->id == 0)
-	// 	{
-	// 		printf("syntax error near unexpected token `%s'\n", token);
-	// 		return(FAILURE);
-	// 	}
-	// 	else if (current_token->prev->type == PIPE)
-	// 	{
-	// 		printf("syntax error near unexpected token `%s'\n", token);
-	// 	}
-	// 	return(SUCCESS);
-	// }
+	else if(ft_pipe_check(token, current_token) == SUCCESS)
+	{
+		// if (current_token->id == 0)
+		// {
+		// 	printf("syntax error near unexpected token `%s'\n", token);
+		// 	return(FAILURE);
+		// }
+		// else if (current_token->prev->type == PIPE)
+		// {
+		// 	printf("syntax error near unexpected token `%s'\n", token);
+		// }
+		return(SUCCESS);
+	}
 	else if(ft_redirect_op_check(token, current_token, data->redirect) == SUCCESS)
 		return(SUCCESS);
 	else if(ft_argument_check(token, current_token) == SUCCESS)
