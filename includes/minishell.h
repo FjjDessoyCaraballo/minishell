@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
 /*   Updated: 2024/07/26 13:54:40 by fdessoy-         ###   ########.fr       */
@@ -87,6 +87,7 @@ typedef struct s_data
 	char	**cmd_a;
 	bool	echoed;
 	bool	echo_flag;
+	bool	expand;
 	char	*line_read;
 	t_env	*envll;
 }	t_data;

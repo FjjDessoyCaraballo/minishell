@@ -44,6 +44,7 @@ typedef struct s_token{
 	char	*path;
 	int		id;
 	bool	expand;
+	bool	echo;
 	struct s_token	*next;
 	struct s_token  *prev;
 }		t_token;
@@ -51,8 +52,8 @@ typedef struct s_token{
 /*****************************************
  * in src/parse/tokenizer.c
  *****************************************/
-void	line_tokenization(t_data *data);
-int		chunky_checker(char *token, t_token *current_token, t_data *data, bool expand);
+int		line_tokenization(t_data *data);
+int		chunky_checker(char *token, t_token *current_token, t_data *data);
 
 /*****************************************
  * src/parse/helper.c
@@ -61,9 +62,14 @@ t_token	*find_token(t_token *token, t_type type);
 int		search_token_type(t_token *token, t_type type);
 
 /*****************************************
+ * src/parse/parse.c
+ *****************************************/
+int parse(t_data *data);
+
+/*****************************************
  * in src/parse/ft_strtok.c
  *****************************************/
-char	*ft_strtok(char *str, const char *delim, bool *expand);
+char	*ft_strtok(char *str, const char *delim);
 int		ft_charinstr(char c, const char *str);
 int		ft_strcmp(char *s1, char *s2);
 

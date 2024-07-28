@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   line_handler.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 12:23:49 by walnaimi          #+#    #+#             */
 /*   Updated: 2024/07/26 13:54:35 by fdessoy-         ###   ########.fr       */
@@ -24,10 +24,19 @@ int	sniff_line(t_data *data)
 		return (NULL_LINE);
 	if (data->line_read || *data->line_read)
 		add_history(data->line_read);
+  data->echoed = false;
 	line_tokenization(data);
 	if (tokens_parsing(data->token) == 2)
 		return (2);
 	return (0);
+/*
+	data->echoed = false;
+	line_tokenization(data);// return values should change
+	// these are ment to stop the tokenization early if an error is found
+	//parse(data);
+	status = tokens_parsing(data->token);
+	return (status);
+*/
 }
 
 /**

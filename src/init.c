@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 12:38:16 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/22 20:16:50 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/26 13:59:13 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,4 +82,5 @@ void	initializer(t_data *data, t_env **env_ll, char **env)
 	data->binary_paths = ft_split(data->bin, ':');
 	data->envll = *env_ll; //to make sure the data->envll points to the initialized env_ll
 	//print_binary_paths(data);
+	data->echoed = false;
 }

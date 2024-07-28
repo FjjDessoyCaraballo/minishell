@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_token.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:34:04 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/15 17:34:05 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/26 14:00:06 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,5 +23,6 @@ t_token* init_token()
 	token->id = 0;
 	token->next = NULL;
 	token->prev = NULL;
+	token->echo = false;
 	return token;
 }

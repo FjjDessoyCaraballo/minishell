@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_test.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:34:10 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/22 12:51:51 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/26 13:59:05 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ void print_tokens(t_data *data)
         printf("token value:[%s]\n", token->value);
         printf("token type:[%i]\n", token->type);
         printf("id:[%i]\n", token->id);
+        if(token->echo == true || data->echoed == true) 
+            printf("echo?:[%d]\n",token->echo);
 		if(token->path != NULL)
 			printf("token path:[%s]\n", token->path);
         if (token->next == NULL) // Stop at the last token
