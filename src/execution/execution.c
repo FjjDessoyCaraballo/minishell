@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/26 11:38:49 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/07/26 11:58:13 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,16 +127,13 @@ void	piped_execution(t_data *data, t_env **envll, char *instruction, int child)
 		else
 			redirect_flag = REDIRECT_IN;
 		file = find_file(instruction, redirect_flag);
-		// filter_redirect(data, instruction, child, file);
 	}
 	dup_fds(data, child, redirect_flag, file);
 	close(data->pipe_fd[1]);
-	printf("[child: %i]\n", child);
 	if (checking_access(data, instruction) != 0)
 		free_data(data, NULL, envll, NULL);
 	ft_exec(data, instruction, redirect_flag, child);
 }
-
 
 void	ft_exec(t_data *data, char *line, int redirect, int child) // child is here for debugging
 {

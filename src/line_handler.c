@@ -6,73 +6,83 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 12:23:49 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/07/26 13:59:39 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/07/26 13:54:35 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
+/**
+ * Here we are prompting the user to give input with the readline() and
+ * tokenizing afterwards. After tokenizing, we are using the tokens to check
+ * for invalid inputs. More information in closed issue #19 in the repository.
+ */
 int	sniff_line(t_data *data)
 {
-	int	status;
-
-	status = 0;
 	data->line_read = readline("\e[45m[I can't believe it's not shell]\e[0m ");
 	if (!data->line_read)
 		return (NULL_LINE);
-	//line_tokenization(data);
 	if (data->line_read || *data->line_read)
 		add_history(data->line_read);
+  data->echoed = false;
+	line_tokenization(data);
+	if (tokens_parsing(data->token) == 2)
+		return (2);
+	return (0);
+/*
 	data->echoed = false;
 	line_tokenization(data);// return values should change
 	// these are ment to stop the tokenization early if an error is found
 	//parse(data);
 	status = tokens_parsing(data->token);
 	return (status);
+*/
 }
 
+/**
+ * As we run through the tokens (nodes in a linked list) we check
+ * if the next token type is valid for the token type that the user
+ * inputted previously. Examples below:
+ * "%> |||"
+ * "%> syntax error near unexpected token `||'"
+ */
 int	tokens_parsing(t_token *token)
 {
-	if (incorrect_syntax(token, PIPE) == FAILURE
-		|| incorrect_syntax(token, RED_OUT) == FAILURE
-		|| incorrect_syntax(token, RED_IN) == FAILURE
-		|| incorrect_syntax(token, HEREDOC) == FAILURE
-		|| incorrect_syntax(token, APPEND) == FAILURE)
-		return (FAILURE);
+	if (incorrect_syntax(token, PIPE) == 2
+		|| incorrect_syntax(token, RED_OUT) == 2
+		|| incorrect_syntax(token, RED_IN) == 2
+		|| incorrect_syntax(token, HEREDOC) == 2
+		|| incorrect_syntax(token, APPEND) == 2)
+		return (2);
 	else
 		return (SUCCESS);
 	
 }
-
+/**
+ * incorrect_syntax() checks for specific operators and checks if they're
+ * being repeated by the users.
+ * 
+ * RETURN VALUES: Upon success, it returns 0. If it fails, it returns 2.
+ */
 int	incorrect_syntax(t_token *token, t_type token_type)
 {
 	t_token	*head;
-	t_type	next_type;
-	
+
 	head = token;
 	while (head)
 	{
-		if (head->type == token_type)
+		if (head->next != NULL)
 		{
-			if (head->next != NULL)
-			{
-				next_type = head->next->type;
-				if (next_type == COMMAND || next_type == RED_IN
-					|| next_type == PIPE || next_type == RED_OUT
-					|| next_type == HEREDOC || next_type == APPEND
-					|| next_type == FLAG || next_type == UNKNOWN)
+			if ((head->type == token_type && head->next->type == token_type)
+				|| (head->type == token_type && head->next->type == RED_IN)
+				|| (head->type == token_type && head->next->type == RED_OUT)
+				|| (head->type == token_type && head->next->type == HEREDOC)
+				|| (head->type == token_type && head->next->type == APPEND)
+				|| (head->type == token_type && head->next->type == FLAG))
 				return (err_pipes(head->value, 2));
-			}
 		}
 		head = head->next;
 	}
 	head = NULL;
 	return (SUCCESS);
 }
-		// if ((head->type == REDIRECT_IN && next_type == COMMAND)
-		// 	|| (head->type == REDIRECT_IN && next_type == REDIRECT_IN)
-		// 	|| (head->type == REDIRECT_IN && next_type == REDIRECT_OUT)
-		// 	|| (head->type == REDIRECT_IN && next_type == PIPE)
-		// 	|| (head->type == REDIRECT_IN && next_type == HEREDOC)
-		// 	|| (head->type == REDIRECT_IN && next_type == APPEND)
-		// 	|| (head->type == REDIRECT_IN && next_type == FLAG))

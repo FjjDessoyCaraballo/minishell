@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 13:20:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/22 16:21:22 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/26 11:55:50 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,10 @@
 
 /**
  * ttda - token to array w/ delimiter
+ * 
  * USAGE: give the token and the delimiter. Delimiters: types of tokens.
  * Use '0' if you don't want to have a delimiter.
+ * 
  * Types of tokens: COMMANDS, FLAGS, ARGUMENTS, REDIRECTS.
  */
 char	**ttad(t_token *token_list, t_type delimiter)
