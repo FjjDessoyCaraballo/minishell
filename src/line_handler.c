@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 12:23:49 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/07/26 13:54:35 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/29 22:14:13 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,17 +26,10 @@ int	sniff_line(t_data *data)
 		add_history(data->line_read);
   data->echoed = false;
 	line_tokenization(data);
-	if (tokens_parsing(data->token) == 2)
+	if (syntax_check(data->token) == 2)
 		return (2);
+	parse_token(data->token);
 	return (0);
-/*
-	data->echoed = false;
-	line_tokenization(data);// return values should change
-	// these are ment to stop the tokenization early if an error is found
-	//parse(data);
-	status = tokens_parsing(data->token);
-	return (status);
-*/
 }
 
 /**
@@ -46,7 +39,7 @@ int	sniff_line(t_data *data)
  * "%> |||"
  * "%> syntax error near unexpected token `||'"
  */
-int	tokens_parsing(t_token *token)
+int	syntax_check(t_token *token)
 {
 	if (incorrect_syntax(token, PIPE) == 2
 		|| incorrect_syntax(token, RED_OUT) == 2

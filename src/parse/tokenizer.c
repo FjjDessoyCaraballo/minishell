@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:34:16 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/26 12:08:33 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/29 22:13:32 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,6 @@ int line_tokenization(t_data *data)
 		}
 	}
 	data->token = first_node;
-    print_tokens(data);
+    //print_tokens(data);
 	return SUCCESS;
 }

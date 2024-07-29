@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/26 13:54:40 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/28 20:46:02 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,7 +147,7 @@ void	free_data(t_data *data, char *path, t_env **env, char **command_array);
 
 /* in line_handler.c */
 int		sniff_line(t_data *data);
-int		tokens_parsing(t_token *token);
+int		syntax_check(t_token *token);
 int		incorrect_syntax(t_token *token, t_type token_type);
 
 /* in ll_utils.c */

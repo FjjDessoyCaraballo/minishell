@@ -64,7 +64,8 @@ int		search_token_type(t_token *token, t_type type);
 /*****************************************
  * src/parse/parse.c
  *****************************************/
-int parse(t_data *data);
+int    parse_token(t_token *token);
+
 
 /*****************************************
  * in src/parse/ft_strtok.c
