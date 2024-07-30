@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 10:19:57 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/24 18:18:29 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/30 21:42:03 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,6 +153,8 @@ char	*get_binary(char *instruction)
 }
 
 /**
+ * DEPRECATED 
+ *
  * Here we want to filter out the file, if there is one. At this point we
  * should surely have an infile, and maybe an outfile. It is not completely
  * necessary that we have an outfile, because when we open fd_out in the data
@@ -163,28 +165,28 @@ char	*get_binary(char *instruction)
  * Return value: upon completion, the function will return with the name of the
  * file that was requested. In case of failure, the  function returns NULL.
  */
-char	*find_file(char *instruction, int redirect_flag)
-{
-	char	*file;
-	char	**filter;
+// char	*find_file(char *instruction, int redirect_flag)
+// {
+// 	char	*file;
+// 	char	**filter;
 
-	filter = ft_split(instruction, ' ');
-	if (!filter)
-		return (NULL);
-	if (redirect_flag == REDIRECT_IN)
-	{
-		file = ft_strdup(filter[1]);
-		free_array(filter);
-		return (filter[2]);
-	}
-	else if (redirect_flag == REDIRECT_OUT)
-	{
-		file = ft_strdup(filter[3]);
-		free_array(filter);
-		return (file);
-	}
-	return (NULL);
-}
+// 	filter = ft_split(instruction, ' ');
+// 	if (!filter)
+// 		return (NULL);
+// 	if (redirect_flag == REDIRECT_IN)
+// 	{
+// 		file = ft_strdup(filter[1]);
+// 		free_array(filter);
+// 		return (filter[2]);
+// 	}
+// 	else if (redirect_flag == REDIRECT_OUT)
+// 	{
+// 		file = ft_strdup(filter[3]);
+// 		free_array(filter);
+// 		return (file);
+// 	}
+// 	return (NULL);
+// }
 
 char	*abs_path(char *command)
 {

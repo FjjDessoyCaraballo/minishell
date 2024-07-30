@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/30 20:40:11 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/30 21:49:35 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,12 @@ int	execution(t_data *data, t_env **env_ll)
 
 	token = data->token;
 	data-> nb_cmds = how_many_children(token);
-	t_token *head = token;
-	while (head) // this is for debugging
-	{
-		printf("token: [%s] type: [%i]\n", head->value, head->type);
-		head = head->next;
-	}
+	// t_token *head = token;
+	// while (head) // this is for debugging
+	// {
+	// 	printf("token: [%s] type: [%i]\n", head->value, head->type);
+	// 	head = head->next;
+	// }
 	if (data->nb_cmds == 1 || find_token(token, BUILTIN) != NULL)
 	{
 		if (data->nb_cmds == 1)
@@ -119,29 +119,52 @@ int	piping(t_data *data, t_env **env_ll, char **all_cmds, int pids)
  * to the final part of the execution in ft_exet().
  * 
  * DETAILS: at this point we may use exit() function without worrying that we will
- * end the whole program.
+ * end the whole program. Also, at this point we are working with fully parsed out
+ * strings, our only concern should be if files/commands don't exist. Examples of
+ * instruction:
+ * "< infile cat"
+ * "cat > outfile"
+ * "ls -la Makefile"
+ * "> outfile"
+ * "<< END"
  */
 void	piped_execution(t_data *data, t_env **envll, char *instruction, int child)
 {
 	static char	*file;
+	char		**cmd_array;
 	int			redirect_flag;
 
 	redirect_flag = 0;
-	if (!ft_strchr(instruction, '<') || !ft_strchr(instruction, '>'))
+	data->index = 0;
+	cmd_array = ft_split(instruction, ' ');
+	while (cmd_array[data->index])
 	{
-		if (ft_strchr(instruction, '>') != NULL) // HEREDOC and APPEND needed later
-			redirect_flag = REDIRECT_OUT;
-		else
-			redirect_flag = REDIRECT_IN;
-		file = find_file(instruction, redirect_flag);
-		if (!file)
+		if (!ft_strcmp(cmd_array[data->index], "<")
+			|| !ft_strcmp(cmd_array[data->index], ">"))
 		{
-			free_array(data->cmd_a);
-			exit(1);
+			if (!ft_strcmp(cmd_array[data->index], ">"))
+			{
+				file = ft_strdup(cmd_array[data->index + 1]);
+				redirect_flag = REDIRECT_OUT;
+			}
+			else
+			{
+				file = ft_strdup(cmd_array[data->index + 1]);
+				redirect_flag = REDIRECT_IN;
+			}
 		}
-		dprintf(2, "file is: %s\n", file);
-		dprintf(2, "redirect flag is: %i\n", redirect_flag);
+		data->index++;
 	}
+	if (!file)
+	{
+		free_array(data->cmd_a);
+		free_array(cmd_array);
+		free_array(data->binary_paths);
+		free_ll(*envll);
+		exit(1);
+	}
+	dprintf(1, "redirect flag is: %i\n", redirect_flag);
+	dprintf(1, "file is: %s\n", file);
 	dup_fds(data, child, redirect_flag, file);
 	close(data->pipe_fd[1]);
 	// dprintf(2, "redirection flag: %i\n", redirect_flag);
@@ -150,7 +173,7 @@ void	piped_execution(t_data *data, t_env **envll, char *instruction, int child)
 		free_data(data, NULL, envll, NULL);
 		exit(FAILURE);
 	}
-	ft_exec(data, instruction, redirect_flag);
+	ft_exec(data, cmd_array, redirect_flag);
 }
 
 /**
@@ -167,40 +190,31 @@ void	piped_execution(t_data *data, t_env **envll, char *instruction, int child)
  * 
  * [placeholder for more documentation]
  */
-void	ft_exec(t_data *data, char *line, int redirect) // child is here for debugging
+void	ft_exec(t_data *data, char **cmd_array, int redirect) // child is here for debugging
 {
 	static char	*path;
-	char		**commands;
 	
 	if (redirect != 0)
-		commands = parse_instruction(line, redirect); // this is not working
-	else
-		commands = ft_split(line, ' ');
-	if (!commands)
+		cmd_array = parse_instruction(cmd_array, redirect); // this is not working
+	if (!cmd_array)
 	{
-		free_array(commands);
+		free_array(cmd_array);
 		free_data(data, NULL, &data->envll, NULL);
 		exit (-1);
 	}
-	if (ft_strchr(commands[0], '/') == NULL)
-		path = loop_path_for_binary(commands[0], data->binary_paths);
+	if (ft_strchr(cmd_array[0], '/') == NULL)
+		path = loop_path_for_binary(cmd_array[0], data->binary_paths);
 	else
-		path = abs_path(commands[0]);
+		path = abs_path(cmd_array[0]);
 	if (!path)
 	{
-		free_data(data, NULL, &data->envll, commands);
+		free_data(data, NULL, &data->envll, cmd_array);
 		exit (1);
 	}
-	// int i = 0;
-	// while (commands[i])
-	// {
-	// 	dprintf(2, "command[%i]: %s\n", i, commands[i]);
-	// 	i++;
-	// }
-	if (execve(path, commands, data->env) == -1)	
+	if (execve(path, cmd_array, data->env) == -1)	
 	{
 		perror("execve");
-		free_data(data, path, &data->envll, commands);
+		free_data(data, path, &data->envll, cmd_array);
 		exit(127);
 	}
 }
@@ -222,15 +236,11 @@ void	ft_exec(t_data *data, char *line, int redirect) // child is here for debugg
  * the commands that will be used in execve(). In case of any failures, the
  * function returns NULL.
  */
-char	**parse_instruction(char *instruction, int redirect_flag)
+char	**parse_instruction(char **cmd_array, int redirect_flag)
 {
-	char	**array_instruction;
 	char	*parsed_cmd;
 	int		index;
 
-	array_instruction = ft_split(instruction, ' ');
-	if (!array_instruction)
-		return (NULL);
 	parsed_cmd = ft_strdup("");
 	if (!parsed_cmd)
 		return (NULL);
@@ -238,7 +248,7 @@ char	**parse_instruction(char *instruction, int redirect_flag)
 		index = 0;
 	else
 		index = 2;
-	parsed_cmd = redirect_out(array_instruction, parsed_cmd, redirect_flag, index);
+	parsed_cmd = redirect_out(cmd_array, parsed_cmd, redirect_flag, index);
 	free_array(array_instruction);
 	array_instruction = ft_split(parsed_cmd, ' ');
 	if (!array_instruction)
@@ -250,8 +260,8 @@ char	**parse_instruction(char *instruction, int redirect_flag)
 }
 
 /**
- * This is just a loop inside the parse_instruction(). Mainly done for school
- * norm reasons.
+ * This function is responsible for taking out the redirection character
+ * of the whole array, leaving just command, flags and arguments.
  */
 char	*redirect_out(char **array, char *instruction, int flag, int index)
 {
@@ -273,3 +283,45 @@ char	*redirect_out(char **array, char *instruction, int flag, int index)
 	}
 	return (instruction);
 }
+
+
+/*************************************************************
+ ************************* DUMP ******************************
+ *************************************************************/
+
+// char	**parse_instruction(char *instruction, int redirect_flag)
+// {
+// 	char	**array_instruction;
+// 	char	*parsed_cmd;
+// 	int		index;
+
+// 	array_instruction = ft_split(instruction, ' ');
+// 	if (!array_instruction)
+// 		return (NULL);
+// 	parsed_cmd = ft_strdup("");
+// 	if (!parsed_cmd)
+// 		return (NULL);
+// 	if (redirect_flag == REDIRECT_OUT)
+// 		index = 0;
+// 	else
+// 		index = 2;
+// 	parsed_cmd = redirect_out(array_instruction, parsed_cmd, redirect_flag, index);
+// 	free_array(array_instruction);
+// 	array_instruction = ft_split(parsed_cmd, ' ');
+// 	if (!array_instruction)
+// 	{
+// 		free_array(array_instruction);
+// 		return (NULL);
+// 	}
+// 	return (array_instruction);
+// }
+
+	// int i = 0;
+	// while (cmd_array[i])
+	// {
+	// 	dprintf(2, "command[%i]: %s\n", i, cmd_array[i]);
+	// 	i++;
+	// }
+
+	// else
+	// 	commands = ft_split(line, ' '); // gonna try to split before

@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/30 20:13:00 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/30 21:42:15 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,7 @@ void	exit_child(char *file, int err_code);
 char	**cl_to_array(t_token *token);
 int		checking_access(t_data *data, char *instruction);
 char	*get_binary(char *instruction);
-char	*find_file(char *instruction, int redirect_flag);
+// char	*find_file(char *instruction, int redirect_flag); DEPRECATED
 char	*abs_path(char *command);
 
 /* in init.c */
