@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/26 11:58:13 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/30 13:45:38 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ int	multiple_cmds(t_data *data, t_token *token, t_env **env_ll)
 	printf("data->nb_cmds: %i\n", data->nb_cmds);
 	while (i < data->nb_cmds)
 	{
-		if (pipe(data->pipe_fd) == -1)
+		if (pipe(data->pipe_fd) == -1) // we are piping too much
 			return (err_pipes("Broken pipe\n", 141));
 		pids = fork();
 		if (pids < 0)
@@ -93,22 +93,27 @@ int	multiple_cmds(t_data *data, t_token *token, t_env **env_ll)
 			piped_execution(data, env_ll, all_cmds[i], i);
 		else // parent
 		{
-			// close(data->pipe_fd[1]);
+			close(data->pipe_fd[1]);
 			if (i > 0)
 				close(data->read_end);
 			data->read_end = data->pipe_fd[0];
 		}
+		printf("%i\n", i);
 		i++;
 	}
+	close_fds(data);
+	printf("status:%i\n", status);
 	// this fucks up everything
-	// close_fds(data);
-	i = 0;
-	while (i < data->nb_cmds)
-	{
-		waitpid(pids, &status, 0);
-		i++;
-	}
-	return (status);
+	// i = 0;
+	// while (i < data->nb_cmds)
+	// {
+	// 	waitpid(pids, &status, 0);
+	// 	i++;
+	// }
+	pids = wait(&status);
+	while (pids > 0)
+		pids = wait(&status);
+	return (WEXITSTATUS(status));
 }
 
 /**
@@ -132,10 +137,10 @@ void	piped_execution(t_data *data, t_env **envll, char *instruction, int child)
 	close(data->pipe_fd[1]);
 	if (checking_access(data, instruction) != 0)
 		free_data(data, NULL, envll, NULL);
-	ft_exec(data, instruction, redirect_flag, child);
+	ft_exec(data, instruction, redirect_flag);
 }
 
-void	ft_exec(t_data *data, char *line, int redirect, int child) // child is here for debugging
+void	ft_exec(t_data *data, char *line, int redirect) // child is here for debugging
 {
 	static char	*path;
 	char		**commands;
@@ -159,7 +164,6 @@ void	ft_exec(t_data *data, char *line, int redirect, int child) // child is here
 		free_data(data, NULL, &data->envll, commands);
 		exit (1);
 	}
-	printf("[child: %i]\n", child);
 	if (execve(path, commands, data->env) == -1)	
 	{
 		perror("execve");
@@ -236,74 +240,3 @@ char	*redirect_out(char **array, char *instruction, int flag, int index)
 	}
 	return (instruction);
 }
-
-// char	**parse_instruction(char *instruction, int redirect_flag)
-// {
-// 	char	**array_instruction;
-// 	char	*new_instruction;
-// 	char	*tmp;
-// 	int		index;
-
-// 	array_instruction = ft_split(instruction, ' ');
-// 	if (!array_instruction)
-// 		return (NULL);
-// 	if (redirect_flag == REDIRECT_IN)
-// 	{
-// 		new_instruction = ft_strdup("");
-// 		index = 2;
-// 		while (array_instruction[index])
-// 		{
-// 			tmp = ft_strjoin(new_instruction, array_instruction[index]);
-// 			if (!tmp)
-// 				return (NULL);
-// 			free(new_instruction);
-// 			new_instruction = ft_strjoin(tmp, " ");
-// 			if (!new_instruction);
-// 				return (NULL);
-// 			free(tmp);
-// 			index++;
-// 		}
-// 		free_array(array_instruction);
-// 		array_instruction = ft_split(new_instruction, " ");
-// 		if (!array_instruction)
-// 		{
-// 			free_array(array_instruction);
-// 			return (NULL);
-// 		}
-// 	}
-// 	else if (redirect_flag == REDIRECT_OUT)
-// 	{
-// 		new_instruction = ft_strdup("");
-// 		if (redirect_flag = REDIRECT_OUT)
-// 			index = 0;
-// 		else
-// 			index = 2;
-// 		while (array_instruction[index])
-// 		{
-// 			if (ft_strcmp(array_instruction[index], ">") && redirect_flag == REDIRECT_OUT)
-// 				break ;
-// 			tmp = ft_strjoin(new_instruction, array_instruction[index]);
-// 			if (!tmp)
-// 				return (NULL);
-// 			free(new_instruction);
-// 			new_instruction = ft_strjoin(tmp, " ");
-// 			if (!new_instruction);
-// 				return (NULL);
-// 			free(tmp);
-// 			index++;
-// 		}
-// 		free_array(array_instruction);
-// 		array_instruction = ft_split(new_instruction, " ");
-// 		if (!array_instruction)
-// 		{
-// 			free_array(array_instruction);
-// 			return (NULL);
-// 		}
-// 	}
-// 	else
-// 	{
-// 		free_array(array_instruction);
-// 		return (NULL);
-// 	}
-// 	return (array_instruction);
-// }
