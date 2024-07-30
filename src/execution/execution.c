@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/30 14:25:43 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/30 15:56:58 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,17 +38,16 @@ Therefore, iteration might be neccessary for either single execution or builtin
 int	execution(t_data *data, t_env **env_ll)
 {
     t_token	*token;
-	//t_token *head;
-	
+
 	token = data->token;
-	//head = token;
 	data-> nb_cmds = how_many_children(token);
-	//int i = 0;
-	/*while (head)
-	{
-		printf("token: [%i][%s] type: [%i]\n", i, head->value, head->type);
-		head = head->next;
-	}*/
+	// int i = 0;
+	// while (head) // this is for debugging
+	// {
+	// 	printf("token: [%i][%s] type: [%i]\n", i, head->value, head->type);
+	// 	head = head->next;
+	// }
+
 	if (data->nb_cmds == 1 && !search_token_type(token, PIPE))
 		data->status = single_execution(data, token, env_ll);
 	else
@@ -65,23 +64,30 @@ int	execution(t_data *data, t_env **env_ll)
  */
 int	multiple_cmds(t_data *data, t_token *token, t_env **env_ll)
 {
-	int		i;
-	pid_t	pids;
-	int		status;
-	char	**all_cmds;
+	static pid_t	pids;
 
-	i = 0;
-	all_cmds = cl_to_array(token);
-	if (!all_cmds)
+	data->cmd_a = cl_to_array(token);
+	if (!data->cmd_a)
 		return (FAILURE);
 	data->env = env_arr_updater(env_ll);
 	if (!data->env)
 		return (FAILURE);
-	printf("data->nb_cmds: %i\n", data->nb_cmds);
-	while (i < data->nb_cmds)
+	data->status = piping(data, env_ll, data->cmd_a, pids);
+	close_fds(data);
+	pids = wait(&data->status);
+	while (pids > 0)
+		pids = wait(&data->status);
+	free_array(data->cmd_a);
+	return (WEXITSTATUS(data->status));
+}
+
+int	piping(t_data *data, t_env **env_ll, char **all_cmds, int pids)
+{
+	data->index = 0;
+	while (data->index < data->nb_cmds)
 	{
 		if (pipe(data->pipe_fd) == -1)
-			return (err_pipes("Broken pipe\n", 141));
+		return (err_pipes("Broken pipe\n", 141));
 		pids = fork();
 		if (pids < 0)
 		{
@@ -90,23 +96,17 @@ int	multiple_cmds(t_data *data, t_token *token, t_env **env_ll)
 			return (err_pipes("Failed to fork\n", -1));
 		}
 		if (pids == 0) // child
-			piped_execution(data, env_ll, all_cmds[i], i);
+			piped_execution(data, env_ll, all_cmds[data->index], data->index);
 		else // parent
 		{
 			close(data->pipe_fd[1]);
-			if (i > 0)
+			if (data->index > 0)
 				close(data->read_end);
 			data->read_end = data->pipe_fd[0];
 		}
-		printf("%i\n", i);
-		i++;
+		data->index++;
 	}
-	close_fds(data);
-	printf("status:%i\n", status);
-	pids = wait(&status);
-	while (pids > 0)
-		pids = wait(&status);
-	return (WEXITSTATUS(status));
+	return (data->index);
 }
 
 /**
@@ -137,7 +137,10 @@ void	piped_execution(t_data *data, t_env **envll, char *instruction, int child)
 	dup_fds(data, child, redirect_flag, file);
 	close(data->pipe_fd[1]);
 	if (checking_access(data, instruction) != 0)
+	{
 		free_data(data, NULL, envll, NULL);
+		exit(FAILURE);
+	}
 	ft_exec(data, instruction, redirect_flag);
 }
 
@@ -183,7 +186,7 @@ void	ft_exec(t_data *data, char *line, int redirect) // child is here for debugg
 	{
 		perror("execve");
 		free_data(data, path, &data->envll, commands);
-		exit (127);
+		exit(127);
 	}
 }
 

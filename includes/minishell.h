@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/30 11:55:21 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/30 15:55:34 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ typedef struct s_data
 	int		read_end;
 	int		*fd;
 	char	*bin;
+	int		index;
 	char	*path;
 	char	**binary_paths;
 	int		pipe_fd[2];
@@ -102,6 +103,7 @@ typedef struct s_data
 /* in execution.c */
 int		execution(t_data *data, t_env **env_ll);
 int		multiple_cmds(t_data *data, t_token *token, t_env **env_ll);
+int		piping(t_data *data, t_env **env_ll, char **all_cmds, int pids);
 void	piped_execution(t_data *data, t_env **envll, char *instruction, int child);
 void	ft_exec(t_data *data, char *line, int redirect);
 char	**parse_instruction(char *instruction, int redirect_flag);
