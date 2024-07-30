@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   chunky_check.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:33:52 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/24 16:22:04 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/28 20:54:22 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,13 +99,13 @@ int	ft_redirect_op_check(char *token,t_token *current_token, char **redirect)
 		{
 			current_token->value = ft_strdup(token);
 			if (i == 0)
-				current_token->type = RED_OUT;
+				current_token->type = RED_OUT;// > output
 			else if (i == 1)
-				current_token->type = APPEND;
+				current_token->type = APPEND;//  >>output
 			else if (i == 2)
-				current_token->type = RED_IN;
+				current_token->type = RED_IN;//  < input
 			else
-				current_token->type = HEREDOC;
+				current_token->type = HEREDOC;// <<input
 			return(SUCCESS);
 		}
 		i++;
