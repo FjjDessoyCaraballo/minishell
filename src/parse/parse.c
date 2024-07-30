@@ -106,7 +106,7 @@ int parse_token(t_token *token)
                     handle_output_redirection(current_token, current_token->next);
                 else
                 {
-                    printf("error 106\n");
+                    //printf("error 106\n");//debug tracking which line
                     return 44;
                 }
             }
@@ -116,14 +116,14 @@ int parse_token(t_token *token)
                     handle_output_redirection(current_token, current_token->next);
                 else
                 {
-                    printf("error 117\n");
+                    //printf("error 117\n");//debug tracking which line
                     return 44;
                 }
             }
         }
         // Handle input redirection ("<" or "<<")
         else if ((current_token->type == RED_IN || current_token->type == HEREDOC)
-            && current_token->next != NULL && current_token->next->value != NULL)
+            && current_token->next != NULL)
         {
             if (current_token->prev == NULL) // No previous token
             {
@@ -131,7 +131,7 @@ int parse_token(t_token *token)
                     handle_input_redirection(current_token, current_token->next);
                 else
                 {
-                    printf("error 132\n");
+                    //printf("error 132\n");//debug tracking which line
                     return 44;
                 }
             }
@@ -141,7 +141,7 @@ int parse_token(t_token *token)
                     handle_input_redirection(current_token, current_token->next);
                 else
                 {
-                    printf("error 142\n");
+                    //printf("error 142\n");//debug tracking which line
                     return 44;
                 }
             }
