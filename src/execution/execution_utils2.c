@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 14:19:20 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/30 14:25:11 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/30 20:36:43 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,8 +72,6 @@ void	open_fdout(t_data *data, char *outfile)
 		exit_child(outfile, EISDIR);
 }
 
-
-
 void	exit_child(char *file, int err_code)
 {
 	ft_putstr_fd(file, 2);
@@ -81,14 +79,9 @@ void	exit_child(char *file, int err_code)
 	if (err_code == NO_FILE)
 		ft_putstr_fd("No such file or directory\n", 2);
 	else if (err_code == FILE_PERMISSION_DENIED)
-	{
 		ft_putstr_fd("Permission denied\n", 2);
-		err_code = 1;
-	}
 	else if (err_code == EISDIR)
-	{
 		ft_putstr_fd("Is a directory\n", 2);
-		err_code = 1;
-	}
+	err_code = 1;
 	exit(err_code);
 }

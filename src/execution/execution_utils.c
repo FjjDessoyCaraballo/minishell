@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 15:29:42 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/30 12:00:08 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/30 20:08:16 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,13 +47,12 @@ int	how_many_children(t_token *token)
 	tmp = token;
 	while (tmp != NULL)
 	{
-		if (tmp->type == PIPE)
+		if (tmp->type == COMMAND)
 			cmds++;
 		tmp = tmp->next;
 	}
-	
 	tmp = NULL;
-	return (cmds + 1);
+	return (cmds);
 }
 
 int	err_pipes(char *msg, int err_code)

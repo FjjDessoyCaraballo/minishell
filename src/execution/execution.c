@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/30 15:56:58 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/30 20:40:11 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,28 +41,29 @@ int	execution(t_data *data, t_env **env_ll)
 
 	token = data->token;
 	data-> nb_cmds = how_many_children(token);
-	// int i = 0;
-	// while (head) // this is for debugging
-	// {
-	// 	printf("token: [%i][%s] type: [%i]\n", i, head->value, head->type);
-	// 	head = head->next;
-	// }
-
-	if (data->nb_cmds == 1 && !search_token_type(token, PIPE))
-		data->status = single_execution(data, token, env_ll);
-	else
-		data->status = multiple_cmds(data, token, env_ll);
-	data->status = built_in_or_garbage(data, env_ll, token);
-	if (data->status != 0)
-		return (data->status);
-	return (148);
+	t_token *head = token;
+	while (head) // this is for debugging
+	{
+		printf("token: [%s] type: [%i]\n", head->value, head->type);
+		head = head->next;
+	}
+	if (data->nb_cmds == 1 || find_token(token, BUILTIN) != NULL)
+	{
+		if (data->nb_cmds == 1)
+			data->status = single_execution(data, token, env_ll);
+		else
+			data->status = built_in_or_garbage(data, env_ll, token); // builtins will be thrown into single execution later
+	}
+	else if (data->nb_cmds > 1)
+		data->status = multiple_execution(data, token, env_ll);
+	return (data->status);
 }
 
 /**
  * This is the function that will be used when we get multiple instructions
  * by pipes. Its still underwork.
  */
-int	multiple_cmds(t_data *data, t_token *token, t_env **env_ll)
+int	multiple_execution(t_data *data, t_token *token, t_env **env_ll)
 {
 	static pid_t	pids;
 
@@ -126,16 +127,24 @@ void	piped_execution(t_data *data, t_env **envll, char *instruction, int child)
 	int			redirect_flag;
 
 	redirect_flag = 0;
-	if (!ft_strcmp(instruction, "<") || !ft_strcmp(instruction, ">"))
+	if (!ft_strchr(instruction, '<') || !ft_strchr(instruction, '>'))
 	{
-		if (!ft_strcmp(instruction, ">")) // HEREDOC and APPEND needed later
+		if (ft_strchr(instruction, '>') != NULL) // HEREDOC and APPEND needed later
 			redirect_flag = REDIRECT_OUT;
 		else
 			redirect_flag = REDIRECT_IN;
 		file = find_file(instruction, redirect_flag);
+		if (!file)
+		{
+			free_array(data->cmd_a);
+			exit(1);
+		}
+		dprintf(2, "file is: %s\n", file);
+		dprintf(2, "redirect flag is: %i\n", redirect_flag);
 	}
 	dup_fds(data, child, redirect_flag, file);
 	close(data->pipe_fd[1]);
+	// dprintf(2, "redirection flag: %i\n", redirect_flag);
 	if (checking_access(data, instruction) != 0)
 	{
 		free_data(data, NULL, envll, NULL);
@@ -164,7 +173,7 @@ void	ft_exec(t_data *data, char *line, int redirect) // child is here for debugg
 	char		**commands;
 	
 	if (redirect != 0)
-		commands = parse_instruction(line, redirect);
+		commands = parse_instruction(line, redirect); // this is not working
 	else
 		commands = ft_split(line, ' ');
 	if (!commands)
@@ -182,6 +191,12 @@ void	ft_exec(t_data *data, char *line, int redirect) // child is here for debugg
 		free_data(data, NULL, &data->envll, commands);
 		exit (1);
 	}
+	// int i = 0;
+	// while (commands[i])
+	// {
+	// 	dprintf(2, "command[%i]: %s\n", i, commands[i]);
+	// 	i++;
+	// }
 	if (execve(path, commands, data->env) == -1)	
 	{
 		perror("execve");
@@ -244,7 +259,7 @@ char	*redirect_out(char **array, char *instruction, int flag, int index)
 
 	while (array[index])
 	{
-		if (ft_strcmp(array[index], ">") && flag == REDIRECT_OUT)
+		if (ft_strchr(array[index], '>') && flag == REDIRECT_OUT)
 			break ;
 		tmp = ft_strjoin(instruction, array[index]);
 		if (!tmp)
@@ -258,11 +273,3 @@ char	*redirect_out(char **array, char *instruction, int flag, int index)
 	}
 	return (instruction);
 }
-
-	// this fucks up everything
-	// i = 0;
-	// while (i < data->nb_cmds)
-	// {
-	// 	waitpid(pids, &status, 0);
-	// 	i++;
-	// }

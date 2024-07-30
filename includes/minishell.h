@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/30 15:55:34 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/30 20:13:00 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ typedef struct s_data
 
 /* in execution.c */
 int		execution(t_data *data, t_env **env_ll);
-int		multiple_cmds(t_data *data, t_token *token, t_env **env_ll);
+int		multiple_execution(t_data *data, t_token *token, t_env **env_ll);
 int		piping(t_data *data, t_env **env_ll, char **all_cmds, int pids);
 void	piped_execution(t_data *data, t_env **envll, char *instruction, int child);
 void	ft_exec(t_data *data, char *line, int redirect);
@@ -113,7 +113,6 @@ char	*redirect_out(char **array, char *instruction, int flag, int index);
 int		single_execution(t_data *data, t_token *token, t_env **env_ll);
 void	single_child(t_data *data, t_token *token, t_env **env_ll);
 int		single_parent(pid_t pid, int status);
-void	filter_redirect(t_data *data, char *instruction, int child, char *file);
 
 /* in execution_utils.c */
 int		err_pipes(char *msg, int err_code);
