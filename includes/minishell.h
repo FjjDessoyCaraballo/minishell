@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
 /*   Updated: 2024/07/30 15:55:34 by fdessoy-         ###   ########.fr       */
@@ -88,6 +88,7 @@ typedef struct s_data
 	char	**cmd_a;
 	bool	echoed;
 	bool	echo_flag;
+	bool	expand;
 	char	*line_read;
 	t_env	*envll;
 }	t_data;
@@ -147,7 +148,7 @@ void	free_data(t_data *data, char *path, t_env **env, char **command_array);
 
 /* in line_handler.c */
 int		sniff_line(t_data *data);
-int		tokens_parsing(t_token *token);
+int		syntax_check(t_token *token);
 int		incorrect_syntax(t_token *token, t_type token_type);
 
 /* in ll_utils.c */

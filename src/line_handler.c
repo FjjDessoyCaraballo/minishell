@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   line_handler.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 12:23:49 by walnaimi          #+#    #+#             */
 /*   Updated: 2024/07/30 11:59:35 by fdessoy-         ###   ########.fr       */
@@ -24,9 +24,11 @@ int	sniff_line(t_data *data)
 		return (NULL_LINE);
 	if (data->line_read || *data->line_read)
 		add_history(data->line_read);
+  data->echoed = false;
 	line_tokenization(data);
-	if (tokens_parsing(data->token) == 2)
+	if (syntax_check(data->token) == 2)
 		return (2);
+	parse_token(data->token);
 	return (0);
 }
 
@@ -37,7 +39,7 @@ int	sniff_line(t_data *data)
  * "%> |||"
  * "%> syntax error near unexpected token `||'"
  */
-int	tokens_parsing(t_token *token)
+int	syntax_check(t_token *token)
 {
 	if (incorrect_syntax(token, PIPE) == 2
 		|| incorrect_syntax(token, RED_OUT) == 2

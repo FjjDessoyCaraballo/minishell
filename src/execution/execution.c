@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
 /*   Updated: 2024/07/30 15:56:58 by fdessoy-         ###   ########.fr       */
@@ -38,7 +38,7 @@ Therefore, iteration might be neccessary for either single execution or builtin
 int	execution(t_data *data, t_env **env_ll)
 {
     t_token	*token;
-	
+
 	token = data->token;
 	data-> nb_cmds = how_many_children(token);
 	// int i = 0;
@@ -47,6 +47,7 @@ int	execution(t_data *data, t_env **env_ll)
 	// 	printf("token: [%i][%s] type: [%i]\n", i, head->value, head->type);
 	// 	head = head->next;
 	// }
+
 	if (data->nb_cmds == 1 && !search_token_type(token, PIPE))
 		data->status = single_execution(data, token, env_ll);
 	else
