@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/30 13:45:38 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/30 14:25:43 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ int	multiple_cmds(t_data *data, t_token *token, t_env **env_ll)
 	printf("data->nb_cmds: %i\n", data->nb_cmds);
 	while (i < data->nb_cmds)
 	{
-		if (pipe(data->pipe_fd) == -1) // we are piping too much
+		if (pipe(data->pipe_fd) == -1)
 			return (err_pipes("Broken pipe\n", 141));
 		pids = fork();
 		if (pids < 0)
@@ -103,13 +103,6 @@ int	multiple_cmds(t_data *data, t_token *token, t_env **env_ll)
 	}
 	close_fds(data);
 	printf("status:%i\n", status);
-	// this fucks up everything
-	// i = 0;
-	// while (i < data->nb_cmds)
-	// {
-	// 	waitpid(pids, &status, 0);
-	// 	i++;
-	// }
 	pids = wait(&status);
 	while (pids > 0)
 		pids = wait(&status);
@@ -117,7 +110,15 @@ int	multiple_cmds(t_data *data, t_token *token, t_env **env_ll)
 }
 
 /**
- * Latest 24.07 - Child process 0 runs, but no other child is created after
+ * The piped execution is where the child processes go. Here we will check for
+ * redirections to know if the user wants the output/input to be redirected from/to
+ * a file.
+ * 
+ * RETURN VALUES: piped_execution() does not return anything as it is just a pathway
+ * to the final part of the execution in ft_exet().
+ * 
+ * DETAILS: at this point we may use exit() function without worrying that we will
+ * end the whole program.
  */
 void	piped_execution(t_data *data, t_env **envll, char *instruction, int child)
 {
@@ -140,6 +141,20 @@ void	piped_execution(t_data *data, t_env **envll, char *instruction, int child)
 	ft_exec(data, instruction, redirect_flag);
 }
 
+/**
+ * This is the second part of the execution where we are going to
+ * check if we have the redirection flag (int redirect) and we are
+ * parsing the commands differently if we do.
+ * 
+ * Redirections here take an even more strict definition:
+ * - "%> cat << EOF | cat > outfile"
+ * 
+ * Therefore, in here, redirections will be strictly "<" and ">", while
+ * HERE_DOC and APPEND will have explicit naming because they are able
+ * to take arguments beforehand.
+ * 
+ * [placeholder for more documentation]
+ */
 void	ft_exec(t_data *data, char *line, int redirect) // child is here for debugging
 {
 	static char	*path;
@@ -240,3 +255,11 @@ char	*redirect_out(char **array, char *instruction, int flag, int index)
 	}
 	return (instruction);
 }
+
+	// this fucks up everything
+	// i = 0;
+	// while (i < data->nb_cmds)
+	// {
+	// 	waitpid(pids, &status, 0);
+	// 	i++;
+	// }

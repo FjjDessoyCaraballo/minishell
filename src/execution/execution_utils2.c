@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 14:19:20 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/30 13:38:25 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/30 14:25:11 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,16 @@
 
 void	dup_fds(t_data *data, int child, int fd_flag, char *file)
 {
-	if (fd_flag == REDIRECT_IN) // don't try to close if this doesn't happen
+	if (fd_flag == REDIRECT_IN)
 	{
 		open_fdin(data, file);	
 		dup2(data->fd_in, STDIN_FILENO);
 		close(data->fd_in);
 	}
-	else if (fd_flag == REDIRECT_OUT) // don't try to close if this doesn't happen
+	else if (fd_flag == REDIRECT_OUT) 
 	{
 		open_fdout(data, file);
-		dup2(data->fd_out, STDOUT_FILENO); // was STDIN_FILENO, corrected to STDOUT_FILENO
+		dup2(data->fd_out, STDOUT_FILENO);
 		close(data->fd_out);
 	}
 	else
@@ -34,7 +34,7 @@ void	dup_fds(t_data *data, int child, int fd_flag, char *file)
 			dup2(data->read_end, STDIN_FILENO);
 	}
 	if (child != data->nb_cmds - 1)
-		dup2(data->pipe_fd[1], STDOUT_FILENO); // <<--- this one
+		dup2(data->pipe_fd[1], STDOUT_FILENO);
 	close(data->pipe_fd[0]);
 	close(data->pipe_fd[1]);
 }
