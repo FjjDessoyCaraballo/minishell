@@ -6,13 +6,13 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:34:16 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/29 22:13:32 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/07/30 18:22:06 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int chunky_checker(char *token,t_token *current_token,t_data *data)
+static int env_var(char *token, t_token *current_token, t_data *data)
 {
 	if (ft_strcmp(token, "$?") == 0)
 	{
@@ -33,6 +33,13 @@ int chunky_checker(char *token,t_token *current_token,t_data *data)
 			printf("\n");
 			return FAILURE;
 	}
+	return FAILURE;
+}
+
+int chunky_checker(char *token,t_token *current_token,t_data *data)
+{
+	if (env_var(token, current_token, data) == SUCCESS)
+		return SUCCESS;
 	else if(ft_builtin_check(token, current_token, data->builtins) == SUCCESS) //current_token->id == 0 && 
 	{
 		if (ft_strcmp(current_token->value, "echo") == SUCCESS)
@@ -80,7 +87,7 @@ int chunky_checker(char *token,t_token *current_token,t_data *data)
 	else
 		return(FAILURE);
 }
-
+/*
 void print_env_ll(t_data *data) 
 {
 	t_env *temp = data->envll;
@@ -89,6 +96,57 @@ void print_env_ll(t_data *data)
 		printf("%s\n", temp->content);
 		temp = temp->next;
 	}
+}
+*/
+
+char *concatenate_echo_args(const char *delimiters, t_data *data) 
+{
+    char *concatenated_args = ft_strdup("");
+    char *token;
+	//int first_token = 1;
+    while ((token = ft_strtok(NULL, delimiters)) != NULL)
+	{
+        // Handle environment variables
+        if (ft_strcmp(token, "$?") == 0)
+		{
+            char *env_status = ft_itoa(data->status);
+            char *temp = ft_strjoin(concatenated_args, " ");
+            //free(concatenated_args);
+            concatenated_args = ft_strjoin(temp, env_status);
+            //free(temp);
+            //free(env_status);
+        }
+		else if (token[0] == '$') 
+		{
+            char *env_value = ft_getenv(token + 1, data->envll);
+            if (env_value)
+			{
+                char *temp = ft_strjoin(concatenated_args, " ");
+                free(concatenated_args);
+                concatenated_args = ft_strjoin(temp, env_value);
+                free(temp);
+            }
+        }
+		else
+		{
+            char *temp = ft_strjoin(concatenated_args, " ");
+            free(concatenated_args);
+            concatenated_args = ft_strjoin(temp, token);
+            free(temp);
+        }
+    }
+	return concatenated_args;
+}
+
+void echoing(t_token *current_token, t_token **prev_token, const char *delimiters, t_data *data)
+{
+    char *concatenated_args = concatenate_echo_args(delimiters, data);
+    current_token->next = init_token();
+    current_token->next->prev = current_token;
+    *prev_token = current_token;
+    current_token = current_token->next;
+    current_token->type = ARGUMENT;
+    current_token->value = concatenated_args;
 }
 
 int line_tokenization(t_data *data)
@@ -112,6 +170,13 @@ int line_tokenization(t_data *data)
 		current_token->prev = prev_token;
 		if(chunky_checker(token, current_token, data) == FAILURE)
 			return FAILURE;
+
+		if(data->echoed && current_token->type == BUILTIN)
+		{
+			echoing(current_token, &prev_token, delimiters, data);
+			break;
+		}
+		
 		token = ft_strtok(NULL, delimiters);
 		if(token != NULL)
 		{
@@ -123,6 +188,6 @@ int line_tokenization(t_data *data)
 		}
 	}
 	data->token = first_node;
-    //print_tokens(data);
+    print_tokens(data);
 	return SUCCESS;
 }
