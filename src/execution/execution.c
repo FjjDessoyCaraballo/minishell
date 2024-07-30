@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/30 21:49:35 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/30 22:17:59 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,24 +155,18 @@ void	piped_execution(t_data *data, t_env **envll, char *instruction, int child)
 		}
 		data->index++;
 	}
-	if (!file)
+	if (checking_access(data, instruction) != 0 || !file)
 	{
 		free_array(data->cmd_a);
 		free_array(cmd_array);
 		free_array(data->binary_paths);
 		free_ll(*envll);
-		exit(1);
+		exit(FAILURE);
 	}
 	dprintf(1, "redirect flag is: %i\n", redirect_flag);
 	dprintf(1, "file is: %s\n", file);
 	dup_fds(data, child, redirect_flag, file);
 	close(data->pipe_fd[1]);
-	// dprintf(2, "redirection flag: %i\n", redirect_flag);
-	if (checking_access(data, instruction) != 0)
-	{
-		free_data(data, NULL, envll, NULL);
-		exit(FAILURE);
-	}
 	ft_exec(data, cmd_array, redirect_flag);
 }
 
@@ -238,56 +232,70 @@ void	ft_exec(t_data *data, char **cmd_array, int redirect) // child is here for 
  */
 char	**parse_instruction(char **cmd_array, int redirect_flag)
 {
-	char	*parsed_cmd;
-	int		index;
+	int	index;
+	int	len;
+	char **parsed_array;
 
-	parsed_cmd = ft_strdup("");
-	if (!parsed_cmd)
-		return (NULL);
-	if (redirect_flag == REDIRECT_OUT)
-		index = 0;
-	else
-		index = 2;
-	parsed_cmd = redirect_out(cmd_array, parsed_cmd, redirect_flag, index);
-	free_array(array_instruction);
-	array_instruction = ft_split(parsed_cmd, ' ');
-	if (!array_instruction)
+	len = 0;
+	index = 0;
+	while (cmd_array[index])
 	{
-		free_array(array_instruction);
+		if (!ft_strcmp(cmd_array[index], ">") || !ft_strcmp(cmd_array[index], "<"))
+			index++;
+		len++;
+		index++;
+	}
+	parsed_array = remove_redirect(cmd_array, len, redirect_flag);
+	if (!parsed_array)
+	{
+		free_array(cmd_array);
 		return (NULL);
 	}
-	return (array_instruction);
+	free_array(cmd_array);
+	return (parsed_array);
 }
 
 /**
  * This function is responsible for taking out the redirection character
  * of the whole array, leaving just command, flags and arguments.
  */
-char	*redirect_out(char **array, char *instruction, int flag, int index)
+char	*remove_redirect(char **array, int len, int flag)
 {
-	char *tmp;
+	// we are getting the whole array and we need to take out the
+	// redirection and change order of stuff if it is an output
+	// redirection.  Otherwhise we will feed the wrong arguments.
+	char 	**parsed_array;
+	int		index;
 
+	index = 0;
+	parsed_array = (char *)malloc(sizeof(char *) * (len + 1));
 	while (array[index])
 	{
-		if (ft_strchr(array[index], '>') && flag == REDIRECT_OUT)
-			break ;
-		tmp = ft_strjoin(instruction, array[index]);
-		if (!tmp)
-			return (NULL);
-		free(instruction);
-		instruction = ft_strjoin(tmp, " ");
-		if (!instruction)
-			return (NULL);
-		free(tmp);
+		if (flag == REDIRECT_IN)
+			// deal with input redirection syntax: everything after <
+		else if (flag == REDIRECT_OUT)
+			// deal with output redirection syntax: anything but >
 		index++;
 	}
-	return (instruction);
+	return (parsed_array);
 }
 
 
 /*************************************************************
  ************************* DUMP ******************************
  *************************************************************/
+
+		// if (!ft_strcmp(array[index], '>'))
+		// 	break ;
+		// tmp = ft_strjoin(instruction, array[index]);
+		// if (!tmp)
+		// 	return (NULL);
+		// free(instruction);
+		// instruction = ft_strjoin(tmp, " ");
+		// if (!instruction)
+		// 	return (NULL);
+		// free(tmp);
+		// index++;
 
 // char	**parse_instruction(char *instruction, int redirect_flag)
 // {
