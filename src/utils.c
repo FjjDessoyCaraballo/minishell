@@ -36,3 +36,17 @@ void	free_data(t_data *data, char *path, t_env **env, char **command_array)
 		free(path);
 	free(data);
 }
+
+void	free_token(t_token *token)
+{
+	t_token	*tmp;
+	
+	while (token != NULL)
+	{
+		tmp = token;
+		token = token->next;
+		free(tmp);
+	}
+	free(token);
+	token = NULL;
+}

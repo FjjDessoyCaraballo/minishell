@@ -134,7 +134,6 @@ void	exit_child(char *file, int err_code);
 char	**cl_to_array(t_token *token);
 int		checking_access(t_data *data, char *instruction);
 char	*get_binary(char *instruction);
-// char	*find_file(char *instruction, int redirect_flag); DEPRECATED
 char	*abs_path(char *command);
 
 /* in init.c */
@@ -148,6 +147,7 @@ void	error_exit(int num);
 
 /* in utils.c */
 void	free_data(t_data *data, char *path, t_env **env, char **command_array);
+void	free_token(t_token *token);
 
 /* in line_handler.c */
 int		sniff_line(t_data *data);

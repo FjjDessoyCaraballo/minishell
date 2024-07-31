@@ -38,6 +38,7 @@ int main(int argc, char **argv, char **env)
 			}
 			else if (exec_status == 0)
 				execution(data, &env_ll);
+			free_token(data->token);
 		}
 	}
 	else

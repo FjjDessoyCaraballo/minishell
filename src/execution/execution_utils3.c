@@ -152,42 +152,6 @@ char	*get_binary(char *instruction)
 	return (binary);
 }
 
-/**
- * DEPRECATED 
- *
- * Here we want to filter out the file, if there is one. At this point we
- * should surely have an infile, and maybe an outfile. It is not completely
- * necessary that we have an outfile, because when we open fd_out in the data
- * structure there will be an option to create a file of the users choosing.
- * This does not mean that the redirection will work without an argument, so
- * it is necessary that the user has inputted a name of a file to be created.
- * 
- * Return value: upon completion, the function will return with the name of the
- * file that was requested. In case of failure, the  function returns NULL.
- */
-// char	*find_file(char *instruction, int redirect_flag)
-// {
-// 	char	*file;
-// 	char	**filter;
-
-// 	filter = ft_split(instruction, ' ');
-// 	if (!filter)
-// 		return (NULL);
-// 	if (redirect_flag == REDIRECT_IN)
-// 	{
-// 		file = ft_strdup(filter[1]);
-// 		free_array(filter);
-// 		return (filter[2]);
-// 	}
-// 	else if (redirect_flag == REDIRECT_OUT)
-// 	{
-// 		file = ft_strdup(filter[3]);
-// 		free_array(filter);
-// 		return (file);
-// 	}
-// 	return (NULL);
-// }
-
 char	*abs_path(char *command)
 {
 	int		i;
@@ -202,47 +166,3 @@ char	*abs_path(char *command)
 	}
 	return (NULL);
 }
-
-
-// char **cl_to_array(t_token *token)
-// {
-// 	t_token *head;
-// 	char	**pipe_array;
-// 	char	*instruction;
-// 	char	*tmp;
-// 	int		i;
-// 	int		nb_of_instructions;
-	
-// 	nb_of_instructions = how_many_tokens(token);
-// 	pipe_array = (char **)malloc(sizeof(char *) * (nb_of_instructions + 1));
-// 	if (!pipe_array)
-// 		return (NULL);
-// 	i = 0;
-// 	head = token;
-// 	instruction = ft_strdup("");
-// 	if (!instruction)
-// 		return (NULL);
-	
-// 	while (head)
-// 	{
-// 		while (head->type != PIPE)
-// 		{
-// 			printf("head->value: %s\ninstruction: %s\n", head->value, instruction);
-// 			tmp = ft_strjoin(instruction, head->value);
-// 			if (!tmp)
-// 				return (NULL);
-// 			free(instruction);
-// 			instruction = ft_strjoin(tmp, " ");
-// 			if (!instruction)
-// 				return (NULL);
-// 			free(tmp);
-// 			pipe_array[i++] = ft_strdup(instruction);
-// 			head = head->next;
-// 		}
-// 		head = head->next; // jumping over the pipe to next command
-// 		free(instruction);
-// 	}
-// 	printf("we are getting here\n");
-// 	pipe_array[i] = NULL;
-// 	return (pipe_array);
-// }

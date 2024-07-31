@@ -24,7 +24,7 @@ int	sniff_line(t_data *data)
 		return (NULL_LINE);
 	if (data->line_read || *data->line_read)
 		add_history(data->line_read);
-  data->echoed = false;
+	data->echoed = false;
 	line_tokenization(data);
 	if (syntax_check(data->token) == 2)
 		return (2);
