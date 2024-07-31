@@ -14,6 +14,7 @@
 
 void	dup_fds(t_data *data, int child, int fd_flag, char *file)
 {
+	dprintf(2, "status of redir flag:%d\n", fd_flag);
 	if (fd_flag == REDIRECT_IN)
 	{
 		open_fdin(data, file);	
@@ -62,7 +63,7 @@ void	open_fdin(t_data *data, char *infile)
 
 void	open_fdout(t_data *data, char *outfile)
 {
-	errno = 0;	
+	errno = 0;
 	data->fd_out = open(outfile, O_WRONLY | O_CREAT | O_APPEND, 0664);
 	if (errno == ENOENT)
 		exit_child(outfile, NO_FILE);

@@ -41,12 +41,12 @@ int	execution(t_data *data, t_env **env_ll)
 
 	token = data->token;
 	data-> nb_cmds = how_many_children(token);
-	// t_token *head = token;
-	// while (head) // this is for debugging
-	// {
-	// 	printf("token: [%s] type: [%i]\n", head->value, head->type);
-	// 	head = head->next;
-	// }
+	t_token *head = token;
+	while (head) // this is for debugging
+	{
+		printf("token: [%s] type: [%i]\n", head->value, head->type);
+		head = head->next;
+	}
 	if (data->nb_cmds == 1 || find_token(token, BUILTIN) != NULL)
 	{
 		if (data->nb_cmds == 1)
@@ -139,27 +139,23 @@ void	piped_execution(t_data *data, t_env **envll, char *instruction, int child)
 	cmd_array = ft_split(instruction, ' ');
 	while (cmd_array[data->index])
 	{
-		if (!ft_strcmp(cmd_array[data->index], "<")
-			|| !ft_strcmp(cmd_array[data->index], ">"))
+		if (!ft_strcmp(cmd_array[data->index], ">"))
 		{
-			if (!ft_strcmp(cmd_array[data->index], ">"))
-			{
-				file = ft_strdup(cmd_array[data->index]);
-				redirect_flag = REDIRECT_OUT;
-			}
-			else
-			{
-				file = ft_strdup(cmd_array[data->index]);
-				redirect_flag = REDIRECT_IN;
-			}
-			if (!file)
-			{
-				free_array(data->cmd_a);
-				free_array(cmd_array);
-				free_array(data->binary_paths);
-				free_ll(*envll);
-				exit(FAILURE);
-			}
+			file = ft_strdup(cmd_array[data->index + 1]);
+			redirect_flag = REDIRECT_OUT;
+		}
+		else if (!ft_strcmp(cmd_array[data->index], "<"))
+		{
+			file = ft_strdup(cmd_array[data->index + 1]);
+			redirect_flag = REDIRECT_IN;
+		}
+		if (!file && redirect_flag != 0)
+		{
+			free_array(data->cmd_a);
+			free_array(cmd_array);
+			free_array(data->binary_paths);
+			free_ll(*envll);
+			exit(FAILURE);
 		}
 		data->index++;
 	}
@@ -218,9 +214,6 @@ void	ft_exec(t_data *data, char **cmd_array, int redirect) // child is here for 
 		exit(127);
 	}
 }
-
-
-
 
 /*************************************************************
  ************************* DUMP ******************************

@@ -19,7 +19,8 @@ int main(int argc, char **argv, char **env)
 	int		exec_status;
 	
 	(void)argv;
-	data = malloc(sizeof(t_data));
+	// data = malloc(sizeof(t_data));
+	data = ft_calloc(1, sizeof(t_data));
 	if (!data)
 		exit(1); // might need to specify error for this
 	env_ll = NULL;

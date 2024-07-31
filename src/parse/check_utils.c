@@ -18,7 +18,7 @@ char *loop_path_for_binary(char *binary, char **paths)
 	int		i; 
 	
 	i = 0;
-	while (paths[i])
+	while (paths && paths[i])
 	{
 		token_with_path = ft_strsjoin(paths[i], binary, '/');
 		if (!access(token_with_path, F_OK))

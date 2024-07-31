@@ -56,6 +56,7 @@ int handle_output_redirection(t_token *current_token, t_token *next_token)
             return FAILURE;
         }
         enter_file(fd);// once we got fd open and ready we enter the file to write
+        close(fd);
         //printf("%d\n",fd);debug
         //printf("\n");perhaps not needed?
         return SUCCESS;
@@ -69,20 +70,22 @@ int handle_output_redirection(t_token *current_token, t_token *next_token)
             return FAILURE;
         }
         enter_file(fd);
-        //printf("%d\n",fd);debug
-        //printf("\n");
+        close(fd);
         return SUCCESS;
     }
+    // close(fd);
     return FAILURE;
 }
 
 
 int handle_input_redirection(t_token *token, t_token *next_token)
 {
+    int fd;
+
     if (ft_strcmp(token->value, "<") == 0)
     {
-        open(next_token->value, O_RDONLY);
-        printf("\n"); // idk if we actually need to print this new line
+        fd = open(next_token->value, O_RDONLY);
+        close (fd); 
         return (0);
     }
     return FAILURE;
