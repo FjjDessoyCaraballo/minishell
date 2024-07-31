@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/31 12:31:39 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/31 12:44:50 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,10 +54,9 @@
 # define FILE_PERMISSION_DENIED 2
 # define PERMISSION_DENIED 126
 # define COMMAND_NOT_FOUND 127
-// # define EXEC_NOT_FOUND -2
 # define ERR_ARG "Wrong number of arguments, Karen\n"
-# define PATH_MAX 1024
 # define SUCCESS 0
+// # define PATH_MAX 1024
 # define FAILURE 1
 
 /*************************************************/
@@ -110,14 +109,14 @@ int		execution(t_data *data, t_env **env_ll);
 int		multiple_execution(t_data *data, t_token *token, t_env **env_ll);
 int		piping(t_data *data, t_env **env_ll, char **all_cmds, int pids);
 void	piped_execution(t_data *data, t_env **envll, char *instruction, int child);
-void	ft_exec(t_data *data, char *line, int redirect);
+void	ft_exec(t_data *data, char **cmd_array, int redirect);
 
 /* in execution2.c */
 int		single_execution(t_data *data, t_token *token, t_env **env_ll);
 void	single_child(t_data *data, t_token *token, t_env **env_ll);
 int		single_parent(pid_t pid, int status);
-char	**parse_instruction(char *instruction, int redirect_flag);
-char	*remove_redirect(char **array, char *instruction, int flag, int index);
+char	**parse_instruction(char **cmd_array);
+char	**remove_redirect(char **array, int len);
 
 /* in execution_utils.c */
 int		err_pipes(char *msg, int err_code);

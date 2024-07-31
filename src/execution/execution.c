@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/31 12:31:50 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/31 12:57:21 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ int	piping(t_data *data, t_env **env_ll, char **all_cmds, int pids)
 	while (data->index < data->nb_cmds)
 	{
 		if (pipe(data->pipe_fd) == -1)
-		return (err_pipes("Broken pipe\n", 141));
+			return (err_pipes("Broken pipe\n", 141));
 		pids = fork();
 		if (pids < 0)
 		{
@@ -144,27 +144,36 @@ void	piped_execution(t_data *data, t_env **envll, char *instruction, int child)
 		{
 			if (!ft_strcmp(cmd_array[data->index], ">"))
 			{
-				file = ft_strdup(cmd_array[data->index + 1]);
+				file = ft_strdup(cmd_array[data->index]);
 				redirect_flag = REDIRECT_OUT;
+				printf("is there a file? %s\n", file);
 			}
 			else
 			{
-				file = ft_strdup(cmd_array[data->index + 1]);
+				file = ft_strdup(cmd_array[data->index]);
 				redirect_flag = REDIRECT_IN;
+				printf("is there a file2? %s\n", file);
+			}
+			if (!file)
+			{
+				free_array(data->cmd_a);
+				free_array(cmd_array);
+				free_array(data->binary_paths);
+				free_ll(*envll);
+				exit(FAILURE);
 			}
 		}
 		data->index++;
 	}
-	if (checking_access(data, instruction) != 0 || !file)
+	if (checking_access(data, instruction) != 0) // || !file
 	{
+		dprintf(2, "getting this far\n");
 		free_array(data->cmd_a);
 		free_array(cmd_array);
 		free_array(data->binary_paths);
 		free_ll(*envll);
 		exit(FAILURE);
 	}
-	dprintf(1, "redirect flag is: %i\n", redirect_flag);
-	dprintf(1, "file is: %s\n", file);
 	dup_fds(data, child, redirect_flag, file);
 	close(data->pipe_fd[1]);
 	ft_exec(data, cmd_array, redirect_flag);
@@ -189,7 +198,7 @@ void	ft_exec(t_data *data, char **cmd_array, int redirect) // child is here for 
 	static char	*path;
 	
 	if (redirect != 0)
-		cmd_array = parse_instruction(cmd_array, redirect); // this is not working
+		cmd_array = parse_instruction(cmd_array); // this is not working
 	if (!cmd_array)
 	{
 		free_array(cmd_array);

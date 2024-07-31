@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 10:41:10 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/31 12:31:53 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/31 12:44:19 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ int	single_parent(pid_t pid, int status)
  * the commands that will be used in execve(). In case of any failures, the
  * function returns NULL.
  */
-char	**parse_instruction(char **cmd_array, int redirect_flag)
+char	**parse_instruction(char **cmd_array)
 {
 	int	index;
 	int	len;
@@ -95,7 +95,7 @@ char	**parse_instruction(char **cmd_array, int redirect_flag)
 		len++;
 		index++;
 	}
-	parsed_array = remove_redirect(cmd_array, len, redirect_flag);
+	parsed_array = remove_redirect(cmd_array, len);
 	if (!parsed_array)
 	{
 		free_array(cmd_array);
@@ -109,7 +109,7 @@ char	**parse_instruction(char **cmd_array, int redirect_flag)
  * This function is responsible for taking out the redirection character
  * of the whole array, leaving just command, flags and arguments.
  */
-char	*remove_redirect(char **array, int len, int flag)
+char	**remove_redirect(char **array, int len)
 {
 	// we are getting the whole array and we need to take out the
 	// redirection and change order of stuff if it is an output
