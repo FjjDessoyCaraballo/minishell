@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/30 21:42:15 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/31 12:31:39 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,11 @@
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <stdbool.h>
+
+/*************************************************/
+/* questionable libraries ************************/
+/*************************************************/
+# include <limits.h>
 
 /*************************************************/
 /* macro *****************************************/
@@ -106,13 +111,13 @@ int		multiple_execution(t_data *data, t_token *token, t_env **env_ll);
 int		piping(t_data *data, t_env **env_ll, char **all_cmds, int pids);
 void	piped_execution(t_data *data, t_env **envll, char *instruction, int child);
 void	ft_exec(t_data *data, char *line, int redirect);
-char	**parse_instruction(char *instruction, int redirect_flag);
-char	*redirect_out(char **array, char *instruction, int flag, int index);
 
 /* in execution2.c */
 int		single_execution(t_data *data, t_token *token, t_env **env_ll);
 void	single_child(t_data *data, t_token *token, t_env **env_ll);
 int		single_parent(pid_t pid, int status);
+char	**parse_instruction(char *instruction, int redirect_flag);
+char	*remove_redirect(char **array, char *instruction, int flag, int index);
 
 /* in execution_utils.c */
 int		err_pipes(char *msg, int err_code);

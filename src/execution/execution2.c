@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 10:41:10 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/30 20:12:52 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/31 12:31:53 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,4 +62,85 @@ int	single_parent(pid_t pid, int status)
 			return (WEXITSTATUS(status));
 		else
 			return (-1);
+}
+/**
+ * Its necessary to know which redirection we have here and give back the
+ * array organized in the usual fashion of "cmd -flag" for execution. We
+ * assume that the index should start at 2 because of the syntax:
+ * %> "< infile cat"
+ * 
+ * For redirect for output, we already have at the index 0 our commands, and
+ * the flags will follow as far as we hit the redirect itself. 
+ * 
+ * The first and second elements of the instruction, inside array_instruction,
+ * MUST be the redirect and file by consequence of our parsing. At this point
+ * we are working with purely validated inputs.
+ * 
+ * Return values: upon success, this function will return an array with only
+ * the commands that will be used in execve(). In case of any failures, the
+ * function returns NULL.
+ */
+char	**parse_instruction(char **cmd_array, int redirect_flag)
+{
+	int	index;
+	int	len;
+	char **parsed_array;
+
+	len = 0;
+	index = 0;
+	while (cmd_array[index])
+	{
+		if (!ft_strcmp(cmd_array[index], ">") || !ft_strcmp(cmd_array[index], "<"))
+			index++;
+		len++;
+		index++;
+	}
+	parsed_array = remove_redirect(cmd_array, len, redirect_flag);
+	if (!parsed_array)
+	{
+		free_array(cmd_array);
+		return (NULL);
+	}
+	free_array(cmd_array);
+	return (parsed_array);
+}
+
+/**
+ * This function is responsible for taking out the redirection character
+ * of the whole array, leaving just command, flags and arguments.
+ */
+char	*remove_redirect(char **array, int len, int flag)
+{
+	// we are getting the whole array and we need to take out the
+	// redirection and change order of stuff if it is an output
+	// redirection.  Otherwhise we will feed the wrong arguments.
+	char 	**parsed_array;
+	int		index;
+	int		i;
+	char	cwd[PATH_MAX];
+
+	i = 0;
+	getcwd(cwd, sizeof(cwd));
+	index = 0;
+	parsed_array = (char **)malloc(sizeof(char *) * (len + 1));
+	while (array[index])
+	{
+		if (!ft_strcmp(array[index], ">") || !ft_strcmp(array[index], "<"))
+			index++;
+		else if (check_binary_locally(array[index], cwd) == SUCCESS)
+		{
+			parsed_array[i] = ft_strdup(array[index]);
+			i++;
+		}
+		index++;
+	} // deal with input redirection syntax: everything after <
+	index = 0;
+	while (array[index])
+	{
+		if (is_file(array[index], cwd) == SUCCESS)
+			parsed_array[i] = ft_strdup(array[index]);
+		index++;
+	}
+	parsed_array[i] = NULL;
+	return (parsed_array);
 }

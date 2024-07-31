@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:33:43 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/24 15:43:14 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/31 11:47:41 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,41 @@ char *loop_path_for_binary(char *binary, char **paths)
 		i++;
 	}
 	return (NULL);
+}
+
+char	*check_binary_locally(char *binary, char *path)
+{
+	char	*binary_with_path;
+
+	binary_with_path = ft_strsjoin(path, binary, "/");
+	if (!access(binary_with_path, F_OK))
+	{
+		if (!access(binary_with_path, X_OK))
+		{
+			free(binary_with_path);
+			return (SUCCESS);
+		}
+	}
+	free(binary_with_path);
+	return (FAILURE)
+}
+
+char	*is_file(char *binary, char *path)
+{
+	char	*file_with_path;
+
+	file_with_path = ft_strsjoin(path, binary, "/");
+	if (!access(file_with_path, F_OK))
+	{
+		if (!access(file_with_path, X_OK))
+		{
+			free(file_with_path);
+			return (FAILURE);
+		}
+		free(file_with_path);
+		return (SUCCESS);
+	}
+	return (FAILURE)
 }
 
 char	*ft_strndup(const char *s, size_t n)
