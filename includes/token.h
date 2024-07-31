@@ -101,7 +101,8 @@ char	*loop_path_for_binary(char *binary, char **paths);
 int		check_binary_locally(char *binary, char *path);
 int		is_file(char *binary, char *path);
 char	*ft_strndup(const char *s, size_t n);
-int		how_many_tokens(t_token *token);
+// int		how_many_tokens(t_token *token); DEPRECATED
+int		count_token(t_token *token, t_type type);
 
 /*****************************************
  * in src/parse/freedom.c
