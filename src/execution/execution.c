@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/31 12:57:21 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/31 12:59:11 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,13 +146,11 @@ void	piped_execution(t_data *data, t_env **envll, char *instruction, int child)
 			{
 				file = ft_strdup(cmd_array[data->index]);
 				redirect_flag = REDIRECT_OUT;
-				printf("is there a file? %s\n", file);
 			}
 			else
 			{
 				file = ft_strdup(cmd_array[data->index]);
 				redirect_flag = REDIRECT_IN;
-				printf("is there a file2? %s\n", file);
 			}
 			if (!file)
 			{
@@ -167,7 +165,6 @@ void	piped_execution(t_data *data, t_env **envll, char *instruction, int child)
 	}
 	if (checking_access(data, instruction) != 0) // || !file
 	{
-		dprintf(2, "getting this far\n");
 		free_array(data->cmd_a);
 		free_array(cmd_array);
 		free_array(data->binary_paths);
