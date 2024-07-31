@@ -70,7 +70,7 @@ int    parse_token(t_token *token);
 /*****************************************
  * in src/parse/ft_strtok.c
  *****************************************/
-char	*ft_strtok(char *str, const char *delim);
+char	*ft_strtok(char *str, const char *delim, t_data *data);
 int		ft_charinstr(char c, const char *str);
 int		ft_strcmp(char *s1, char *s2);
 

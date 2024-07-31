@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:12:51 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/30 12:10:34 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/31 16:16:44 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int main(int argc, char **argv, char **env)
 		while (666)
 		{
 			exec_status = sniff_line(data);
-			printf("exec status: %i\n", exec_status);
+			//printf("exec status: %i\n", exec_status);
 			if (exec_status == NULL_LINE)
 			{
 				printf("exit\n");

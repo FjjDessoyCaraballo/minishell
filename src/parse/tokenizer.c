@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:34:16 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/30 18:22:06 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/07/31 22:48:42 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,60 +87,100 @@ int chunky_checker(char *token,t_token *current_token,t_data *data)
 	else
 		return(FAILURE);
 }
-/*
-void print_env_ll(t_data *data) 
-{
-	t_env *temp = data->envll;
-	while (temp) 
-	{
-		printf("%s\n", temp->content);
-		temp = temp->next;
-	}
-}
-*/
 
 char *concatenate_echo_args(const char *delimiters, t_data *data) 
 {
-    char *concatenated_args = ft_strdup("");
+    char *concatenated_args = NULL;
     char *token;
-	//int first_token = 1;
-    while ((token = ft_strtok(NULL, delimiters)) != NULL)
-	{
+    int first_token = 1;
+	(void)(data);
+	
+
+    while ((token = ft_strtok(NULL, delimiters, data)) != NULL)
+    {
+		if (data->error == 4)
+		{
+			printf("Tokenization error within concatenate_echo_args: unmatched quote detected.\n");
+            return NULL;
+		}
+        char *temp;
+
         // Handle environment variables
-        if (ft_strcmp(token, "$?") == 0)
-		{
+        /*if (ft_strcmp(token, "$?") == 0)
+        {
             char *env_status = ft_itoa(data->status);
-            char *temp = ft_strjoin(concatenated_args, " ");
-            //free(concatenated_args);
-            concatenated_args = ft_strjoin(temp, env_status);
-            //free(temp);
-            //free(env_status);
-        }
-		else if (token[0] == '$') 
-		{
-            char *env_value = ft_getenv(token + 1, data->envll);
-            if (env_value)
-			{
-                char *temp = ft_strjoin(concatenated_args, " ");
+            if (concatenated_args)
+            {
+                temp = ft_strjoin(concatenated_args, " ");
                 free(concatenated_args);
-                concatenated_args = ft_strjoin(temp, env_value);
+                concatenated_args = ft_strjoin(temp, env_status);
                 free(temp);
             }
+            else
+            {
+                concatenated_args = ft_strdup(env_status);
+            }
+            free(env_status);
         }
-		else
-		{
-            char *temp = ft_strjoin(concatenated_args, " ");
-            free(concatenated_args);
-            concatenated_args = ft_strjoin(temp, token);
-            free(temp);
-        }
+        else if (token[0] == '$') 
+        {
+            char *env_value = ft_getenv(token + 1, data->envll);
+            if (env_value)
+            {
+                if (concatenated_args)
+                {
+                    temp = ft_strjoin(concatenated_args, " ");
+                    free(concatenated_args);
+                    concatenated_args = ft_strjoin(temp, env_value);
+                    free(temp);
+                }
+                else
+                {
+                    concatenated_args = ft_strdup(env_value);
+                }
+            }
+        }*/
+        //else
+        //{
+            if (concatenated_args)
+            {
+                // Only add a space if it's not the first token
+                if (!first_token)
+                {
+                    temp = ft_strjoin(concatenated_args, " ");
+                    free(concatenated_args);
+                    concatenated_args = ft_strjoin(temp, token);
+                    free(temp);
+                }
+                else
+                {
+                    temp = ft_strdup(token);
+                    free(concatenated_args);
+                    concatenated_args = temp;
+                }
+            }
+            else
+            {
+                concatenated_args = ft_strdup(token);
+            }
+        //}
+
+        first_token = 0; // After the first token, subsequent tokens should be prefixed with a space
     }
-	return concatenated_args;
+
+    return concatenated_args;
 }
+
 
 void echoing(t_token *current_token, t_token **prev_token, const char *delimiters, t_data *data)
 {
     char *concatenated_args = concatenate_echo_args(delimiters, data);
+	if (concatenated_args == NULL && data->error == 4)
+	{
+		// Handle error
+        printf("error: unmatched quote detected.\n");
+        return;
+	}
     current_token->next = init_token();
     current_token->next->prev = current_token;
     *prev_token = current_token;
@@ -153,41 +193,63 @@ int line_tokenization(t_data *data)
 {
     char *token;
     const char *delimiters = "  \t\n";
-	t_token *first_node = init_token();
-	t_token *current_token = first_node;
-	t_token *prev_token = NULL;
-	int id = 0;
+    t_token *first_node = init_token();
+    t_token *current_token = first_node;
+    t_token *prev_token = NULL;
+    int id = 0;
+    data->error = 0;
 
-	char *builtins[] = {"echo","cd","pwd","export","unset","env","exit",NULL};
-	data->builtins = builtins;
-	char *redirect[] = {">",">>","<","<<", NULL};
-	data->redirect = redirect;
+    char *builtins[] = {"echo", "cd", "pwd", "export", "unset", "env", "exit", NULL};
+    data->builtins = builtins;
+    char *redirect[] = {">", ">>", "<", "<<", NULL};
+    data->redirect = redirect;
 
-    token = ft_strtok(data->line_read, delimiters);
-    while (token != NULL)
+    token = ft_strtok(data->line_read, delimiters, data);
+    if (data->error == 4)
     {
-		current_token->id = id;
-		current_token->prev = prev_token;
-		if(chunky_checker(token, current_token, data) == FAILURE)
-			return FAILURE;
+        // Handle the error appropriately, e.g., clean up and return failure
+        printf("Tokenization error: unmatched quote detected. 221\n");
+        data->error = 0;
+        printf("%i\n",data->error);
+        return FAILURE;
+    }
 
-		if(data->echoed && current_token->type == BUILTIN)
-		{
-			echoing(current_token, &prev_token, delimiters, data);
-			break;
-		}
-		
-		token = ft_strtok(NULL, delimiters);
-		if(token != NULL)
-		{
-			current_token->next = init_token();
-			current_token->next->prev = current_token;
-			prev_token = current_token;
-			current_token = current_token->next;
-			id++;
-		}
-	}
-	data->token = first_node;
-    print_tokens(data);
-	return SUCCESS;
+    while (token != NULL && data->error != 4)
+    {
+        current_token->id = id;
+        current_token->prev = prev_token;
+        chunky_checker(token, current_token, data); //FAILURE
+            //return FAILURE;
+        if (data->echoed && current_token->type == BUILTIN && data->error != 4)
+        {
+            echoing(current_token, &prev_token, delimiters, data);
+            if (data->error == 4)
+            {
+                printf("Echoing error: unmatched quote detected after echoing.\n");
+                data->error = 0;
+                return FAILURE;
+            }
+            break;
+        }
+
+        token = ft_strtok(NULL, delimiters, data);
+        if (data->error == 4)
+        {
+            // Handle the error appropriately, e.g., clean up and return failure
+            printf("Tokenization error: unmatched quote detected during tokenization.\n");
+            return FAILURE;
+        }
+
+        if (token != NULL && data->error != 4)
+        {
+            current_token->next = init_token();
+            current_token->next->prev = current_token;
+            prev_token = current_token;
+            current_token = current_token->next;
+            id++;
+        }
+    }
+    data->token = first_node;
+    print_tokens(data); // debug
+    return SUCCESS;
 }

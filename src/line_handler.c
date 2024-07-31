@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 12:23:49 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/07/30 11:59:35 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/07/31 22:44:05 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ int	sniff_line(t_data *data)
 	if (data->line_read || *data->line_read)
 		add_history(data->line_read);
   data->echoed = false;
-	line_tokenization(data);
+	if(line_tokenization(data) == FAILURE)
+		return FAILURE;
 	if (syntax_check(data->token) == 2)
 		return (2);
 	parse_token(data->token);
