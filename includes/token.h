@@ -66,11 +66,17 @@ int		search_token_type(t_token *token, t_type type);
  *****************************************/
 int    parse_token(t_token *token);
 
+/*****************************************
+ * src/parse/expand_env.c
+ *****************************************/
+char *expand_env_variable(const char *input, size_t *i, t_data *data, size_t *new_len);
+void copy_env_value(char *result, const char *env_value, size_t *j, const char *var_name);
+char *expand_env_variables(const char *input, t_data *data);
 
 /*****************************************
  * in src/parse/ft_strtok.c
  *****************************************/
-char	*ft_strtok(char *str, const char *delim, t_data *data);
+char	*ft_strtok(char *str, const char *delim, t_data *data, t_token *cur_tok);
 int		ft_charinstr(char c, const char *str);
 int		ft_strcmp(char *s1, char *s2);
 

@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/30 23:02:29 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/01 23:05:52 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,9 @@ typedef struct s_data
 	int		in_quotes;
 	char	*line_read;
 	int		error;
+	int		id;
+	char	*vtoken;
+	const char *deli;
 	t_env	*envll;
 }	t_data;
 

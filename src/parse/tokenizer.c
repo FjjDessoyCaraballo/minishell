@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:34:16 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/31 22:48:42 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/01 23:05:52 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,8 @@ int chunky_checker(char *token,t_token *current_token,t_data *data)
 		current_token->value = "-n";
 		return (SUCCESS);
 	}
-	else if(data->echoed == false && (ft_command_check(token, current_token, data) == SUCCESS))	//(current_token->id == 0 || current_token->prev->type == PIPE) && 
-		return SUCCESS;
-	else if(current_token->prev != NULL && (current_token->prev->type == COMMAND || current_token->prev->type == FLAG)
-			&& token[0] == '-')
+    else if(current_token->prev != NULL && (current_token->prev->type == COMMAND || current_token->prev->type == FLAG)
+		&& token[0] == '-')
 	{
 		current_token->type = FLAG;
 		current_token->value = ft_strdup(token);
@@ -76,6 +74,12 @@ int chunky_checker(char *token,t_token *current_token,t_data *data)
 		data->echoed = false;
 		return SUCCESS;
 	}
+    
+	else if(data->echoed == false && (ft_command_check(token, current_token, data) == SUCCESS))	//(current_token->id == 0 || current_token->prev->type == PIPE) && 
+		{
+            return SUCCESS;
+        }
+
 	else if(ft_argument_check(token, current_token) == SUCCESS)
 	{
 		if(current_token->id == 0)
@@ -88,99 +92,48 @@ int chunky_checker(char *token,t_token *current_token,t_data *data)
 		return(FAILURE);
 }
 
-char *concatenate_echo_args(const char *delimiters, t_data *data) 
-{
+char *concatenate_echo_args(t_token *current_token, const char *delimiters, t_data *data) {
     char *concatenated_args = NULL;
     char *token;
     int first_token = 1;
-	(void)(data);
-	
 
-    while ((token = ft_strtok(NULL, delimiters, data)) != NULL)
-    {
-		if (data->error == 4)
-		{
-			printf("Tokenization error within concatenate_echo_args: unmatched quote detected.\n");
+    while ((token = ft_strtok(NULL, delimiters, data, current_token)) != NULL) {
+        if (data->error == 4)
             return NULL;
-		}
         char *temp;
 
-        // Handle environment variables
-        /*if (ft_strcmp(token, "$?") == 0)
-        {
-            char *env_status = ft_itoa(data->status);
-            if (concatenated_args)
-            {
+        // Expand environment variables within the token
+        char *expanded_token = expand_env_variables(token, data);
+
+        if (concatenated_args) {
+            // Only add a space if it's not the first token
+            if (!first_token) {
                 temp = ft_strjoin(concatenated_args, " ");
                 free(concatenated_args);
-                concatenated_args = ft_strjoin(temp, env_status);
+                concatenated_args = ft_strjoin(temp, expanded_token);
                 free(temp);
+            } else {
+                temp = ft_strdup(expanded_token);
+                free(concatenated_args);
+                concatenated_args = temp;
             }
-            else
-            {
-                concatenated_args = ft_strdup(env_status);
-            }
-            free(env_status);
+        } else {
+            concatenated_args = ft_strdup(expanded_token);
         }
-        else if (token[0] == '$') 
-        {
-            char *env_value = ft_getenv(token + 1, data->envll);
-            if (env_value)
-            {
-                if (concatenated_args)
-                {
-                    temp = ft_strjoin(concatenated_args, " ");
-                    free(concatenated_args);
-                    concatenated_args = ft_strjoin(temp, env_value);
-                    free(temp);
-                }
-                else
-                {
-                    concatenated_args = ft_strdup(env_value);
-                }
-            }
-        }*/
-        //else
-        //{
-            if (concatenated_args)
-            {
-                // Only add a space if it's not the first token
-                if (!first_token)
-                {
-                    temp = ft_strjoin(concatenated_args, " ");
-                    free(concatenated_args);
-                    concatenated_args = ft_strjoin(temp, token);
-                    free(temp);
-                }
-                else
-                {
-                    temp = ft_strdup(token);
-                    free(concatenated_args);
-                    concatenated_args = temp;
-                }
-            }
-            else
-            {
-                concatenated_args = ft_strdup(token);
-            }
-        //}
 
+        free(expanded_token); // Free the expanded token
         first_token = 0; // After the first token, subsequent tokens should be prefixed with a space
     }
 
     return concatenated_args;
 }
 
-
 void echoing(t_token *current_token, t_token **prev_token, const char *delimiters, t_data *data)
 {
-    char *concatenated_args = concatenate_echo_args(delimiters, data);
-	if (concatenated_args == NULL && data->error == 4)
-	{
-		// Handle error
-        printf("error: unmatched quote detected.\n");
+    char *concatenated_args = concatenate_echo_args(current_token, delimiters, data);
+    if (concatenated_args == NULL && data->error == 4)
         return;
-	}
+    //printf("this catted arg is :%s\n", concatenated_args);//debug
     current_token->next = init_token();
     current_token->next->prev = current_token;
     *prev_token = current_token;
@@ -189,67 +142,77 @@ void echoing(t_token *current_token, t_token **prev_token, const char *delimiter
     current_token->value = concatenated_args;
 }
 
+int check_and_handle_echo(t_token *current_token, t_token **prev_token, const char *delimiters, t_data *data) 
+{
+    if (data->echoed && current_token->type == BUILTIN && data->error != 4) 
+    {
+        echoing(current_token, prev_token, delimiters, data);
+        if (data->error == 4) 
+        {
+            data->error = 0;
+            return FAILURE;
+        }
+        if (current_token->next->value == NULL) 
+        {
+            printf("\n");
+            return FAILURE;
+        }
+        return SUCCESS; // Indicating to break the loop
+    }
+    return SUCCESS; // Indicating to continue the loop
+}
+
+static void setup(t_data *data)
+{
+    static char *builtins[] = {"echo", "cd", "pwd", "export", "unset", "env", "exit", NULL};
+    static char *redirect[] = {">", ">>", "<", "<<", NULL};
+    data->deli = "  \t\n";
+    data->error = 0;
+    data->builtins = builtins;
+    data->redirect = redirect;
+    data->id = 0;
+    data->vtoken = 0;
+}
+
+t_token *create_and_link_next_token(t_token *current_token, t_data *data)
+{
+    // Create and initialize the next token
+    t_token *new_token = init_token();
+    current_token->next = new_token;
+    new_token->prev = current_token;
+    // Increment the id in the data structure
+    data->id++;
+    // Return the newly created token as the new current_token
+    return new_token;
+}
+
 int line_tokenization(t_data *data)
 {
-    char *token;
-    const char *delimiters = "  \t\n";
     t_token *first_node = init_token();
     t_token *current_token = first_node;
     t_token *prev_token = NULL;
-    int id = 0;
-    data->error = 0;
-
-    char *builtins[] = {"echo", "cd", "pwd", "export", "unset", "env", "exit", NULL};
-    data->builtins = builtins;
-    char *redirect[] = {">", ">>", "<", "<<", NULL};
-    data->redirect = redirect;
-
-    token = ft_strtok(data->line_read, delimiters, data);
-    if (data->error == 4)
+    
+    setup(data);
+    data->vtoken = ft_strtok(data->line_read, data->deli, data, current_token);
+    while (data->vtoken != NULL && data->error != 4)
     {
-        // Handle the error appropriately, e.g., clean up and return failure
-        printf("Tokenization error: unmatched quote detected. 221\n");
-        data->error = 0;
-        printf("%i\n",data->error);
-        return FAILURE;
-    }
-
-    while (token != NULL && data->error != 4)
-    {
-        current_token->id = id;
+        current_token->id = data->id;
         current_token->prev = prev_token;
-        chunky_checker(token, current_token, data); //FAILURE
-            //return FAILURE;
-        if (data->echoed && current_token->type == BUILTIN && data->error != 4)
-        {
-            echoing(current_token, &prev_token, delimiters, data);
-            if (data->error == 4)
-            {
-                printf("Echoing error: unmatched quote detected after echoing.\n");
-                data->error = 0;
-                return FAILURE;
-            }
-            break;
-        }
-
-        token = ft_strtok(NULL, delimiters, data);
-        if (data->error == 4)
-        {
-            // Handle the error appropriately, e.g., clean up and return failure
-            printf("Tokenization error: unmatched quote detected during tokenization.\n");
+        if(chunky_checker(data->vtoken, current_token, data) == FAILURE)
             return FAILURE;
-        }
-
-        if (token != NULL && data->error != 4)
+        if (check_and_handle_echo(current_token, &prev_token, data->deli, data) == FAILURE)
+            return FAILURE;
+        data->vtoken = ft_strtok(NULL, data->deli, data, current_token);
+        if (data->error == 4)
+            return FAILURE;
+        if (data->vtoken != NULL && data->error != 4)
         {
-            current_token->next = init_token();
-            current_token->next->prev = current_token;
-            prev_token = current_token;
-            current_token = current_token->next;
-            id++;
+            current_token = create_and_link_next_token(current_token, data);
+            prev_token = current_token->prev;
         }
     }
     data->token = first_node;
-    print_tokens(data); // debug
     return SUCCESS;
-}
+}   
+
+//print_tokens(data); // debug

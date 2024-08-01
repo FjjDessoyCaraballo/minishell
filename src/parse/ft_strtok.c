@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:34:00 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/01 01:04:15 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/01 15:27:17 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,7 +153,7 @@ char *remove_quotes(const char *str)
     return temp_str;
 }
 
-char *ft_strtok(char *str, const char *delim, t_data *data)
+char *ft_strtok(char *str, const char *delim, t_data *data, t_token *cur_tok)
 {
     static char *target;
     char *token;
@@ -192,7 +192,16 @@ char *ft_strtok(char *str, const char *delim, t_data *data)
         }
         else if (target[index] == '"' || target[index] == '\'')
         {
-            data->in_quotes = 1;
+            if(target[index] == '\'')
+            {
+                data->in_quotes = 1;
+                cur_tok->expand = false;
+            }
+            else
+            {
+                data->in_quotes = 2;
+                cur_tok->expand = true;
+            }
             quote_char = target[index];
             index++; // Skip the opening quote
             continue;
