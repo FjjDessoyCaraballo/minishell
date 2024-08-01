@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils2.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 14:19:20 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/30 14:25:11 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/01 09:31:01 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	dup_fds(t_data *data, int child, int fd_flag, char *file)
 	else if (fd_flag == REDIRECT_OUT) 
 	{
 		open_fdout(data, file);
-		dup2(data->fd_out, STDOUT_FILENO);
+		dup2(STDOUT_FILENO, data->fd_out);
 		close(data->fd_out);
 	}
 	else
