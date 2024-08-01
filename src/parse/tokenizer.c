@@ -106,6 +106,7 @@ int line_tokenization(t_data *data)
 	data->redirect = redirect;
 
     token = ft_strtok(data->line_read, delimiters);
+	
     while (token != NULL)
     {
 		current_token->id = id;

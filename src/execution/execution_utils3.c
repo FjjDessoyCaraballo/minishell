@@ -35,7 +35,7 @@ char **cl_to_array(t_token *token)
 	int		i;
 	int		nb_of_instructions;
 	
-	nb_of_instructions = how_many_tokens(token);
+	nb_of_instructions = count_token(token, PIPE) + 1;
 	pipe_array = (char **)malloc(sizeof(char *) * (nb_of_instructions + 1));
 	if (!pipe_array)
 		return (NULL);
@@ -70,7 +70,8 @@ char **cl_to_array(t_token *token)
             head = head->next;
     }
     free(instruction);
-    pipe_array[i] = NULL;
+	instruction = NULL;
+    // pipe_array[i] = NULL;
     return (pipe_array);
 }
 
@@ -100,19 +101,25 @@ int	checking_access(t_data *data, char *instruction)
 		if (!access(binary_path, F_OK))
 		{
 			if(!access(binary_path, X_OK))
+			{
+				free(binary);
+				free(binary_path);
 				return (SUCCESS);
+			}
 			else
 			{
 				ft_putstr_fd(binary, 2);
 				ft_putstr_fd(": ", 2);
 				ft_putstr_fd("command not found\n", 2);
 				free(binary);
+				free(binary_path);
 				return (FAILURE);
 			}
 		}
 		else
 			free(binary_path);
 	}
+	free(binary);
 	return (FAILURE);
 }
 

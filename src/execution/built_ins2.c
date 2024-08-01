@@ -14,16 +14,35 @@
 
 int	built_in_or_garbage(t_data *data, t_env **env_ll, t_token *token)
 {
-	t_token *tmp;
-	
+	t_token 	*tmp;
+	static char	**message;
+
+	tmp = token;
+	int i = 0;
+	while (tmp)
+	{
+		printf("token [%i][%s]\n", i, tmp->value);
+		tmp = tmp->next;
+		i++;
+	}
 	tmp = token;
 	while (tmp != NULL)
 	{
-		if (token->type == BUILTIN)
+		
+		if (tmp->type == BUILTIN)
 			return (built_ins(data, token, env_ll));
-		else if (token->type == ARGUMENT)
-			return (err_pipes(token->value, 127));
 		tmp = tmp->next;
+	}
+	tmp = NULL;
+	if (token)
+	{
+		
+		message = ft_split(token->value, ' ');
+		if (!message)
+			return (0);
+		err_msg(message[0], "command not found", 0);
+		free_array(message);
+		return (127);
 	}
 	return (0);
 }
@@ -46,6 +65,7 @@ int	shell_cd(t_token *token, t_data *data)
     if (!curr_pwd)
 	{
         free(curr_pwd);
+		curr_pwd = NULL;
 		ft_putstr_fd("The path ahead is block by nothingness\n", 2);
 		return (FAILURE);
 	}
@@ -138,6 +158,7 @@ int	unset(t_token *token, t_env **env_ll)
 	{
 		*env_ll = tmp->next;
 		free(tmp);
+		tmp = NULL;
 		return (SUCCESS);
 	}
 	while (tmp->next != NULL)
@@ -147,6 +168,7 @@ int	unset(t_token *token, t_env **env_ll)
 			del = tmp->next;
 			tmp->next = tmp->next->next;
 			free(del);
+			del = NULL;
 			return (SUCCESS);
 		}
 		tmp = tmp->next;

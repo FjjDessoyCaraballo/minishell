@@ -119,7 +119,7 @@ char	**parse_instruction(char **cmd_array);
 char	**remove_redirect(char **array, int len);
 
 /* in execution_utils.c */
-int		err_pipes(char *msg, int err_code);
+int		err_msg(char *obj, char *msg, int err_code);
 int		how_many_children(t_token *token);
 char	*access_path(char **path, char *cmd);
 void	close_fds(t_data *data);

@@ -14,9 +14,13 @@
 
 t_token* init_token()
 {
-	t_token *token = (t_token *)malloc(sizeof(t_token));
+	t_token *token;
+
+	// t_token *token = (t_token *)malloc(sizeof(t_token));
+	token = (t_token *)ft_calloc(1, sizeof(t_token));
 	if (!token)
 		return NULL;
+	// ft_bzero(token, sizeof(t_token));
 	token->type = UNKNOWN;
 	token->value = NULL;
 	token->path = NULL;
@@ -24,5 +28,5 @@ t_token* init_token()
 	token->next = NULL;
 	token->prev = NULL;
 	token->echo = false;
-	return token;
+	return (token);
 }

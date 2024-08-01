@@ -52,7 +52,7 @@ char *ft_strtok(char *str, const char *delim)
         if (*target == '\0')
             return NULL;
     }
-
+    
     // Token starts here
     index = 0;
     while (target[index])
@@ -87,6 +87,7 @@ char *ft_strtok(char *str, const char *delim)
 
     token = ft_substr(target, 0, index);
     target += index;
+
     return token;
 }
 

@@ -72,7 +72,7 @@ int	incorrect_syntax(t_token *token, t_type token_type)
 				|| (head->type == token_type && head->next->type == HEREDOC)
 				|| (head->type == token_type && head->next->type == APPEND)
 				|| (head->type == token_type && head->next->type == FLAG))
-				return (err_pipes(head->value, 2));
+				return (err_msg(head->value, "syntax error", 2));
 		}
 		head = head->next;
 	}

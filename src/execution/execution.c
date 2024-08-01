@@ -40,22 +40,22 @@ int	execution(t_data *data, t_env **env_ll)
     t_token	*token;
 
 	token = data->token;
-	data-> nb_cmds = how_many_children(token);
-	t_token *head = token;
-	while (head) // this is for debugging
-	{
-		printf("token: [%s] type: [%i]\n", head->value, head->type);
-		head = head->next;
-	}
-	if (data->nb_cmds == 1 || find_token(token, BUILTIN) != NULL)
+	data->nb_cmds = how_many_children(token);
+	// t_token *head = token;
+	// while (head) // this is for debugging
+	// {
+	// 	printf("token: [%s] type: [%i]\n", head->value, head->type);
+	// 	head = head->next;
+	// }
+	if (data->nb_cmds > 1)
+		data->status = multiple_execution(data, token, env_ll);
+	else
 	{
 		if (data->nb_cmds == 1)
 			data->status = single_execution(data, token, env_ll);
 		else
 			data->status = built_in_or_garbage(data, env_ll, token); // builtins will be thrown into single execution later
 	}
-	else if (data->nb_cmds > 1)
-		data->status = multiple_execution(data, token, env_ll);
 	return (data->status);
 }
 
@@ -66,19 +66,20 @@ int	execution(t_data *data, t_env **env_ll)
 int	multiple_execution(t_data *data, t_token *token, t_env **env_ll)
 {
 	static pid_t	pids;
+	static char		**cmd_a;
 
-	data->cmd_a = cl_to_array(token);
-	if (!data->cmd_a)
+	cmd_a = ttad(token, PIPE);
+	if (!cmd_a)
 		return (FAILURE);
 	data->env = env_arr_updater(env_ll);
 	if (!data->env)
 		return (FAILURE);
-	data->status = piping(data, env_ll, data->cmd_a, pids);
+	data->status = piping(data, env_ll, cmd_a, pids);
 	close_fds(data);
 	pids = wait(&data->status);
 	while (pids > 0)
 		pids = wait(&data->status);
-	free_array(data->cmd_a);
+	// free_array(cmd_a);
 	return (WEXITSTATUS(data->status));
 }
 
@@ -88,13 +89,13 @@ int	piping(t_data *data, t_env **env_ll, char **all_cmds, int pids)
 	while (data->index < data->nb_cmds)
 	{
 		if (pipe(data->pipe_fd) == -1)
-			return (err_pipes("Broken pipe\n", 141));
+			return (err_msg(NULL, "Broken pipe\n", 141));
 		pids = fork();
 		if (pids < 0)
 		{
 			close(data->pipe_fd[0]);
 			close(data->pipe_fd[1]);
-			return (err_pipes("Failed to fork\n", -1));
+			return (err_msg(NULL, "Failed to fork\n", -1));
 		}
 		if (pids == 0) // child
 			piped_execution(data, env_ll, all_cmds[data->index], data->index);
@@ -151,7 +152,6 @@ void	piped_execution(t_data *data, t_env **envll, char *instruction, int child)
 		}
 		if (!file && redirect_flag != 0)
 		{
-			free_array(data->cmd_a);
 			free_array(cmd_array);
 			free_array(data->binary_paths);
 			free_ll(*envll);
@@ -161,7 +161,6 @@ void	piped_execution(t_data *data, t_env **envll, char *instruction, int child)
 	}
 	if (checking_access(data, instruction) != 0) // || !file
 	{
-		free_array(data->cmd_a);
 		free_array(cmd_array);
 		free_array(data->binary_paths);
 		free_ll(*envll);
@@ -192,7 +191,7 @@ void	ft_exec(t_data *data, char **cmd_array, int redirect) // child is here for 
 	
 	if (redirect != 0)
 		cmd_array = parse_instruction(cmd_array); // this is not working
-	if (!cmd_array)
+	if (!cmd_array || !*cmd_array)
 	{
 		free_array(cmd_array);
 		free_data(data, NULL, &data->envll, NULL);

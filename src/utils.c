@@ -33,8 +33,10 @@ void	free_data(t_data *data, char *path, t_env **env, char **command_array)
 	if (command_array)
 		free_array(command_array);
 	if (path)
+	{
 		free(path);
-	free(data);
+		path = NULL;
+	}
 }
 
 void	free_token(t_token *token)
@@ -46,6 +48,7 @@ void	free_token(t_token *token)
 		tmp = token;
 		token = token->next;
 		free(tmp);
+		tmp = NULL;
 	}
 	free(token);
 	token = NULL;

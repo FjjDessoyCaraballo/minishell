@@ -43,30 +43,30 @@ void	single_child(t_data *data, t_token *token, t_env **env_ll)
 	char	**command_array;
 	char	**env;
 	char	*path;
-	t_token	*head;
-	int		redir_flag;
+	// t_token	*head;
+	// int		redir_flag;
 
-	head = token;
-	redir_flag = 0;
+	// head = token;
+	// redir_flag = 0;
 	command_array = ttad(token, 0);
-	if (count_token(token, RED_IN) > 0 || count_token(token, RED_IN) > 0
-		|| count_token(token, RED_IN) > 0 || count_token(token, RED_IN) > 0)
-	{
-		if (find_token(token, RED_IN) || find_token(token, RED_OUT)
-			|| find_token(token, HEREDOC) || find_token(token, APPEND))
-			redir_flag = 1;
-			command_array = parse_instruction(command_array);
-	}
+	// if (count_token(token, RED_IN) > 0 || count_token(token, RED_IN) > 0
+	// 	|| count_token(token, RED_IN) > 0 || count_token(token, RED_IN) > 0)
+	// {
+	// 	if (find_token(token, RED_IN) || find_token(token, RED_OUT)
+	// 		|| find_token(token, HEREDOC) || find_token(token, APPEND))
+	// 		redir_flag = 1;
+	// 		command_array = parse_instruction(command_array);
+	// }
 	/**
 	 * 
 	 * this is where we are going to deal with the redirection of the command
 	 * we need to take care of heredoc, append, red out and red in
 	 * 
 	 */
-	if (redir_flag == 0)
-		path = ft_strsjoin(token->path, token->value, '/');
-	else
-		path = ft_strsjoin(token->path, command_array[0], '/');
+	// if (redir_flag == 0)
+	// else
+	// 	path = ft_strsjoin(token->path, command_array[0], '/');
+	path = ft_strsjoin(token->path, token->value, '/');
 	env = env_arr_updater(env_ll);
 	if (execve(path, command_array, env) == -1)
 	{
