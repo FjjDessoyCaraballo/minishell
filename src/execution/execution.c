@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/30 15:56:58 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/01 11:14:17 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int	multiple_cmds(t_data *data, t_token *token, t_env **env_ll)
 	data->env = env_arr_updater(env_ll);
 	if (!data->env)
 		return (FAILURE);
-	data->status = piping(data, env_ll, data->cmd_a, pids);
+	data->status = child_processes(data, env_ll, data->cmd_a, pids);
 	close_fds(data);
 	pids = wait(&data->status);
 	while (pids > 0)
@@ -81,19 +81,19 @@ int	multiple_cmds(t_data *data, t_token *token, t_env **env_ll)
 	return (WEXITSTATUS(data->status));
 }
 
-int	piping(t_data *data, t_env **env_ll, char **all_cmds, int pids)
+int	child_processes(t_data *data, t_env **env_ll, char **all_cmds, int pids)
 {
 	data->index = 0;
 	while (data->index < data->nb_cmds)
 	{
 		if (pipe(data->pipe_fd) == -1)
-		return (err_pipes("Broken pipe\n", 141));
+		return (err_msg("Broken pipe\n", 141));
 		pids = fork();
 		if (pids < 0)
 		{
 			close(data->pipe_fd[0]);
 			close(data->pipe_fd[1]);
-			return (err_pipes("Failed to fork\n", -1));
+			return (err_msg("Failed to fork\n", -1));
 		}
 		if (pids == 0) // child
 			piped_execution(data, env_ll, all_cmds[data->index], data->index);
