@@ -16,7 +16,7 @@ int main(int argc, char **argv, char **env)
 {
 	t_data			*data;
 	t_env			*env_ll;
-	int		exec_status;
+	int				exec_status;
 	
 	(void)argv;
 	data = malloc(sizeof(t_data));

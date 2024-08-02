@@ -56,22 +56,6 @@ char	*bin_extract(char *path)
 	return (NULL);
 }
 
-/*void print_binary_paths(t_data *data)
-{
-    if (!data->binary_paths)
-    {
-        printf("Binary paths are NULL\n");
-        return;
-    }
-
-    printf("Binary paths:\n");
-    for (int i = 0; data->binary_paths[i] != NULL; i++)
-    {
-        printf("Path %d: %s\n", i, data->binary_paths[i]);
-    }
-}*/
-
-
 void	initializer(t_data *data, t_env **env_ll, char **env)
 {
 	signal(SIGINT, handler);
