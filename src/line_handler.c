@@ -25,7 +25,8 @@ int	sniff_line(t_data *data)
 	if (data->line_read || *data->line_read)
 		add_history(data->line_read);
   data->echoed = false;
-	line_tokenization(data);
+	if(line_tokenization(data) == FAILURE)
+		return FAILURE;
 	if (syntax_check(data->token) == 2)
 		return (2);
 	parse_token(data->token);
