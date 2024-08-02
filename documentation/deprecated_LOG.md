@@ -48,4 +48,7 @@ Week 1 (week 20 of 2024)
 15.7.2024
 1. Set up signal handler on first level of shell (ctrl + c, ctrl + \)
 2. ctrl + \ is ignored on first level, but still need to set it to execute while in child processes
+
+2.8.2024
+Did some norminetting and impliamented the export function to print alphabetically.
 ```

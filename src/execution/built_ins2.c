@@ -6,7 +6,7 @@
 /*   By: lstorey <lstorey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 15:26:27 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/02 14:03:22 by lstorey          ###   ########.fr       */
+/*   Updated: 2024/08/02 17:27:27 by lstorey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,12 +114,13 @@ int	print_export(t_env **env_ll)
 	if (!env_array)
 		return (SUCCESS);
 	i = 0;
-	while (env_array[i])
-	{
-		printf("declare -x ");
-		printf("%s\n", env_array[i]);
-		i++;
-	}
+	alphabetical_printer(env_array);
+	// while (env_array[i])
+	// {
+	// 	printf("declare -x ");
+	// 	printf("%s\n", env_array[i]);
+	// 	i++;
+	// }
 	free_array(env_array);
 	return (SUCCESS);
 }
