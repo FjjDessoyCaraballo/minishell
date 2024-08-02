@@ -36,7 +36,6 @@ int	built_in_or_garbage(t_data *data, t_env **env_ll, t_token *token)
 	tmp = NULL;
 	if (token)
 	{
-		
 		message = ft_split(token->value, ' ');
 		if (!message)
 			return (0);
