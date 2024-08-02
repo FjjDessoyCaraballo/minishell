@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/25 15:09:57 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/01 11:14:17 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,17 +38,16 @@ Therefore, iteration might be neccessary for either single execution or builtin
 int	execution(t_data *data, t_env **env_ll)
 {
     t_token	*token;
-	t_token *head;
-	
+
 	token = data->token;
-	head = token;
 	data-> nb_cmds = how_many_children(token);
-	int i = 0;
-	while (head)
-	{
-		printf("token: [%i][%s] type: [%i]\n", i, head->value, head->type);
-		head = head->next;
-	}
+	// int i = 0;
+	// while (head) // this is for debugging
+	// {
+	// 	printf("token: [%i][%s] type: [%i]\n", i, head->value, head->type);
+	// 	head = head->next;
+	// }
+
 	if (data->nb_cmds == 1 && !search_token_type(token, PIPE))
 		data->status = single_execution(data, token, env_ll);
 	else
@@ -65,54 +64,61 @@ int	execution(t_data *data, t_env **env_ll)
  */
 int	multiple_cmds(t_data *data, t_token *token, t_env **env_ll)
 {
-	int		i;
-	pid_t	pids;
-	int		status;
-	char	**all_cmds;
+	static pid_t	pids;
 
-	i = 0;
-	all_cmds = cl_to_array(token);
-	if (!all_cmds)
+	data->cmd_a = cl_to_array(token);
+	if (!data->cmd_a)
 		return (FAILURE);
 	data->env = env_arr_updater(env_ll);
 	if (!data->env)
 		return (FAILURE);
-	printf("data->nb_cmds: %i\n", data->nb_cmds);
-	while (i < data->nb_cmds)
+	data->status = child_processes(data, env_ll, data->cmd_a, pids);
+	close_fds(data);
+	pids = wait(&data->status);
+	while (pids > 0)
+		pids = wait(&data->status);
+	free_array(data->cmd_a);
+	return (WEXITSTATUS(data->status));
+}
+
+int	child_processes(t_data *data, t_env **env_ll, char **all_cmds, int pids)
+{
+	data->index = 0;
+	while (data->index < data->nb_cmds)
 	{
 		if (pipe(data->pipe_fd) == -1)
-			return (err_pipes("Broken pipe\n", 141));
+		return (err_msg("Broken pipe\n", 141));
 		pids = fork();
 		if (pids < 0)
 		{
 			close(data->pipe_fd[0]);
 			close(data->pipe_fd[1]);
-			return (err_pipes("Failed to fork\n", -1));
+			return (err_msg("Failed to fork\n", -1));
 		}
 		if (pids == 0) // child
-			piped_execution(data, env_ll, all_cmds[i], i);
+			piped_execution(data, env_ll, all_cmds[data->index], data->index);
 		else // parent
 		{
-			// close(data->pipe_fd[1]);
-			if (i > 0)
+			close(data->pipe_fd[1]);
+			if (data->index > 0)
 				close(data->read_end);
 			data->read_end = data->pipe_fd[0];
 		}
-		i++;
+		data->index++;
 	}
-	close_fds(data);
-	
-	i = 0;
-	while (i < data->nb_cmds)
-	{
-		waitpid(pids, &status, 0);
-		i++;
-	}
-	return (status);
+	return (data->index);
 }
 
 /**
- * Latest 24.07 - Child process 0 runs, but no other child is created after
+ * The piped execution is where the child processes go. Here we will check for
+ * redirections to know if the user wants the output/input to be redirected from/to
+ * a file.
+ * 
+ * RETURN VALUES: piped_execution() does not return anything as it is just a pathway
+ * to the final part of the execution in ft_exet().
+ * 
+ * DETAILS: at this point we may use exit() function without worrying that we will
+ * end the whole program.
  */
 void	piped_execution(t_data *data, t_env **envll, char *instruction, int child)
 {
@@ -127,18 +133,32 @@ void	piped_execution(t_data *data, t_env **envll, char *instruction, int child)
 		else
 			redirect_flag = REDIRECT_IN;
 		file = find_file(instruction, redirect_flag);
-		// filter_redirect(data, instruction, child, file);
 	}
 	dup_fds(data, child, redirect_flag, file);
 	close(data->pipe_fd[1]);
-	printf("[child: %i]\n", child);
 	if (checking_access(data, instruction) != 0)
+	{
 		free_data(data, NULL, envll, NULL);
-	ft_exec(data, instruction, redirect_flag, child);
+		exit(FAILURE);
+	}
+	ft_exec(data, instruction, redirect_flag);
 }
 
-
-void	ft_exec(t_data *data, char *line, int redirect, int child) // child is here for debugging
+/**
+ * This is the second part of the execution where we are going to
+ * check if we have the redirection flag (int redirect) and we are
+ * parsing the commands differently if we do.
+ * 
+ * Redirections here take an even more strict definition:
+ * - "%> cat << EOF | cat > outfile"
+ * 
+ * Therefore, in here, redirections will be strictly "<" and ">", while
+ * HERE_DOC and APPEND will have explicit naming because they are able
+ * to take arguments beforehand.
+ * 
+ * [placeholder for more documentation]
+ */
+void	ft_exec(t_data *data, char *line, int redirect) // child is here for debugging
 {
 	static char	*path;
 	char		**commands;
@@ -162,12 +182,11 @@ void	ft_exec(t_data *data, char *line, int redirect, int child) // child is here
 		free_data(data, NULL, &data->envll, commands);
 		exit (1);
 	}
-	printf("[child: %i]\n", child);
 	if (execve(path, commands, data->env) == -1)	
 	{
 		perror("execve");
 		free_data(data, path, &data->envll, commands);
-		exit (127);
+		exit(127);
 	}
 }
 
@@ -240,73 +259,10 @@ char	*redirect_out(char **array, char *instruction, int flag, int index)
 	return (instruction);
 }
 
-// char	**parse_instruction(char *instruction, int redirect_flag)
-// {
-// 	char	**array_instruction;
-// 	char	*new_instruction;
-// 	char	*tmp;
-// 	int		index;
-
-// 	array_instruction = ft_split(instruction, ' ');
-// 	if (!array_instruction)
-// 		return (NULL);
-// 	if (redirect_flag == REDIRECT_IN)
-// 	{
-// 		new_instruction = ft_strdup("");
-// 		index = 2;
-// 		while (array_instruction[index])
-// 		{
-// 			tmp = ft_strjoin(new_instruction, array_instruction[index]);
-// 			if (!tmp)
-// 				return (NULL);
-// 			free(new_instruction);
-// 			new_instruction = ft_strjoin(tmp, " ");
-// 			if (!new_instruction);
-// 				return (NULL);
-// 			free(tmp);
-// 			index++;
-// 		}
-// 		free_array(array_instruction);
-// 		array_instruction = ft_split(new_instruction, " ");
-// 		if (!array_instruction)
-// 		{
-// 			free_array(array_instruction);
-// 			return (NULL);
-// 		}
-// 	}
-// 	else if (redirect_flag == REDIRECT_OUT)
-// 	{
-// 		new_instruction = ft_strdup("");
-// 		if (redirect_flag = REDIRECT_OUT)
-// 			index = 0;
-// 		else
-// 			index = 2;
-// 		while (array_instruction[index])
-// 		{
-// 			if (ft_strcmp(array_instruction[index], ">") && redirect_flag == REDIRECT_OUT)
-// 				break ;
-// 			tmp = ft_strjoin(new_instruction, array_instruction[index]);
-// 			if (!tmp)
-// 				return (NULL);
-// 			free(new_instruction);
-// 			new_instruction = ft_strjoin(tmp, " ");
-// 			if (!new_instruction);
-// 				return (NULL);
-// 			free(tmp);
-// 			index++;
-// 		}
-// 		free_array(array_instruction);
-// 		array_instruction = ft_split(new_instruction, " ");
-// 		if (!array_instruction)
-// 		{
-// 			free_array(array_instruction);
-// 			return (NULL);
-// 		}
-// 	}
-// 	else
-// 	{
-// 		free_array(array_instruction);
-// 		return (NULL);
-// 	}
-// 	return (array_instruction);
-// }
+	// this fucks up everything
+	// i = 0;
+	// while (i < data->nb_cmds)
+	// {
+	// 	waitpid(pids, &status, 0);
+	// 	i++;
+	// }

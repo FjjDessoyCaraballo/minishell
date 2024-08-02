@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils3.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 10:19:57 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/24 18:18:29 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/01 11:15:16 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,19 +100,25 @@ int	checking_access(t_data *data, char *instruction)
 		if (!access(binary_path, F_OK))
 		{
 			if(!access(binary_path, X_OK))
+			{
+				free(binary);
+				free(binary_path);
 				return (SUCCESS);
+			}
 			else
 			{
 				ft_putstr_fd(binary, 2);
 				ft_putstr_fd(": ", 2);
 				ft_putstr_fd("command not found\n", 2);
 				free(binary);
+				free(binary_path);
 				return (FAILURE);
 			}
 		}
 		else
 			free(binary_path);
 	}
+	free(binary);
 	return (FAILURE);
 }
 

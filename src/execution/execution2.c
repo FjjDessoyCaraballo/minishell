@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   execution2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 10:41:10 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/24 17:58:12 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/01 11:14:05 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 /**
- * This function takes care of executing commands with no piping.
+ * This function takes care of executing commands with no child_processes.
  * USAGE: %> cmd -flag argument OR %> cmd argument -flag
  */
 int	single_execution(t_data *data, t_token *token, t_env **env_ll)

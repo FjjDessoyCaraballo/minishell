@@ -39,8 +39,8 @@ SRC_FILES = main.c\
 			src/parse/token_to_array.c\
 			src/parse/getenv.c\
 			src/parse/helper.c\
-
-
+			src/parse/parse.c\
+			
 # Object files
 OBJ_FILES = $(SRC_FILES:.c=.o)
 
@@ -60,7 +60,7 @@ all: $(NAME)
 	$(CC) $(CFLAGS) $(INCFLAGS) $(LIBFT_INC) -g -c $< -o $@
 
 $(NAME): $(OBJ_FILES) $(LIBFT)
-	$(CC) $(CFLAGS) $(OBJ_FILES) $(INCFLAGS) $(LIBFT_LINK) -o $(NAME) $(O_FLAGS)
+	$(CC) $(CFLAGS) $(OBJ_FILES) $(LIBFT_LINK) -o $(NAME) $(O_FLAGS)
 	@echo "\033[1;33m[✔] Compiling minishell...\033[0m"
 
 $(LIBFT): $(LIBFT_MAKEFILE)

@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 14:19:20 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/25 15:15:30 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/01 09:31:01 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,57 +20,24 @@ void	dup_fds(t_data *data, int child, int fd_flag, char *file)
 		dup2(data->fd_in, STDIN_FILENO);
 		close(data->fd_in);
 	}
-	else if (fd_flag == REDIRECT_OUT)
+	else if (fd_flag == REDIRECT_OUT) 
 	{
 		open_fdout(data, file);
-		dup2(data->fd_out, STDOUT_FILENO); // was STDIN_FILENO, corrected to STDOUT_FILENO
+		dup2(STDOUT_FILENO, data->fd_out);
 		close(data->fd_out);
 	}
 	else
 	{
 		if (child == 0)
-		{
-			printf("first dup\n");
 			dup2(data->pipe_fd[0], STDIN_FILENO);
-		}
 		else
-		{
-			printf("no first\n");
 			dup2(data->read_end, STDIN_FILENO);
-		}
 	}
 	if (child != data->nb_cmds - 1)
-		dup2(data->pipe_fd[1], STDOUT_FILENO); // <<--- this one
+		dup2(data->pipe_fd[1], STDOUT_FILENO);
 	close(data->pipe_fd[0]);
 	close(data->pipe_fd[1]);
 }
-
-
-// void	dup_fds(t_data *data, int child, int fd_flag, char *file)
-// {
-// 	if (fd_flag == REDIRECT_IN)
-// 	{
-// 		open_fdin(data, file);	
-// 		dup2(data->fd_in, STDIN_FILENO);
-// 		close (data->fd_in);
-// 	}
-// 	else if (fd_flag == REDIRECT_OUT)
-// 	{
-// 		open_fdout(data, file);
-// 		dup2(data->fd_out, STDIN_FILENO);
-// 		close(data->fd_out);
-// 	}
-// 	else
-// 	{
-// 		if (child == 0)
-// 			dup2(data->pipe_fd[0], STDIN_FILENO);
-// 		else
-// 			dup2(data->read_end, STDIN_FILENO);
-// 	}
-//     dup2(data->pipe_fd[1], STDOUT_FILENO); // <---- here we have a problem
-//     close(data->pipe_fd[0]);
-//     close(data->pipe_fd[1]);
-// }
 
 void	open_fdin(t_data *data, char *infile)
 {
@@ -105,19 +72,6 @@ void	open_fdout(t_data *data, char *outfile)
 		exit_child(outfile, EISDIR);
 }
 
-void close_fds(t_data *data)
-{
-    if (data->pipe_fd[0] != -1)
-        close(data->pipe_fd[0]);
-    if (data->pipe_fd[1] != -1)
-        close(data->pipe_fd[1]);
-    if (data->fd_in != -1)
-        close(data->fd_in);
-    if (data->fd_out != -1)
-        close(data->fd_out);
-    if (data->read_end != -1)
-        close(data->read_end);
-}
 
 
 void	exit_child(char *file, int err_code)

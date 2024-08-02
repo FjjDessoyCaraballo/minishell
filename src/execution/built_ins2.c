@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 15:26:27 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/25 09:44:17 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/01 11:14:17 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	built_in_or_garbage(t_data *data, t_env **env_ll, t_token *token)
 		if (token->type == BUILTIN)
 			return (built_ins(data, token, env_ll));
 		else if (token->type == ARGUMENT)
-			return (err_pipes(token->value, 127));
+			return (err_msg(token->value, 127));
 		tmp = tmp->next;
 	}
 	return (0);

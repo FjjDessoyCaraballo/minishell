@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lstorey <lstorey@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/25 18:52:57 by lstorey          ###   ########.fr       */
+/*   Updated: 2024/08/01 11:14:17 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,6 @@
 # include <stdbool.h>
 
 /*************************************************/
-/* global variable *******************************/
-/*************************************************/
-extern int g_exit_code;
-
-/*************************************************/
 /* macro *****************************************/
 /*************************************************/
 //Errors
@@ -49,7 +44,8 @@ extern int g_exit_code;
 # define REDIRECT_OUT 2
 # define REDIRECT_IN 1
 # define NO_FILE 1
-# define DIRECOTRY 69
+# define NULL_LINE 5
+# define DIRECTORY 69
 # define FILE_PERMISSION_DENIED 2
 # define PERMISSION_DENIED 126
 # define COMMAND_NOT_FOUND 127
@@ -76,6 +72,7 @@ typedef struct s_data
 	int		read_end;
 	int		*fd;
 	char	*bin;
+	int		index;
 	char	*path;
 	char	**binary_paths;
 	int		pipe_fd[2];
@@ -91,6 +88,7 @@ typedef struct s_data
 	char	**cmd_a;
 	bool	echoed;
 	bool	echo_flag;
+	bool	expand;
 	char	*line_read;
 	t_env	*envll;
 }	t_data;
@@ -105,8 +103,9 @@ typedef struct s_data
 /* in execution.c */
 int		execution(t_data *data, t_env **env_ll);
 int		multiple_cmds(t_data *data, t_token *token, t_env **env_ll);
+int		child_processes(t_data *data, t_env **env_ll, char **all_cmds, int pids);
 void	piped_execution(t_data *data, t_env **envll, char *instruction, int child);
-void	ft_exec(t_data *data, char *line, int redirect, int child);
+void	ft_exec(t_data *data, char *line, int redirect);
 char	**parse_instruction(char *instruction, int redirect_flag);
 char	*redirect_out(char **array, char *instruction, int flag, int index);
 
@@ -117,16 +116,15 @@ int		single_parent(pid_t pid, int status);
 void	filter_redirect(t_data *data, char *instruction, int child, char *file);
 
 /* in execution_utils.c */
-int		err_pipes(char *msg, int err_code);
-void	close_all_fds(int *fd);
+int		err_msg(char *msg, int err_code);
 int		how_many_children(t_token *token);
 char	*access_path(char **path, char *cmd);
+void	close_fds(t_data *data);
 
 /* in execution_utils2.c */
 void	dup_fds(t_data *data, int child, int fd_flag, char *file);
 void	open_fdin(t_data *data, char *infile);
 void	open_fdout(t_data *data, char *outfile);
-void	close_fds(t_data *data);
 void	exit_child(char *file, int err_code);
 
 /* in execution_utils3.c */
@@ -150,6 +148,8 @@ void	free_data(t_data *data, char *path, t_env **env, char **command_array);
 
 /* in line_handler.c */
 int		sniff_line(t_data *data);
+int		syntax_check(t_token *token);
+int		incorrect_syntax(t_token *token, t_type token_type);
 
 /* in ll_utils.c */
 t_env	*ft_listnew(void *content);
