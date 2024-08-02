@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   line_handler.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lstorey <lstorey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 12:23:49 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/08/01 11:14:17 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/02 11:50:28 by lstorey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	sniff_line(t_data *data)
 		return (NULL_LINE);
 	if (data->line_read || *data->line_read)
 		add_history(data->line_read);
-  data->echoed = false;
+	data->echoed = false;
 	line_tokenization(data);
 	if (syntax_check(data->token) == 2)
 		return (2);
@@ -49,7 +49,6 @@ int	syntax_check(t_token *token)
 		return (2);
 	else
 		return (SUCCESS);
-	
 }
 /**
  * incorrect_syntax() checks for specific operators and checks if they're
@@ -57,6 +56,7 @@ int	syntax_check(t_token *token)
  * 
  * RETURN VALUES: Upon success, it returns 0. If it fails, it returns 2.
  */
+
 int	incorrect_syntax(t_token *token, t_type token_type)
 {
 	t_token	*head;

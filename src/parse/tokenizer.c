@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: lstorey <lstorey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:34:16 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/29 22:13:32 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/02 11:54:03 by lstorey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int chunky_checker(char *token,t_token *current_token,t_data *data)
 		data->echoed = false;
 		return SUCCESS;
 	}
-	else if(ft_redirect_op_check(token, current_token, data->redirect) == SUCCESS)
+	else if(redirect_op_check(token, current_token, data->redirect) == SUCCESS)
 	{
 		current_token->echo = false;
 		data->echoed = false;

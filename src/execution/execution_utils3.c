@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils3.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lstorey <lstorey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 10:19:57 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/01 11:15:16 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/02 14:21:05 by lstorey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,16 +25,19 @@
  * pipe_array[0] = "ls -la"
  * pipe_array[1] = "grep Makefile"
  * pipe_array[2] = "cat > outfile"
+ * 
+ * ***NOTE: I dont think we need malloc checks after strdup, as its taken care of inside the function
+ * 			that should save a few lines at least***
  */
-char **cl_to_array(t_token *token)
+char	**cl_to_array(t_token *token)
 {
-	t_token *head;
+	t_token	*head;
 	char	**pipe_array;
 	char	*instruction;
 	char	*tmp;
 	int		i;
 	int		nb_of_instructions;
-	
+
 	nb_of_instructions = how_many_tokens(token);
 	pipe_array = (char **)malloc(sizeof(char *) * (nb_of_instructions + 1));
 	if (!pipe_array)
@@ -44,34 +47,34 @@ char **cl_to_array(t_token *token)
 	instruction = ft_strdup("");
 	if (!instruction)
 		return (NULL);
-    while (head) 
+	while (head)
 	{
-        instruction[0] = '\0';
-        while (head && head->type != PIPE) 
+		instruction[0] = '\0';
+		while (head && head->type != PIPE)
 		{
-            tmp = ft_strjoin(instruction, head->value);
+			tmp = ft_strjoin(instruction, head->value);
 			if (!tmp)
 				return (NULL);
-            free(instruction);
-            instruction = tmp;
-            tmp = ft_strjoin(instruction, " ");
+			free(instruction);
+			instruction = tmp;
+ 			tmp = ft_strjoin(instruction, " ");
 			if (!tmp)
 				return (NULL);
-            free(instruction);
-            instruction = tmp;
-            head = head->next;
-        }
-        if (instruction[ft_strlen(instruction) - 1] == ' ')
-            instruction[ft_strlen(instruction) - 1] = '\0';
-        pipe_array[i++] = ft_strdup(instruction);
-        if (!pipe_array[i - 1])
-            return (NULL);
-        if (head && head->type == PIPE)
-            head = head->next;
-    }
-    free(instruction);
-    pipe_array[i] = NULL;
-    return (pipe_array);
+			free(instruction);
+			instruction = tmp;
+			head = head->next;
+		}
+		if (instruction[ft_strlen(instruction) - 1] == ' ')
+			instruction[ft_strlen(instruction) - 1] = '\0';
+		pipe_array[i++] = ft_strdup(instruction);
+		if (!pipe_array[i - 1])
+			return (NULL);
+		if (head && head->type == PIPE)
+			head = head->next;
+	}
+	free(instruction);
+	pipe_array[i] = NULL;
+	return (pipe_array);
 }
 
 /** checking_access() is mainly a last check for general binaries that
@@ -139,8 +142,8 @@ int	checking_access(t_data *data, char *instruction)
  */
 char	*get_binary(char *instruction)
 {
-	char **split_instruction;
-	char *binary;
+	char	**split_instruction;
+	char	*binary;
 
 	split_instruction = ft_split(instruction, ' ');
 	if (!split_instruction)
@@ -198,7 +201,6 @@ char	*abs_path(char *command)
 	char	*path;
 
 	i = 0;
-	
 	while (command[i++])
 	{
 		if (ft_strchr(command, '/') != NULL)

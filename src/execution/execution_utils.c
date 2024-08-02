@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lstorey <lstorey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 15:29:42 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/01 11:14:17 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/02 14:09:18 by lstorey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ char	*access_path(char **path, char *cmd)
 	char	*curr_path;
 
 	i = 0;
-
 	while (path[i])
 	{
 		curr_path = ft_strsjoin(path[i], cmd, '/');
@@ -42,7 +41,7 @@ int	how_many_children(t_token *token)
 {
 	int		cmds;
 	t_token	*tmp;
-	
+
 	cmds = 0;
 	tmp = token;
 	while (tmp != NULL)
@@ -51,7 +50,6 @@ int	how_many_children(t_token *token)
 			cmds++;
 		tmp = tmp->next;
 	}
-	
 	tmp = NULL;
 	return (cmds + 1);
 }
@@ -66,19 +64,18 @@ int	err_msg(char *msg, int err_code)
 	return (err_code);
 }
 
-void close_fds(t_data *data)
+void	close_fds(t_data *data)
 {
-    if (data->pipe_fd[0] != 0)
-        close(data->pipe_fd[0]);
-    if (data->pipe_fd[1] != 0)
-        close(data->pipe_fd[1]);
-    if (data->fd_in != 0)
-        close(data->fd_in);
-    if (data->fd_out != 0)
-        close(data->fd_out);
-    if (data->read_end != 0)
-        close(data->read_end);
-
+	if (data->pipe_fd[0] != 0)
+		close(data->pipe_fd[0]);
+	if (data->pipe_fd[1] != 0)
+		close(data->pipe_fd[1]);
+	if (data->fd_in != 0)
+		close(data->fd_in);
+	if (data->fd_out != 0)
+		close(data->fd_out);
+	if (data->read_end != 0)
+		close(data->read_end);
 	// printf("data->pipe_fd[0] %i\n", data->pipe_fd[0]);
 	// printf("data->pipe_fd[1] %i\n", data->pipe_fd[1]);
 	// printf("data->read_end %i\n", data->read_end);

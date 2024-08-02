@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lstorey <lstorey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/01 11:14:17 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/02 14:04:38 by lstorey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ typedef struct s_env
 
 typedef struct s_data
 {
-	char 	**env;
+	char	**env;
 	int		nb_cmds;
 	int		read_end;
 	int		*fd;
@@ -80,9 +80,8 @@ typedef struct s_data
 	int		fd_out;
 	char	*home_pwd;
 	int		status;
-	char	**cmd;
-	// need to insert pids, tokens, and commands
-	t_token *token;
+	char	**cmd; // need to insert pids, tokens, and commands
+	t_token	*token;
 	char	**builtins;
 	char	**redirect;
 	char	**cmd_a;
@@ -93,7 +92,6 @@ typedef struct s_data
 	t_env	*envll;
 }	t_data;
 
-
 /*************************************************/
 /* functions *************************************/
 /*************************************************/
@@ -103,8 +101,8 @@ typedef struct s_data
 /* in execution.c */
 int		execution(t_data *data, t_env **env_ll);
 int		multiple_cmds(t_data *data, t_token *token, t_env **env_ll);
-int		child_processes(t_data *data, t_env **env_ll, char **all_cmds, int pids);
-void	piped_execution(t_data *data, t_env **envll, char *instruction, int child);
+int		child_action(t_data *data, t_env **env_ll, char **all_cmds, int pids);
+void	piped_execution(t_data *data, t_env **envll, char *instr, int child);
 void	ft_exec(t_data *data, char *line, int redirect);
 char	**parse_instruction(char *instruction, int redirect_flag);
 char	*redirect_out(char **array, char *instruction, int flag, int index);
