@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 11:49:16 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/07/30 12:52:30 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/05 10:06:25 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ void enter_file(int fd)// this is what happens inside the file as we add texts t
             perror("read");
             break;
         }
-        
         buffer[bytes_read] = '\0'; // Null-terminate the string
 
         if (strncmp(buffer, "END", 3) == 0 && (buffer[3] == '\n' || buffer[3] == '\0'))//if it finds END it breaks and goes to close
@@ -38,9 +37,7 @@ void enter_file(int fd)// this is what happens inside the file as we add texts t
             perror("write");
             break;
         }
-
     }
-
     close(fd);//closes file ofc
 }
 

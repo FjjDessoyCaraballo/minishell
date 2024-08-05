@@ -3,28 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   ll_utils2.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: lstorey <lstorey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 11:35:09 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/22 15:49:16 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/02 12:53:40 by lstorey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 /* should probably not use getenv() here */
-char **env_arr_updater(t_env **env_ll)
+char	**env_arr_updater(t_env **env_ll)
 {
-    int     i;
+	int		i;
 	int		size;
-    t_env   *tmp;
+	t_env	*tmp;
 	char	**env;
-   
-    i = 0;
+
+	i = 0;
 	tmp = (*env_ll);
 	size = ll_size(env_ll);
-	env = malloc(sizeof(char **) * (size + 1)); // + 1
- 	if (!env)
+	env = malloc(sizeof(char **) * (size + 1));// + 1
+	if (!env)
 	{
 		perror("Failed to allocate memory for data->env\n");
 		return (NULL);
@@ -33,10 +33,10 @@ char **env_arr_updater(t_env **env_ll)
 	{
 		env[i] = ft_strdup(tmp->content);
 		tmp = tmp->next;
-        i++;
-    }
+		i++;
+	}
 	env[i] = NULL;
-    tmp = NULL;
+	tmp = NULL;
 	return (env);
 }
 

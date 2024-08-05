@@ -1,10 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   token.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/08/02 11:35:39 by lstorey           #+#    #+#             */
+/*   Updated: 2024/08/05 09:58:14 by fdessoy-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef TOKEN_H
 # define TOKEN_H
 
 # include "minishell.h"
 # include <stdbool.h>
-typedef struct s_data t_data;
-typedef struct s_env t_env;
+
+typedef struct s_data	t_data;
+typedef struct s_env	t_env;
 /*******************************************
  * enum assign types
  * 0. echo,cd,pwd...
@@ -15,8 +28,8 @@ typedef struct s_env t_env;
  * 5. flags, -n , -l, --version
  * 404. not found (default).
  ********************************************/
-
-typedef	enum e_type{
+typedef enum e_type
+{
 	BUILTIN = 1,
 	COMMAND = 2,
 	ARGUMENT = 3,
@@ -38,15 +51,16 @@ typedef	enum e_type{
  * prev = points to the previous token.
  *******************************************/
 
-typedef struct s_token{
-	t_type	type;
-	char	*value;
-	char	*path;
-	int		id;
-	bool	expand;
-	bool	echo;
+typedef struct s_token
+{
+	t_type			type;
+	char			*value;
+	char			*path;
+	int				id;
+	bool			expand;
+	bool			echo;
 	struct s_token	*next;
-	struct s_token  *prev;
+	struct s_token	*prev;
 }		t_token;
 
 /*****************************************
@@ -83,7 +97,7 @@ int		ft_strcmp(char *s1, char *s2);
 /*****************************************
  * in src/parse/init_token.c
  *****************************************/
-t_token* init_token();
+t_token	*init_token(void);
 
 /*****************************************
  * in src/parse/chunky_check.c
@@ -91,8 +105,7 @@ t_token* init_token();
 int		ft_builtin_check(char *token, t_token *current_token, char **builtins);
 int		ft_command_check(char *token, t_token *current_token, t_data *data);
 int		ft_pipe_check(char *token, t_token *current_token);
-int		ft_redirect_op_check(char *token, t_token *current_token, char **redirect);
-int		ft_argument_check(char *token, t_token *current_token);
+int		redirect_op_check(char *token, t_token *current_token, char **redirect);
 
 /*****************************************
  * in src/parse/token_test.c
@@ -106,6 +119,7 @@ void	print_cmd(char **cmd_a);
 char	*loop_path_for_binary(char *binary, char **paths);
 char	*ft_strndup(const char *s, size_t n);
 int		how_many_tokens(t_token *token);
+int		ft_argument_check(char *token, t_token *current_token);
 
 /*****************************************
  * in src/parse/freedom.c

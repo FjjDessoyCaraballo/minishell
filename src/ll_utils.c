@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ll_utils.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lstorey <lstorey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 09:30:58 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/05/21 11:51:07 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/02 12:50:29 by lstorey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ char	*get_home(t_env *env_ll)
 	{
 		if (!ft_strncmp(env_ll->content, "HOME=", 5))
 			return (env_ll->content + 5);
-		env_ll = env_ll->next;		
+		env_ll = env_ll->next;
 	}
 	env_ll = tmp;
 	return (NULL);
@@ -69,7 +69,7 @@ t_env	*ft_list_last(t_env *lst)
 void	free_ll(t_env *env_ll)
 {
 	t_env	*tmp;
-	
+
 	while (env_ll != NULL)
 	{
 		tmp = env_ll;
