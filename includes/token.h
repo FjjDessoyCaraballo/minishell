@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 11:35:39 by lstorey           #+#    #+#             */
-/*   Updated: 2024/08/05 10:23:32 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/05 11:41:17 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,7 @@ int		check_binary_locally(char *binary, char *path);
 int		is_file(char *binary, char *path);
 char	*ft_strndup(const char *s, size_t n);
 int		how_many_tokens(t_token *token);
+int		count_token(t_token *token, t_type type);
 int		ft_argument_check(char *token, t_token *current_token);
 
 /*****************************************

@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 10:41:10 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/05 10:38:12 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/05 13:42:18 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,15 +40,19 @@ int	single_execution(t_data *data, t_token *token, t_env **env_ll)
 
 void	single_child(t_data *data, t_token *token, t_env **env_ll)
 {
-	char	**command_array;
-	char	**env;
-	char	*path;
+	static char	**command_array;
+	static char	**execution_array;
+	static char	**env;
+	char		*path;
 	// t_token	*head;
 	// int		redir_flag;
 
 	// head = token;
 	// redir_flag = 0;
-	command_array = ttad(token, 0);
+	// command_array = ttad(token, 0);
+	command_array = cl_to_array(token);
+	execution_array = ft_split(command_array[0], ' ');
+	free_array(command_array);
 	// if (count_token(token, RED_IN) > 0 || count_token(token, RED_IN) > 0
 	// 	|| count_token(token, RED_IN) > 0 || count_token(token, RED_IN) > 0)
 	// {
@@ -68,9 +72,10 @@ void	single_child(t_data *data, t_token *token, t_env **env_ll)
 	// 	path = ft_strsjoin(token->path, command_array[0], '/');
 	path = ft_strsjoin(token->path, token->value, '/');
 	env = env_arr_updater(env_ll);
-	if (execve(path, command_array, env) == -1)
+	if (execve(path, execution_array, env) == -1)
 	{
 		free_array(env);
+		free_array(execution_array);
 		free_data(data, path, env_ll, command_array);
 		exit (127);
 	}

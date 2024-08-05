@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 10:19:57 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/05 10:37:27 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/05 13:32:43 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ char	**cl_to_array(t_token *token)
     }
     free(instruction);
 	instruction = NULL;
-    // pipe_array[i] = NULL;
+    pipe_array[i] = NULL;
     return (pipe_array);
 }
 

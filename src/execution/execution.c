@@ -6,21 +6,12 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/05 10:37:51 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/05 13:38:37 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-/* here we are going to differentiate kinds of execution:
-- built-in;
-- simple command;
-- pipes;
-- redirections;
-
-Execution should happen within child process, otherwise it quits the whole thang.
-Therefore, iteration might be neccessary for either single execution or builtin
-*/	
 /*static int	token_printer(t_token *token)
 {
 	t_token *head;
@@ -41,12 +32,7 @@ int	execution(t_data *data, t_env **env_ll)
 
 	token = data->token;
 	data->nb_cmds = how_many_children(token);
-	// t_token *head = token;
-	// while (head) // this is for debugging
-	// {
-	// 	printf("token: [%s] type: [%i]\n", head->value, head->type);
-	// 	head = head->next;
-	// }
+	// token_printer(token);
 	if (data->nb_cmds > 1)
 		data->status = multiple_execution(data, token, env_ll);
 	else
@@ -68,7 +54,7 @@ int	multiple_execution(t_data *data, t_token *token, t_env **env_ll)
 	static pid_t	pids;
 	static char		**cmd_a;
 
-	cmd_a = ttad(token, PIPE);
+	cmd_a = cl_to_array(token);
 	if (!cmd_a)
 		return (FAILURE);
 	data->env = env_arr_updater(env_ll);
@@ -79,11 +65,11 @@ int	multiple_execution(t_data *data, t_token *token, t_env **env_ll)
 	pids = wait(&data->status);
 	while (pids > 0)
 		pids = wait(&data->status);
-	// free_array(cmd_a);
+	free_array(cmd_a);
 	return (WEXITSTATUS(data->status));
 }
 
-int	child_action(t_data *data, t_env **env_ll, char **all_cmds, int pids)
+int	piping(t_data *data, t_env **env_ll, char **all_cmds, int pids)
 {
 	data->index = 0;
 	while (data->index < data->nb_cmds)
@@ -137,7 +123,7 @@ void	piped_execution(t_data *data, t_env **envll, char *instr, int child)
 
 	redirect_flag = 0;
 	data->index = 0;
-	cmd_array = ft_split(instruction, ' ');
+	cmd_array = ft_split(instr, ' ');
 	while (cmd_array[data->index])
 	{
 		if (!ft_strcmp(cmd_array[data->index], ">"))
@@ -159,7 +145,7 @@ void	piped_execution(t_data *data, t_env **envll, char *instr, int child)
 		}
 		data->index++;
 	}
-	if (checking_access(data, instruction) != 0) // || !file
+	if (checking_access(data, instr) != 0) // || !file
 	{
 		free_array(cmd_array);
 		free_array(data->binary_paths);
@@ -217,52 +203,3 @@ void	ft_exec(t_data *data, char **cmd_array, int redirect) // child is here for 
 /*************************************************************
  ************************* DUMP ******************************
  *************************************************************/
-
-		// if (!ft_strcmp(array[index], '>'))
-		// 	break ;
-		// tmp = ft_strjoin(instruction, array[index]);
-		// if (!tmp)
-		// 	return (NULL);
-		// free(instruction);
-		// instruction = ft_strjoin(tmp, " ");
-		// if (!instruction)
-		// 	return (NULL);
-		// free(tmp);
-		// index++;
-
-// char	**parse_instruction(char *instruction, int redirect_flag)
-// {
-// 	char	**array_instruction;
-// 	char	*parsed_cmd;
-// 	int		index;
-
-// 	array_instruction = ft_split(instruction, ' ');
-// 	if (!array_instruction)
-// 		return (NULL);
-// 	parsed_cmd = ft_strdup("");
-// 	if (!parsed_cmd)
-// 		return (NULL);
-// 	if (redirect_flag == REDIRECT_OUT)
-// 		index = 0;
-// 	else
-// 		index = 2;
-// 	parsed_cmd = redirect_out(array_instruction, parsed_cmd, redirect_flag, index);
-// 	free_array(array_instruction);
-// 	array_instruction = ft_split(parsed_cmd, ' ');
-// 	if (!array_instruction)
-// 	{
-// 		free_array(array_instruction);
-// 		return (NULL);
-// 	}
-// 	return (array_instruction);
-// }
-
-	// int i = 0;
-	// while (cmd_array[i])
-	// {
-	// 	dprintf(2, "command[%i]: %s\n", i, cmd_array[i]);
-	// 	i++;
-	// }
-
-	// else
-	// 	commands = ft_split(line, ' '); // gonna try to split before
