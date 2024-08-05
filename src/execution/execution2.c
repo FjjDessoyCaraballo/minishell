@@ -6,14 +6,14 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 10:41:10 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/31 12:44:19 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/05 10:38:12 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 /**
- * This function takes care of executing commands with no piping.
+ * This function takes care of executing commands with no child_processes.
  * USAGE: %> cmd -flag argument OR %> cmd argument -flag
  */
 int	single_execution(t_data *data, t_token *token, t_env **env_ll)
@@ -78,11 +78,11 @@ void	single_child(t_data *data, t_token *token, t_env **env_ll)
 
 int	single_parent(pid_t pid, int status)
 {
-		waitpid(pid, &status, 0);
-		if (WIFEXITED(status))
-			return (WEXITSTATUS(status));
-		else
-			return (-1);
+	waitpid(pid, &status, 0);
+	if (WIFEXITED(status))
+		return (WEXITSTATUS(status));
+	else
+		return (-1);
 }
 /**
  * Its necessary to know which redirection we have here and give back the

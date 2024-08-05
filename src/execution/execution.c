@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/31 12:59:11 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/05 10:37:51 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ Therefore, iteration might be neccessary for either single execution or builtin
 
 int	execution(t_data *data, t_env **env_ll)
 {
-    t_token	*token;
+	t_token	*token;
 
 	token = data->token;
 	data->nb_cmds = how_many_children(token);
@@ -83,7 +83,7 @@ int	multiple_execution(t_data *data, t_token *token, t_env **env_ll)
 	return (WEXITSTATUS(data->status));
 }
 
-int	piping(t_data *data, t_env **env_ll, char **all_cmds, int pids)
+int	child_action(t_data *data, t_env **env_ll, char **all_cmds, int pids)
 {
 	data->index = 0;
 	while (data->index < data->nb_cmds)
@@ -129,7 +129,7 @@ int	piping(t_data *data, t_env **env_ll, char **all_cmds, int pids)
  * "> outfile"
  * "<< END"
  */
-void	piped_execution(t_data *data, t_env **envll, char *instruction, int child)
+void	piped_execution(t_data *data, t_env **envll, char *instr, int child)
 {
 	static char	*file;
 	char		**cmd_array;

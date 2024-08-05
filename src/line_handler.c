@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   line_handler.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 12:23:49 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/07/30 11:59:35 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/05 10:23:45 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,54 @@ int	syntax_check(t_token *token)
 		return (2);
 	else
 		return (SUCCESS);
+}
+/**
+ * incorrect_syntax() checks for specific operators and checks if they're
+ * being repeated by the users.
+ * 
+ * RETURN VALUES: Upon success, it returns 0. If it fails, it returns 2.
+ */
+
+int	incorrect_syntax(t_token *token, t_type token_type)
+{
+	t_token	*head;
+
+	head = token;
+	while (head)
+	{
+		if (head->next != NULL)
+		{
+			if ((head->type == token_type && head->next->type == token_type)
+				|| (head->type == token_type && head->next->type == RED_IN)
+				|| (head->type == token_type && head->next->type == RED_OUT)
+				|| (head->type == token_type && head->next->type == HEREDOC)
+				|| (head->type == token_type && head->next->type == APPEND)
+				|| (head->type == token_type && head->next->type == FLAG))
+				return (err_msg(head->value, 2));
+		}
+		head = head->next;
+	}
+	head = NULL;
+	return (SUCCESS);
+}
+
+/**
+ * As we run through the tokens (nodes in a linked list) we check
+ * if the next token type is valid for the token type that the user
+ * inputted previously. Examples below:
+ * "%> |||"
+ * "%> syntax error near unexpected token `||'"
+ */
+int	syntax_check(t_token *token)
+{
+	if (incorrect_syntax(token, PIPE) == 2
+		|| incorrect_syntax(token, RED_OUT) == 2
+		|| incorrect_syntax(token, RED_IN) == 2
+		|| incorrect_syntax(token, HEREDOC) == 2
+		|| incorrect_syntax(token, APPEND) == 2)
+		return (2);
+	else
+		return (SUCCESS);
 	
 }
 /**
@@ -72,7 +120,7 @@ int	incorrect_syntax(t_token *token, t_type token_type)
 				|| (head->type == token_type && head->next->type == HEREDOC)
 				|| (head->type == token_type && head->next->type == APPEND)
 				|| (head->type == token_type && head->next->type == FLAG))
-				return (err_msg(head->value, "syntax error", 2));
+				return (err_msg(head->value, 2));
 		}
 		head = head->next;
 	}

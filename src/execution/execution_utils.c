@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 15:29:42 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/30 20:08:16 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/05 10:37:07 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ char	*access_path(char **path, char *cmd)
 	char	*curr_path;
 
 	i = 0;
-
 	while (path[i])
 	{
 		curr_path = ft_strsjoin(path[i], cmd, '/');
@@ -42,7 +41,7 @@ int	how_many_children(t_token *token)
 {
 	int		cmds;
 	t_token	*tmp;
-	
+
 	cmds = 0;
 	tmp = token;
 	while (tmp != NULL)
@@ -64,7 +63,7 @@ int	err_msg(char *obj, char *msg, int err_code)
 	return (err_code);
 }
 
-void close_fds(t_data *data)
+void	close_fds(t_data *data)
 {
     if (data->pipe_fd[0] != 0)
         close(data->pipe_fd[0]);

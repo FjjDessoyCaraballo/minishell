@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils2.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 14:19:20 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/30 20:36:43 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/05 10:37:13 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,14 @@ void	dup_fds(t_data *data, int child, int fd_flag, char *file)
 	dprintf(2, "status of redir flag:%d\n", fd_flag);
 	if (fd_flag == REDIRECT_IN)
 	{
-		open_fdin(data, file);	
+		open_fdin(data, file);
 		dup2(data->fd_in, STDIN_FILENO);
 		close(data->fd_in);
 	}
-	else if (fd_flag == REDIRECT_OUT) 
+	else if (fd_flag == REDIRECT_OUT)
 	{
 		open_fdout(data, file);
-		dup2(data->fd_out, STDOUT_FILENO);
+		dup2(STDOUT_FILENO, data->fd_out);
 		close(data->fd_out);
 	}
 	else
@@ -42,7 +42,7 @@ void	dup_fds(t_data *data, int child, int fd_flag, char *file)
 
 void	open_fdin(t_data *data, char *infile)
 {
-	errno = 0;	
+	errno = 0;
 	data->fd_in = open(infile, O_RDONLY);
 	if (errno == ENOENT)
 	{

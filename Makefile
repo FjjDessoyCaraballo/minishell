@@ -24,6 +24,7 @@ SRC_FILES = main.c\
 			exit_handler.c\
 			src/execution/built_ins.c\
 			src/execution/built_ins2.c\
+			src/execution/built_ins3.c\
 			src/execution/execution.c\
 			src/execution/execution2.c\
 			src/execution/execution_utils.c\
@@ -40,6 +41,7 @@ SRC_FILES = main.c\
 			src/parse/getenv.c\
 			src/parse/helper.c\
 			src/parse/parse.c\
+			src/parse/expand_env.c\
 			
 # Object files
 OBJ_FILES = $(SRC_FILES:.c=.o)

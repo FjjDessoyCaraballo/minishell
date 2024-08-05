@@ -66,3 +66,15 @@ void print_cmd(char **cmd_a)
 		i++;
 	}
 }
+
+/*
+void print_env_ll(t_data *data) 
+{
+	t_env *temp = data->envll;
+	while (temp) 
+	{
+		printf("%s\n", temp->content);
+		temp = temp->next;
+	}
+}
+*/

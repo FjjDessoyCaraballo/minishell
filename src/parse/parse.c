@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 11:49:16 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/07/30 12:40:57 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/05 10:39:26 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,17 @@ void enter_file(int fd)// this is what happens inside the file as we add texts t
     {
         bytes_read = read(STDIN_FILENO, buffer, sizeof(buffer) - 1);
         if (bytes_read < 0)
-            break ;
+        {
+            perror("read");
+            break;
+        }
         buffer[bytes_read] = '\0'; // Null-terminate the string
         if (strncmp(buffer, "END", 3) == 0 && (buffer[3] == '\n' || buffer[3] == '\0'))
             break ;
         if (write(fd, buffer, bytes_read) != bytes_read)
             break ;
     }
-    close(fd);
+    close(fd);//closes file ofc
 }
 
 int handle_output_redirection(t_token *current_token, t_token *next_token)

@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/31 12:44:50 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/05 10:23:19 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ typedef struct s_env
 
 typedef struct s_data
 {
-	char 	**env;
+	char	**env;
 	int		nb_cmds;
 	int		read_end;
 	int		*fd;
@@ -84,9 +84,8 @@ typedef struct s_data
 	int		fd_out;
 	char	*home_pwd;
 	int		status;
-	char	**cmd;
-	// need to insert pids, tokens, and commands
-	t_token *token;
+	char	**cmd; // need to insert pids, tokens, and commands
+	t_token	*token;
 	char	**builtins;
 	char	**redirect;
 	char	**cmd_a;
@@ -94,9 +93,12 @@ typedef struct s_data
 	bool	echo_flag;
 	bool	expand;
 	char	*line_read;
+	int		error;
+	int		id;
+	char	*vtoken;
+	const char *deli;
 	t_env	*envll;
 }	t_data;
-
 
 /*************************************************/
 /* functions *************************************/
@@ -178,6 +180,9 @@ int		shell_cd(t_token *token, t_data *data);
 int		export(t_token *token, t_env **env_ll);
 int		print_export(t_env **env_ll);
 int		unset(t_token *token, t_env **env_ll);
+
+/* in built_ins3.c */
+void alphabetical_printer(char **env_array);
 
 /* signals.c */
 void	handler(int sig);
