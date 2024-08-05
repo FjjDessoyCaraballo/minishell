@@ -6,7 +6,7 @@
 /*   By: lstorey <lstorey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 11:35:09 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/02 12:53:40 by lstorey          ###   ########.fr       */
+/*   Updated: 2024/08/05 10:33:41 by lstorey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	ll_size(t_env **env_ll)
 
 	if (!env_ll || !*env_ll)
 		return (0);
-	i = 0;
+	i = 1;
 	tmp = *env_ll;
 	while (tmp->next != NULL)
 	{
