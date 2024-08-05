@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 15:26:27 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/01 11:14:17 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/05 10:03:03 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 int	built_in_or_garbage(t_data *data, t_env **env_ll, t_token *token)
 {
-	t_token *tmp;
-	
+	t_token	*tmp;
+
 	tmp = token;
 	while (tmp != NULL)
 	{
@@ -42,10 +42,10 @@ int	shell_cd(t_token *token, t_data *data)
 	}
 	token = token->next; // this should have the path
 	new_pwd = NULL;
-    curr_pwd = getcwd(NULL, 0);
-    if (!curr_pwd)
+	curr_pwd = getcwd(NULL, 0);
+	if (!curr_pwd)
 	{
-        free(curr_pwd);
+		free(curr_pwd);
 		ft_putstr_fd("The path ahead is block by nothingness\n", 2);
 		return (FAILURE);
 	}
@@ -53,6 +53,7 @@ int	shell_cd(t_token *token, t_data *data)
 	chdir(new_pwd);
 	return (SUCCESS);
 }
+
 /* export puts variables declared by user in the env */
 int	export(t_token *token, t_env **env_ll)
 {
@@ -99,11 +100,12 @@ int	export(t_token *token, t_env **env_ll)
 	// free_array(exp_list);
 	return (SUCCESS);
 }
+
 // when someone types EXPORT only, it prints all env variables
 // IN ALPHABETICAL ORDER!!! <- still needs to be implemented (not really necessary)
 int	print_export(t_env **env_ll)
 {
-	char 	**env_array;
+	char	**env_array;
 	int		i;
 
 	if (!env_ll || !*env_ll)
@@ -112,12 +114,13 @@ int	print_export(t_env **env_ll)
 	if (!env_array)
 		return (SUCCESS);
 	i = 0;
-	while (env_array[i])
-	{
-		printf("declare -x ");
-		printf("%s\n", env_array[i]);
-		i++;
-	}
+	alphabetical_printer(env_array);
+	// while (env_array[i])
+	// {
+	// 	printf("declare -x ");
+	// 	printf("%s\n", env_array[i]);
+	// 	i++;
+	// }
 	free_array(env_array);
 	return (SUCCESS);
 }
@@ -127,7 +130,7 @@ int	unset(t_token *token, t_env **env_ll)
 {
 	t_env	*tmp;
 	t_env	*del;
-	t_token *head;
+	t_token	*head;
 
 	head = token;
 	if (!head->next || !*env_ll || !env_ll)
@@ -142,7 +145,8 @@ int	unset(t_token *token, t_env **env_ll)
 	}
 	while (tmp->next != NULL)
 	{
-		if (!ft_strncmp(head->value, tmp->next->content, ft_strlen(head->value)))
+		if (!ft_strncmp(head->value, tmp->next->content,
+				ft_strlen(head->value)))
 		{
 			del = tmp->next;
 			tmp->next = tmp->next->next;

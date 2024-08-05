@@ -3,20 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   check_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:33:43 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/24 15:43:14 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/05 10:03:42 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-char *loop_path_for_binary(char *binary, char **paths)
+char	*loop_path_for_binary(char *binary, char **paths)
 {
 	char	*token_with_path;
-	int		i; 
-	
+	int		i;
+
 	i = 0;
 	while (paths[i])
 	{
@@ -54,7 +54,7 @@ char	*ft_strndup(const char *s, size_t n)
 
 int	how_many_tokens(t_token *token)
 {
-	t_token *head;
+	t_token	*head;
 	int		count;
 
 	count = 0;
@@ -64,7 +64,14 @@ int	how_many_tokens(t_token *token)
 		if (token->type == PIPE)
 			head = head->next;
 		count++;
-		head = head->next;	
+		head = head->next;
 	}
 	return (count);
+}
+
+int	ft_argument_check(char *token, t_token *current_token)
+{
+	current_token->value = token;
+	current_token->type = ARGUMENT;
+	return (SUCCESS);
 }

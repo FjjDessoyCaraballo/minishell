@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 14:19:20 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/01 09:31:01 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/05 10:00:48 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,11 @@ void	dup_fds(t_data *data, int child, int fd_flag, char *file)
 {
 	if (fd_flag == REDIRECT_IN)
 	{
-		open_fdin(data, file);	
+		open_fdin(data, file);
 		dup2(data->fd_in, STDIN_FILENO);
 		close(data->fd_in);
 	}
-	else if (fd_flag == REDIRECT_OUT) 
+	else if (fd_flag == REDIRECT_OUT)
 	{
 		open_fdout(data, file);
 		dup2(STDOUT_FILENO, data->fd_out);
@@ -41,7 +41,7 @@ void	dup_fds(t_data *data, int child, int fd_flag, char *file)
 
 void	open_fdin(t_data *data, char *infile)
 {
-	errno = 0;	
+	errno = 0;
 	data->fd_in = open(infile, O_RDONLY);
 	if (errno == ENOENT)
 	{
@@ -62,7 +62,7 @@ void	open_fdin(t_data *data, char *infile)
 
 void	open_fdout(t_data *data, char *outfile)
 {
-	errno = 0;	
+	errno = 0;
 	data->fd_out = open(outfile, O_WRONLY | O_CREAT | O_APPEND, 0664);
 	if (errno == ENOENT)
 		exit_child(outfile, NO_FILE);
@@ -71,8 +71,6 @@ void	open_fdout(t_data *data, char *outfile)
 	else if (errno == EISDIR)
 		exit_child(outfile, EISDIR);
 }
-
-
 
 void	exit_child(char *file, int err_code)
 {
