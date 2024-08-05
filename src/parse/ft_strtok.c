@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:34:00 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/05 10:05:41 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/05 10:39:19 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,7 +175,7 @@ char *ft_strtok(char *str, const char *delim, t_data *data, t_token *cur_tok)
         if (*target == '\0')
             return NULL;
     }
-
+    
     // Token starts here
     token_start = index;
     while (target[index])

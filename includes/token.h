@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 11:35:39 by lstorey           #+#    #+#             */
-/*   Updated: 2024/08/05 09:58:14 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/05 10:23:32 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,8 @@ void	print_cmd(char **cmd_a);
  * in src/parse/check_utils.c
  *****************************************/
 char	*loop_path_for_binary(char *binary, char **paths);
+int		check_binary_locally(char *binary, char *path);
+int		is_file(char *binary, char *path);
 char	*ft_strndup(const char *s, size_t n);
 int		how_many_tokens(t_token *token);
 int		ft_argument_check(char *token, t_token *current_token);
