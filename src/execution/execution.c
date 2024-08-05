@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/05 10:01:23 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/05 10:37:51 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,42 +41,45 @@ int	execution(t_data *data, t_env **env_ll)
 
 	token = data->token;
 	data->nb_cmds = how_many_children(token);
-	// int i = 0;
+	// t_token *head = token;
 	// while (head) // this is for debugging
 	// {
-	// 	printf("token: [%i][%s] type: [%i]\n", i, head->value, head->type);
+	// 	printf("token: [%s] type: [%i]\n", head->value, head->type);
 	// 	head = head->next;
 	// }
-	if (data->nb_cmds == 1 && !search_token_type(token, PIPE))
-		data->status = single_execution(data, token, env_ll);
+	if (data->nb_cmds > 1)
+		data->status = multiple_execution(data, token, env_ll);
 	else
-		data->status = multiple_cmds(data, token, env_ll);
-	data->status = built_in_or_garbage(data, env_ll, token);
-	if (data->status != 0)
-		return (data->status);
-	return (148);
+	{
+		if (data->nb_cmds == 1)
+			data->status = single_execution(data, token, env_ll);
+		else
+			data->status = built_in_or_garbage(data, env_ll, token); // builtins will be thrown into single execution later
+	}
+	return (data->status);
 }
 
 /**
  * This is the function that will be used when we get multiple instructions
  * by pipes. Its still underwork.
  */
-int	multiple_cmds(t_data *data, t_token *token, t_env **env_ll)
+int	multiple_execution(t_data *data, t_token *token, t_env **env_ll)
 {
 	static pid_t	pids;
+	static char		**cmd_a;
 
-	data->cmd_a = cl_to_array(token);
-	if (!data->cmd_a)
+	cmd_a = ttad(token, PIPE);
+	if (!cmd_a)
 		return (FAILURE);
 	data->env = env_arr_updater(env_ll);
 	if (!data->env)
 		return (FAILURE);
-	data->status = child_action(data, env_ll, data->cmd_a, pids);
+	data->status = piping(data, env_ll, cmd_a, pids);
 	close_fds(data);
 	pids = wait(&data->status);
 	while (pids > 0)
 		pids = wait(&data->status);
-	free_array(data->cmd_a);
+	// free_array(cmd_a);
 	return (WEXITSTATUS(data->status));
 }
 
@@ -86,13 +89,13 @@ int	child_action(t_data *data, t_env **env_ll, char **all_cmds, int pids)
 	while (data->index < data->nb_cmds)
 	{
 		if (pipe(data->pipe_fd) == -1)
-			return (err_msg("Broken pipe\n", 141));
+			return (err_msg(NULL, "Broken pipe\n", 141));
 		pids = fork();
 		if (pids < 0)
 		{
 			close(data->pipe_fd[0]);
 			close(data->pipe_fd[1]);
-			return (err_msg("Failed to fork\n", -1));
+			return (err_msg(NULL, "Failed to fork\n", -1));
 		}
 		if (pids == 0) // child
 			piped_execution(data, env_ll, all_cmds[data->index], data->index);
@@ -117,30 +120,55 @@ int	child_action(t_data *data, t_env **env_ll, char **all_cmds, int pids)
  * to the final part of the execution in ft_exet().
  * 
  * DETAILS: at this point we may use exit() function without worrying that we will
- * end the whole program.
+ * end the whole program. Also, at this point we are working with fully parsed out
+ * strings, our only concern should be if files/commands don't exist. Examples of
+ * instruction:
+ * "< infile cat"
+ * "cat > outfile"
+ * "ls -la Makefile"
+ * "> outfile"
+ * "<< END"
  */
 void	piped_execution(t_data *data, t_env **envll, char *instr, int child)
 {
 	static char	*file;
+	char		**cmd_array;
 	int			redirect_flag;
 
 	redirect_flag = 0;
-	if (!ft_strcmp(instr, "<") || !ft_strcmp(instr, ">"))
+	data->index = 0;
+	cmd_array = ft_split(instruction, ' ');
+	while (cmd_array[data->index])
 	{
-		if (!ft_strcmp(instr, ">")) // HEREDOC and APPEND needed later
+		if (!ft_strcmp(cmd_array[data->index], ">"))
+		{
+			file = ft_strdup(cmd_array[data->index + 1]);
 			redirect_flag = REDIRECT_OUT;
-		else
+		}
+		else if (!ft_strcmp(cmd_array[data->index], "<"))
+		{
+			file = ft_strdup(cmd_array[data->index + 1]);
 			redirect_flag = REDIRECT_IN;
-		file = find_file(instr, redirect_flag);
+		}
+		if (!file && redirect_flag != 0)
+		{
+			free_array(cmd_array);
+			free_array(data->binary_paths);
+			free_ll(*envll);
+			exit(FAILURE);
+		}
+		data->index++;
+	}
+	if (checking_access(data, instruction) != 0) // || !file
+	{
+		free_array(cmd_array);
+		free_array(data->binary_paths);
+		free_ll(*envll);
+		exit(FAILURE);
 	}
 	dup_fds(data, child, redirect_flag, file);
 	close(data->pipe_fd[1]);
-	if (checking_access(data, instr) != 0)
-	{
-		free_data(data, NULL, envll, NULL);
-		exit(FAILURE);
-	}
-	ft_exec(data, instr, redirect_flag);
+	ft_exec(data, cmd_array, redirect_flag);
 }
 
 /**
@@ -157,33 +185,84 @@ void	piped_execution(t_data *data, t_env **envll, char *instr, int child)
  * 
  * [placeholder for more documentation]
  */
-void	ft_exec(t_data *data, char *line, int redirect) // child is here for debugging
+void	ft_exec(t_data *data, char **cmd_array, int redirect) // child is here for debugging
 {
 	static char	*path;
-	char		**commands;
+	
 	if (redirect != 0)
-		commands = parse_instruction(line, redirect);
-	else
-		commands = ft_split(line, ' ');
-	if (!commands)
+		cmd_array = parse_instruction(cmd_array); // this is not working
+	if (!cmd_array || !*cmd_array)
 	{
-		free_array(commands);
+		free_array(cmd_array);
 		free_data(data, NULL, &data->envll, NULL);
 		exit (-1);
 	}
-	if (ft_strchr(commands[0], '/') == NULL)
-		path = loop_path_for_binary(commands[0], data->binary_paths);
+	if (ft_strchr(cmd_array[0], '/') == NULL)
+		path = loop_path_for_binary(cmd_array[0], data->binary_paths);
 	else
-		path = abs_path(commands[0]);
+		path = abs_path(cmd_array[0]);
 	if (!path)
 	{
-		free_data(data, NULL, &data->envll, commands);
+		free_data(data, NULL, &data->envll, cmd_array);
 		exit (1);
 	}
-	if (execve(path, commands, data->env) == -1)
+	if (execve(path, cmd_array, data->env) == -1)	
 	{
 		perror("execve");
-		free_data(data, path, &data->envll, commands);
+		free_data(data, path, &data->envll, cmd_array);
 		exit(127);
 	}
 }
+
+/*************************************************************
+ ************************* DUMP ******************************
+ *************************************************************/
+
+		// if (!ft_strcmp(array[index], '>'))
+		// 	break ;
+		// tmp = ft_strjoin(instruction, array[index]);
+		// if (!tmp)
+		// 	return (NULL);
+		// free(instruction);
+		// instruction = ft_strjoin(tmp, " ");
+		// if (!instruction)
+		// 	return (NULL);
+		// free(tmp);
+		// index++;
+
+// char	**parse_instruction(char *instruction, int redirect_flag)
+// {
+// 	char	**array_instruction;
+// 	char	*parsed_cmd;
+// 	int		index;
+
+// 	array_instruction = ft_split(instruction, ' ');
+// 	if (!array_instruction)
+// 		return (NULL);
+// 	parsed_cmd = ft_strdup("");
+// 	if (!parsed_cmd)
+// 		return (NULL);
+// 	if (redirect_flag == REDIRECT_OUT)
+// 		index = 0;
+// 	else
+// 		index = 2;
+// 	parsed_cmd = redirect_out(array_instruction, parsed_cmd, redirect_flag, index);
+// 	free_array(array_instruction);
+// 	array_instruction = ft_split(parsed_cmd, ' ');
+// 	if (!array_instruction)
+// 	{
+// 		free_array(array_instruction);
+// 		return (NULL);
+// 	}
+// 	return (array_instruction);
+// }
+
+	// int i = 0;
+	// while (cmd_array[i])
+	// {
+	// 	dprintf(2, "command[%i]: %s\n", i, cmd_array[i]);
+	// 	i++;
+	// }
+
+	// else
+	// 	commands = ft_split(line, ' '); // gonna try to split before
