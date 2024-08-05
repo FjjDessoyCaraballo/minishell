@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/05 09:54:29 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/05 11:11:59 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,33 +67,34 @@ typedef struct s_env
 
 typedef struct s_data
 {
-	char	**env;
-	int		nb_cmds;
-	int		read_end;
-	int		*fd;
-	char	*bin;
-	int		index;
-	char	*path;
-	char	**binary_paths;
-	int		pipe_fd[2];
-	int		fd_in;
-	int		fd_out;
-	char	*home_pwd;
-	int		status;
-	char	**cmd; // need to insert pids, tokens, and commands
-	t_token	*token;
-	char	**builtins;
-	char	**redirect;
-	char	**cmd_a;
-	bool	echoed;
-	bool	echo_flag;
-	bool	expand;
-	char	*line_read;
-	int		error;
-	int		id;
-	char	*vtoken;
-	const char *deli;
-	t_env	*envll;
+	char		**env;
+	int			nb_cmds;
+	int			read_end;
+	int			*fd;
+	char		*bin;
+	int			index;
+	char		*path;
+	char		**binary_paths;
+	int			pipe_fd[2];
+	int			fd_in;
+	int			fd_out;
+	char		*home_pwd;
+	int			status;
+	char		**cmd; // need to insert pids, tokens, and commands
+	t_token		*token;
+	char		**builtins;
+	char		**redirect;
+	char		**cmd_a;
+	int			in_quotes;
+	bool		echoed;
+	bool		echo_flag;
+	bool		expand;
+	char		*line_read;
+	int			error;
+	int			id;
+	char		*vtoken;
+	const char 	*deli;
+	t_env		*envll;
 }	t_data;
 
 /*************************************************/

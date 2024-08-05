@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:34:16 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/05 10:06:57 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/05 11:12:43 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ int chunky_checker(char *token,t_token *current_token,t_data *data)
 		data->echoed = false;
 		return SUCCESS;
 	}
-	else if(ft_redirect_op_check(token, current_token, data->redirect) == SUCCESS)
+	else if(redirect_op_check(token, current_token, data->redirect) == SUCCESS)
 	{
 		current_token->echo = false;
 		data->echoed = false;
