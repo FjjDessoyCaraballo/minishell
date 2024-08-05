@@ -1,10 +1,11 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   built_ins2.c                                       :+:      :+:    :+:   */
+/*   ft_strcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lstorey <lstorey@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
+<<<<<<< HEAD:src/built_ins2.c
 /*   Created: 2024/05/24 09:48:26 by lstorey           #+#    #+#             */
 /*   Updated: 2024/05/24 09:49:35 by lstorey          ###   ########.fr       */
 /*                                                                            */
@@ -67,3 +68,21 @@ void	print_export(t_env *env_ll)
 	}
 	env_ll = tmp;
 }
+=======
+/*   Created: 2024/07/11 14:06:10 by fdessoy-          #+#    #+#             */
+/*   Updated: 2024/07/11 14:18:06 by fdessoy-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "libft.h"
+
+int	ft_strcmp(char *s1, char *s2)
+{
+	int	i;
+
+	i = 0;
+	while (s1[i] && s1[i] == s2[i])
+		i++;
+	return (s1[i] - s2[i]);
+}
+>>>>>>> main:libft/libft/ft_strcmp.c

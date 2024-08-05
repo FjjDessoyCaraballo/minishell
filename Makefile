@@ -14,9 +14,35 @@ CFLAGS = -Wall -Wextra -Werror -I${HOME}/.brew/opt/readline/include -g #-fsaniti
 INCFLAGS = -Iincludes -Ilibft/includes
 
 # Main project files
-SRC_FILES = main.c exit_handler.c init.c line_handler.c ll_utils.c\
-			built_ins.c built_ins2.c
-
+SRC_FILES = main.c\
+			init.c\
+			utils.c\
+			signals.c\
+			ll_utils.c\
+			ll_utils2.c\
+			line_handler.c\
+			exit_handler.c\
+			src/execution/built_ins.c\
+			src/execution/built_ins2.c\
+			src/execution/built_ins3.c\
+			src/execution/execution.c\
+			src/execution/execution2.c\
+			src/execution/execution_utils.c\
+			src/execution/execution_utils2.c\
+			src/execution/execution_utils3.c\
+			src/parse/tokenizer.c\
+			src/parse/ft_strtok.c\
+			src/parse/init_token.c\
+			src/parse/token_test.c\
+			src/parse/chunky_check.c\
+			src/parse/check_utils.c\
+			src/parse/freedom.c\
+			src/parse/token_to_array.c\
+			src/parse/getenv.c\
+			src/parse/helper.c\
+			src/parse/parse.c\
+			src/parse/expand_env.c\
+			
 # Object files
 OBJ_FILES = $(SRC_FILES:.c=.o)
 
@@ -37,7 +63,7 @@ all: $(NAME)
 
 $(NAME): $(OBJ_FILES) $(LIBFT)
 	$(CC) $(CFLAGS) $(OBJ_FILES) $(LIBFT_LINK) -o $(NAME) $(O_FLAGS)
-	@echo "\033[1;33m[✔] Compiling push_swap...\033[0m"
+	@echo "\033[1;33m[✔] Compiling minishell...\033[0m"
 
 $(LIBFT): $(LIBFT_MAKEFILE)
 	$(MAKE) -C $(LIBFT_DIR)

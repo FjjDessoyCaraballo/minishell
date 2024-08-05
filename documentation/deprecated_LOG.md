@@ -1,110 +1,8 @@
-# minishell
-
-## Description:
-This project is meant to replicate some basic core parts of bash shell.
-
-## Usage:
-1. Initialize the program with ```./minishell```
-2. Utilize the shell as you would use a proper shell
-
-## Result:
-- Status: <span style="color:red">Incomplete</span>
-- Result: <span style="color:red">0%</span>
-
-## Contact: 
-Felipe
-- 42-email: fdessoy-@student.hive.fi
-- 42-profile: [https://profile.intra.42.fr/users/fdessoy-](https://profile.intra.42.fr/users/fdessoy-)
-
-Waleed
-- 42-email: walnaimi@student.hive.fi
-- 42-profile: https://profile.intra.42.fr/users/walnaimi
-- discord: torutu.
-
-Bruno
-- 42-email: bposa@student.hive.fi
-- 42-profile: https://profile.intra.42.fr/users/bposa
-
-Leo
-- 42-email: lstorey@student.hive.fi
-- 42-profile: https://profile.intra.42.fr/users/lstorey
-
-## Instructions for branching
-ALWAYS remember to pull from main to have the latest version of minishell before continuing your work. At the same time, always remember to only push to main directory when the program is properly working. AVOID PUSHING FAULTY PROGRAM AT ALL COSTS!
-
-<<<<<<< HEAD
-```1. git clone repo
-2. git checkout 'BranchName' (NB: use -b to create a new branch)
-3. git status (optional)
-=======
+# Log:
 ```
-1. git clone repo
-2. git checkout -b 'BranchName'
-3. git status
->>>>>>> main
-4. git add (files)
-5. git commit -m "comment"
-6. git push (in your branch)
-7. git checkout main
-8. git pull (in main)
-9. git merge 'BranchName'
-10. git commit -m "comment"
-11. git push
-12. git checkout BranchName
-```
+Week 1 (week 20 of 2024)
+13.05.2024
 
-<<<<<<< HEAD
-## TO DO (aka DA PLAN):
-1. Parse the line given to readline()
-	1.1. Turn everything into lowercase;
-	1.2. No whites;
-	1.3. No special characters;
-2. Tokenization;
-3. Built-ins
-	3.1. echo (with -n) DONE;
-	3.2. cd DONE;
-	3.3. pwd DONE;
-	3.4. export;
-	3.5. unset;
-	3.6. env DONE;
-	3.7. exit DONE;
-4. Piping;
-5. Handle $?;
-6. CTRL-C + CTRL-D + CTRL-\;
-7. Environment variables ($ expands values);
-=======
-## Process of building the code:
-1. Tokenization
-    - convert input command line into a linked list
-        - built-ins.
-            - echo (with -n)
-            - cd
-            - pwd
-            - export
-            - unset
-            - env
-            - exit
-        - commands.
-        - arguments.
-        - pipe.
-        - Redirection Operators.
-            - "<"
-            - ">"
-            - "<<"
-            - ">>"
-        - single and double quotes.
-2. single and multiple commands (pipes)
-3. Handle $?
-4. Environment variables ($ expands values)
-5. Signals
-    - CTRL + C
-    - CTRL + \
-    - CTRL + D
->>>>>>> main
-
-## Acronyms
-
-<<<<<<< HEAD
 1. Made the Makefile. This specific Makefile had to be done differently from other that we previously did, because the readline() package had to be installed using brew.
 2. Made the headerfile minishell.h. Added some structs that will definitely change throughout the project.
 3. Currently the project is/was able to initialize the readline() without any extra functionalities.
@@ -135,19 +33,22 @@ ALWAYS remember to pull from main to have the latest version of minishell before
 
 22.05.2024
 1. Upon closer inspection to the behavior of the CD built-in, it is not susceptible to changes while unsetting variables from ENV; Therefore, for architectural, integrity, and replication reasons, pwd is being initialized into a variable in the data struct. Check for perm_pwd for a pwd that should be always available;
-2. Apparently, the envp can be unset and should still work with the basic builtins. this may call for two parallel envp's when piping;
+2. Apparently, the envp can be unset and should still work with the basic builtins. this may call for two parallel envp's when child_processes;
 3. CD is working with arguments, but now the sole CD is not working;
 4. CD is fully working. The problem originated from logical problem with the structure of the function, as it was calling chdir and later calling it again to same position as it was, making the first chdir() redundant;
 5. CD is segfaulting randomly, which probably means that there is a problem with some pointer;
 
 23.05.2024
 1. Fixed exit and not it takes an integer to represent exit status number. For example, if user inputs 'exit 1', when the user later inputs '$?' it will get that exit number;
+
+08.07.2024
+1. Fixed if statement in built-ins2.c that was not guarding the empty cur_pwd, and now bultin-in returns in case of failure of getcwd();
+2. Assembled team to finally properly quickstart the project. We have divided the work load and agreed on specifics on how to work. There is still a need to go over git commands and properly understand branches before letting everyone to go to work independently;
+
+15.7.2024
+1. Set up signal handler on first level of shell (ctrl + c, ctrl + \)
+2. ctrl + \ is ignored on first level, but still need to set it to execute while in child processes
+
+2.8.2024
+Did some norminetting and impliamented the export function to print alphabetically.
 ```
-=======
-1. env_ll - environment linked list (any time you see ll, it means linked list);
-2. len - length;
-3. i - index;
-4. str - string;
-5. pwd - print working directory;
-6. cwd - current working directory;
->>>>>>> main
