@@ -126,7 +126,7 @@ char *ft_strtok(char *str, const char *delim, t_data *data, t_token *cur_tok)
         if (*target == '\0')
             return NULL;
     }
-
+    
     // Token starts here
     token_start = index;
     while (target[index])

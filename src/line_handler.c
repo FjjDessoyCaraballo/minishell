@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 12:23:49 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/08/06 16:57:18 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/05 11:20:49 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int	incorrect_syntax(t_token *token, t_type token_type)
 				|| (head->type == token_type && head->next->type == HEREDOC)
 				|| (head->type == token_type && head->next->type == APPEND)
 				|| (head->type == token_type && head->next->type == FLAG))
-				return (err_msg(head->value, 2));
+				return (err_msg(head->value, SYNTAX, 2));
 		}
 		head = head->next;
 	}

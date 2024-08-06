@@ -6,34 +6,45 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/05 10:01:23 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/06 15:20:12 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-/* here we are going to differentiate kinds of execution:
-- built-in;
-- simple command;
-- pipes;
-- redirections;
+/*************************************************************
+ ************************* DUMP ******************************
+ *************************************************************/
 
-Execution should happen within child process, otherwise it quits the whole thang.
-Therefore, iteration might be neccessary for either single execution or builtin
-*/	
-/*static int	token_printer(t_token *token)
-{
-	t_token *head;
+// /*
+// static int	token_printer(t_token *token)
+// {
+// 	t_token *head;
 	
-	head = token;
-	while (head != NULL)
+// 	head = token;
+// 	while (head != NULL)
+// 	{
+// 		dprintf(2, "[%s][%i]\n", head->value, head->type);
+// 		head = head->next;
+// 	}
+// 	head = NULL;
+// 	return (SUCCESS);
+// }  // */
+
+static void	line_printer(char **array)
+{
+	int i = 0;
+
+	while (array[i])
 	{
-		printf("[%s][%i]\n", head->value, head->type);
-		head = head->next;
+		dprintf(2, "array[%i]: %s\n", i, array[i]);
+		i++;
 	}
-	head = NULL;
-	return (SUCCESS);
-}*/
+}
+
+/*************************************************************
+ ************************* DUMP ******************************
+ *************************************************************/
 
 int	execution(t_data *data, t_env **env_ll)
 {
@@ -41,58 +52,57 @@ int	execution(t_data *data, t_env **env_ll)
 
 	token = data->token;
 	data->nb_cmds = how_many_children(token);
-	// int i = 0;
-	// while (head) // this is for debugging
-	// {
-	// 	printf("token: [%i][%s] type: [%i]\n", i, head->value, head->type);
-	// 	head = head->next;
-	// }
-	if (data->nb_cmds == 1 && !search_token_type(token, PIPE))
-		data->status = single_execution(data, token, env_ll);
+	// token_printer(token);
+	if (data->nb_cmds >= 1)
+		data->status = execution_prepping(data, token, env_ll);
 	else
-		data->status = multiple_cmds(data, token, env_ll);
-	data->status = built_in_or_garbage(data, env_ll, token);
-	if (data->status != 0)
-		return (data->status);
-	return (148);
+	{
+		if (count_token(token, BUILTIN) == 1)
+		{
+			token = find_token(token, BUILTIN);
+			data->status = built_ins(data, token, env_ll);
+		}
+	}
+	return (data->status);
 }
 
 /**
  * This is the function that will be used when we get multiple instructions
  * by pipes. Its still underwork.
  */
-int	multiple_cmds(t_data *data, t_token *token, t_env **env_ll)
+int	execution_prepping(t_data *data, t_token *token, t_env **env_ll)
 {
 	static pid_t	pids;
+	static char		**cmd_a;
 
-	data->cmd_a = cl_to_array(token);
-	if (!data->cmd_a)
+	cmd_a = cl_to_array(token);
+	if (!cmd_a)
 		return (FAILURE);
 	data->env = env_arr_updater(env_ll);
 	if (!data->env)
 		return (FAILURE);
-	data->status = child_action(data, env_ll, data->cmd_a, pids);
+	data->status = piping(data, env_ll, cmd_a, pids);
 	close_fds(data);
 	pids = wait(&data->status);
 	while (pids > 0)
 		pids = wait(&data->status);
-	free_array(data->cmd_a);
+	free_array(cmd_a);
 	return (WEXITSTATUS(data->status));
 }
 
-int	child_action(t_data *data, t_env **env_ll, char **all_cmds, int pids)
+int	piping(t_data *data, t_env **env_ll, char **all_cmds, int pids)
 {
 	data->index = 0;
 	while (data->index < data->nb_cmds)
 	{
 		if (pipe(data->pipe_fd) == -1)
-			return (err_msg("Broken pipe\n", 141));
+			return (err_msg(NULL, "Broken pipe\n", 141));
 		pids = fork();
 		if (pids < 0)
 		{
 			close(data->pipe_fd[0]);
 			close(data->pipe_fd[1]);
-			return (err_msg("Failed to fork\n", -1));
+			return (err_msg(NULL, "Failed to fork\n", -1));
 		}
 		if (pids == 0) // child
 			piped_execution(data, env_ll, all_cmds[data->index], data->index);
@@ -117,30 +127,69 @@ int	child_action(t_data *data, t_env **env_ll, char **all_cmds, int pids)
  * to the final part of the execution in ft_exet().
  * 
  * DETAILS: at this point we may use exit() function without worrying that we will
- * end the whole program.
+ * end the whole program. Also, at this point we are working with fully parsed out
+ * strings, our only concern should be if files/commands don't exist. Examples of
+ * instruction:
+ * "< infile cat"
+ * "cat > outfile"
+ * "ls -la Makefile"
+ * "> outfile"
+ * "<< END"
  */
 void	piped_execution(t_data *data, t_env **envll, char *instr, int child)
 {
 	static char	*file;
+	char		**cmd_array;
 	int			redirect_flag;
 
 	redirect_flag = 0;
-	if (!ft_strcmp(instr, "<") || !ft_strcmp(instr, ">"))
+	data->index = 0;
+	cmd_array = ft_split(instr, ' ');
+	line_printer(cmd_array);
+	while (cmd_array[data->index])
 	{
-		if (!ft_strcmp(instr, ">")) // HEREDOC and APPEND needed later
+		if (!ft_strcmp(cmd_array[data->index], ">"))
+		{
+			dprintf(2, "we got the infile redirection\n");
+			file = ft_strdup(cmd_array[data->index + 1]);
 			redirect_flag = REDIRECT_OUT;
-		else
+			dprintf(2, "file in output redirection: %s\n", file);
+			dprintf(2, "redirect_flag after REDIRECT_OUT: %i\n\n", redirect_flag);
+		}
+		else if (!ft_strcmp(cmd_array[data->index], "<"))
+		{
+			dprintf(2, "we got the infile redirection\n");
+			file = ft_strdup(cmd_array[data->index + 1]);
+			dprintf(2, "file in input redirection: %s\n", file);
 			redirect_flag = REDIRECT_IN;
-		file = find_file(instr, redirect_flag);
+			dprintf(2, "redirect_flag after REDIRECT_IN: %i\n\n", redirect_flag);
+		}
+		if (!file && redirect_flag != 0)
+		{
+			dprintf(2, "\n\n WE SHOULD NOT GET HERE \n\n");
+			free_array(cmd_array);
+			free_array(data->binary_paths);
+			free_ll(*envll);
+			exit(FAILURE);
+		}
+		data->index++;
+	}
+	if (checking_access(data, instr, child) != 0) // || !file
+	{
+		dprintf(2, "\n\n WE SHOULD NOT GET HERE \n\n");
+		free_array(cmd_array);
+		free_array(data->binary_paths);
+		free_ll(*envll);
+		exit(FAILURE);
+	}
+	if (child == 0)
+	{
+		dprintf(2, "\nflag 1: input redirection || flag 2: output redirection\n");
+		dprintf(2, "redirect flag: %i in child: %i\n\n", redirect_flag, child);
 	}
 	dup_fds(data, child, redirect_flag, file);
 	close(data->pipe_fd[1]);
-	if (checking_access(data, instr) != 0)
-	{
-		free_data(data, NULL, envll, NULL);
-		exit(FAILURE);
-	}
-	ft_exec(data, instr, redirect_flag);
+	ft_exec(data, cmd_array, redirect_flag);
 }
 
 /**
@@ -157,33 +206,35 @@ void	piped_execution(t_data *data, t_env **envll, char *instr, int child)
  * 
  * [placeholder for more documentation]
  */
-void	ft_exec(t_data *data, char *line, int redirect) // child is here for debugging
+void	ft_exec(t_data *data, char **cmd_array, int redirect) // child is here for debugging
 {
 	static char	*path;
-	char		**commands;
+	
+	
 	if (redirect != 0)
-		commands = parse_instruction(line, redirect);
-	else
-		commands = ft_split(line, ' ');
-	if (!commands)
+		cmd_array = parse_instruction(cmd_array); // is returning null
+	dprintf(2, "OUTPUT:\n\n\n\n")
+	if (!cmd_array || !*cmd_array)
 	{
-		free_array(commands);
+		dprintf(2, "\n\n WE SHOULD NOT GET HERE!!! 404 \n\n");
+		free_array(cmd_array);
 		free_data(data, NULL, &data->envll, NULL);
 		exit (-1);
 	}
-	if (ft_strchr(commands[0], '/') == NULL)
-		path = loop_path_for_binary(commands[0], data->binary_paths);
+	if (ft_strchr(cmd_array[0], '/') == NULL)
+		path = loop_path_for_binary(cmd_array[0], data->binary_paths);
 	else
-		path = abs_path(commands[0]);
+		path = abs_path(cmd_array[0]);
 	if (!path)
 	{
-		free_data(data, NULL, &data->envll, commands);
+		free_data(data, NULL, &data->envll, cmd_array);
 		exit (1);
 	}
-	if (execve(path, commands, data->env) == -1)
+	if (execve(path, cmd_array, data->env) == -1)	
 	{
 		perror("execve");
-		free_data(data, path, &data->envll, commands);
+		free_data(data, path, &data->envll, cmd_array);
 		exit(127);
 	}
 }
+

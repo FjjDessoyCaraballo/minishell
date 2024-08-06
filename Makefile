@@ -1,4 +1,4 @@
-CC = cc
+CC = cc # CHANGE THIS
 
 #Directories
 SRC_DIR = src
@@ -10,7 +10,7 @@ VPATH = src:libft:includes
 O_FLAGS = -lreadline -L${HOME}/.brew/opt/readline/lib
 
 # Compiler flags
-CFLAGS = -Wall -Wextra -Werror -I${HOME}/.brew/opt/readline/include -g #-fsanitize=address
+CFLAGS = -Wall -Wextra -Werror -I${HOME}/.brew/opt/readline/include #-fsanitize=address #-g
 INCFLAGS = -Iincludes -Ilibft/includes
 
 # Main project files
@@ -24,12 +24,11 @@ SRC_FILES = main.c\
 			exit_handler.c\
 			src/execution/built_ins.c\
 			src/execution/built_ins2.c\
-			src/execution/built_ins3.c\
 			src/execution/execution.c\
-			src/execution/execution2.c\
 			src/execution/execution_utils.c\
 			src/execution/execution_utils2.c\
 			src/execution/execution_utils3.c\
+			src/execution/execution_utils4.c\
 			src/parse/tokenizer.c\
 			src/parse/ft_strtok.c\
 			src/parse/init_token.c\

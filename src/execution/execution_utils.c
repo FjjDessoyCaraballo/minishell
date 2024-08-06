@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 15:29:42 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/05 10:01:37 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/05 10:37:07 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,35 +46,33 @@ int	how_many_children(t_token *token)
 	tmp = token;
 	while (tmp != NULL)
 	{
-		if (tmp->type == PIPE)
+		if (tmp->type == COMMAND)
 			cmds++;
 		tmp = tmp->next;
 	}
-	
 	tmp = NULL;
-	return (cmds + 1);
+	return (cmds);
 }
 
-int	err_msg(char *msg, int err_code)
+int	err_msg(char *obj, char *msg, int err_code)
 {
-	if (*msg)
-	{
-		printf("Syntax error near unexpected token: ");
-		printf("`%s'\n", msg);
-	}
+	if (*obj && msg != NULL)
+		printf("%s: ", obj);
+	if (*msg && msg != NULL)
+		printf("%s\n", msg);
 	return (err_code);
 }
 
 void	close_fds(t_data *data)
 {
-	if (data->pipe_fd[0] != 0)
-		close(data->pipe_fd[0]);
-	if (data->pipe_fd[1] != 0)
-		close(data->pipe_fd[1]);
-	if (data->fd_in != 0)
-		close(data->fd_in);
-	if (data->fd_out != 0)
-		close(data->fd_out);
-	if (data->read_end != 0)
-		close(data->read_end);
+    if (data->pipe_fd[0] != 0)
+        close(data->pipe_fd[0]);
+    if (data->pipe_fd[1] != 0)
+        close(data->pipe_fd[1]);
+    if (data->fd_in != 0)
+        close(data->fd_in);
+    if (data->fd_out != 0)
+        close(data->fd_out);
+    if (data->read_end != 0)
+        close(data->read_end);
 }
