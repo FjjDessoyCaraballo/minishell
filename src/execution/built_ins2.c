@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 15:26:27 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/05 10:03:03 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/06 15:58:25 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,14 +106,14 @@ int	export(t_token *token, t_env **env_ll)
 int	print_export(t_env **env_ll)
 {
 	char	**env_array;
-	int		i;
+	//int		i;
 
 	if (!env_ll || !*env_ll)
 		return (SUCCESS);
 	env_array = env_arr_updater(env_ll);
 	if (!env_array)
 		return (SUCCESS);
-	i = 0;
+	//i = 0;
 	alphabetical_printer(env_array);
 	// while (env_array[i])
 	// {
