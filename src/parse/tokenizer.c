@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:34:16 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/06 16:27:57 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/06 17:38:47 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int chunky_checker(char *token,t_token *current_token,t_data *data)
 	{
 		if(current_token->id == 1 && current_token->prev->type == ARGUMENT)
         {
-            printf("perhaps here\n");
+            //printf("perhaps here\n");
 			return (FAILURE);
         }
 		else if(data->echoed == true)
