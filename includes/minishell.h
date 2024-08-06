@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/06 10:07:52 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/06 14:53:36 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,7 @@ void	exit_child(char *file, int err_code);
 
 /* in execution_utils3.c */
 char	**cl_to_array(t_token *token);
-int		checking_access(t_data *data, char *instruction);
+int		checking_access(t_data *data, char *instruction, int child);
 char	*get_binary(char *instruction);
 char	*abs_path(char *command);
 

@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 10:19:57 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/05 13:32:43 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/06 15:18:55 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ char	**cl_to_array(t_token *token)
  * FAILURE is returned, it means that your binary cannot be found in the
  * general concatenated paths in the environment pointers.
  */
-int	checking_access(t_data *data, char *instruction)
+int	checking_access(t_data *data, char *instruction, int child)
 {
 	int		i;
 	char	*binary_path;
@@ -98,6 +98,7 @@ int	checking_access(t_data *data, char *instruction)
 	
 	i = 0;
 	binary = get_binary(instruction);
+	dprintf(2, "\nThe binary in child %i is: %s\n\n", child, binary);
 	while (data->binary_paths[i++])
 	{
 		binary_path = ft_strsjoin(data->binary_paths[i], binary, '/');
@@ -143,18 +144,21 @@ int	checking_access(t_data *data, char *instruction)
  */
 char	*get_binary(char *instruction)
 {
-	char	**split_instruction;
-	char	*binary;
+	char		**split_instruction;
+	static char	*binary;
+	int			index;
 
+	index = 0;
 	split_instruction = ft_split(instruction, ' ');
 	if (!split_instruction)
 		return (NULL);
-	if (!ft_strcmp(instruction, "<"))
-		binary = ft_strdup(split_instruction[3]);
+	if (!ft_strcmp(split_instruction[0], "<"))
+		binary = ft_strdup(split_instruction[2]);
 	else
 		binary = ft_strdup(split_instruction[0]);
 	if (!binary)
 	{
+		dprintf(2, "\nwe got an empty binary at get_binary\n\n");
 		free_array(split_instruction);
 		return (NULL);
 	}

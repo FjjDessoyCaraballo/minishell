@@ -1,16 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execution2.c                                       :+:      :+:    :+:   */
+/*   execution_utils4.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 10:41:10 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/06 09:48:31 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/06 14:48:10 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+static void	line_printer(char **array)
+{
+	int i = 0;
+
+	while (array[i])
+	{
+		dprintf(2, "array[%i]: %s\n", i, array[i]);
+		i++;
+	}
+}
 
 /**
  * Its necessary to know which redirection we have here and give back the
@@ -27,16 +38,16 @@
  * 
  * Return values: upon success, this function will return an array with only
  * the commands that will be used in execve(). In case of any failures, the
- * function returns NULL.
+ * function returns NULL.dprintf(2, "we got here\n");
  */
 char	**parse_instruction(char **cmd_array)
 {
 	int	index;
 	int	len;
 	char **parsed_array;
-
-	len = 0;
+	
 	index = 0;
+	len = 0;
 	while (cmd_array[index])
 	{
 		if (!ft_strcmp(cmd_array[index], ">") || !ft_strcmp(cmd_array[index], "<"))
@@ -47,6 +58,7 @@ char	**parse_instruction(char **cmd_array)
 	parsed_array = remove_redirect(cmd_array, len);
 	if (!parsed_array)
 	{
+		dprintf(2, "\n\n WE SHOULD NOT GET HERE!!! 404 \n\n");
 		free_array(cmd_array);
 		return (NULL);
 	}
@@ -57,40 +69,37 @@ char	**parse_instruction(char **cmd_array)
 /**
  * This function is responsible for taking out the redirection character
  * of the whole array, leaving just command, flags and arguments.
+ * 
+ * 	we are getting the whole array and we need to take out the
+	redirection and change order of stuff if it is an output
+	redirection.  Otherwhise we will feed the wrong arguments.
  */
 char	**remove_redirect(char **array, int len)
 {
-	// we are getting the whole array and we need to take out the
-	// redirection and change order of stuff if it is an output
-	// redirection.  Otherwhise we will feed the wrong arguments.
-	char 	**parsed_array;
-	int		index;
-	int		i;
-	char	cwd[PATH_MAX];
+
+	static char	**parsed_array;
+	int			index;
+	int			i;
+	static char	*cwd;
 
 	i = 0;
-	getcwd(cwd, sizeof(cwd));
+	cwd = getcwd(NULL, 0);
 	index = 0;
 	parsed_array = (char **)malloc(sizeof(char *) * (len + 1));
+	if (!parsed_array)
+		return (NULL);
 	while (array[index])
 	{
-		if (!ft_strcmp(array[index], ">") || !ft_strcmp(array[index], "<"))
+		if (!ft_strcmp(array[index], ">"))
 			index++;
-		else if (check_binary_locally(array[index], cwd) == SUCCESS)
-		{
-			parsed_array[i] = ft_strdup(array[index]);
-			i++;
-		}
+		parsed_array[i] = ft_strdup(array[index]);
+		if (!parsed_array[i])
+			return (NULL);
+		i++;
 		index++;
 	} // deal with input redirection syntax: everything after <
-	index = 0;
-	while (array[index])
-	{
-		if (is_file(array[index], cwd) == SUCCESS)
-			parsed_array[i] = ft_strdup(array[index]);
-		index++;
-	}
 	parsed_array[i] = NULL;
+	line_printer(parsed_array);
 	return (parsed_array);
 }
 

@@ -6,26 +6,45 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/06 10:10:32 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/06 15:20:12 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
+/*************************************************************
+ ************************* DUMP ******************************
+ *************************************************************/
+
 // /*
-static int	token_printer(t_token *token)
-{
-	t_token *head;
+// static int	token_printer(t_token *token)
+// {
+// 	t_token *head;
 	
-	head = token;
-	while (head != NULL)
+// 	head = token;
+// 	while (head != NULL)
+// 	{
+// 		dprintf(2, "[%s][%i]\n", head->value, head->type);
+// 		head = head->next;
+// 	}
+// 	head = NULL;
+// 	return (SUCCESS);
+// }  // */
+
+static void	line_printer(char **array)
+{
+	int i = 0;
+
+	while (array[i])
 	{
-		printf("[%s][%i]\n", head->value, head->type);
-		head = head->next;
+		dprintf(2, "array[%i]: %s\n", i, array[i]);
+		i++;
 	}
-	head = NULL;
-	return (SUCCESS);
-}  // */
+}
+
+/*************************************************************
+ ************************* DUMP ******************************
+ *************************************************************/
 
 int	execution(t_data *data, t_env **env_ll)
 {
@@ -33,11 +52,17 @@ int	execution(t_data *data, t_env **env_ll)
 
 	token = data->token;
 	data->nb_cmds = how_many_children(token);
-	token_printer(token);
+	// token_printer(token);
 	if (data->nb_cmds >= 1)
 		data->status = execution_prepping(data, token, env_ll);
 	else
-		data->status = built_ins(data, token, env_ll);
+	{
+		if (count_token(token, BUILTIN) == 1)
+		{
+			token = find_token(token, BUILTIN);
+			data->status = built_ins(data, token, env_ll);
+		}
+	}
 	return (data->status);
 }
 
@@ -120,20 +145,28 @@ void	piped_execution(t_data *data, t_env **envll, char *instr, int child)
 	redirect_flag = 0;
 	data->index = 0;
 	cmd_array = ft_split(instr, ' ');
+	line_printer(cmd_array);
 	while (cmd_array[data->index])
 	{
 		if (!ft_strcmp(cmd_array[data->index], ">"))
 		{
+			dprintf(2, "we got the infile redirection\n");
 			file = ft_strdup(cmd_array[data->index + 1]);
 			redirect_flag = REDIRECT_OUT;
+			dprintf(2, "file in output redirection: %s\n", file);
+			dprintf(2, "redirect_flag after REDIRECT_OUT: %i\n\n", redirect_flag);
 		}
 		else if (!ft_strcmp(cmd_array[data->index], "<"))
 		{
+			dprintf(2, "we got the infile redirection\n");
 			file = ft_strdup(cmd_array[data->index + 1]);
+			dprintf(2, "file in input redirection: %s\n", file);
 			redirect_flag = REDIRECT_IN;
+			dprintf(2, "redirect_flag after REDIRECT_IN: %i\n\n", redirect_flag);
 		}
 		if (!file && redirect_flag != 0)
 		{
+			dprintf(2, "\n\n WE SHOULD NOT GET HERE \n\n");
 			free_array(cmd_array);
 			free_array(data->binary_paths);
 			free_ll(*envll);
@@ -141,12 +174,18 @@ void	piped_execution(t_data *data, t_env **envll, char *instr, int child)
 		}
 		data->index++;
 	}
-	if (checking_access(data, instr) != 0) // || !file
+	if (checking_access(data, instr, child) != 0) // || !file
 	{
+		dprintf(2, "\n\n WE SHOULD NOT GET HERE \n\n");
 		free_array(cmd_array);
 		free_array(data->binary_paths);
 		free_ll(*envll);
 		exit(FAILURE);
+	}
+	if (child == 0)
+	{
+		dprintf(2, "\nflag 1: input redirection || flag 2: output redirection\n");
+		dprintf(2, "redirect flag: %i in child: %i\n\n", redirect_flag, child);
 	}
 	dup_fds(data, child, redirect_flag, file);
 	close(data->pipe_fd[1]);
@@ -171,10 +210,13 @@ void	ft_exec(t_data *data, char **cmd_array, int redirect) // child is here for 
 {
 	static char	*path;
 	
+	
 	if (redirect != 0)
-		cmd_array = parse_instruction(cmd_array); // this is not working
+		cmd_array = parse_instruction(cmd_array); // is returning null
+	dprintf(2, "OUTPUT:\n\n\n\n")
 	if (!cmd_array || !*cmd_array)
 	{
+		dprintf(2, "\n\n WE SHOULD NOT GET HERE!!! 404 \n\n");
 		free_array(cmd_array);
 		free_data(data, NULL, &data->envll, NULL);
 		exit (-1);
@@ -196,25 +238,3 @@ void	ft_exec(t_data *data, char **cmd_array, int redirect) // child is here for 
 	}
 }
 
-/*************************************************************
- ************************* DUMP ******************************
- *************************************************************/
-
-// int	execution(t_data *data, t_env **env_ll)
-// {
-// 	t_token	*token;
-
-// 	token = data->token;
-// 	data->nb_cmds = how_many_children(token);
-// 	// token_printer(token);
-// 	if (data->nb_cmds >= 1)
-// 		data->status = multiple_execution(data, token, env_ll);
-// 	// else
-// 	// {
-// 	// 	if (data->nb_cmds == 1)
-// 	// 		data->status = single_execution(data, token, env_ll);
-// 		else
-// 			data->status = built_in_or_garbage(data, env_ll, token); // builtins will be thrown into single execution later
-// 	// }
-// 	return (data->status);
-// }
