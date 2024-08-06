@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:34:00 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/06 16:49:13 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/06 20:00:30 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,110 +101,6 @@ char *remove_quotes(const char *str)
 
     return temp_str;
 }
-/*
-char *ft_strtok(char *str, const char *delim, t_data *data, t_token *cur_tok)
-{
-    static char *target;
-    char *token;
-    char *new_token = NULL;
-    int index = 0;
-    int token_start = 0; // Start index of the token
-    data->quote = 0;
-    data->error = 0;
-    data->in_quotes = 0;
-    char quote_char = '\0';
-
-    if (str)
-        target = str;
-    if (!target || *target == '\0')
-        return NULL;
-
-    // Skip leading delimiters
-    while (*target && ft_charinstr(*target, delim))
-    {
-        target++;
-        if (*target == '\0')
-            return NULL;
-    }
-
-    // Token starts here
-    token_start = index;
-    while (target[index])
-    {
-        if (data->in_quotes)
-        {
-            if (target[index] == quote_char)
-            {
-                //printf("closing quote\n");//debug
-                data->in_quotes = 0;
-                //data->quote = data->in_quotes;
-                quote_char = '\0';
-                index++; // Move past the closing quote
-                continue;
-            }
-        }
-        else if (target[index] == '"' || target[index] == '\'')
-        {
-            if(target[index] == '\'')
-            {
-                data->in_quotes = 1;
-                data->quote = data->in_quotes;
-                cur_tok->expand = false;
-                printf("curtok:%s\nexpand:%d\n\n",cur_tok->value, cur_tok->expand);
-                //printf("single quotes\n");
-            }
-            else
-            {
-                data->in_quotes = 2;
-                data->quote = data->in_quotes;
-                cur_tok->expand = true;
-                //printf("double quotes\n");
-            }
-            quote_char = target[index];
-            index++; // Skip the opening quote
-            continue;
-        }
-        else if (ft_charinstr(target[index], delim) && !data->in_quotes)
-        {
-            break;
-        }
-        index++;
-    }
-
-    if (data->in_quotes)
-    {
-        data->status = 4;
-        printf("Error: unmatched quote found.\n");
-        return NULL;
-    }
-
-    if (index == 0 && !data->in_quotes) // No token found
-        return NULL;
-
-    // Allocate token and copy substring, excluding the opening and closing quotes if present
-    token = ft_substr(target, token_start, index - token_start);
-    if (!token)
-        return NULL;
-
-    // Remove quotes from the token
-    printf("before strippin:%s\n",token);
-    printf("---token:%s\n---quote:%i\n---cur_exp:%i\n", token, data->quote, cur_tok->expand);//debug
-    //EXPAND HERE BABY GRILLY
-    new_token = (expand token)
-    char *stripped_token = remove_quotes(token);
-    free(token); // Free the original token with quotes
-
-    // Move target pointer past the token
-    target += index;
-
-    // Skip trailing delimiters for next call
-    while (*target && ft_charinstr(*target, delim))
-    {
-        target++;
-    }
-
-    return stripped_token;
-}*/
 
 char *ft_strtok(char *str, const char *delim, t_data *data, t_token *cur_tok)
 {
