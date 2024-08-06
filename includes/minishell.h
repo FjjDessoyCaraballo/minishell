@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/05 11:11:59 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/06 16:27:35 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,15 +85,15 @@ typedef struct s_data
 	char		**builtins;
 	char		**redirect;
 	char		**cmd_a;
-	int			in_quotes;
 	bool		echoed;
 	bool		echo_flag;
-	bool		expand;
+	int			in_quotes;
+	int			quote;
 	char		*line_read;
 	int			error;
 	int			id;
 	char		*vtoken;
-	const char 	*deli;
+	const char *deli;
 	t_env		*envll;
 }	t_data;
 

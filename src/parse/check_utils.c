@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:33:43 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/05 10:03:42 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/06 16:47:58 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,11 +67,4 @@ int	how_many_tokens(t_token *token)
 		head = head->next;
 	}
 	return (count);
-}
-
-int	ft_argument_check(char *token, t_token *current_token)
-{
-	current_token->value = token;
-	current_token->type = ARGUMENT;
-	return (SUCCESS);
 }
