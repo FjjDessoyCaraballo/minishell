@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strtok.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:34:00 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/05 10:05:41 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/06 16:49:13 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ int	ft_strcmp(char *s1, char *s2)
 		i++;
 	return (s1[i] - s2[i]);
 }
+
 int ft_charinstr(char c, const char *str)
 {
 	while (*str)
@@ -30,59 +31,6 @@ int ft_charinstr(char c, const char *str)
 		str++;
 	}
 	return (0);
-}
-
-int     ft_getstart(char const *s1, char const *set)
-{
-        size_t  len;
-        size_t  i;
-
-        len = ft_strlen(s1);
-        i = 0;
-        while (i < len)
-        {
-                if (ft_strchr(set, s1[i]) == 0)
-                        break ;
-                i++;
-        }
-        return (i);
-}
-
-int     ft_getend(const char *s1, const char *set)
-{
-        size_t  len;
-        size_t  i;
-
-        len = ft_strlen(s1);
-        i = 0;
-        while (i < len)
-        {
-                if (ft_strchr(set, s1[len - i - 1]) == 0)
-                        break ;
-                i++;
-        }
-        return (len - i);
-}
-
-char    *ft_strtrim(char const *s1, char const *set)
-{
-        int             end;
-        int             start;
-        char    *dest;
-
-        if (s1 == NULL)
-                return (NULL);
-        if (set == NULL)
-                return (ft_strdup(s1));
-        start = ft_getstart(s1, set);
-        end = ft_getend(s1, set);
-        if (start >= end)
-                return (ft_strdup(""));
-        dest = (char *)malloc(sizeof(char) * (end - start + 1));
-        if (dest == NULL)
-                return (NULL);
-        ft_strlcpy(dest, s1 + start, end - start + 1);
-        return (dest);
 }
 
 int ft_strlencount(const char *str, char c, int numtof)
@@ -99,6 +47,7 @@ int ft_strlencount(const char *str, char c, int numtof)
     }
     return(i);
 }
+
 char *remove_quotes(const char *str)
 {
     int i, j;
@@ -152,13 +101,15 @@ char *remove_quotes(const char *str)
 
     return temp_str;
 }
-
+/*
 char *ft_strtok(char *str, const char *delim, t_data *data, t_token *cur_tok)
 {
     static char *target;
     char *token;
+    char *new_token = NULL;
     int index = 0;
     int token_start = 0; // Start index of the token
+    data->quote = 0;
     data->error = 0;
     data->in_quotes = 0;
     char quote_char = '\0';
@@ -184,7 +135,9 @@ char *ft_strtok(char *str, const char *delim, t_data *data, t_token *cur_tok)
         {
             if (target[index] == quote_char)
             {
+                //printf("closing quote\n");//debug
                 data->in_quotes = 0;
+                //data->quote = data->in_quotes;
                 quote_char = '\0';
                 index++; // Move past the closing quote
                 continue;
@@ -195,12 +148,17 @@ char *ft_strtok(char *str, const char *delim, t_data *data, t_token *cur_tok)
             if(target[index] == '\'')
             {
                 data->in_quotes = 1;
+                data->quote = data->in_quotes;
                 cur_tok->expand = false;
+                printf("curtok:%s\nexpand:%d\n\n",cur_tok->value, cur_tok->expand);
+                //printf("single quotes\n");
             }
             else
             {
                 data->in_quotes = 2;
+                data->quote = data->in_quotes;
                 cur_tok->expand = true;
+                //printf("double quotes\n");
             }
             quote_char = target[index];
             index++; // Skip the opening quote
@@ -215,7 +173,7 @@ char *ft_strtok(char *str, const char *delim, t_data *data, t_token *cur_tok)
 
     if (data->in_quotes)
     {
-        data->error = 4;
+        data->status = 4;
         printf("Error: unmatched quote found.\n");
         return NULL;
     }
@@ -229,7 +187,10 @@ char *ft_strtok(char *str, const char *delim, t_data *data, t_token *cur_tok)
         return NULL;
 
     // Remove quotes from the token
-    //printf("before strippin:%s\n",token);
+    printf("before strippin:%s\n",token);
+    printf("---token:%s\n---quote:%i\n---cur_exp:%i\n", token, data->quote, cur_tok->expand);//debug
+    //EXPAND HERE BABY GRILLY
+    new_token = (expand token)
     char *stripped_token = remove_quotes(token);
     free(token); // Free the original token with quotes
 
@@ -243,4 +204,117 @@ char *ft_strtok(char *str, const char *delim, t_data *data, t_token *cur_tok)
     }
 
     return stripped_token;
+}*/
+
+char *ft_strtok(char *str, const char *delim, t_data *data, t_token *cur_tok)
+{
+    static char *target;
+    char *token;
+    char *new_token;
+    int index = 0;
+    int token_start = 0; // Start index of the token
+    data->quote = 0;
+    data->error = 0;
+    data->in_quotes = 0;
+    char quote_char = '\0';
+
+    if (str)
+        target = str;
+    if (!target || *target == '\0')
+        return NULL;
+
+    // Skip leading delimiters
+    while (*target && ft_charinstr(*target, delim))
+    {
+        target++;
+        if (*target == '\0')
+            return NULL;
+    }
+
+    // Token starts here
+    token_start = index;
+    while (target[index])
+    {
+        if (data->in_quotes)
+        {
+            if (target[index] == quote_char)
+            {
+                //printf("closing quote\n");//debug
+                data->in_quotes = 0;
+                //data->quote = data->in_quotes;
+                quote_char = '\0';
+                index++; // Move past the closing quote
+                continue;
+            }
+        }
+        else if (target[index] == '"' || target[index] == '\'')
+        {
+            if(target[index] == '\'')
+            {
+                data->in_quotes = 1;
+                data->quote = data->in_quotes;
+                cur_tok->expand = false;
+                //printf("curtok:%s\nexpand:%d\n\n",cur_tok->value, cur_tok->expand);
+                //printf("single quotes\n");
+            }
+            else
+            {
+                data->in_quotes = 2;
+                data->quote = data->in_quotes;
+                cur_tok->expand = true;
+                //printf("double quotes\n");
+            }
+            quote_char = target[index];
+            index++; // Skip the opening quote
+            continue;
+        }
+        else if (ft_charinstr(target[index], delim) && !data->in_quotes)
+        {
+            break;
+        }
+        index++;
+    }
+
+    if (data->in_quotes)
+    {
+        data->status = 4;
+        printf("Error: unmatched quote found.\n");
+        return NULL;
+    }
+
+    if (index == 0 && !data->in_quotes) // No token found
+        return NULL;
+
+    // Allocate token and copy substring, excluding the opening and closing quotes if present
+    token = ft_substr(target, token_start, index - token_start);
+    if (!token)
+        return NULL;
+
+    // Expand environment variables in the token
+    //printf("before expand:%s\n", token);
+    new_token = expand_env_variables(token, data);
+    //printf("after expand:%s\n", new_token);
+    
+    if (new_token)
+    {
+        free(token); // Free the old token with quotes
+        token = new_token; // Update token to the expanded version
+    }
+    else
+    {
+        // Handle failure to expand
+        free(token);
+        token = NULL;
+    }
+    char *stripped_token = remove_quotes(token);
+    token = stripped_token;
+    // Move target pointer past the token
+    target += index;
+
+    // Skip trailing delimiters for next call
+    while (*target && ft_charinstr(*target, delim))
+    {
+        target++;
+    }
+    return token;
 }

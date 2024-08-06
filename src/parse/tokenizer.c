@@ -3,44 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:34:16 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/05 11:12:43 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/06 17:38:47 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static int env_var(char *token, t_token *current_token, t_data *data)
-{
-	if (ft_strcmp(token, "$?") == 0)
-	{
-		current_token->type = ENVVAR;
-		current_token->value = ft_itoa(data->status);
-		//printf("%s\n", current_token->value);
-		return SUCCESS;
-	}
-	else if(token[0] == '$')
-	{
-		char *env_value = ft_getenv(token + 1, data->envll);
-			if (env_value)
-		{
-			current_token->type = ARGUMENT;
-			current_token->value = ft_strdup(env_value);
-			return SUCCESS;
-		}
-			printf("\n");
-			return FAILURE;
-	}
-	return FAILURE;
-}
-
 int chunky_checker(char *token,t_token *current_token,t_data *data)
 {
-	if (env_var(token, current_token, data) == SUCCESS)
-		return SUCCESS;
-	else if(ft_builtin_check(token, current_token, data->builtins) == SUCCESS) //current_token->id == 0 && 
+	if(ft_builtin_check(token, current_token, data->builtins) == SUCCESS) //current_token->id == 0 && 
 	{
 		if (ft_strcmp(current_token->value, "echo") == SUCCESS)
 		{
@@ -68,7 +42,7 @@ int chunky_checker(char *token,t_token *current_token,t_data *data)
 		data->echoed = false;
 		return SUCCESS;
 	}
-	else if(redirect_op_check(token, current_token, data->redirect) == SUCCESS)
+	else if(ft_redirect_op_check(token, current_token, data->redirect) == SUCCESS)
 	{
 		current_token->echo = false;
 		data->echoed = false;
@@ -82,64 +56,21 @@ int chunky_checker(char *token,t_token *current_token,t_data *data)
 
 	else if(ft_argument_check(token, current_token) == SUCCESS)
 	{
-		if(current_token->id == 0)
+		if(current_token->id == 1 && current_token->prev->type == ARGUMENT)
+        {
+            //printf("perhaps here\n");
 			return (FAILURE);
+        }
 		else if(data->echoed == true)
 			current_token->echo = true;
 		return SUCCESS;
 	}
 	else
+    {
+        printf("couldn't find type for token\n");
 		return(FAILURE);
-}
-
-char *concatenate_echo_args(t_token *current_token, const char *delimiters, t_data *data) {
-    char *concatenated_args = NULL;
-    char *token;
-    int first_token = 1;
-
-    while ((token = ft_strtok(NULL, delimiters, data, current_token)) != NULL) {
-        if (data->error == 4)
-            return NULL;
-        char *temp;
-
-        // Expand environment variables within the token
-        char *expanded_token = expand_env_variables(token, data);
-
-        if (concatenated_args) {
-            // Only add a space if it's not the first token
-            if (!first_token) {
-                temp = ft_strjoin(concatenated_args, " ");
-                free(concatenated_args);
-                concatenated_args = ft_strjoin(temp, expanded_token);
-                free(temp);
-            } else {
-                temp = ft_strdup(expanded_token);
-                free(concatenated_args);
-                concatenated_args = temp;
-            }
-        } else {
-            concatenated_args = ft_strdup(expanded_token);
-        }
-
-        free(expanded_token); // Free the expanded token
-        first_token = 0; // After the first token, subsequent tokens should be prefixed with a space
     }
-
-    return concatenated_args;
-}
-
-void echoing(t_token *current_token, t_token **prev_token, const char *delimiters, t_data *data)
-{
-    char *concatenated_args = concatenate_echo_args(current_token, delimiters, data);
-    if (concatenated_args == NULL && data->error == 4)
-        return;
-    //printf("this catted arg is :%s\n", concatenated_args);//debug
-    current_token->next = init_token();
-    current_token->next->prev = current_token;
-    *prev_token = current_token;
-    current_token = current_token->next;
-    current_token->type = ARGUMENT;
-    current_token->value = concatenated_args;
+    return(SUCCESS);
 }
 
 int check_and_handle_echo(t_token *current_token, t_token **prev_token, const char *delimiters, t_data *data) 
@@ -186,33 +117,72 @@ t_token *create_and_link_next_token(t_token *current_token, t_data *data)
     return new_token;
 }
 
+void expand_token_if_needed(t_token *current_token, t_data *data)
+{
+    // Check if the token needs expansion and if it has a valid value
+    //printf("data->quote: %d\ncurrent_token->expand: %d\ncurrent_token->value:%s\n", data->quote, current_token->expand, current_token->value);
+    if (current_token->expand && current_token->value && data->quote != 1)//SOLTUION TO EXPAND OR NOT TO EXPAND
+    {
+        // Expand environment variables
+        char *expanded_value = expand_env_variables(current_token->value, data);
+        if (expanded_value)
+        {
+            // Free the old value if it exists
+            if (current_token->value)
+                free(current_token->value);
+            // Update the token's value with the expanded value
+            current_token->value = expanded_value;
+        }
+        else
+        {
+            // Handle expansion failure if needed
+            // For now, just set current_token->value to a default or handle the error
+            current_token->value = strdup("");  // Assign an empty string or handle as needed
+        }
+    }
+}
+
+/*
+ * This function performs tokenization on a line of input.
+ * It initializes the first token node, sets up the tokenization process,
+ * and iteratively processes each token until there are no more tokens or an error occurs.
+ *
+ * @param data A pointer to the main data structure containing information about the shell.
+ *
+ * @return Returns SUCCESS if the tokenization is successful, or FAILURE if an error occurs.
+ *
+ */
+
 int line_tokenization(t_data *data)
 {
     t_token *first_node = init_token();
     t_token *current_token = first_node;
     t_token *prev_token = NULL;
-    
+
     setup(data);
+    //printf("data->line_read: %s\n\n", data->line_read);
     data->vtoken = ft_strtok(data->line_read, data->deli, data, current_token);
-    while (data->vtoken != NULL && data->error != 4)
+
+    while (data->vtoken != NULL && data->status != 4)
     {
         current_token->id = data->id;
         current_token->prev = prev_token;
-        if(chunky_checker(data->vtoken, current_token, data) == FAILURE)
+        current_token->value = ft_strdup(data->vtoken);
+        //expand_token_if_needed(current_token, data);
+        if (chunky_checker(current_token->value, current_token, data) == FAILURE)
             return FAILURE;
         if (check_and_handle_echo(current_token, &prev_token, data->deli, data) == FAILURE)
             return FAILURE;
         data->vtoken = ft_strtok(NULL, data->deli, data, current_token);
-        if (data->error == 4)
+        if (data->status == 4)
             return FAILURE;
-        if (data->vtoken != NULL && data->error != 4)
+        if (data->vtoken != NULL && data->status != 4)
         {
             current_token = create_and_link_next_token(current_token, data);
             prev_token = current_token->prev;
         }
     }
     data->token = first_node;
+    //print_tokens(data);//debug
     return SUCCESS;
-}   
-
-//print_tokens(data); // debug
+}
