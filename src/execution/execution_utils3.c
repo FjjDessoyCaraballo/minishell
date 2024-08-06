@@ -146,9 +146,7 @@ char	*get_binary(char *instruction)
 {
 	char		**split_instruction;
 	static char	*binary;
-	int			index;
 
-	index = 0;
 	split_instruction = ft_split(instruction, ' ');
 	if (!split_instruction)
 		return (NULL);
