@@ -6,89 +6,12 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 10:41:10 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/05 13:42:18 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/06 09:48:31 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-/**
- * This function takes care of executing commands with no child_processes.
- * USAGE: %> cmd -flag argument OR %> cmd argument -flag
- */
-int	single_execution(t_data *data, t_token *token, t_env **env_ll)
-{
-	pid_t	pid;
-	int		status;
-
-	pid = fork();
-	status = 0;
-	if (pid < 0)
-	{
-		free_ll((*env_ll));
-		free_data(data, NULL, env_ll, NULL);
-		perror("fork");
-		data->status = -1;
-		return (-1);
-	}
-	else if (pid == 0)
-		single_child(data, token, env_ll);
-	else
-		status = single_parent(pid, status);
-	return (status);
-}
-
-void	single_child(t_data *data, t_token *token, t_env **env_ll)
-{
-	static char	**command_array;
-	static char	**execution_array;
-	static char	**env;
-	char		*path;
-	// t_token	*head;
-	// int		redir_flag;
-
-	// head = token;
-	// redir_flag = 0;
-	// command_array = ttad(token, 0);
-	command_array = cl_to_array(token);
-	execution_array = ft_split(command_array[0], ' ');
-	free_array(command_array);
-	// if (count_token(token, RED_IN) > 0 || count_token(token, RED_IN) > 0
-	// 	|| count_token(token, RED_IN) > 0 || count_token(token, RED_IN) > 0)
-	// {
-	// 	if (find_token(token, RED_IN) || find_token(token, RED_OUT)
-	// 		|| find_token(token, HEREDOC) || find_token(token, APPEND))
-	// 		redir_flag = 1;
-	// 		command_array = parse_instruction(command_array);
-	// }
-	/**
-	 * 
-	 * this is where we are going to deal with the redirection of the command
-	 * we need to take care of heredoc, append, red out and red in
-	 * 
-	 */
-	// if (redir_flag == 0)
-	// else
-	// 	path = ft_strsjoin(token->path, command_array[0], '/');
-	path = ft_strsjoin(token->path, token->value, '/');
-	env = env_arr_updater(env_ll);
-	if (execve(path, execution_array, env) == -1)
-	{
-		free_array(env);
-		free_array(execution_array);
-		free_data(data, path, env_ll, command_array);
-		exit (127);
-	}
-}
-
-int	single_parent(pid_t pid, int status)
-{
-	waitpid(pid, &status, 0);
-	if (WIFEXITED(status))
-		return (WEXITSTATUS(status));
-	else
-		return (-1);
-}
 /**
  * Its necessary to know which redirection we have here and give back the
  * array organized in the usual fashion of "cmd -flag" for execution. We
@@ -170,3 +93,85 @@ char	**remove_redirect(char **array, int len)
 	parsed_array[i] = NULL;
 	return (parsed_array);
 }
+
+/*************************************************************
+ ************************* DUMP ******************************
+ *************************************************************/
+
+/**
+//  * This function takes care of executing commands with no child_processes.
+//  * USAGE: %> cmd -flag argument OR %> cmd argument -flag
+//  */
+// int	single_execution(t_data *data, t_token *token, t_env **env_ll)
+// {
+// 	pid_t	pid;
+// 	int		status;
+
+// 	pid = fork();
+// 	status = 0;
+// 	if (pid < 0)
+// 	{
+// 		free_ll((*env_ll));
+// 		free_data(data, NULL, env_ll, NULL);
+// 		perror("fork");
+// 		data->status = -1;
+// 		return (-1);
+// 	}
+// 	else if (pid == 0)
+// 		single_child(data, token, env_ll);
+// 	else
+// 		status = single_parent(pid, status);
+// 	return (status);
+// }
+
+// void	single_child(t_data *data, t_token *token, t_env **env_ll)
+// {
+// 	static char	**command_array;
+// 	static char	**execution_array;
+// 	static char	**env;
+// 	char		*path;
+// 	// t_token	*head;
+// 	// int		redir_flag;
+
+// 	// head = token;
+// 	// redir_flag = 0;
+// 	// command_array = ttad(token, 0);
+// 	command_array = cl_to_array(token);
+// 	execution_array = ft_split(command_array[0], ' ');
+// 	free_array(command_array);
+// 	// if (count_token(token, RED_IN) > 0 || count_token(token, RED_IN) > 0
+// 	// 	|| count_token(token, RED_IN) > 0 || count_token(token, RED_IN) > 0)
+// 	// {
+// 	// 	if (find_token(token, RED_IN) || find_token(token, RED_OUT)
+// 	// 		|| find_token(token, HEREDOC) || find_token(token, APPEND))
+// 	// 		redir_flag = 1;
+// 	// 		command_array = parse_instruction(command_array);
+// 	// }
+// 	/**
+// 	 * 
+// 	 * this is where we are going to deal with the redirection of the command
+// 	 * we need to take care of heredoc, append, red out and red in
+// 	 * 
+// 	 */
+// 	// if (redir_flag == 0)
+// 	// else
+// 	// 	path = ft_strsjoin(token->path, command_array[0], '/');
+// 	path = ft_strsjoin(token->path, token->value, '/');
+// 	env = env_arr_updater(env_ll);
+// 	if (execve(path, execution_array, env) == -1)
+// 	{
+// 		free_array(env);
+// 		free_array(execution_array);
+// 		free_data(data, path, env_ll, command_array);
+// 		exit (127);
+// 	}
+// }
+
+// int	single_parent(pid_t pid, int status)
+// {
+// 	waitpid(pid, &status, 0);
+// 	if (WIFEXITED(status))
+// 		return (WEXITSTATUS(status));
+// 	else
+// 		return (-1);
+// }

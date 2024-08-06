@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/05 11:21:19 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/06 10:07:52 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,21 +106,12 @@ typedef struct s_data
 /* functions *************************************/
 /*************************************************/
 
-// int 	lonely_execution(t_data *data, t_token *token, t_env **env_ll);
-
 /* in execution.c */
 int		execution(t_data *data, t_env **env_ll);
-int		multiple_execution(t_data *data, t_token *token, t_env **env_ll);
+int		execution_prepping(t_data *data, t_token *token, t_env **env_ll);
 int		piping(t_data *data, t_env **env_ll, char **all_cmds, int pids);
 void	piped_execution(t_data *data, t_env **envll, char *instruction, int child);
 void	ft_exec(t_data *data, char **cmd_array, int redirect);
-
-/* in execution2.c */
-int		single_execution(t_data *data, t_token *token, t_env **env_ll);
-void	single_child(t_data *data, t_token *token, t_env **env_ll);
-int		single_parent(pid_t pid, int status);
-char	**parse_instruction(char **cmd_array);
-char	**remove_redirect(char **array, int len);
 
 /* in execution_utils.c */
 int		err_msg(char *obj, char *msg, int err_code);
@@ -139,6 +130,10 @@ char	**cl_to_array(t_token *token);
 int		checking_access(t_data *data, char *instruction);
 char	*get_binary(char *instruction);
 char	*abs_path(char *command);
+
+/* in execution_utils4.c */
+char	**parse_instruction(char **cmd_array);
+char	**remove_redirect(char **array, int len);
 
 /* in init.c */
 void	ll_env(t_env **env_ll, char **env);
@@ -177,16 +172,22 @@ void	get_the_hell_out(t_data *data, t_token *token, t_env *env_ll);
 int		yodeling(t_token *token);
 
 /* in built_ins2.c */
-int		built_in_or_garbage(t_data *data, t_env **env_ll, t_token *token);
 int		shell_cd(t_token *token, t_data *data);
 int		export(t_token *token, t_env **env_ll);
 int		print_export(t_env **env_ll);
 int		unset(t_token *token, t_env **env_ll);
+void 	alphabetical_printer(char **env_array);
 
 /* in built_ins3.c */
-void alphabetical_printer(char **env_array);
 
 /* signals.c */
 void	handler(int sig);
+
+/* DEPRECATED FUNCTIONS */
+// int		built_in_or_garbage(t_data *data, t_env **env_ll, t_token *token);
+// int		single_execution(t_data *data, t_token *token, t_env **env_ll); DEPRECATED
+// void	single_child(t_data *data, t_token *token, t_env **env_ll); DEPRECRATED
+// int		single_parent(pid_t pid, int status); DEPRECATED
+// int 	lonely_execution(t_data *data, t_token *token, t_env **env_ll);
 
 #endif

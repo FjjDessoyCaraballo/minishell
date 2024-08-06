@@ -6,44 +6,37 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 15:26:27 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/05 10:24:51 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/06 10:04:11 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	built_in_or_garbage(t_data *data, t_env **env_ll, t_token *token)
+void alphabetical_printer(char **env_array)
 {
-	t_token 	*tmp;
-	static char	**message;
+    int i;
+    int j;
+    char c;
 
-	tmp = token;
-	int i = 0;
-	while (tmp)
-	{
-		printf("token [%i][%s]\n", i, tmp->value);
-		tmp = tmp->next;
-		i++;
-	}
-	tmp = token;
-	while (tmp != NULL)
-	{
-		
-		if (tmp->type == BUILTIN)
-			return (built_ins(data, token, env_ll));
-		tmp = tmp->next;
-	}
-	tmp = NULL;
-	if (token)
-	{
-		message = ft_split(token->value, ' ');
-		if (!message)
-			return (0);
-		err_msg(message[0], "command not found", 0);
-		free_array(message);
-		return (127);
-	}
-	return (0);
+    i = 0;
+    j = 0;
+    c = 'A';
+
+    while (c < 91)
+    {
+        while (env_array[i])
+        {
+            if (env_array[i][j] == c)
+            {
+                printf("declare -x ");
+                printf("%s\n", env_array[i]);
+                
+            }
+            i++;
+        }
+        i = 0;
+        c++;
+    }
 }
 
 // suscetible to changes after parsing commands from line
@@ -181,3 +174,42 @@ int	unset(t_token *token, t_env **env_ll)
 	head = NULL;
 	return (SUCCESS);
 }
+
+
+/*************************************************************
+ ************************* DUMP ******************************
+ *************************************************************/
+
+// int	built_in_or_garbage(t_data *data, t_env **env_ll, t_token *token)
+// {
+// 	t_token 	*tmp;
+// 	static char	**message;
+
+// 	tmp = token;
+// 	int i = 0;
+// 	while (tmp)
+// 	{
+// 		printf("token [%i][%s]\n", i, tmp->value);
+// 		tmp = tmp->next;
+// 		i++;
+// 	}
+// 	tmp = token;
+// 	while (tmp != NULL)
+// 	{
+		
+// 		if (tmp->type == BUILTIN)
+// 			return (built_ins(data, token, env_ll));
+// 		tmp = tmp->next;
+// 	}
+// 	tmp = NULL;
+// 	if (token)
+// 	{
+// 		message = ft_split(token->value, ' ');
+// 		if (!message)
+// 			return (0);
+// 		err_msg(message[0], "command not found", 0);
+// 		free_array(message);
+// 		return (127);
+// 	}
+// 	return (0);
+// }

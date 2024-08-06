@@ -6,13 +6,14 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/05 13:38:37 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/06 10:10:32 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-/*static int	token_printer(t_token *token)
+// /*
+static int	token_printer(t_token *token)
 {
 	t_token *head;
 	
@@ -24,7 +25,7 @@
 	}
 	head = NULL;
 	return (SUCCESS);
-}*/
+}  // */
 
 int	execution(t_data *data, t_env **env_ll)
 {
@@ -32,16 +33,11 @@ int	execution(t_data *data, t_env **env_ll)
 
 	token = data->token;
 	data->nb_cmds = how_many_children(token);
-	// token_printer(token);
-	if (data->nb_cmds > 1)
-		data->status = multiple_execution(data, token, env_ll);
+	token_printer(token);
+	if (data->nb_cmds >= 1)
+		data->status = execution_prepping(data, token, env_ll);
 	else
-	{
-		if (data->nb_cmds == 1)
-			data->status = single_execution(data, token, env_ll);
-		else
-			data->status = built_in_or_garbage(data, env_ll, token); // builtins will be thrown into single execution later
-	}
+		data->status = built_ins(data, token, env_ll);
 	return (data->status);
 }
 
@@ -49,7 +45,7 @@ int	execution(t_data *data, t_env **env_ll)
  * This is the function that will be used when we get multiple instructions
  * by pipes. Its still underwork.
  */
-int	multiple_execution(t_data *data, t_token *token, t_env **env_ll)
+int	execution_prepping(t_data *data, t_token *token, t_env **env_ll)
 {
 	static pid_t	pids;
 	static char		**cmd_a;
@@ -203,3 +199,22 @@ void	ft_exec(t_data *data, char **cmd_array, int redirect) // child is here for 
 /*************************************************************
  ************************* DUMP ******************************
  *************************************************************/
+
+// int	execution(t_data *data, t_env **env_ll)
+// {
+// 	t_token	*token;
+
+// 	token = data->token;
+// 	data->nb_cmds = how_many_children(token);
+// 	// token_printer(token);
+// 	if (data->nb_cmds >= 1)
+// 		data->status = multiple_execution(data, token, env_ll);
+// 	// else
+// 	// {
+// 	// 	if (data->nb_cmds == 1)
+// 	// 		data->status = single_execution(data, token, env_ll);
+// 		else
+// 			data->status = built_in_or_garbage(data, env_ll, token); // builtins will be thrown into single execution later
+// 	// }
+// 	return (data->status);
+// }

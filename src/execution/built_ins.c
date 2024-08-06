@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 14:18:24 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/05 09:59:38 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/06 10:11:06 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ int	built_ins(t_data *data, t_token *token, t_env **env_ll)
 		status = export(token, env_ll);
 	else if (!ft_strncmp(token->value, "unset", 5))
 		status = unset(token, env_ll);
+	else
+		printf("Unknown command: %s\n", token->value);
 	return (status);
 }
 
