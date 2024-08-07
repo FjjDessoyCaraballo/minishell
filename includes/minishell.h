@@ -48,7 +48,10 @@
 # define EXIT "Exit\n"
 # define REDIRECT_OUT 2
 # define REDIRECT_IN 1
-# define NO_FILE 1
+# define NO_FILE 100
+# define FILE 55
+# define EXECUTABLE 50
+# define REDIRECT 60
 # define SYNTAX "syntax error near unexpected token "
 # define NULL_LINE 5
 # define DIRECTORY 69
@@ -132,8 +135,8 @@ char	*get_binary(char *instruction);
 char	*abs_path(char *command);
 
 /* in execution_utils4.c */
-char	**parse_instruction(char **cmd_array);
-char	**remove_redirect(char **array, int len);
+char	**parse_instruction(t_data *data, char **cmd_array);
+char	**remove_redirect(t_data *data, char **array, int len);
 
 /* in init.c */
 void	ll_env(t_env **env_ll, char **env);

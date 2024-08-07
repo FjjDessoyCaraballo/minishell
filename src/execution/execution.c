@@ -59,7 +59,7 @@ int	execution(t_data *data, t_env **env_ll)
 	{
 		if (count_token(token, BUILTIN) == 1)
 		{
-			token = find_token(token, BUILTIN);
+			token = find_token(token, BUILTIN); // need to deal with possible garbage before the token
 			data->status = built_ins(data, token, env_ll);
 		}
 	}
@@ -145,28 +145,22 @@ void	piped_execution(t_data *data, t_env **envll, char *instr, int child)
 	redirect_flag = 0;
 	data->index = 0;
 	cmd_array = ft_split(instr, ' ');
-	line_printer(cmd_array);
+	// line_printer(cmd_array);
 	while (cmd_array[data->index])
 	{
 		if (!ft_strcmp(cmd_array[data->index], ">"))
 		{
-			dprintf(2, "we got the infile redirection\n");
 			file = ft_strdup(cmd_array[data->index + 1]);
 			redirect_flag = REDIRECT_OUT;
-			dprintf(2, "file in output redirection: %s\n", file);
-			dprintf(2, "redirect_flag after REDIRECT_OUT: %i\n\n", redirect_flag);
 		}
 		else if (!ft_strcmp(cmd_array[data->index], "<"))
 		{
-			dprintf(2, "we got the infile redirection\n");
 			file = ft_strdup(cmd_array[data->index + 1]);
-			dprintf(2, "file in input redirection: %s\n", file);
 			redirect_flag = REDIRECT_IN;
-			dprintf(2, "redirect_flag after REDIRECT_IN: %i\n\n", redirect_flag);
 		}
 		if (!file && redirect_flag != 0)
 		{
-			dprintf(2, "\n\n WE SHOULD NOT GET HERE \n\n");
+			dprintf(2, "\n\n file is null \n\n");
 			free_array(cmd_array);
 			free_array(data->binary_paths);
 			free_ll(*envll);
@@ -176,17 +170,14 @@ void	piped_execution(t_data *data, t_env **envll, char *instr, int child)
 	}
 	if (checking_access(data, instr, child) != 0) // || !file
 	{
-		dprintf(2, "\n\n WE SHOULD NOT GET HERE \n\n");
+		dprintf(2, "\n\n check access failed\n\n");
 		free_array(cmd_array);
 		free_array(data->binary_paths);
 		free_ll(*envll);
 		exit(FAILURE);
 	}
-	if (child == 0)
-	{
-		dprintf(2, "\nflag 1: input redirection || flag 2: output redirection\n");
-		dprintf(2, "redirect flag: %i in child: %i\n\n", redirect_flag, child);
-	}
+	dprintf(2, "\nflag 1: input redirection || flag 2: output redirection\n");
+	dprintf(2, "redirect flag: %i || child: %i\n\n", redirect_flag, child);
 	dup_fds(data, child, redirect_flag, file);
 	close(data->pipe_fd[1]);
 	ft_exec(data, cmd_array, redirect_flag);
@@ -210,26 +201,34 @@ void	ft_exec(t_data *data, char **cmd_array, int redirect) // child is here for 
 {
 	static char	*path;
 	
-	
 	if (redirect != 0)
-		cmd_array = parse_instruction(cmd_array); // is returning null
-	dprintf(2, "OUTPUT:\n\n\n\n");
+		cmd_array = parse_instruction(data, cmd_array); // is returning garbage
+	line_printer(cmd_array);
 	if (!cmd_array || !*cmd_array)
 	{
-		dprintf(2, "\n\n WE SHOULD NOT GET HERE!!! 404 \n\n");
+		dprintf(2, "\n\n cmd_array is null \n\n");
 		free_array(cmd_array);
 		free_data(data, NULL, &data->envll, NULL);
 		exit (-1);
 	}
-	if (ft_strchr(cmd_array[0], '/') == NULL)
-		path = loop_path_for_binary(cmd_array[0], data->binary_paths);
+	if (ft_strchr(cmd_array[0], '/') == NULL) // path should probably be defined before
+	{ // we should probably loop through the array to find the executable to then  check if it has a path
+		dprintf(2, "cmd_array[0] is: %s\n", cmd_array[0]);
+		path = loop_path_for_binary(cmd_array[0], data->binary_paths); // this ain't gonna work
+		dprintf(2, "path in the if clause: %s\n", path);
+	}
 	else
+	{
 		path = abs_path(cmd_array[0]);
+		dprintf(2, "path in the else clause: %s\n", path);
+	}
 	if (!path)
 	{
+		dprintf(2, "path is null\n");
 		free_data(data, NULL, &data->envll, cmd_array);
 		exit (1);
 	}
+	dprintf(2, "OUTPUT:\n\n\n\n");
 	if (execve(path, cmd_array, data->env) == -1)	
 	{
 		perror("execve");
