@@ -61,7 +61,7 @@ int	how_many_children(t_token *token)
 int	err_msg(char *obj, char *msg, int err_code)
 {
 	if (*obj && *msg)
-		printf("%s: %s", obj, msg);
+		printf("%s: %s\n", obj, msg);
 	else if (!obj && *msg)
 		printf("%s\n", msg);
 	return (err_code);

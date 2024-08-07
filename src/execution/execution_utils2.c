@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils2.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 14:19:20 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/05 10:37:13 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/07 13:20:54 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	dup_fds(t_data *data, int child, int fd_flag, char *file)
 {
-	dprintf(2, "status of redir flag:%d\n", fd_flag);
+	//dprintf(2, "status of redir flag:%d\n", fd_flag);//debug
 	if (fd_flag == REDIRECT_IN)
 	{
 		open_fdin(data, file);
