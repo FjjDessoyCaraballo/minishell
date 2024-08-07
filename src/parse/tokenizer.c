@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:34:16 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/07 03:06:45 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/07 11:39:20 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,10 +171,10 @@ int line_tokenization(t_data *data)
         current_token->prev = prev_token;
         current_token->value = ft_strdup(data->vtoken);
         //expand_token_if_needed(current_token, data);
-        //if (chunky_checker(current_token->value, current_token, data) == FAILURE)
-            //return FAILURE;
-        //if (check_and_handle_echo(current_token, &prev_token, data->deli, data) == FAILURE)
-            //return FAILURE;
+        if (chunky_checker(current_token->value, current_token, data) == FAILURE)
+            return FAILURE;
+        if (check_and_handle_echo(current_token, &prev_token, data->deli, data) == FAILURE)
+            return FAILURE;
         data->vtoken = ft_strtok(NULL, data->deli, data, current_token);
         if (data->status == 4)
             return FAILURE;

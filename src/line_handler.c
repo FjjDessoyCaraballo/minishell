@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 12:23:49 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/08/07 03:28:52 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/07 11:39:21 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int sniff_line(t_data *data)
 	
     if (line_tokenization(data) == FAILURE)// Tokenize the input line
 		return FAILURE;
-    t_token *token = data->token;
+    /*t_token *token = data->token;
     while (token != NULL)// Process each token with chunky_checker
     {
         if (chunky_checker(token->value, token, data) == FAILURE)
@@ -62,12 +62,11 @@ int sniff_line(t_data *data)
 			return FAILURE;
 		
         token = token->next;
-    }
+    }*/
     if (syntax_check(data->token) == 2)// Perform syntax check on the token list
 		return 2;
     parse_token(data->token);// Parse the token
     
-
     return 0;
 }
 
