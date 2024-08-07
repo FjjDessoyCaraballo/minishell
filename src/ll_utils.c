@@ -75,5 +75,6 @@ void	free_ll(t_env *env_ll)
 		tmp = env_ll;
 		env_ll = env_ll->next;
 		free(tmp);
+		tmp = NULL;
 	}
 }

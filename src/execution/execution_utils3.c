@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 10:19:57 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/05 10:00:39 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/06 15:18:55 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,8 @@ char	**cl_to_array(t_token *token)
 	char	*tmp;
 	int		i;
 	int		nb_of_instructions;
-	nb_of_instructions = how_many_tokens(token);
+	
+	nb_of_instructions = count_token(token, PIPE) + 1;
 	pipe_array = (char **)malloc(sizeof(char *) * (nb_of_instructions + 1));
 	if (!pipe_array)
 		return (NULL);
@@ -59,21 +60,22 @@ char	**cl_to_array(t_token *token)
  			tmp = ft_strjoin(instruction, " ");
 			if (!tmp)
 				return (NULL);
-			free(instruction);
-			instruction = tmp;
-			head = head->next;
-		}
-		if (instruction[ft_strlen(instruction) - 1] == ' ')
-			instruction[ft_strlen(instruction) - 1] = '\0';
-		pipe_array[i++] = ft_strdup(instruction);
-		if (!pipe_array[i - 1])
-			return (NULL);
-		if (head && head->type == PIPE)
-			head = head->next;
-	}
-	free(instruction);
-	pipe_array[i] = NULL;
-	return (pipe_array);
+            free(instruction);
+            instruction = tmp;
+            head = head->next;
+        }
+        if (instruction[ft_strlen(instruction) - 1] == ' ')
+            instruction[ft_strlen(instruction) - 1] = '\0';
+        pipe_array[i++] = ft_strdup(instruction);
+        if (!pipe_array[i - 1])
+            return (NULL);
+        if (head && head->type == PIPE)
+            head = head->next;
+    }
+    free(instruction);
+	instruction = NULL;
+    pipe_array[i] = NULL;
+    return (pipe_array);
 }
 
 /** checking_access() is mainly a last check for general binaries that
@@ -88,7 +90,7 @@ char	**cl_to_array(t_token *token)
  * FAILURE is returned, it means that your binary cannot be found in the
  * general concatenated paths in the environment pointers.
  */
-int	checking_access(t_data *data, char *instruction)
+int	checking_access(t_data *data, char *instruction, int child)
 {
 	int		i;
 	char	*binary_path;
@@ -96,6 +98,7 @@ int	checking_access(t_data *data, char *instruction)
 	
 	i = 0;
 	binary = get_binary(instruction);
+	dprintf(2, "\nThe binary in child %i is: %s\n\n", child, binary);
 	while (data->binary_paths[i++])
 	{
 		binary_path = ft_strsjoin(data->binary_paths[i], binary, '/');
@@ -141,57 +144,26 @@ int	checking_access(t_data *data, char *instruction)
  */
 char	*get_binary(char *instruction)
 {
-	char	**split_instruction;
-	char	*binary;
+	char		**split_instruction;
+	static char	*binary;
+	int			index;
 
+	index = 0;
 	split_instruction = ft_split(instruction, ' ');
 	if (!split_instruction)
 		return (NULL);
-	if (!ft_strcmp(instruction, "<"))
-		binary = ft_strdup(split_instruction[3]);
+	if (!ft_strcmp(split_instruction[0], "<"))
+		binary = ft_strdup(split_instruction[2]);
 	else
 		binary = ft_strdup(split_instruction[0]);
 	if (!binary)
 	{
+		dprintf(2, "\nwe got an empty binary at get_binary\n\n");
 		free_array(split_instruction);
 		return (NULL);
 	}
 	free_array(split_instruction);
 	return (binary);
-}
-
-/**
- * Here we want to filter out the file, if there is one. At this point we
- * should surely have an infile, and maybe an outfile. It is not completely
- * necessary that we have an outfile, because when we open fd_out in the data
- * structure there will be an option to create a file of the users choosing.
- * This does not mean that the redirection will work without an argument, so
- * it is necessary that the user has inputted a name of a file to be created.
- * 
- * Return value: upon completion, the function will return with the name of the
- * file that was requested. In case of failure, the  function returns NULL.
- */
-char	*find_file(char *instruction, int redirect_flag)
-{
-	char	*file;
-	char	**filter;
-
-	filter = ft_split(instruction, ' ');
-	if (!filter)
-		return (NULL);
-	if (redirect_flag == REDIRECT_IN)
-	{
-		file = ft_strdup(filter[1]);
-		free_array(filter);
-		return (filter[2]);
-	}
-	else if (redirect_flag == REDIRECT_OUT)
-	{
-		file = ft_strdup(filter[3]);
-		free_array(filter);
-		return (file);
-	}
-	return (NULL);
 }
 
 char	*abs_path(char *command)
@@ -207,47 +179,3 @@ char	*abs_path(char *command)
 	}
 	return (NULL);
 }
-
-
-// char **cl_to_array(t_token *token)
-// {
-// 	t_token *head;
-// 	char	**pipe_array;
-// 	char	*instruction;
-// 	char	*tmp;
-// 	int		i;
-// 	int		nb_of_instructions;
-	
-// 	nb_of_instructions = how_many_tokens(token);
-// 	pipe_array = (char **)malloc(sizeof(char *) * (nb_of_instructions + 1));
-// 	if (!pipe_array)
-// 		return (NULL);
-// 	i = 0;
-// 	head = token;
-// 	instruction = ft_strdup("");
-// 	if (!instruction)
-// 		return (NULL);
-	
-// 	while (head)
-// 	{
-// 		while (head->type != PIPE)
-// 		{
-// 			printf("head->value: %s\ninstruction: %s\n", head->value, instruction);
-// 			tmp = ft_strjoin(instruction, head->value);
-// 			if (!tmp)
-// 				return (NULL);
-// 			free(instruction);
-// 			instruction = ft_strjoin(tmp, " ");
-// 			if (!instruction)
-// 				return (NULL);
-// 			free(tmp);
-// 			pipe_array[i++] = ft_strdup(instruction);
-// 			head = head->next;
-// 		}
-// 		head = head->next; // jumping over the pipe to next command
-// 		free(instruction);
-// 	}
-// 	printf("we are getting here\n");
-// 	pipe_array[i] = NULL;
-// 	return (pipe_array);
-// }

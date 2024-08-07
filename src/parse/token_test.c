@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_test.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lstorey <lstorey@student.42.fr>            +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:34:10 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/05 12:41:04 by lstorey          ###   ########.fr       */
+/*   Updated: 2024/08/06 16:29:55 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ void print_tokens(t_data *data)
         printf("token value:[%s]\n", token->value);
         printf("token type:[%i]\n", token->type);
         printf("id:[%i]\n", token->id);
+        printf("expand:[%i]\n",token->expand);
         if(token->echo == true || data->echoed == true) 
             printf("echo?:[%d]\n",token->echo);
 		if(token->path != NULL)

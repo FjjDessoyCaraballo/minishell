@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lstorey <lstorey@student.42.fr>            +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:33:43 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/05 13:58:36 by lstorey          ###   ########.fr       */
+/*   Updated: 2024/08/05 10:39:11 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ char	*loop_path_for_binary(char *binary, char **paths)
 	int		i;
 
 	i = 0;
-	while (paths[i])
+	while (paths && paths[i])
 	{
 		token_with_path = ft_strsjoin(paths[i], binary, '/');
 		if (!access(token_with_path, F_OK))
@@ -32,6 +32,41 @@ char	*loop_path_for_binary(char *binary, char **paths)
 		i++;
 	}
 	return (NULL);
+}
+
+int	check_binary_locally(char *binary, char *path)
+{
+	char	*binary_with_path;
+
+	binary_with_path = ft_strsjoin(path, binary, '/');
+	if (!access(binary_with_path, F_OK))
+	{
+		if (!access(binary_with_path, X_OK))
+		{
+			free(binary_with_path);
+			return (SUCCESS);
+		}
+	}
+	free(binary_with_path);
+	return (FAILURE);
+}
+
+int	is_file(char *binary, char *path)
+{
+	char	*file_with_path;
+
+	file_with_path = ft_strsjoin(path, binary, '/');
+	if (!access(file_with_path, F_OK))
+	{
+		if (!access(file_with_path, X_OK))
+		{
+			free(file_with_path);
+			return (FAILURE);
+		}
+		free(file_with_path);
+		return (SUCCESS);
+	}
+	return (FAILURE);
 }
 
 char	*ft_strndup(const char *s, size_t n)
@@ -52,6 +87,23 @@ char	*ft_strndup(const char *s, size_t n)
 	return (res);
 }
 
+// int	how_many_tokens(t_token *token)  DEPRECATED
+// {
+// 	t_token *head;
+// 	int		count;
+
+// 	count = 0;
+// 	head = token;
+// 	while (head)
+// 	{
+// 		if (token->type == PIPE)
+// 			head = head->next;
+// 		count++;
+// 		head = head->next;	
+// 	}
+// 	return (count);
+// }
+
 int	count_token(t_token *token, t_type type)
 {
 	t_token	*head;
@@ -66,11 +118,4 @@ int	count_token(t_token *token, t_type type)
 		head = head->next;	
 	}
 	return (count);
-}
-
-int	ft_argument_check(char *token, t_token *current_token)
-{
-	current_token->value = token;
-	current_token->type = ARGUMENT;
-	return (SUCCESS);
 }

@@ -23,4 +23,5 @@ void	free_array(char **array)
 		i++;
 	}
 	free(array);
+	array = NULL;
 }
