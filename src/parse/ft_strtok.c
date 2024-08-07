@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:34:00 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/06 20:00:30 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/06 22:57:25 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,14 +50,13 @@ int ft_strlencount(const char *str, char c, int numtof)
 
 char *remove_quotes(const char *str)
 {
-    int i, j;
-    int len = strlen(str);
-    //int new_len = 0;
+    int i;
+    int j;
+    int len = ft_strlen(str);
     char *new_str = NULL;
     char *temp_str = NULL;
 
-    // Allocate space for the result
-    new_str = (char *)malloc(len + 1); // Max possible length
+    new_str = (char *)malloc(len + 1); // Max possible length, Allocate space for the result
     if (!new_str)
         return NULL;
 
@@ -67,36 +66,24 @@ char *remove_quotes(const char *str)
     {
         if (str[i] == '"' || str[i] == '\'')
         {
-            // Skip the opening quote
-            char quote_char = str[i];
+            char quote_char = str[i];// Skip the opening quote
             i++;
             while (str[i] && str[i] != quote_char)
-            {
-                // Append characters between quotes
-                new_str[j++] = str[i++];
-            }
+                new_str[j++] = str[i++];// Append characters between quotes
             if (str[i] == quote_char)
-            {
-                // Skip the closing quote
-                i++;
-            }
+                i++;// Skip the closing quote
         }
         else
-        {
-            // Copy characters outside of quotes
-            new_str[j++] = str[i++];
-        }
+            new_str[j++] = str[i++];// Copy characters outside of quotes
     }
     new_str[j] = '\0'; // Null-terminate the new string
-
-    // Allocate and copy the final cleaned string
-    temp_str = (char *)malloc(j + 1);
+    temp_str = (char *)malloc(j + 1);// Allocate and copy the final cleaned string
     if (!temp_str)
     {
         free(new_str);
         return NULL;
     }
-    memcpy(temp_str, new_str, j + 1);
+    ft_memcpy(temp_str, new_str, j + 1);
     free(new_str); // Free the old string
 
     return temp_str;
