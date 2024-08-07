@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 15:26:27 by fdessoy-          #+#    #+#             */
 /*   Updated: 2024/08/06 10:04:11 by fdessoy-         ###   ########.fr       */
@@ -118,7 +118,6 @@ int	export(t_token *token, t_env **env_ll)
 int	print_export(t_env **env_ll)
 {
 	char	**env_array;
-	// int		i;
 
 	if (!env_ll || !*env_ll)
 		return (SUCCESS);
@@ -126,13 +125,6 @@ int	print_export(t_env **env_ll)
 	if (!env_array)
 		return (SUCCESS);
 	alphabetical_printer(env_array);
-	// i = 0;
-	// while (env_array[i])
-	// {
-	// 	printf("declare -x ");
-	// 	printf("%s\n", env_array[i]);
-	// 	i++;
-	// }
 	free_array(env_array);
 	return (SUCCESS);
 }

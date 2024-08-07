@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   token.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 11:35:39 by lstorey           #+#    #+#             */
 /*   Updated: 2024/08/05 11:41:17 by fdessoy-         ###   ########.fr       */
@@ -15,44 +15,48 @@
 
 # include "minishell.h"
 # include <stdbool.h>
-
-typedef struct s_data	t_data;
-typedef struct s_env	t_env;
+typedef struct s_data t_data;
+typedef struct s_env t_env;
 /*******************************************
  * enum assign types
- * 0. echo,cd,pwd...
- * 1. PATH=,ls, grep, chmod...
- * 2. $HOME, "Hello world"...
- * 3. |
- * 4. <,>,<<,>>
- * 5. flags, -n , -l, --version
+ * 1. echo,cd,pwd...
+ * 2. PATH=,ls, grep, chmod...
+ * 3. , "Hello world"...
+ * 4. |
+ * 5. -n -l
+ * 6. if it's an environment variable(probably gonna remove it)
+ * 7. redirection input (<)
+ * 8. redirection output (>)
+ * 9. heredoc (<<)
+ * 10. append (>>)
  * 404. not found (default).
  ********************************************/
-typedef enum e_type
-{
+
+typedef	enum e_type{
 	BUILTIN = 1,
 	COMMAND = 2,
 	ARGUMENT = 3,
 	PIPE = 4,
-	FLAG = 6,
-	ENVVAR = 7,
-	RED_IN = 8,
-	RED_OUT = 9,
-	HEREDOC = 10,
-	APPEND = 11,
+	FLAG = 5,
+	ENVVAR = 6,
+	RED_IN = 7,
+	RED_OUT = 8,
+	HEREDOC = 9,
+	APPEND = 10,
 	UNKNOWN = 404,
 }			t_type;
 
 /*******************************************
- * type = takes from the enum above
- * value = shows the exact value of the type
- * id = index of the token
- * next = points to the next token
+ * type = takes from the enum above.
+ * value = shows the exact value of the type.
+ * id = index of the token.
+ * expand = if token is gonna expands or not.
+ * echo = if the token is part of token.
+ * next = points to the next token.
  * prev = points to the previous token.
  *******************************************/
 
-typedef struct s_token
-{
+typedef struct s_token{
 	t_type			type;
 	char			*value;
 	char			*path;
@@ -60,7 +64,7 @@ typedef struct s_token
 	bool			expand;
 	bool			echo;
 	struct s_token	*next;
-	struct s_token	*prev;
+	struct s_token  *prev;
 }		t_token;
 
 /*****************************************
@@ -83,9 +87,9 @@ int    parse_token(t_token *token);
 /*****************************************
  * src/parse/expand_env.c
  *****************************************/
-char *expand_env_variable(const char *input, size_t *i, t_data *data, size_t *new_len);
-void copy_env_value(char *result, const char *env_value, size_t *j, const char *var_name);
-char *expand_env_variables(const char *input, t_data *data);
+char 	*expand_env_variable(const char *input, size_t *i, t_data *data, size_t *new_len);
+void 	copy_env_value(char *result, const char *env_value, size_t *j);
+char 	*expand_env_variables(const char *input, t_data *data);
 
 /*****************************************
  * in src/parse/ft_strtok.c
@@ -93,11 +97,18 @@ char *expand_env_variables(const char *input, t_data *data);
 char	*ft_strtok(char *str, const char *delim, t_data *data, t_token *cur_tok);
 int		ft_charinstr(char c, const char *str);
 int		ft_strcmp(char *s1, char *s2);
+char 	*remove_quotes(const char *str);
+
+/*****************************************
+ * in src/parse/echo.c
+ *****************************************/
+void 	echoing(t_token *current_token, t_token **prev_token, const char *delimiters, t_data *data);
+char 	*concatenate_echo_args(t_token *current_token, const char *delimiters, t_data *data);
 
 /*****************************************
  * in src/parse/init_token.c
  *****************************************/
-t_token	*init_token(void);
+t_token	*init_token();
 
 /*****************************************
  * in src/parse/chunky_check.c
@@ -105,7 +116,8 @@ t_token	*init_token(void);
 int		ft_builtin_check(char *token, t_token *current_token, char **builtins);
 int		ft_command_check(char *token, t_token *current_token, t_data *data);
 int		ft_pipe_check(char *token, t_token *current_token);
-int		redirect_op_check(char *token, t_token *current_token, char **redirect);
+int		ft_redirect_op_check(char *token, t_token *current_token, char **redirect);
+int		ft_argument_check(char *token, t_token *current_token);
 
 /*****************************************
  * in src/parse/token_test.c

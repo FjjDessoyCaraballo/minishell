@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   line_handler.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 12:23:49 by walnaimi          #+#    #+#             */
 /*   Updated: 2024/08/05 11:20:49 by fdessoy-         ###   ########.fr       */
@@ -19,7 +19,7 @@
  */
 int	sniff_line(t_data *data)
 {
-	data->line_read = readline("\e[45m[I can't believe it's not shell]\e[0m ");
+	data->line_read = readline("\e[45m[Happy birhday Felipe 🥳]\e[0m ");
 	if (!data->line_read)
 		return (NULL_LINE);
 	if (data->line_read || *data->line_read)
