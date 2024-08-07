@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lstorey <lstorey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:33:43 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/05 10:03:42 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/05 13:58:36 by lstorey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ char	*ft_strndup(const char *s, size_t n)
 	return (res);
 }
 
-int	how_many_tokens(t_token *token)
+int	count_token(t_token *token, t_type type)
 {
 	t_token	*head;
 	int		count;
@@ -61,10 +61,9 @@ int	how_many_tokens(t_token *token)
 	head = token;
 	while (head)
 	{
-		if (token->type == PIPE)
-			head = head->next;
-		count++;
-		head = head->next;
+		if (token->type == type)
+			count++;
+		head = head->next;	
 	}
 	return (count);
 }

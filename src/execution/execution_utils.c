@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lstorey <lstorey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 15:29:42 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/05 10:01:37 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/05 13:50:10 by lstorey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ int	how_many_children(t_token *token)
 			cmds++;
 		tmp = tmp->next;
 	}
-	
 	tmp = NULL;
 	return (cmds + 1);
 }

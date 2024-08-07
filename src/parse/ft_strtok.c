@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strtok.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lstorey <lstorey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:34:00 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/05 10:05:41 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/05 12:14:39 by lstorey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,7 +147,7 @@ char *remove_quotes(const char *str)
         free(new_str);
         return NULL;
     }
-    memcpy(temp_str, new_str, j + 1);
+    memcpy(temp_str, new_str, j + 1); // Need to change to ft_ verion
     free(new_str); // Free the old string
 
     return temp_str;

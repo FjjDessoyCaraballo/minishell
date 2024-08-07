@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lstorey <lstorey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/05 10:01:23 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/05 13:59:36 by lstorey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,14 @@ int	execution(t_data *data, t_env **env_ll)
 	t_token	*token;
 
 	token = data->token;
+	// token_printer(token);
 	data->nb_cmds = how_many_children(token);
-	// int i = 0;
-	// while (head) // this is for debugging
-	// {
-	// 	printf("token: [%i][%s] type: [%i]\n", i, head->value, head->type);
-	// 	head = head->next;
-	// }
+	/*CREATE ONE FUNCTION FOR SINGLE OF MULIPLE PIPIES*/
+
+	if (find_token(token, PIPE) == NULL && find_token(token, BUILTIN) && count_token(token, BUILTIN)_== 1)
+
+
+
 	if (data->nb_cmds == 1 && !search_token_type(token, PIPE))
 		data->status = single_execution(data, token, env_ll);
 	else
@@ -64,14 +65,19 @@ int	execution(t_data *data, t_env **env_ll)
 int	multiple_cmds(t_data *data, t_token *token, t_env **env_ll)
 {
 	static pid_t	pids;
+	static char		**cmd_a;
 
-	data->cmd_a = cl_to_array(token);
-	if (!data->cmd_a)
+	if (find_token(token, PIPE) != NULL)
+		cmd_a = ttad(token, PIPE); //Needs to be token to array, should take token and delimiter
+	else
+		cmd_a = ttad(token, 0);
+	if (!cmd_a)
 		return (FAILURE);
 	data->env = env_arr_updater(env_ll);
 	if (!data->env)
 		return (FAILURE);
 	data->status = child_action(data, env_ll, data->cmd_a, pids);
+	printf("here\n");
 	close_fds(data);
 	pids = wait(&data->status);
 	while (pids > 0)

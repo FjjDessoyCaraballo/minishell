@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lstorey <lstorey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 11:35:39 by lstorey           #+#    #+#             */
-/*   Updated: 2024/08/05 09:58:14 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/05 13:59:09 by lstorey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,8 +118,9 @@ void	print_cmd(char **cmd_a);
  *****************************************/
 char	*loop_path_for_binary(char *binary, char **paths);
 char	*ft_strndup(const char *s, size_t n);
-int		how_many_tokens(t_token *token);
+// int		how_many_tokens(t_token *token);
 int		ft_argument_check(char *token, t_token *current_token);
+int		count_token(t_token *token, t_type type);
 
 /*****************************************
  * in src/parse/freedom.c
