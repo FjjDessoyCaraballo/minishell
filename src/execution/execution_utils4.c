@@ -12,17 +12,6 @@
 
 #include "../../includes/minishell.h"
 
-static void	line_printer(char **array)
-{
-	int i = 0;
-
-	while (array[i])
-	{
-		dprintf(2, "array[%i]: %s\n", i, array[i]);
-		i++;
-	}
-}
-
 /**
  * Its necessary to know which redirection we have here and give back the
  * array organized in the usual fashion of "cmd -flag" for execution. We
@@ -40,7 +29,7 @@ static void	line_printer(char **array)
  * the commands that will be used in execve(). In case of any failures, the
  * function returns NULL.dprintf(2, "we got here\n");
  */
-char	**parse_instruction(char **cmd_array)
+char	**parse_instruction(t_data *data, char **cmd_array)
 {
 	int	index;
 	int	len;
@@ -55,7 +44,7 @@ char	**parse_instruction(char **cmd_array)
 		len++;
 		index++;
 	}
-	parsed_array = remove_redirect(cmd_array, len);
+	parsed_array = remove_redirect(data, cmd_array, len);
 	if (!parsed_array)
 	{
 		dprintf(2, "\n\n WE SHOULD NOT GET HERE!!! 404 \n\n");
@@ -74,32 +63,72 @@ char	**parse_instruction(char **cmd_array)
 	redirection and change order of stuff if it is an output
 	redirection.  Otherwhise we will feed the wrong arguments.
  */
-char	**remove_redirect(char **array, int len)
+char	**remove_redirect(t_data *data, char **array, int len)
 {
 	static char	**parsed_array;
+	int			array_index;
 	int			index;
-	int			i;
-	// static char	*cwd;
+	static char	*cwd;
 
-	i = 0;
-	// cwd = getcwd(NULL, 0);
-	index = 0;
 	parsed_array = (char **)malloc(sizeof(char *) * (len + 1));
 	if (!parsed_array)
 		return (NULL);
-	while (array[index])
+	// cwd = check_absolute_path(array);
+	cwd = getcwd(NULL, 0);
+	index = 0;
+	array_index = 0;
+	data->index = 0;
+	data->index++;
+	while (array[array_index])
 	{
-		if (!ft_strcmp(array[index], ">"))
-			index++;
-		parsed_array[i] = ft_strdup(array[index]);
-		if (!parsed_array[i])
+		if (!ft_strcmp(array[array_index], ">"))
+			array_index++;
+		parsed_array[index] = ft_strdup(array[array_index]);
+		if (!parsed_array[index])
 			return (NULL);
-		i++;
 		index++;
-	} // deal with input redirection syntax: everything after <
-	parsed_array[i] = NULL;
-	line_printer(parsed_array);
+		array_index++;
+	}
+	dprintf(2, "cwd: %s\n", cwd);
+/**
+ * use access() to see if its a file or executable to define who goes first
+ */
+	while (array[i])
+	{
+
+	}
+	if (file_or_executable(array) == FILE || file_or_executable(array) == EXECUTABLE)
+	{
+		if (file_or_executable(array) == FAILURE)
+			|| file_or_executable(array) == REDIRECT)
+			index++;
+		
+	}
+
+
+	parsed_array[index] = NULL;
 	return (parsed_array);
+}
+
+int	file_or_executable(char *element)
+{
+	int	i;
+
+	i = 0;
+
+		if (!ft_strcmp(element, ">")
+			|| !ft_strcmp(element, "<"))
+			return (REDIRECT);
+		if (!access(element, F_OK))
+		{
+			if (!access(element, X_OK))
+				return (EXECUTABLE);
+			return (FILE);
+		}
+		else
+		element;
+		i++;
+	return (FAILURE);
 }
 
 /*************************************************************
