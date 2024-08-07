@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 15:29:42 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/05 10:01:37 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/07 03:03:46 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,10 +57,14 @@ int	how_many_children(t_token *token)
 
 int	err_msg(char *msg, int err_code)
 {
-	if (*msg)
+	if (*msg && err_code == 2)
 	{
 		printf("Syntax error near unexpected token: ");
 		printf("`%s'\n", msg);
+	}
+	else if (*msg && err_code == 127) 
+	{
+		printf("%s: command not found\n", msg);
 	}
 	return (err_code);
 }
