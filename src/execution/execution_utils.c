@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 15:29:42 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/05 10:37:07 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/07 03:03:46 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,11 +54,15 @@ int	how_many_children(t_token *token)
 	return (cmds);
 }
 
+/**
+* This is our standard error printer.
+* NEVER NULL THE FIRST PARAMETER!
+*/
 int	err_msg(char *obj, char *msg, int err_code)
 {
-	if (*obj && msg != NULL)
-		printf("%s: ", obj);
-	if (*msg && msg != NULL)
+	if (*obj && *msg)
+		printf("%s: %s", obj, msg);
+	else if (!obj && *msg)
 		printf("%s\n", msg);
 	return (err_code);
 }
