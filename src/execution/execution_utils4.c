@@ -94,43 +94,43 @@ char	**remove_redirect(t_data *data, char **array, int len)
 /**
  * use access() to see if its a file or executable to define who goes first
  */
-	while (array[i])
-	{
+	// while (array[i])
+	// {
 
-	}
-	if (file_or_executable(array) == FILE || file_or_executable(array) == EXECUTABLE)
-	{
-		if (file_or_executable(array) == FAILURE)
-			|| file_or_executable(array) == REDIRECT)
-			index++;
+	// }
+	// if (file_or_executable(array) == FILE || file_or_executable(array) == EXECUTABLE)
+	// {
+	// 	if (file_or_executable(array) == FAILURE)
+	// 		|| file_or_executable(array) == REDIRECT)
+	// 		index++;
 		
-	}
+	// }
 
 
 	parsed_array[index] = NULL;
 	return (parsed_array);
 }
 
-int	file_or_executable(char *element)
-{
-	int	i;
+// int	file_or_executable(char *element)
+// {
+// 	int	i;
 
-	i = 0;
+// 	i = 0;
 
-		if (!ft_strcmp(element, ">")
-			|| !ft_strcmp(element, "<"))
-			return (REDIRECT);
-		if (!access(element, F_OK))
-		{
-			if (!access(element, X_OK))
-				return (EXECUTABLE);
-			return (FILE);
-		}
-		else
-		element;
-		i++;
-	return (FAILURE);
-}
+// 		if (!ft_strcmp(element, ">")
+// 			|| !ft_strcmp(element, "<"))
+// 			return (REDIRECT);
+// 		if (!access(element, F_OK))
+// 		{
+// 			if (!access(element, X_OK))
+// 				return (EXECUTABLE);
+// 			return (FILE);
+// 		}
+// 		else
+// 		element;
+// 		i++;
+// 	return (FAILURE);
+// }
 
 /*************************************************************
  ************************* DUMP ******************************
