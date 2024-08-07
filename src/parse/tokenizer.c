@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:34:16 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/07 11:39:20 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/07 15:27:16 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ int chunky_checker(char *token,t_token *current_token,t_data *data)
 {
 	if(ft_builtin_check(token, current_token, data->builtins) == SUCCESS) //current_token->id == 0 && 
 	{
+        data->cmd_ignore = true;
 		if (ft_strcmp(current_token->value, "echo") == SUCCESS)
 		{
 			data->echoed = true;
@@ -184,8 +185,8 @@ int line_tokenization(t_data *data)
             prev_token = current_token->prev;
         }
     }
-    if(current_token->value == NULL)
-        return FAILURE;
+    //if(current_token->value == NULL)
+        //return FAILURE;
     data->token = first_node;
     //print_tokens(data);//debug
     return SUCCESS;
