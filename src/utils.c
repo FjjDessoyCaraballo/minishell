@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 11:23:58 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/05 10:02:11 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/05 10:24:13 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,23 @@ void	free_data(t_data *data, char *path, t_env **env, char **command_array)
 	if (command_array)
 		free_array(command_array);
 	if (path)
+	{
 		free(path);
-	free(data);
+		path = NULL;
+	}
+}
+
+void	free_token(t_token *token)
+{
+	t_token	*tmp;
+	
+	while (token != NULL)
+	{
+		tmp = token;
+		token = token->next;
+		free(tmp);
+		tmp = NULL;
+	}
+	free(token);
+	token = NULL;
 }

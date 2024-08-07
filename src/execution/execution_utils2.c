@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 14:19:20 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/05 10:00:48 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/05 10:37:13 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 void	dup_fds(t_data *data, int child, int fd_flag, char *file)
 {
+	dprintf(2, "status of redir flag:%d\n", fd_flag);
 	if (fd_flag == REDIRECT_IN)
 	{
 		open_fdin(data, file);
@@ -79,14 +80,9 @@ void	exit_child(char *file, int err_code)
 	if (err_code == NO_FILE)
 		ft_putstr_fd("No such file or directory\n", 2);
 	else if (err_code == FILE_PERMISSION_DENIED)
-	{
 		ft_putstr_fd("Permission denied\n", 2);
-		err_code = 1;
-	}
 	else if (err_code == EISDIR)
-	{
 		ft_putstr_fd("Is a directory\n", 2);
-		err_code = 1;
-	}
+	err_code = 1;
 	exit(err_code);
 }

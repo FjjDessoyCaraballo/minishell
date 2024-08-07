@@ -46,39 +46,37 @@ int	how_many_children(t_token *token)
 	tmp = token;
 	while (tmp != NULL)
 	{
-		if (tmp->type == PIPE)
+		if (tmp->type == COMMAND)
 			cmds++;
 		tmp = tmp->next;
 	}
-	
 	tmp = NULL;
-	return (cmds + 1);
+	return (cmds);
 }
 
-int	err_msg(char *msg, int err_code)
+/**
+* This is our standard error printer.
+* NEVER NULL THE FIRST PARAMETER!
+*/
+int	err_msg(char *obj, char *msg, int err_code)
 {
-	if (*msg && err_code == 2)
-	{
-		printf("Syntax error near unexpected token: ");
-		printf("`%s'\n", msg);
-	}
-	else if (*msg && err_code == 127) 
-	{
-		printf("%s: command not found\n", msg);
-	}
+	if (*obj && *msg)
+		printf("%s: %s", obj, msg);
+	else if (!obj && *msg)
+		printf("%s\n", msg);
 	return (err_code);
 }
 
 void	close_fds(t_data *data)
 {
-	if (data->pipe_fd[0] != 0)
-		close(data->pipe_fd[0]);
-	if (data->pipe_fd[1] != 0)
-		close(data->pipe_fd[1]);
-	if (data->fd_in != 0)
-		close(data->fd_in);
-	if (data->fd_out != 0)
-		close(data->fd_out);
-	if (data->read_end != 0)
-		close(data->read_end);
+    if (data->pipe_fd[0] != 0)
+        close(data->pipe_fd[0]);
+    if (data->pipe_fd[1] != 0)
+        close(data->pipe_fd[1]);
+    if (data->fd_in != 0)
+        close(data->fd_in);
+    if (data->fd_out != 0)
+        close(data->fd_out);
+    if (data->read_end != 0)
+        close(data->read_end);
 }
