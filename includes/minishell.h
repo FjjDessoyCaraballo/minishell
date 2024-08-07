@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/06 16:27:35 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/07 00:37:23 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,7 @@ typedef struct s_data
 	int			id;
 	char		*vtoken;
 	const char *deli;
+	bool		cmd_ignore;
 	t_env		*envll;
 }	t_data;
 

@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 12:23:49 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/08/06 16:57:18 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/07 03:28:52 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
  * tokenizing afterwards. After tokenizing, we are using the tokens to check
  * for invalid inputs. More information in closed issue #19 in the repository.
  */
-int	sniff_line(t_data *data)
+/*int	sniff_line(t_data *data)
 {
 	data->line_read = readline("\e[45m[Happy birhday Felipe 🥳]\e[0m ");
 	if (!data->line_read)
@@ -26,11 +26,52 @@ int	sniff_line(t_data *data)
 		add_history(data->line_read);
 	data->echoed = false;
 	line_tokenization(data);
+	//a function that calls chunky_checker and check_and_handle_echo
 	if (syntax_check(data->token) == 2)
 		return (2);
 	parse_token(data->token);
 	return (0);
+}*/
+int sniff_line(t_data *data)
+{
+    data->line_read = readline("\e[45m[Happy birthday Felipe 🥳]\e[0m ");
+    if (!data->line_read)
+        return NULL_LINE;
+    if (*data->line_read)
+		add_history(data->line_read);
+
+	data->cmd_ignore = false;
+	data->echoed = false;
+	data->echo_flag = false;
+	
+    if (line_tokenization(data) == FAILURE)// Tokenize the input line
+		return FAILURE;
+    t_token *token = data->token;
+    while (token != NULL)// Process each token with chunky_checker
+    {
+        if (chunky_checker(token->value, token, data) == FAILURE)
+            return FAILURE;
+        token = token->next;
+    }
+    token = data->token;
+	
+    while (token != NULL)// Handle echo-specific logic (if needed)
+    {
+		//print_tokens(data);//debug
+        if (check_and_handle_echo(token, &data->token, data->deli, data) == FAILURE)
+			return FAILURE;
+		
+        token = token->next;
+    }
+    if (syntax_check(data->token) == 2)// Perform syntax check on the token list
+		return 2;
+    parse_token(data->token);// Parse the token
+    
+
+    return 0;
 }
+
+
 
 /**
  * As we run through the tokens (nodes in a linked list) we check
