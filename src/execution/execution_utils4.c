@@ -93,7 +93,7 @@ char	**remove_redirect(t_data *data, char **array, int len)
 /**
  * use access() to see if its a file or executable to define who goes first
  */
-	while (array[i])
+/*	while (array[i])
 	{
 
 	}
@@ -105,11 +105,11 @@ char	**remove_redirect(t_data *data, char **array, int len)
 		
 	}
 
-
+*/
 	parsed_array[index] = NULL;
 	return (parsed_array);
 }
-
+/*
 int	file_or_executable(char *element)
 {
 	int	i;
@@ -130,7 +130,7 @@ int	file_or_executable(char *element)
 		i++;
 	return (FAILURE);
 }
-
+*/
 /*************************************************************
  ************************* DUMP ******************************
  *************************************************************/
