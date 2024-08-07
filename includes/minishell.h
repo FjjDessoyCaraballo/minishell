@@ -46,21 +46,20 @@
 # define ERR "Error\n"
 # define MALLOC "Malloc failure\n"
 # define EXIT "Exit\n"
+# define NO_EXEC "command not found"
 # define REDIRECT_OUT 2
 # define REDIRECT_IN 1
 # define NO_FILE 100
-# define FILE 55
-# define EXECUTABLE 50
-# define REDIRECT 60
 # define SYNTAX "syntax error near unexpected token "
 # define NULL_LINE 5
 # define DIRECTORY 69
+# define FILE 55
+# define EXECUTABLE 56
 # define FILE_PERMISSION_DENIED 2
 # define PERMISSION_DENIED 126
 # define COMMAND_NOT_FOUND 127
 # define ERR_ARG "Wrong number of arguments, Karen\n"
 # define SUCCESS 0
-// # define PATH_MAX 1024
 # define FAILURE 1
 
 /*************************************************/
@@ -114,9 +113,9 @@ int		execution(t_data *data, t_env **env_ll);
 int		execution_prepping(t_data *data, t_token *token, t_env **env_ll);
 int		piping(t_data *data, t_env **env_ll, char **all_cmds, int pids);
 void	piped_execution(t_data *data, t_env **envll, char *instruction, int child);
-void	ft_exec(t_data *data, char **cmd_array, int redirect);
+void	ft_exec(t_data *data, char **cmd_array, int redirect, int child);
 
-/* in execution_utils.c */
+/* in execution_utils1.c */
 int		err_msg(char *obj, char *msg, int err_code);
 int		how_many_children(t_token *token);
 char	*access_path(char **path, char *cmd);
@@ -150,6 +149,9 @@ void	error_exit(int num);
 /* in utils.c */
 void	free_data(t_data *data, char *path, t_env **env, char **command_array);
 void	free_token(t_token *token);
+int		check_bin_local(char *binary);
+int		check_bin_path(char *binary, char **paths);
+int		is_file(char *binary, char *path);
 
 /* in line_handler.c */
 int		sniff_line(t_data *data);

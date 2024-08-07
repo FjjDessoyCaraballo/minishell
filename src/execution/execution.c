@@ -53,16 +53,13 @@ int	execution(t_data *data, t_env **env_ll)
 	token = data->token;
 	data->nb_cmds = how_many_children(token);
 	// token_printer(token);
-	if (data->nb_cmds >= 1)
-		data->status = execution_prepping(data, token, env_ll);
-	else
+	if (token->type == BUILTIN)
 	{
-		if (count_token(token, BUILTIN) == 1)
-		{
-			token = find_token(token, BUILTIN); // need to deal with possible garbage before the token
-			data->status = built_ins(data, token, env_ll);
-		}
+		token = find_token(token, BUILTIN); // need to deal with possible garbage before the token
+		data->status = built_ins(data, token, env_ll);
 	}
+	else
+		data->status = execution_prepping(data, token, env_ll);
 	return (data->status);
 }
 
@@ -180,7 +177,7 @@ void	piped_execution(t_data *data, t_env **envll, char *instr, int child)
 	dprintf(2, "redirect flag: %i || child: %i\n\n", redirect_flag, child);
 	dup_fds(data, child, redirect_flag, file);
 	close(data->pipe_fd[1]);
-	ft_exec(data, cmd_array, redirect_flag);
+	ft_exec(data, cmd_array, redirect_flag, child);
 }
 
 /**
@@ -197,13 +194,22 @@ void	piped_execution(t_data *data, t_env **envll, char *instr, int child)
  * 
  * [placeholder for more documentation]
  */
-void	ft_exec(t_data *data, char **cmd_array, int redirect) // child is here for debugging
+void	ft_exec(t_data *data, char **cmd_array, int redirect, int child) // child for debugging
 {
 	static char	*path;
 	
-	if (redirect != 0)
-		cmd_array = parse_instruction(data, cmd_array); // is returning garbage
-	line_printer(cmd_array);
+	// dprintf(2, "\n\n\n BEFORE PARSE_INSTRUCTION\n\n");
+	// line_printer(cmd_array);
+	// dprintf(2, "\n\n\n");
+	if (redirect > 0)
+		cmd_array = parse_instruction(data, cmd_array); // currently hanging
+	dprintf(2, "in child %i\n", child);
+	if (cmd_array)
+	{
+		dprintf(2, "\n\n\n AFTER PARSE_INSTRUCTION\n\n");
+		line_printer(cmd_array);
+		dprintf(2, "\n\n\n");
+	}
 	if (!cmd_array || !*cmd_array)
 	{
 		dprintf(2, "\n\n cmd_array is null \n\n");
@@ -228,7 +234,8 @@ void	ft_exec(t_data *data, char **cmd_array, int redirect) // child is here for 
 		free_data(data, NULL, &data->envll, cmd_array);
 		exit (1);
 	}
-	dprintf(2, "OUTPUT:\n\n\n\n");
+	dprintf(2, "path before execve: %s\n", path);
+	dprintf(2, "OUTPUT:\n\n");
 	if (execve(path, cmd_array, data->env) == -1)	
 	{
 		perror("execve");
@@ -236,4 +243,5 @@ void	ft_exec(t_data *data, char **cmd_array, int redirect) // child is here for 
 		exit(127);
 	}
 }
+
 

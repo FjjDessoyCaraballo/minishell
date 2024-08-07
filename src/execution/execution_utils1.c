@@ -54,11 +54,12 @@ int	how_many_children(t_token *token)
 	return (cmds);
 }
 
+
 int	err_msg(char *obj, char *msg, int err_code)
 {
-	if (*obj && msg != NULL)
-		printf("%s: ", obj);
-	if (*msg && msg != NULL)
+	if (*obj && *msg)
+		printf("%s: %s\n", obj, msg);
+	else if (!obj && *msg)
 		printf("%s\n", msg);
 	return (err_code);
 }

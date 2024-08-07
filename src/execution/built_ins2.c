@@ -48,6 +48,7 @@ int	shell_cd(t_token *token, t_data *data)
 
 	if (token->next == NULL)
 	{
+		dprintf(2, "we have fallen into the first clause of shell_cd\n");
 		chdir(data->home_pwd);
 		return (SUCCESS);
 	}
@@ -58,11 +59,15 @@ int	shell_cd(t_token *token, t_data *data)
 	{
         free(curr_pwd);
 		curr_pwd = NULL;
-		ft_putstr_fd("The path ahead is block by nothingness\n", 2);
+		ft_putstr_fd("The path ahead is blocked by nothingness\n", 2);
 		return (FAILURE);
 	}
 	new_pwd = ft_strsjoin(curr_pwd, token->value, '/');
-	chdir(new_pwd);
+	if (chdir(new_pwd) < 0)
+	{
+		dprintf(2, "we done fuck up\n");
+		return (FAILURE);
+	}
 	return (SUCCESS);
 }
 
