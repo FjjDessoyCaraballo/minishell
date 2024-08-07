@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:34:16 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/06 17:38:47 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/07 11:39:20 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,11 @@ int chunky_checker(char *token,t_token *current_token,t_data *data)
 		if (ft_strcmp(current_token->value, "echo") == SUCCESS)
 		{
 			data->echoed = true;
-			data->echo_flag = false;
+			data->echo_flag = true;
 		}
 		return(SUCCESS);
 	}
-	else if(data->echo_flag)
+	else if(data->echo_flag && ft_strcmp(current_token->value, "-n") == SUCCESS)
 	{
 		current_token->type = FLAG;
 		current_token->value = "-n";
@@ -38,6 +38,7 @@ int chunky_checker(char *token,t_token *current_token,t_data *data)
 	}
 	else if(ft_pipe_check(token, current_token) == SUCCESS)
 	{
+        data->cmd_ignore = false;
 		current_token->echo = false;
 		data->echoed = false;
 		return SUCCESS;
@@ -49,8 +50,9 @@ int chunky_checker(char *token,t_token *current_token,t_data *data)
 		return SUCCESS;
 	}
     
-	else if(data->echoed == false && (ft_command_check(token, current_token, data) == SUCCESS))	//(current_token->id == 0 || current_token->prev->type == PIPE) && 
+	else if(data->echoed == false && data->cmd_ignore == false && (ft_command_check(token, current_token, data) == SUCCESS))	//(current_token->id == 0 || current_token->prev->type == PIPE) && 
 		{
+            data->cmd_ignore = true;
             return SUCCESS;
         }
 
@@ -58,10 +60,10 @@ int chunky_checker(char *token,t_token *current_token,t_data *data)
 	{
 		if(current_token->id == 1 && current_token->prev->type == ARGUMENT)
         {
-            //printf("perhaps here\n");
-			return (FAILURE);
+            //printf("%s: command not found\n", current_token->prev->value);
+			data->cmd_ignore = true;
         }
-		else if(data->echoed == true)
+		if(data->echoed == true)
 			current_token->echo = true;
 		return SUCCESS;
 	}
@@ -182,6 +184,8 @@ int line_tokenization(t_data *data)
             prev_token = current_token->prev;
         }
     }
+    if(current_token->value == NULL)
+        return FAILURE;
     data->token = first_node;
     //print_tokens(data);//debug
     return SUCCESS;
