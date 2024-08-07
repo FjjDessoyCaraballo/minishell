@@ -118,21 +118,13 @@ int	export(t_token *token, t_env **env_ll)
 int	print_export(t_env **env_ll)
 {
 	char	**env_array;
-	//int		i;
 
 	if (!env_ll || !*env_ll)
 		return (SUCCESS);
 	env_array = env_arr_updater(env_ll);
 	if (!env_array)
 		return (SUCCESS);
-	//i = 0;
 	alphabetical_printer(env_array);
-	// while (env_array[i])
-	// {
-	// 	printf("declare -x ");
-	// 	printf("%s\n", env_array[i]);
-	// 	i++;
-	// }
 	free_array(env_array);
 	return (SUCCESS);
 }

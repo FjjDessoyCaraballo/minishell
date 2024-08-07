@@ -213,7 +213,7 @@ void	ft_exec(t_data *data, char **cmd_array, int redirect) // child is here for 
 	
 	if (redirect != 0)
 		cmd_array = parse_instruction(cmd_array); // is returning null
-	dprintf(2, "OUTPUT:\n\n\n\n")
+	dprintf(2, "OUTPUT:\n\n\n\n");
 	if (!cmd_array || !*cmd_array)
 	{
 		dprintf(2, "\n\n WE SHOULD NOT GET HERE!!! 404 \n\n");

@@ -76,14 +76,13 @@ char	**parse_instruction(char **cmd_array)
  */
 char	**remove_redirect(char **array, int len)
 {
-
 	static char	**parsed_array;
 	int			index;
 	int			i;
-	static char	*cwd;
+	// static char	*cwd;
 
 	i = 0;
-	cwd = getcwd(NULL, 0);
+	// cwd = getcwd(NULL, 0);
 	index = 0;
 	parsed_array = (char **)malloc(sizeof(char *) * (len + 1));
 	if (!parsed_array)
