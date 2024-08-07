@@ -204,6 +204,7 @@ void	ft_exec(t_data *data, char **cmd_array, int redirect) // child is here for 
 	if (redirect != 0)
 		cmd_array = parse_instruction(data, cmd_array); // is returning garbage
 	line_printer(cmd_array);
+
 	if (!cmd_array || !*cmd_array)
 	{
 		dprintf(2, "\n\n cmd_array is null \n\n");

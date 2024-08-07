@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:33:52 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/06 16:46:21 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/07 00:22:01 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,7 @@ int ft_command_check(char *token, t_token *current_token, t_data *data)
     if (current_token->type != UNKNOWN)
         return FAILURE;
     char **paths = ft_split(data->bin, ':');
-	//char **paths = data->binary_paths;
-	//print_binary_paths(data);
+
     char *executable_path = loop_path_for_binary(token, paths);
     if (executable_path != NULL)
     {
@@ -67,7 +66,6 @@ int ft_command_check(char *token, t_token *current_token, t_data *data)
             current_token->path = NULL;
             current_token->value = ft_strdup(executable_path);
         }
-
         current_token->type = COMMAND;
 		free_my_boi(paths);
         free(executable_path);  // Free the allocated path

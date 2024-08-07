@@ -70,7 +70,6 @@ char	**remove_redirect(t_data *data, char **array, int len)
 	int			index;
 	static char	*cwd;
 
-	
 	parsed_array = (char **)malloc(sizeof(char *) * (len + 1));
 	if (!parsed_array)
 		return (NULL);
