@@ -20,10 +20,11 @@ void	dup_fds(t_data *data, int child, int fd_flag, char *file)
 		dup2(data->fd_in, STDIN_FILENO);
 		close(data->fd_in);
 	}
-	else if (fd_flag == REDIRECT_OUT)
+	else if (fd_flag == REDIRECT_OUT && child != 0)
 	{
 		open_fdout(data, file);
-		dup2(STDOUT_FILENO, data->fd_out);
+		dup2(data->read_end, STDIN_FILENO);
+		dup2(data->fd_out, STDOUT_FILENO);
 		close(data->fd_out);
 	}
 	else

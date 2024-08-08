@@ -177,7 +177,6 @@ void	piped_execution(t_data *data, t_env **envll, char *instr, int child)
 	//dprintf(2, "\nflag 1: input redirection || flag 2: output redirection\n");//debug
 	//dprintf(2, "redirect flag: %i || child: %i\n\n", redirect_flag, child);//debug
 	dup_fds(data, child, redirect_flag, file);
-	close(data->pipe_fd[1]);
 	ft_exec(data, cmd_array, redirect_flag, child);
 }
 
