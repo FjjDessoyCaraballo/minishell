@@ -40,7 +40,7 @@
 # include <limits.h>
 
 /*************************************************/
-/* macros *****************************************/
+/* macros ****************************************/
 /*************************************************/
 # define ERR "Error\n"
 # define MALLOC "Malloc failure\n"
@@ -94,8 +94,6 @@ typedef struct s_data
 	bool		echoed;
 	bool		echo_flag;
 	bool		piped;
-	int			in_quotes;
-	int			quote;
 	char		*line_read;
 	int			id;
 	char		*vtoken;
