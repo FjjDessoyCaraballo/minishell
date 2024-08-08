@@ -14,24 +14,26 @@
 
 void	dup_fds(t_data *data, int child, int fd_flag, char *file)
 {
-	if (fd_flag == REDIRECT_IN)
+	if (fd_flag == REDIRECT_IN) // command has red in
 	{
 		open_fdin(data, file);
 		dup2(data->fd_in, STDIN_FILENO);
 		close(data->fd_in);
+		dup2(data->pipe_fd[1], STDOUT_FILENO);
 	}
-	else if (fd_flag == REDIRECT_OUT && child != 0)
+	else if (fd_flag == REDIRECT_OUT) // command has red out
 	{
 		open_fdout(data, file);
 		dup2(data->read_end, STDIN_FILENO);
+		// close(data->read_end);
 		dup2(data->fd_out, STDOUT_FILENO);
 		close(data->fd_out);
 	}
 	else
 	{
 		if (child == 0 && data->piped == true)
-			dup2(data->pipe_fd[0], STDIN_FILENO); // first child should not have its fd duped to a pipe, keep stdin
-		else if (data->piped == true)
+			dup2(data->pipe_fd[0], STDIN_FILENO);
+		else
 			dup2(data->read_end, STDIN_FILENO);
 	}
 	if (child != data->nb_cmds - 1)
@@ -39,6 +41,16 @@ void	dup_fds(t_data *data, int child, int fd_flag, char *file)
 	close(data->pipe_fd[0]);
 	close(data->pipe_fd[1]);
 }
+
+	// else
+	// {
+	// 	if (child == 0 && data->piped == true)
+	// 		dup2(data->pipe_fd[0], STDIN_FILENO);
+	// 	else
+	// 		dup2(data->read_end, STDIN_FILENO);
+	// }
+	// if (child != data->nb_cmds - 1)
+	// 	dup2(data->pipe_fd[1], STDOUT_FILENO);
 
 void	open_fdin(t_data *data, char *infile)
 {
@@ -64,7 +76,7 @@ void	open_fdin(t_data *data, char *infile)
 void	open_fdout(t_data *data, char *outfile)
 {
 	errno = 0;
-	data->fd_out = open(outfile, O_WRONLY | O_CREAT | O_APPEND, 0664);
+	data->fd_out = open(outfile, O_RDWR | O_CREAT | O_TRUNC, 0664);
 	if (errno == ENOENT)
 		exit_child(outfile, NO_FILE);
 	else if (errno == EACCES)

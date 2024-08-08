@@ -42,8 +42,6 @@ char	*loop_path_for_binary(char *binary, char **paths)
 	return (NULL);
 }
 
-
-
 char	*ft_strndup(const char *s, size_t n)
 {
 	char			*res;
@@ -71,9 +69,9 @@ int	count_token(t_token *token, t_type type)
 	head = token;
 	while (head)
 	{
-		if (token->type == type)
+		if (head->type == type)
 			count++;
-		head = head->next;	
+		head = head->next;
 	}
 	head = NULL;
 	return (count);

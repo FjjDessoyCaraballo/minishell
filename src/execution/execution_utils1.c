@@ -37,22 +37,22 @@ char	*access_path(char **path, char *cmd)
 	return (NULL);
 }
 
-int	how_many_children(t_token *token)
-{
-	int		cmds;
-	t_token	*tmp;
+// int	how_many_children(t_token *token) DEPRECATED
+// {
+// 	int		cmds;
+// 	t_token	*tmp;
 
-	cmds = 0;
-	tmp = token;
-	while (tmp != NULL)
-	{
-		if (tmp->type == COMMAND)
-			cmds++;
-		tmp = tmp->next;
-	}
-	tmp = NULL;
-	return (cmds);
-}
+// 	cmds = 0;
+// 	tmp = token;
+// 	while (tmp != NULL)
+// 	{
+// 		if (tmp->type == COMMAND)
+// 			cmds++;
+// 		tmp = tmp->next;
+// 	}
+// 	tmp = NULL;
+// 	return (cmds);
+// }
 
 /**
 * This is our standard error printer.

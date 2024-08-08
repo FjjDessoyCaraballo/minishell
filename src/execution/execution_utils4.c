@@ -48,7 +48,6 @@ char	**parse_instruction(t_data *data, char **cmd_array)
 		index++;
 	}
 	parsed_array = remove_redirect(data, cmd_array, len);
-	dprintf(2, "we are getting here\n");
 	if (!parsed_array)
 	{
 		dprintf(2, "\n\n received null parsed_array in parse_instruction \n\n");

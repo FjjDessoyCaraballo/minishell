@@ -123,11 +123,11 @@ int		execution(t_data *data, t_env **env_ll);
 int		execution_prepping(t_data *data, t_token *token, t_env **env_ll);
 int		piping(t_data *data, t_env **env_ll, char **all_cmds, int pids);
 void	piped_execution(t_data *data, t_env **envll, char *instruction, int child);
-void	ft_exec(t_data *data, char **cmd_array, int redirect, int child);
+void	ft_exec(t_data *data, char **cmd_array, int redirect);
 
 /* in execution_utils1.c */
 int		err_msg(char *obj, char *msg, int err_code);
-int		how_many_children(t_token *token);
+// int		how_many_children(t_token *token); DEPRECATED
 char	*access_path(char **path, char *cmd);
 void	close_fds(t_data *data);
 
