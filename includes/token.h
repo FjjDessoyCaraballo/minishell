@@ -98,7 +98,7 @@ char 	*expand_env_variables(const char *input, t_data *data);
 char	*ft_strtok(char *str, const char *delim, t_data *data, t_token *cur_tok);
 int		ft_charinstr(char c, const char *str);
 int		ft_strcmp(char *s1, char *s2);
-char 	*remove_quotes(const char *str);
+char *remove_quotes(const char *str, t_data *data);
 
 /*****************************************
  * in src/parse/echo.c
@@ -114,11 +114,26 @@ t_token	*init_token();
 /*****************************************
  * in src/parse/chunky_check.c
  *****************************************/
-int		ft_builtin_check(char *token, t_token *current_token, char **builtins);
+int		ft_builtin_check(char *token, t_token *current_token);
 int		ft_command_check(char *token, t_token *current_token, t_data *data);
 int		ft_pipe_check(char *token, t_token *current_token);
-int		ft_redirect_op_check(char *token, t_token *current_token, char **redirect);
+int		ft_redirect_op_check(char *token, t_token *current_token);
 int		ft_argument_check(char *token, t_token *current_token);
+
+/***************************************
+ * in src/parse/chunky_check_1.c
+ ***************************************/
+int check_builtin(char *token, t_token *current_token, t_data *data);
+int check_echo_flag(char *token, t_token *current_token, t_data *data);
+int check_flag(char *token, t_token *current_token, t_data *data);
+
+/***************************************
+ * in src/parse/chunky_check_2.c
+ ***************************************/
+int check_pipe(char *token, t_token *current_token, t_data *data);
+int check_redirect(char *token, t_token *current_token, t_data *data);
+int check_command(char *token, t_token *current_token, t_data *data);
+int check_argument(char *token, t_token *current_token, t_data *data);
 
 /*****************************************
  * in src/parse/token_test.c

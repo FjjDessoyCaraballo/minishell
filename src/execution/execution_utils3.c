@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils3.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 10:19:57 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/06 15:18:55 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/07 13:23:10 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,8 @@ int	checking_access(t_data *data, char *instruction, int child)
 	
 	i = 0;
 	binary = get_binary(instruction);
-	dprintf(2, "\nThe binary in child %i is: %s\n\n", child, binary);
+	(void)child;
+	//dprintf(2, "\nThe binary in child %i is: %s\n\n", child, binary);//debug
 	while (data->binary_paths[i++])
 	{
 		binary_path = ft_strsjoin(data->binary_paths[i], binary, '/');

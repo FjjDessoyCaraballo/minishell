@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 14:18:24 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/06 10:11:06 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/07 15:27:11 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 int	built_ins(t_data *data, t_token *token, t_env **env_ll)
 {
 	int	status;
-
 	status = 0;
 	data->home_pwd = get_home((*env_ll));
 	if (!ft_strncmp(token->value, "env", 3))
@@ -88,10 +87,14 @@ int	yodeling(t_token *token)
 		return (printf("\n"), SUCCESS);
 	if (head->next->type == FLAG)
 	{
-		head = head->next->next;
+		head = head->next;
+		while(head->type == FLAG)
+			head = head->next;
 		while (head != NULL)
 		{
 			printf("%s", head->value);
+			if(head->next != NULL)
+				printf(" ");
 			head = head->next;
 		}
 		return (SUCCESS);
@@ -101,8 +104,12 @@ int	yodeling(t_token *token)
 		head = head->next;
 		while (head != NULL)
 		{
-			printf("%s\n", head->value);
+			printf("%s", head->value);
 			head = head->next;
+			if(head != NULL)
+				printf(" ");
+			else if (head == NULL)
+				printf("\n");
 		}
 		return (SUCCESS);
 	}
