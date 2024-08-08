@@ -14,7 +14,6 @@
 
 void	dup_fds(t_data *data, int child, int fd_flag, char *file)
 {
-	//dprintf(2, "status of redir flag:%d\n", fd_flag);//debug
 	if (fd_flag == REDIRECT_IN)
 	{
 		open_fdin(data, file);
@@ -29,9 +28,9 @@ void	dup_fds(t_data *data, int child, int fd_flag, char *file)
 	}
 	else
 	{
-		if (child == 0)
-			dup2(data->pipe_fd[0], STDIN_FILENO);
-		else
+		if (child == 0 && data->piped == true)
+			dup2(data->pipe_fd[0], STDIN_FILENO); // first child should not have its fd duped to a pipe, keep stdin
+		else if (data->piped == true)
 			dup2(data->read_end, STDIN_FILENO);
 	}
 	if (child != data->nb_cmds - 1)

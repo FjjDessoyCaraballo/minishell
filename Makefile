@@ -25,7 +25,7 @@ SRC_FILES = main.c\
 			src/execution/built_ins.c\
 			src/execution/built_ins2.c\
 			src/execution/execution.c\
-			src/execution/execution_utils.c\
+			src/execution/execution_utils1.c\
 			src/execution/execution_utils2.c\
 			src/execution/execution_utils3.c\
 			src/execution/execution_utils4.c\
