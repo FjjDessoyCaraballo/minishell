@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: lstorey <lstorey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 15:26:27 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/06 10:04:11 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/08 12:16:58 by lstorey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void alphabetical_printer(char **env_array)
     j = 0;
     c = 'A';
 
-    while (c < 91)
+    while ((c > 64 && c < 91) || (c > 96 && c < 123))
     {
         while (env_array[i])
         {
@@ -75,6 +75,7 @@ int	export(t_token *token, t_env **env_ll)
 	int		count;
 	t_token	*head;
 
+	printf("here\n");
 	head = token;
 	count = 0;
 	if (!head->next)
@@ -106,7 +107,10 @@ int	export(t_token *token, t_env **env_ll)
 		(*env_ll) = ft_listnew(exp_list[i++]);
 	i = 0;
 	while (exp_list[i])
+	{
 		ft_listadd_back(env_ll, ft_listnew(exp_list[i++]));
+		printf("added to back.\n");
+	}
 	(*env_ll) = tmp;
 	tmp = NULL;
 	// free_array(exp_list);

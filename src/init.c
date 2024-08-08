@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lstorey <lstorey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 12:38:16 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/06 13:38:24 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/08 12:09:42 by lstorey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ void	ll_env(t_env **env_ll, char **env)
 	if (*env_ll == NULL)
 		*env_ll = ft_listnew(env[i++]);
 	tmp = (*env_ll);
+	i = 0;
 	while (env[i])
 		ft_listadd_back(env_ll, ft_listnew(env[i++]));
 	(*env_ll) = tmp;
