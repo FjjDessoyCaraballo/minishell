@@ -1,14 +1,14 @@
 total 176
-drwxrwxr-x 7 fdessoy fdessoy   4096 Aug  8 16:59 .
+drwxrwxr-x 7 fdessoy fdessoy   4096 Aug  8 17:01 .
 drwxrwxr-x 3 fdessoy fdessoy   4096 Aug  6 20:37 ..
 drwxrwxr-x 2 fdessoy fdessoy   4096 Aug  6 20:37 documentation
-drwxrwxr-x 8 fdessoy fdessoy   4096 Aug  8 12:24 .git
+drwxrwxr-x 8 fdessoy fdessoy   4096 Aug  8 16:59 .git
 drwxrwxr-x 2 fdessoy fdessoy   4096 Aug  8 11:50 includes
 -rw-rw-r-- 1 fdessoy fdessoy    265 Aug  8 16:32 infile
 drwxrwxr-x 6 fdessoy fdessoy   4096 Aug  8 15:37 libft
 -rw-rw-r-- 1 fdessoy fdessoy   1080 Aug  6 20:37 LICENSE
 -rw-rw-r-- 1 fdessoy fdessoy   2169 Aug  8 10:32 Makefile
--rwxrwxr-x 1 fdessoy fdessoy 133400 Aug  8 16:56 minishell
--rw-rw-r-- 1 fdessoy fdessoy      0 Aug  8 16:59 outfile
+-rwxrwxr-x 1 fdessoy fdessoy 133352 Aug  8 17:01 minishell
+-rw-rw-r-- 1 fdessoy fdessoy      0 Aug  8 17:02 outfile
 -rw-rw-r-- 1 fdessoy fdessoy   2148 Aug  6 20:37 README.md
 drwxrwxr-x 4 fdessoy fdessoy   4096 Aug  8 11:50 src

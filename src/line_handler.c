@@ -30,7 +30,7 @@ void setup(t_data *data)
 
 int sniff_line(t_data *data)
 {
-    data->line_read = readline("\e[45m[Happy birthday Felipe 🥳]\e[0m ");
+    data->line_read = readline("\e[45m[I can't believe this is not shell]\e[0m ");
     if (!data->line_read)
         return NULL_LINE;
     if (*data->line_read)
