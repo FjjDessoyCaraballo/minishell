@@ -50,16 +50,14 @@ int    execution(t_data *data, t_env **env_ll)
 {
     t_token    *token;
 
+	
 	token = data->token;
 	data->nb_cmds = how_many_children(token);
 	// token_printer(token);
-	if (token->type == BUILTIN)
-	{
-		token = find_token(token, BUILTIN); // need to deal with possible garbage before the token
-		data->status = built_ins(data, token, env_ll);
-	}
-	else
+	if (find_token(token, COMMAND))
 		data->status = execution_prepping(data, token, env_ll);
+	else
+		data->status = built_ins(data, token, env_ll);
 	return (data->status);
 }
 
@@ -103,9 +101,10 @@ int	piping(t_data *data, t_env **env_ll, char **all_cmds, int pids)
 			close(data->pipe_fd[1]);
 			return (err_msg(NULL, "Failed to fork\n", -1));
 		}
-		if (pids == 0) // child
+		
+		if (pids == 0)
 			piped_execution(data, env_ll, all_cmds[data->index], data->index);
-		else // parent
+		else
 		{	
 			close(data->pipe_fd[1]);
 			if (data->index > 0)
@@ -114,6 +113,7 @@ int	piping(t_data *data, t_env **env_ll, char **all_cmds, int pids)
 		}
 		data->index++;
 	}
+	
 	return (data->index);
 }
 
