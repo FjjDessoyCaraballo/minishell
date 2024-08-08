@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/06 15:20:12 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/07 14:13:50 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static void	line_printer(char **array)
 
 	while (array[i])
 	{
-		dprintf(2, "array[%i]: %s\n", i, array[i]);
+		//dprintf(2, "array[%i]: %s\n", i, array[i]);//debug
 		i++;
 	}
 }
@@ -46,9 +46,9 @@ static void	line_printer(char **array)
  ************************* DUMP ******************************
  *************************************************************/
 
-int	execution(t_data *data, t_env **env_ll)
+int    execution(t_data *data, t_env **env_ll)
 {
-	t_token	*token;
+    t_token    *token;
 
 	token = data->token;
 	data->nb_cmds = how_many_children(token);
@@ -175,8 +175,8 @@ void	piped_execution(t_data *data, t_env **envll, char *instr, int child)
 		free_ll(*envll);
 		exit(FAILURE);
 	}
-	dprintf(2, "\nflag 1: input redirection || flag 2: output redirection\n");
-	dprintf(2, "redirect flag: %i || child: %i\n\n", redirect_flag, child);
+	//dprintf(2, "\nflag 1: input redirection || flag 2: output redirection\n");//debug
+	//dprintf(2, "redirect flag: %i || child: %i\n\n", redirect_flag, child);//debug
 	dup_fds(data, child, redirect_flag, file);
 	close(data->pipe_fd[1]);
 	ft_exec(data, cmd_array, redirect_flag, child);
@@ -214,16 +214,16 @@ void	ft_exec(t_data *data, char **cmd_array, int redirect, int child) // child f
 	}
 	if (!cmd_array || !*cmd_array)
 	{
-		dprintf(2, "\n\n cmd_array is null \n\n");
+		//dprintf(2, "\n\n cmd_array is null \n\n");//debug
 		free_array(cmd_array);
 		free_data(data, NULL, &data->envll, NULL);
 		exit (-1);
 	}
 	if (ft_strchr(cmd_array[0], '/') == NULL) // path should probably be defined before
 	{ // we should probably loop through the array to find the executable to then  check if it has a path
-		dprintf(2, "cmd_array[0] is: %s\n", cmd_array[0]);
+		//dprintf(2, "cmd_array[0] is: %s\n", cmd_array[0]);//debug
 		path = loop_path_for_binary(cmd_array[0], data->binary_paths); // this ain't gonna work
-		dprintf(2, "path in the if clause: %s\n", path);
+		//dprintf(2, "path in the if clause: %s\n", path);//debug
 	}
 	else
 	{
@@ -232,7 +232,7 @@ void	ft_exec(t_data *data, char **cmd_array, int redirect, int child) // child f
 	}
 	if (!path)
 	{
-		dprintf(2, "path is null\n");
+		//dprintf(2, "path is null\n");//debug
 		free_data(data, NULL, &data->envll, cmd_array);
 		exit (1);
 	}

@@ -97,11 +97,22 @@ typedef struct s_data
 	int			in_quotes;
 	int			quote;
 	char		*line_read;
-	int			error;
 	int			id;
 	char		*vtoken;
 	const char *deli;
 	bool		cmd_ignore;
+	char		*ctoken;//ft_strtok
+	char		*cnew_token;//ft_strtok
+	int			quote;//ft_strtok
+	int			sindex;//ft_strtok
+	int			token_start;//ft_strtok
+	int			in_quotes;//ft_strtok
+	char		quote_char;//ft_strtok
+	size_t		len_t;
+	size_t		i_t;
+	size_t		j_t;
+	int			s_quote_o;
+	int			d_quote_o;
 	t_env		*envll;
 }	t_data;
 
