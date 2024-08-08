@@ -6,7 +6,7 @@
 /*   By: lstorey <lstorey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 10:19:57 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/08 13:01:41 by lstorey          ###   ########.fr       */
+/*   Updated: 2024/08/08 13:14:09 by lstorey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,7 +148,6 @@ char	*get_binary(char *instruction)
 	char		**split_instruction;
 	static char	*binary;
 
-	index = 0;
 	split_instruction = ft_split(instruction, ' ');
 	if (!split_instruction)
 		return (NULL);

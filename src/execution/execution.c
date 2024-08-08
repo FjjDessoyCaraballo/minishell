@@ -6,7 +6,7 @@
 /*   By: lstorey <lstorey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/08 13:07:33 by lstorey          ###   ########.fr       */
+/*   Updated: 2024/08/08 13:13:44 by lstorey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static int	token_printer(t_token *token)
 // 	return (SUCCESS);
 // }  // */
 
-static void	line_printer(char **array)
+/* static void	line_printer(char **array)
 {
 	int i = 0;
 
