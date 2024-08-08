@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils2.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lstorey <lstorey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 14:19:20 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/05 10:37:13 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/08 13:01:21 by lstorey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,17 +21,18 @@ void	dup_fds(t_data *data, int child, int fd_flag, char *file)
 		dup2(data->fd_in, STDIN_FILENO);
 		close(data->fd_in);
 	}
-	else if (fd_flag == REDIRECT_OUT)
+	else if (fd_flag == REDIRECT_OUT && child != 0)
 	{
 		open_fdout(data, file);
-		dup2(STDOUT_FILENO, data->fd_out);
+		dup2(data->read_end, STDIN_FILENO);
+		dup2(data->fd_out, STDOUT_FILENO);
 		close(data->fd_out);
 	}
 	else
 	{
-		if (child == 0)
-			dup2(data->pipe_fd[0], STDIN_FILENO);
-		else
+		if (child == 0 && data->piped == true)
+			dup2(data->pipe_fd[0], STDIN_FILENO); // first child should not have its fd duped to a pipe, keep stdin
+		else if (data->piped == true)
 			dup2(data->read_end, STDIN_FILENO);
 	}
 	if (child != data->nb_cmds - 1)

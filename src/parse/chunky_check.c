@@ -3,30 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   chunky_check.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: lstorey <lstorey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:33:52 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/06 16:46:21 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/08 13:05:39 by lstorey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	ft_builtin_check(char *token, t_token *current_token, char **builtins)
+int	ft_builtin_check(char *token, t_token *current_token)
 {
-	int i;
-	i = 0;
-	while(builtins[i] != NULL)
-	{
-		if(ft_strcmp(token, builtins[i]) == SUCCESS)
+	if(ft_strncmp(token,"echo", 5) == SUCCESS
+	|| ft_strncmp(token, "exit", 5) == SUCCESS
+	|| ft_strncmp(token, "pwd", 4) == SUCCESS
+	|| ft_strncmp(token, "cd", 3)== SUCCESS
+	|| ft_strncmp(token, "export", 7) == SUCCESS
+	|| ft_strncmp(token, "unset", 6) == SUCCESS
+	|| ft_strncmp(token, "env", 3) == SUCCESS)
 		{
 			current_token->value = ft_strdup(token);
 			current_token->type = BUILTIN;
 			return (SUCCESS);
 		}
-		i++;
-	}
-
 		return (FAILURE);
 }
 
@@ -46,16 +45,12 @@ void print_binary_paths(t_data *data)
 
 int ft_command_check(char *token, t_token *current_token, t_data *data)
 {
-    if (current_token->type != UNKNOWN)
-        return FAILURE;
     char **paths = ft_split(data->bin, ':');
-	//char **paths = data->binary_paths;
-	//print_binary_paths(data);
+
     char *executable_path = loop_path_for_binary(token, paths);
     if (executable_path != NULL)
     {
-        // Find the last '/' character to separate the path and name
-        char *last_slash = ft_strrchr(executable_path, '/');
+        char *last_slash = ft_strrchr(executable_path, '/');// Find the last '/' character to separate the path and name
         if (last_slash)
         {
             int path_len = last_slash - executable_path + 1;
@@ -67,7 +62,6 @@ int ft_command_check(char *token, t_token *current_token, t_data *data)
             current_token->path = NULL;
             current_token->value = ft_strdup(executable_path);
         }
-
         current_token->type = COMMAND;
 		free_my_boi(paths);
         free(executable_path);  // Free the allocated path
@@ -76,7 +70,6 @@ int ft_command_check(char *token, t_token *current_token, t_data *data)
 	free_my_boi(paths);
     return FAILURE;
 }
-
 
 int ft_pipe_check(char *token, t_token *current_token)
 {
@@ -89,26 +82,32 @@ int ft_pipe_check(char *token, t_token *current_token)
 	return(FAILURE);
 }
 
-int	ft_redirect_op_check(char *token,t_token *current_token, char **redirect)
+
+int	ft_redirect_op_check(char *token,t_token *current_token)
 {
-	int i;
-	i = 0;
-	while(redirect[i] != NULL)
+	if(ft_strncmp(token,">",2) == SUCCESS)
 	{
-		if(ft_strcmp(token,redirect[i]) == SUCCESS)
-		{
-			current_token->value = ft_strdup(token);
-			if (i == 0)
-				current_token->type = RED_OUT;// > output
-			else if (i == 1)
-				current_token->type = APPEND;//  >>output
-			else if (i == 2)
-				current_token->type = RED_IN;//  < input
-			else
-				current_token->type = HEREDOC;// <<input
-			return(SUCCESS);
-		}
-		i++;
+		current_token->value = ft_strdup(token);
+		current_token->type = RED_OUT;// > output
+		return(SUCCESS);
+	}
+	else if (ft_strncmp(token,">>",3) == SUCCESS)
+	{
+		current_token->value = ft_strdup(token);
+		current_token->type = APPEND;// >> output
+		return(SUCCESS);
+	}
+	else if (ft_strncmp(token,"<",2) == SUCCESS)
+	{
+		current_token->value = ft_strdup(token);
+		current_token->type = RED_IN;// < input
+		return(SUCCESS);
+	}
+	else if (ft_strncmp(token,"<<",3) == SUCCESS)
+	{
+		current_token->value = ft_strdup(token);
+		current_token->type = HEREDOC;// <<input
+		return(SUCCESS);
 	}
 	return(FAILURE);
 }

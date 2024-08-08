@@ -6,7 +6,7 @@
 /*   By: lstorey <lstorey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 15:26:27 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/08 12:16:58 by lstorey          ###   ########.fr       */
+/*   Updated: 2024/08/08 13:09:25 by lstorey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void alphabetical_printer(char **env_array)
     j = 0;
     c = 'A';
 
-    while ((c > 64 && c < 91) || (c > 96 && c < 123))
+    while (c < 91)
     {
         while (env_array[i])
         {
@@ -48,6 +48,7 @@ int	shell_cd(t_token *token, t_data *data)
 
 	if (token->next == NULL)
 	{
+		dprintf(2, "we have fallen into the first clause of shell_cd\n");
 		chdir(data->home_pwd);
 		return (SUCCESS);
 	}
@@ -58,11 +59,15 @@ int	shell_cd(t_token *token, t_data *data)
 	{
         free(curr_pwd);
 		curr_pwd = NULL;
-		ft_putstr_fd("The path ahead is block by nothingness\n", 2);
+		ft_putstr_fd("The path ahead is blocked by nothingness\n", 2);
 		return (FAILURE);
 	}
 	new_pwd = ft_strsjoin(curr_pwd, token->value, '/');
-	chdir(new_pwd);
+	if (chdir(new_pwd) < 0)
+	{
+		dprintf(2, "we done fuck up\n");
+		return (FAILURE);
+	}
 	return (SUCCESS);
 }
 
@@ -122,21 +127,13 @@ int	export(t_token *token, t_env **env_ll)
 int	print_export(t_env **env_ll)
 {
 	char	**env_array;
-	//int		i;
 
 	if (!env_ll || !*env_ll)
 		return (SUCCESS);
 	env_array = env_arr_updater(env_ll);
 	if (!env_array)
 		return (SUCCESS);
-	//i = 0;
 	alphabetical_printer(env_array);
-	// while (env_array[i])
-	// {
-	// 	printf("declare -x ");
-	// 	printf("%s\n", env_array[i]);
-	// 	i++;
-	// }
 	free_array(env_array);
 	return (SUCCESS);
 }

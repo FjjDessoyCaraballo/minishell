@@ -6,7 +6,7 @@
 /*   By: lstorey <lstorey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:12:51 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/07 11:40:35 by lstorey          ###   ########.fr       */
+/*   Updated: 2024/08/08 13:00:34 by lstorey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ int	main(int argc, char **argv, char **env)
 				printf("exit\n");
 				break ;
 			}
+			else if (status == 963)
+				continue;
 			else
 				execution(data, &env_ll);
 			free_token(data->token);

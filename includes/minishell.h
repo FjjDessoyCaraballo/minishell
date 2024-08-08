@@ -6,7 +6,7 @@
 /*   By: lstorey <lstorey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/07 11:39:43 by lstorey          ###   ########.fr       */
+/*   Updated: 2024/08/08 12:59:12 by lstorey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,26 +32,28 @@
 # include <fcntl.h>
 # include <readline/history.h>
 # include <readline/readline.h>
-# include <stdbool.h>
 
 /*************************************************/
 /* questionable libraries ************************/
 /*************************************************/
+# include <stdbool.h>
 # include <limits.h>
 
 /*************************************************/
-/* macro *****************************************/
+/* macros ****************************************/
 /*************************************************/
-//Errors
 # define ERR "Error\n"
 # define MALLOC "Malloc failure\n"
 # define EXIT "Exit\n"
+# define NO_EXEC "command not found"
 # define REDIRECT_OUT 2
 # define REDIRECT_IN 1
-# define NO_FILE 1
+# define NO_FILE 100
 # define SYNTAX "syntax error near unexpected token "
 # define NULL_LINE 5
 # define DIRECTORY 69
+# define FILE 55
+# define EXECUTABLE 56
 # define FILE_PERMISSION_DENIED 2
 # define PERMISSION_DENIED 126
 # define COMMAND_NOT_FOUND 127
@@ -97,13 +99,24 @@ typedef struct s_data
 	char		**cmd_a;
 	bool		echoed;
 	bool		echo_flag;
-	int			in_quotes;
-	int			quote;
+	bool		piped;
 	char		*line_read;
-	int			error;
 	int			id;
 	char		*vtoken;
 	const char *deli;
+	bool		cmd_ignore;
+	char		*ctoken;//ft_strtok
+	char		*cnew_token;//ft_strtok
+	int			quote;//ft_strtok
+	int			sindex;//ft_strtok
+	int			token_start;//ft_strtok
+	int			in_quotes;//ft_strtok
+	char		quote_char;//ft_strtok
+	size_t		len_t;
+	size_t		i_t;
+	size_t		j_t;
+	int			s_quote_o;
+	int			d_quote_o;
 	t_env		*envll;
 }	t_data;
 
@@ -116,9 +129,9 @@ int		execution(t_data *data, t_env **env_ll);
 int		execution_prepping(t_data *data, t_token *token, t_env **env_ll);
 int		piping(t_data *data, t_env **env_ll, char **all_cmds, int pids);
 void	piped_execution(t_data *data, t_env **envll, char *instruction, int child);
-void	ft_exec(t_data *data, char **cmd_array, int redirect);
+void	ft_exec(t_data *data, char **cmd_array, int redirect, int child);
 
-/* in execution_utils.c */
+/* in execution_utils1.c */
 int		err_msg(char *obj, char *msg, int err_code);
 int		how_many_children(t_token *token);
 char	*access_path(char **path, char *cmd);
@@ -137,8 +150,8 @@ char	*get_binary(char *instruction);
 char	*abs_path(char *command);
 
 /* in execution_utils4.c */
-char	**parse_instruction(char **cmd_array);
-char	**remove_redirect(char **array, int len);
+char	**parse_instruction(t_data *data, char **cmd_array);
+char	**remove_redirect(t_data *data, char **array, int len);
 
 /* in init.c */
 void	ll_env(t_env **env_ll, char **env);
@@ -152,6 +165,9 @@ void	error_exit(int num);
 /* in utils.c */
 void	free_data(t_data *data, char *path, t_env **env, char **command_array);
 void	free_token(t_token *token);
+int		check_bin_local(char *binary);
+int		check_bin_path(char *binary, char **paths);
+int		is_file(char *binary, char *path);
 
 /* in line_handler.c */
 int		sniff_line(t_data *data);

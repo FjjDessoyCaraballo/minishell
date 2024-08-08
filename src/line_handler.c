@@ -3,35 +3,49 @@
 /*                                                        :::      ::::::::   */
 /*   line_handler.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: lstorey <lstorey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 12:23:49 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/08/05 11:20:49 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/08 13:00:25 by lstorey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
+void setup(t_data *data)
+{
+    data->deli = "  \t\n";
+    data->id = 0;
+    data->vtoken = 0;
+    data->cmd_ignore = false;
+    data->echoed = false;
+    data->echo_flag = false;
+	data->status = 0;
+}
 /**
  * Here we are prompting the user to give input with the readline() and
  * tokenizing afterwards. After tokenizing, we are using the tokens to check
  * for invalid inputs. More information in closed issue #19 in the repository.
  */
-int	sniff_line(t_data *data)
+
+int sniff_line(t_data *data)
 {
-	data->line_read = readline("\e[45m[Happy birhday Felipe 🥳]\e[0m ");
-	if (!data->line_read)
-		return (NULL_LINE);
-	if (data->line_read || *data->line_read)
+    data->line_read = readline("\e[45m[Happy birthday Felipe 🥳]\e[0m ");
+    if (!data->line_read)
+        return NULL_LINE;
+    if (*data->line_read)
 		add_history(data->line_read);
-	data->echoed = false;
-	line_tokenization(data);
-	if (syntax_check(data->token) == 2)
-		return (2);
-	parse_token(data->token);
-	return (0);
+	setup(data);
+    if (line_tokenization(data) == FAILURE)// Tokenize the input line
+		return 963;
+    if (syntax_check(data->token) == 2)// Perform syntax check on the token list
+		return 2;
+    parse_token(data->token);// Parse the token
+    // print_tokens(data);
+    return 0;
 }
 
+//
 /**
  * As we run through the tokens (nodes in a linked list) we check
  * if the next token type is valid for the token type that the user
