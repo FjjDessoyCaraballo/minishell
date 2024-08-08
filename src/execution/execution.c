@@ -16,31 +16,31 @@
  ************************* DUMP ******************************
  *************************************************************/
 
-// /*
-// static int	token_printer(t_token *token)
-// {
-// 	t_token *head;
-	
-// 	head = token;
-// 	while (head != NULL)
-// 	{
-// 		dprintf(2, "[%s][%i]\n", head->value, head->type);
-// 		head = head->next;
-// 	}
-// 	head = NULL;
-// 	return (SUCCESS);
-// }  // */
-
-static void	line_printer(char **array)
+/*
+static int	token_printer(t_token *token)
 {
-	int i = 0;
-
-	while (array[i])
+	t_token *head;
+	
+	head = token;
+	while (head != NULL)
 	{
-		//dprintf(2, "array[%i]: %s\n", i, array[i]);//debug
-		i++;
+		dprintf(2, "[%s][%i]\n", head->value, head->type);
+		head = head->next;
 	}
-}
+	head = NULL;
+	return (SUCCESS);
+}  // */
+
+// static void	line_printer(char **array)
+// {
+// 	int i = 0;
+
+// 	while (array[i])
+// 	{
+// 		//dprintf(2, "array[%i]: %s\n", i, array[i]);//debug
+// 		i++;
+// 	}
+// }
 
 /*************************************************************
  ************************* DUMP ******************************
@@ -54,10 +54,7 @@ int    execution(t_data *data, t_env **env_ll)
 	data->nb_cmds = how_many_children(token);
 	// token_printer(token);
 	if (token->type == BUILTIN)
-	{
-		token = find_token(token, BUILTIN); // need to deal with possible garbage before the token
-		data->status = built_ins(data, token, env_ll);
-	}
+			data->status = built_ins(data, token, env_ll);
 	else
 		data->status = execution_prepping(data, token, env_ll);
 	return (data->status);
@@ -103,9 +100,10 @@ int	piping(t_data *data, t_env **env_ll, char **all_cmds, int pids)
 			close(data->pipe_fd[1]);
 			return (err_msg(NULL, "Failed to fork\n", -1));
 		}
-		if (pids == 0) // child
+		
+		if (pids == 0)
 			piped_execution(data, env_ll, all_cmds[data->index], data->index);
-		else // parent
+		else
 		{	
 			close(data->pipe_fd[1]);
 			if (data->index > 0)
@@ -114,6 +112,7 @@ int	piping(t_data *data, t_env **env_ll, char **all_cmds, int pids)
 		}
 		data->index++;
 	}
+	
 	return (data->index);
 }
 
@@ -178,7 +177,6 @@ void	piped_execution(t_data *data, t_env **envll, char *instr, int child)
 	//dprintf(2, "\nflag 1: input redirection || flag 2: output redirection\n");//debug
 	//dprintf(2, "redirect flag: %i || child: %i\n\n", redirect_flag, child);//debug
 	dup_fds(data, child, redirect_flag, file);
-	close(data->pipe_fd[1]);
 	ft_exec(data, cmd_array, redirect_flag, child);
 }
 
@@ -209,7 +207,7 @@ void	ft_exec(t_data *data, char **cmd_array, int redirect, int child) // child f
 	if (cmd_array)
 	{
 		dprintf(2, "\n\n\n AFTER PARSE_INSTRUCTION\n\n");
-		line_printer(cmd_array);
+		// line_printer(cmd_array);
 		dprintf(2, "\n\n\n");
 	}
 	if (!cmd_array || !*cmd_array)
