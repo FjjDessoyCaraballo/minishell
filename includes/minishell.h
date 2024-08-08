@@ -32,17 +32,16 @@
 # include <fcntl.h>
 # include <readline/history.h>
 # include <readline/readline.h>
-# include <stdbool.h>
 
 /*************************************************/
 /* questionable libraries ************************/
 /*************************************************/
+# include <stdbool.h>
 # include <limits.h>
 
 /*************************************************/
-/* macro *****************************************/
+/* macros *****************************************/
 /*************************************************/
-//Errors
 # define ERR "Error\n"
 # define MALLOC "Malloc failure\n"
 # define EXIT "Exit\n"
@@ -94,6 +93,7 @@ typedef struct s_data
 	char		**cmd_a;
 	bool		echoed;
 	bool		echo_flag;
+	bool		piped;
 	int			in_quotes;
 	int			quote;
 	char		*line_read;

@@ -75,6 +75,8 @@ int	execution_prepping(t_data *data, t_token *token, t_env **env_ll)
 	cmd_a = cl_to_array(token);
 	if (!cmd_a)
 		return (FAILURE);
+	if (count_token(token, PIPE) >= 1)
+		data->piped = true;
 	data->env = env_arr_updater(env_ll);
 	if (!data->env)
 		return (FAILURE);
@@ -104,7 +106,7 @@ int	piping(t_data *data, t_env **env_ll, char **all_cmds, int pids)
 		if (pids == 0) // child
 			piped_execution(data, env_ll, all_cmds[data->index], data->index);
 		else // parent
-		{
+		{	
 			close(data->pipe_fd[1]);
 			if (data->index > 0)
 				close(data->read_end);
