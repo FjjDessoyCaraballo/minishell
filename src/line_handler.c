@@ -15,12 +15,12 @@
 void setup(t_data *data)
 {
     data->deli = "  \t\n";
-    data->error = 0;
     data->id = 0;
     data->vtoken = 0;
     data->cmd_ignore = false;
     data->echoed = false;
     data->echo_flag = false;
+	data->status = 0;
 }
 /**
  * Here we are prompting the user to give input with the readline() and
@@ -37,8 +37,7 @@ int sniff_line(t_data *data)
 		add_history(data->line_read);
 	setup(data);
     if (line_tokenization(data) == FAILURE)// Tokenize the input line
-		return FAILURE;
-	
+		return 963;
     if (syntax_check(data->token) == 2)// Perform syntax check on the token list
 		return 2;
     parse_token(data->token);// Parse the token

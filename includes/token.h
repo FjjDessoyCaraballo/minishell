@@ -98,7 +98,7 @@ char 	*expand_env_variables(const char *input, t_data *data);
 char	*ft_strtok(char *str, const char *delim, t_data *data, t_token *cur_tok);
 int		ft_charinstr(char c, const char *str);
 int		ft_strcmp(char *s1, char *s2);
-char 	*remove_quotes(const char *str);
+char *remove_quotes(const char *str, t_data *data);
 
 /*****************************************
  * in src/parse/echo.c

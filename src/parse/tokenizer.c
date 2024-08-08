@@ -33,26 +33,6 @@ int chunky_checker(char *token, t_token *current_token, t_data *data)
     return FAILURE;
 }
 
-/*int check_and_handle_echo(t_token *current_token, t_token **prev_token, const char *delimiters, t_data *data) 
-{
-    if (data->echoed && current_token->type == BUILTIN && data->error != 4) 
-    {
-        echoing(current_token, prev_token, delimiters, data);
-        if (data->error == 4) 
-        {
-            data->error = 0;
-            return FAILURE;
-        }
-        if (current_token->next->value == NULL) 
-        {
-            printf("\n");
-            return FAILURE;
-        }
-        return SUCCESS; // Indicating to break the loop
-    }
-    return SUCCESS; // Indicating to continue the loop
-}*/
-
 t_token *create_and_link_next_token(t_token *current_token, t_data *data)
 {
     t_token *new_token = init_token();// Create and initialize the next token
@@ -64,9 +44,7 @@ t_token *create_and_link_next_token(t_token *current_token, t_data *data)
 
 void expand_token_if_needed(t_token *current_token, t_data *data)
 {
-    // Check if the token needs expansion and if it has a valid value
-    //printf("data->quote: %d\ncurrent_token->expand: %d\ncurrent_token->value:%s\n", data->quote, current_token->expand, current_token->value);
-    if (current_token->expand && current_token->value && data->quote != 1)//SOLTUION TO EXPAND OR NOT TO EXPAND
+    if (current_token->expand && current_token->value && data->quote != 1)//TO EXPAND OR NOT TO EXPAND
     {
         char *expanded_value = expand_env_variables(current_token->value, data);// Expand environment variables
         if (expanded_value)
@@ -85,10 +63,10 @@ int line_tokenization(t_data *data)
     t_token *first_node = init_token();
     t_token *current_token = first_node;
     t_token *prev_token = NULL;
-    
     data->vtoken = ft_strtok(data->line_read, data->deli, data, current_token);
-
-    while (data->vtoken != NULL && data->status != 4)
+        if (data->status == 963)
+            return FAILURE;
+    while (data->vtoken != NULL && data->status != 963)
     {
         current_token->id = data->id;
         current_token->prev = prev_token;
@@ -96,9 +74,9 @@ int line_tokenization(t_data *data)
         if (chunky_checker(current_token->value, current_token, data) == FAILURE)
             return FAILURE;
         data->vtoken = ft_strtok(NULL, data->deli, data, current_token);
-        if (data->status == 4)
+        if (data->status == 963)
             return FAILURE;
-        if (data->vtoken != NULL && data->status != 4)
+        if (data->vtoken != NULL && data->status != 963)
         {
             current_token = create_and_link_next_token(current_token, data);
             prev_token = current_token->prev;

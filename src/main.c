@@ -34,6 +34,8 @@ int	main(int argc, char **argv, char **env)
 				printf("exit\n");
 				break ;
 			}
+			else if (status == 963)
+				continue;
 			else
 				execution(data, &env_ll);
 			free_token(data->token);
