@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:34:00 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/06 22:57:25 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/08 20:34:19 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,23 @@ void initialize_tokenization(t_data *data) {
     data->quote_char = '\0';
 }
 
+int handle_special_chars(const char *target, const char *special_chars, t_data *data)
+{
+    // Check for multi-character special tokens first
+    if (strncmp(&target[data->sindex], ">>", 2) == 0 || strncmp(&target[data->sindex], "<<", 2) == 0)
+    {
+        data->sindex += 2; // Skip the multi-character token
+        return 2; // Indicate that a multi-character special token was found and handled
+    }
+    // Check for single-character special tokens
+    if (ft_charinstr(target[data->sindex], special_chars))
+    {
+        data->sindex++; // Skip the single-character token
+        return 1; // Indicate that a single-character special token was found and handled
+    }
+    return 0; // No special character found
+}
+
 char *set_target_and_skip_delimiters(const char *str, const char *delim, char **target)
 {
     if (str)
@@ -119,13 +136,13 @@ void handle_quote(const char *target, t_data *data, t_token *cur_tok)
     if (target[data->sindex] == '\'')
     {
         data->in_quotes = 1;         // Single quote state
-        data->quote = data->in_quotes;
+        //data->quote = data->in_quotes;
         cur_tok->expand = false;     // Single quotes typically don't expand
     }
     else
     {
         data->in_quotes = 2;         // Double quote state
-        data->quote = data->in_quotes;
+        //data->quote = data->in_quotes;
         cur_tok->expand = true;      // Double quotes typically expand variables
     }
     data->quote_char = target[data->sindex]; // Record the quote character
@@ -158,6 +175,7 @@ void process_quoting_and_delimiters(const char *target, const char *delim, t_dat
     }
 }
 
+
 char *validate_and_process_token(const char *target, t_data *data)
 {
     if (data->in_quotes)// Check for unmatched quotes
@@ -189,10 +207,7 @@ int unmatched_quote_check(t_data *data)
     //printf("data->echoed:%d\n",data->echoed);
     if (data->in_quotes)
     {
-        if(data->echoed == 0)
-            printf("unmatched quote\n");
-        else
-            printf("unmatched quote :3\n");
+        printf("unmatched quote 😳\n");
         return FAILURE;
     }
     return SUCCESS;
@@ -210,24 +225,30 @@ void remove_quotes_and_skip_delimiters(const char *delim, t_data *data, char **t
 }
 
 
+
 char *ft_strtok(char *str, const char *delim, t_data *data, t_token *cur_tok)
 {
     static char *target;
     initialize_tokenization(data);
+    if(str)
+        modify_str(str);
    if(set_target_and_skip_delimiters(str, delim, &target) == NULL)
         return NULL;
     data->token_start = data->sindex;// Token starts here
     process_quoting_and_delimiters(target, delim, data, cur_tok);
+    
     if (unmatched_quote_check(data) == FAILURE)
     {
         data->status = 963;
         return NULL;
     }
     char *token;
+    
     token = validate_and_process_token(target, data);
     if (!token)
         return NULL;
+    
     remove_quotes_and_skip_delimiters(delim, data, &target);
-
     return data->ctoken;
 }
+

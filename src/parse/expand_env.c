@@ -19,11 +19,6 @@ char *expand_env_variable(const char *input, size_t *i, t_data *data, size_t *ne
     size_t var_len = *i - var_start;
     if (var_len > 0)
     {
-        /*char var_name[var_len + 1];
-        strncpy(var_name, &input[var_start], var_len);
-        var_name[var_len] = '\0';
-
-        char *env_value = ft_getenv(var_name, data->envll);*/
         char *env_value = get_env_value(input, var_start, var_len, data);
         if (env_value)
         {
@@ -39,6 +34,39 @@ char *expand_env_variable(const char *input, size_t *i, t_data *data, size_t *ne
     *new_len = 0;
     return NULL;
 }
+
+void handle_status_variable(t_data *data, char *result, size_t *j) 
+{
+    char *status_str = ft_itoa(data->status); // Convert integer to string
+    if (status_str)
+    {
+        size_t k = 0;
+        while (status_str[k])
+            result[(*j)++] = status_str[k++]; // Append each character to result
+        free(status_str); // Free the dynamically allocated memory
+    }
+}
+
+void handle_dollar_sign(const char *input, size_t *i, t_data *data, char *result, size_t *j)
+{
+    if (input[*i + 1] == ' ' || input[*i + 1] == '\0') 
+        result[(*j)++] = input[(*i)++];
+    else if (data->d_quote_o && input[*i + 1] == '"')
+        result[(*j)++] = input[(*i)++];
+    else if (input[*i + 1] == '$')
+    {
+        (*i) += 2;
+        result[(*j)++] = '$';
+    }
+    else if (input[*i + 1] == '?')
+    {
+        (*i) += 2;
+        handle_status_variable(data, result, j);
+    }
+    else
+        handle_env_variable(input, i, data, result, j);
+}
+
 
 char *expand_env_variables(const char *input, t_data *data)
 {
@@ -58,7 +86,7 @@ char *expand_env_variables(const char *input, t_data *data)
         else if (input[i] == '"' && !data->s_quote_o)
             double_q(input, data, result, &i, &j);
         else if (input[i] == '$' && !data->s_quote_o)
-            handle_env_variable(input, &i, data, result, &j);
+            handle_dollar_sign(input, &i, data, result, &j);
         else
             result[j++] = input[i++];
     }

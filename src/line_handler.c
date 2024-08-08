@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 12:23:49 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/08/08 15:59:33 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/08 21:35:01 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ void setup(t_data *data)
     data->cmd_ignore = false;
     data->echoed = false;
     data->echo_flag = false;
+	if (data->status)
+		data->exit_code = data->status;
 	data->status = 0;
 }
 /**
@@ -38,10 +40,10 @@ int sniff_line(t_data *data)
 	setup(data);
     if (line_tokenization(data) == FAILURE)// Tokenize the input line
 		return 963;
+    //print_tokens(data);
     if (syntax_check(data->token) == 2)// Perform syntax check on the token list
 		return 2;
     parse_token(data->token);// Parse the token
-    //print_tokens(data);
     return 0;
 }
 

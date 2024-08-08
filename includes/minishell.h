@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/07 00:37:23 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/08 20:53:08 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,7 @@ typedef struct s_data
 	size_t		len_t;
 	int			s_quote_o;
 	int			d_quote_o;
+	int			exit_code;
 	t_env		*envll;
 }	t_data;
 
