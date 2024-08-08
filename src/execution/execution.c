@@ -16,7 +16,7 @@
  ************************* DUMP ******************************
  *************************************************************/
 
-// /*
+/*
 static int	token_printer(t_token *token)
 {
 	t_token *head;
@@ -50,15 +50,13 @@ int    execution(t_data *data, t_env **env_ll)
 {
     t_token    *token;
 
-	
 	token = data->token;
 	data->nb_cmds = how_many_children(token);
-	token_printer(token);
-	dprintf(2, "count token for commands: %i\n", count_token(token, COMMAND));
-	if (count_token(data->token, COMMAND) >= 1)
-		data->status = execution_prepping(data, token, env_ll);
+	// token_printer(token);
+	if (token->type == BUILTIN)
+			data->status = built_ins(data, token, env_ll);
 	else
-		data->status = built_ins(data, token, env_ll);
+		data->status = execution_prepping(data, token, env_ll);
 	return (data->status);
 }
 
