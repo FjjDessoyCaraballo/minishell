@@ -43,6 +43,7 @@ SRC_FILES = main.c\
 			src/parse/helper.c\
 			src/parse/parse.c\
 			src/parse/expand_env.c\
+			src/parse/expand_env_utils.c\
 # Object files
 OBJ_FILES = $(SRC_FILES:.c=.o)
 

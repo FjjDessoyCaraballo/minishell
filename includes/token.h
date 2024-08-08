@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 11:35:39 by lstorey           #+#    #+#             */
-/*   Updated: 2024/08/07 01:25:19 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/08 14:57:06 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,15 @@ int    parse_token(t_token *token);
 char 	*expand_env_variable(const char *input, size_t *i, t_data *data, size_t *new_len);
 void 	copy_env_value(char *result, const char *env_value, size_t *j);
 char 	*expand_env_variables(const char *input, t_data *data);
+
+/****************************************
+ * src/parse/expand_env_utils.c
+ ****************************************/
+void setup_env_variables(const char *input,t_data *data);
+void single_q(const char *input, t_data *data, char *res, size_t *i, size_t *j);
+void double_q(const char *input, t_data *data, char *res, size_t *i, size_t *j);
+void handle_env_variable(const char *input, size_t *i, t_data *data, char *result, size_t *j);
+void copy_env_value(char *result, const char *env_value, size_t *j);
 
 /*****************************************
  * in src/parse/ft_strtok.c
