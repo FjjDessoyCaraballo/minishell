@@ -17,30 +17,30 @@
  *************************************************************/
 
 // /*
-// static int	token_printer(t_token *token)
-// {
-// 	t_token *head;
-	
-// 	head = token;
-// 	while (head != NULL)
-// 	{
-// 		dprintf(2, "[%s][%i]\n", head->value, head->type);
-// 		head = head->next;
-// 	}
-// 	head = NULL;
-// 	return (SUCCESS);
-// }  // */
-
-static void	line_printer(char **array)
+static int	token_printer(t_token *token)
 {
-	int i = 0;
-
-	while (array[i])
+	t_token *head;
+	
+	head = token;
+	while (head != NULL)
 	{
-		//dprintf(2, "array[%i]: %s\n", i, array[i]);//debug
-		i++;
+		dprintf(2, "[%s][%i]\n", head->value, head->type);
+		head = head->next;
 	}
-}
+	head = NULL;
+	return (SUCCESS);
+}  // */
+
+// static void	line_printer(char **array)
+// {
+// 	int i = 0;
+
+// 	while (array[i])
+// 	{
+// 		//dprintf(2, "array[%i]: %s\n", i, array[i]);//debug
+// 		i++;
+// 	}
+// }
 
 /*************************************************************
  ************************* DUMP ******************************
@@ -53,8 +53,9 @@ int    execution(t_data *data, t_env **env_ll)
 	
 	token = data->token;
 	data->nb_cmds = how_many_children(token);
-	// token_printer(token);
-	if (find_token(token, COMMAND))
+	token_printer(token);
+	dprintf(2, "count token for commands: %i\n", count_token(token, COMMAND));
+	if (count_token(data->token, COMMAND) >= 1)
 		data->status = execution_prepping(data, token, env_ll);
 	else
 		data->status = built_ins(data, token, env_ll);
@@ -209,7 +210,7 @@ void	ft_exec(t_data *data, char **cmd_array, int redirect, int child) // child f
 	if (cmd_array)
 	{
 		dprintf(2, "\n\n\n AFTER PARSE_INSTRUCTION\n\n");
-		line_printer(cmd_array);
+		// line_printer(cmd_array);
 		dprintf(2, "\n\n\n");
 	}
 	if (!cmd_array || !*cmd_array)

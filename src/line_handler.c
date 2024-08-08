@@ -41,7 +41,7 @@ int sniff_line(t_data *data)
     if (syntax_check(data->token) == 2)// Perform syntax check on the token list
 		return 2;
     parse_token(data->token);// Parse the token
-    print_tokens(data);
+    // print_tokens(data);
     return 0;
 }
 
