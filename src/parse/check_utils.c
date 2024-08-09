@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:33:43 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/05 10:39:11 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/09 03:34:00 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ char	*ft_strndup(const char *s, size_t n)
 	unsigned int	i;
 
 	i = 0;
-	res = malloc(sizeof(char) * (n + 1));
+	res = malloc(sizeof(char) * (n + 1)); //1 -> chunky_check 57
 	if (res == NULL)
 		return (NULL);
 	while (i < n)

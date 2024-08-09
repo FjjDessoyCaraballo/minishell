@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:34:00 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/08 20:34:19 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/09 03:36:34 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ char *remove_quotes(const char *str, t_data *data)
 
     return temp_str;
 }
+
 
 void initialize_tokenization(t_data *data) {
     data->sindex = 0;
@@ -215,9 +216,10 @@ int unmatched_quote_check(t_data *data)
 
 void remove_quotes_and_skip_delimiters(const char *delim, t_data *data, char **target)
 {
-    char *stripped_token;
-    stripped_token = remove_quotes(data->ctoken, data); // Remove quotes from the token
-    data->ctoken = stripped_token;
+    //char *stripped_token;
+    data->ctoken = remove_quotes(data->ctoken, data); // Remove quotes from the token
+    //data->ctoken = stripped_token;
+    //free(stripped_token); // Free the stripped token
     *target += data->sindex; // Move target pointer past the token
 
     while (**target && ft_charinstr(**target, delim)) // Skip trailing delimiters for next call
@@ -245,10 +247,12 @@ char *ft_strtok(char *str, const char *delim, t_data *data, t_token *cur_tok)
     char *token;
     
     token = validate_and_process_token(target, data);
+    
     if (!token)
         return NULL;
     
     remove_quotes_and_skip_delimiters(delim, data, &target);
+    free(token);
     return data->ctoken;
 }
 

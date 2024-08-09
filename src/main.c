@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:12:51 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/05 10:23:59 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/09 05:17:38 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,16 @@ int	main(int argc, char **argv, char **env)
 				break ;
 			}
 			else if (status == 963)
+			{
 				continue;
+			}
 			else
 				execution(data, &env_ll);
 			free_token(data->token);
 			data->token = NULL;
 		}
+		free_token(data->token); // Free tokens
+		free(data); 
 	}
 	else
 		ft_putstr_fd(ERR_ARG, 2);

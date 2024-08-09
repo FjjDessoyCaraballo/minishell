@@ -6,11 +6,36 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 12:23:49 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/08/08 21:35:01 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/09 04:40:00 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+void free_tokens(t_token *head)
+{
+    t_token *current = head;
+    t_token *next;
+
+    while (current != NULL)
+    {
+        next = current->next; // Save the next node
+
+        // Free the dynamically allocated members of the current node
+        if (current->value)
+            free(current->value); // Free the value
+        if (current->path)
+            free(current->path); // Free the path
+        
+        // Free the current node itself
+        free(current);
+
+        // Move to the next node
+        current = next;
+    }
+}
+
+
 
 void setup(t_data *data)
 {
@@ -20,8 +45,7 @@ void setup(t_data *data)
     data->cmd_ignore = false;
     data->echoed = false;
     data->echo_flag = false;
-	if (data->status)
-		data->exit_code = data->status;
+	//data->exit_code;
 	data->status = 0;
 }
 /**
@@ -29,7 +53,6 @@ void setup(t_data *data)
  * tokenizing afterwards. After tokenizing, we are using the tokens to check
  * for invalid inputs. More information in closed issue #19 in the repository.
  */
-
 int sniff_line(t_data *data)
 {
     data->line_read = readline("\e[45m[Happy birthday Felipe 🥳]\e[0m ");
@@ -38,8 +61,13 @@ int sniff_line(t_data *data)
     if (*data->line_read)
 		add_history(data->line_read);
 	setup(data);
-    if (line_tokenization(data) == FAILURE)// Tokenize the input line
+    if (line_tokenization(data) == FAILURE)// Tokenize and parse the input line
+	{
+		free_tokens(data->token);
 		return 963;
+	}
+	free(data->vtoken);
+	free(data->ctoken);
     //print_tokens(data);
     if (syntax_check(data->token) == 2)// Perform syntax check on the token list
 		return 2;

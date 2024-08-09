@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/08 20:53:08 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/08 22:12:59 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,8 +90,7 @@ typedef struct s_data
 	int			status;
 	char		**cmd; // need to insert pids, tokens, and commands
 	t_token		*token;
-	char		**builtins;
-	char		**redirect;
+	t_token		*first_node;
 	char		**cmd_a;
 	bool		echoed;
 	bool		echo_flag;

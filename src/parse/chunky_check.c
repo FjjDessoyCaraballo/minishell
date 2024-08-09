@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:33:52 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/07 00:22:01 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/09 03:34:04 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int ft_command_check(char *token, t_token *current_token, t_data *data)
         if (last_slash)
         {
             int path_len = last_slash - executable_path + 1;
-            current_token->path = ft_strndup(executable_path, path_len);
+            current_token->path = ft_strndup(executable_path, path_len); // 2 -> check_command 28
             current_token->value = ft_strdup(last_slash + 1);
         }
         else
