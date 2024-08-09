@@ -3,32 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils2.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 14:19:20 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/07 13:20:54 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/09 14:39:12 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	dup_fds(t_data *data, int child, int fd_flag, char *file)
+void	dup_fds(t_data *data, int child, char **array)
 {
-	if (fd_flag == REDIRECT_IN) // command has red in
-	{
-		open_fdin(data, file);
-		dup2(data->fd_in, STDIN_FILENO);
-		close(data->fd_in);
-		dup2(data->pipe_fd[1], STDOUT_FILENO);
-	}
-	else if (fd_flag == REDIRECT_OUT) // command has red out
-	{
-		open_fdout(data, file);
-		dup2(data->read_end, STDIN_FILENO);
-		// close(data->read_end);
-		dup2(data->fd_out, STDOUT_FILENO);
-		close(data->fd_out);
-	}
+	if (data->redirections == true)
+		redirections_handling(data, array);
 	else
 	{
 		if (child == 0 && data->piped == true)
@@ -41,16 +28,6 @@ void	dup_fds(t_data *data, int child, int fd_flag, char *file)
 	close(data->pipe_fd[0]);
 	close(data->pipe_fd[1]);
 }
-
-	// else
-	// {
-	// 	if (child == 0 && data->piped == true)
-	// 		dup2(data->pipe_fd[0], STDIN_FILENO);
-	// 	else
-	// 		dup2(data->read_end, STDIN_FILENO);
-	// }
-	// if (child != data->nb_cmds - 1)
-	// 	dup2(data->pipe_fd[1], STDOUT_FILENO);
 
 void	open_fdin(t_data *data, char *infile)
 {
@@ -73,16 +50,28 @@ void	open_fdin(t_data *data, char *infile)
 	}
 }
 
-void	open_fdout(t_data *data, char *outfile)
+void	open_fdout(t_data *data, char *outfile, int flag)
 {
 	errno = 0;
-	data->fd_out = open(outfile, O_RDWR | O_CREAT | O_TRUNC, 0664);
+	if (!flag)
+		data->fd_out = open(outfile, O_RDWR | O_CREAT | O_APPEND, 0664);
+	else
+		data->fd_out = open(outfile, O_RDWR | O_CREAT | O_TRUNC, 0664);
 	if (errno == ENOENT)
+	{
+		close_fds(data);
 		exit_child(outfile, NO_FILE);
+	}
 	else if (errno == EACCES)
+	{
+		close_fds(data);
 		exit_child(outfile, FILE_PERMISSION_DENIED);
+	}
 	else if (errno == EISDIR)
+	{
+		close_fds(data);
 		exit_child(outfile, EISDIR);
+	}
 }
 
 void	exit_child(char *file, int err_code)

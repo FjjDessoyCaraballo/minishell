@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 11:35:39 by lstorey           #+#    #+#             */
-/*   Updated: 2024/08/07 01:25:19 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/09 15:00:48 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,10 +82,7 @@ int		check_and_handle_echo(t_token *current_token, t_token **prev_token, const c
 t_token	*find_token(t_token *token, t_type type);
 int		search_token_type(t_token *token, t_type type);
 
-/*****************************************
- * src/parse/parse.c
- *****************************************/
-int    parse_token(t_token *token);
+
 
 /*****************************************
  * src/parse/expand_env.c

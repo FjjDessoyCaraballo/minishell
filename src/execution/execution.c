@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/07 14:13:50 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/09 15:17:01 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ static void	line_printer(char **array)
 		i++;
 	}
 }
-
 
 /*static int	token_printer(t_token *token)
 {
@@ -43,9 +42,11 @@ int    execution(t_data *data, t_env **env_ll)
     t_token    *token;
 
 	token = data->token;
-	data->piped = false;
 	data->nb_cmds = count_token(token, COMMAND);
-	if (data->nb_cmds >= 1)
+	if (data->nb_cmds == 0)
+		data->nb_cmds = 1;
+	printf("here? 1\n");
+	if (token->type != BUILTIN)
 		data->status = execution_prepping(data, token, env_ll);
 	else if (data->nb_cmds == 0)
 		data->status = built_ins(data, token, env_ll);
@@ -62,16 +63,9 @@ int	execution_prepping(t_data *data, t_token *token, t_env **env_ll)
 	static char		**cmd_a;
 
 	cmd_a = cl_to_array(token);
-	dprintf(2, "\n\nin execution prepping\n\n");
-	line_printer(cmd_a);
 	if (!cmd_a)
 		return (FAILURE);
-	// line_printer(cmd_a);
-	if (count_token(token, PIPE) >= 1)
-		data->piped = true;
-	data->env = env_arr_updater(env_ll);
-	if (!data->env)
-		return (FAILURE);
+	printf("here? 2\n");
 	data->status = piping(data, env_ll, cmd_a, pids);
 	close_fds(data);
 	pids = wait(&data->status);
@@ -84,7 +78,7 @@ int	execution_prepping(t_data *data, t_token *token, t_env **env_ll)
 int	piping(t_data *data, t_env **env_ll, char **all_cmds, int pids)
 {
 	data->index = 0;
-	while (data->index <= data->nb_cmds)
+	while (data->index < data->nb_cmds)
 	{
 		if (pipe(data->pipe_fd) == -1)
 			return (err_msg(NULL, "Broken pipe\n", 141));
@@ -95,7 +89,10 @@ int	piping(t_data *data, t_env **env_ll, char **all_cmds, int pids)
 			close(data->pipe_fd[1]);
 			return (err_msg(NULL, "Failed to fork\n", -1));
 		}
-		
+		data->env = env_arr_updater(env_ll);
+		if (!data->env)
+			return (FAILURE);
+		printf("here? 3\n");
 		if (pids == 0)
 			piped_execution(data, env_ll, all_cmds[data->index], data->index);
 		else
@@ -130,34 +127,11 @@ int	piping(t_data *data, t_env **env_ll, char **all_cmds, int pids)
  */
 void	piped_execution(t_data *data, t_env **envll, char *instr, int child)
 {
-	static char	*file;
 	char		**cmd_array;
-	int			redirect_flag;
 
-	redirect_flag = 0;
 	data->index = 0;
 	cmd_array = ft_split(instr, ' ');
-	while (cmd_array[data->index])
-	{
-		if (!ft_strcmp(cmd_array[data->index], ">"))
-		{
-			file = ft_strdup(cmd_array[data->index + 1]);
-			redirect_flag = REDIRECT_OUT;
-		}
-		else if (!ft_strcmp(cmd_array[data->index], "<"))
-		{
-			file = ft_strdup(cmd_array[data->index + 1]);
-			redirect_flag = REDIRECT_IN;
-		}
-		if (!file && redirect_flag != 0)
-		{
-			free_array(cmd_array);
-			free_array(data->binary_paths);
-			free_ll(*envll);
-			exit(FAILURE);
-		}
-		data->index++;
-	}
+	dup_fds(data, child, cmd_array); // something wrong is happening in the middle children
 	if (checking_access(data, instr, child) != 0)
 	{
 		free_array(cmd_array);
@@ -165,9 +139,9 @@ void	piped_execution(t_data *data, t_env **envll, char *instr, int child)
 		free_ll(*envll);
 		exit(FAILURE);
 	}
-	// dprintf(2, "we are in child %i\n", child);
-	dup_fds(data, child, redirect_flag, file); // something wrong is happening in the middle children
-	ft_exec(data, cmd_array, redirect_flag);
+	printf("here? 4\n");
+	printf("here? 5\n");
+	ft_exec(data, cmd_array);
 }
 
 /**
@@ -184,20 +158,25 @@ void	piped_execution(t_data *data, t_env **envll, char *instr, int child)
  * 
  * [placeholder for more documentation]
  */
-void	ft_exec(t_data *data, char **cmd_array, int redirect)
+void	ft_exec(t_data *data, char **cmd_array)
 {
 	static char	*path;
 
-	if (redirect > 0)
+	printf("here? 6\n");
+	if (data->redirections == false)
+		dprintf(2, "something terrible has happened\n");
+	if (data->redirections == true)
+	{
+		dprintf(2, "ok, something terrible did NOT happen\n");
 		cmd_array = parse_instruction(data, cmd_array); // still not working
+	}
+	line_printer(cmd_array);
 	if (!cmd_array || !*cmd_array)
 	{
 		free_array(cmd_array);
 		free_data(data, NULL, &data->envll, NULL);
 		exit (-1);
 	}
-	dprintf(2, "\n\nin ft_exec\n\n");
-	line_printer(cmd_array);
 	if (ft_strchr(cmd_array[0], '/') == NULL)
 		path = loop_path_for_binary(cmd_array[0], data->binary_paths);
 	else
@@ -207,6 +186,7 @@ void	ft_exec(t_data *data, char **cmd_array, int redirect)
 		free_data(data, NULL, &data->envll, cmd_array);
 		exit (1);
 	}
+	printf("here? 7\n");
 	if (execve(path, cmd_array, data->env) == -1)	
 	{
 		perror("execve");
@@ -214,11 +194,3 @@ void	ft_exec(t_data *data, char **cmd_array, int redirect)
 		exit(127);
 	}
 }
-
-/*************************************************************
- ************************* DUMP ******************************
- *************************************************************/
-
-
-
-
