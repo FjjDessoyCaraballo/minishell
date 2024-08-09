@@ -6,7 +6,11 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2024/08/14 14:39:58 by fdessoy-         ###   ########.fr       */
+=======
+/*   Updated: 2024/08/09 04:01:28 by walnaimi         ###   ########.fr       */
+>>>>>>> 668cfd8 (fixed echo when it deals with a (failed to expand variable) string solved and some memory leaks issue)
 /*                                                                            */
 /* ************************************************************************** */
 

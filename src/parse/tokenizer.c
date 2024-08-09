@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:34:16 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/07 15:27:16 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/09 05:17:39 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@ int chunky_checker(char *token, t_token *current_token, t_data *data)
 {
     if (check_builtin(token, current_token, data) == SUCCESS)
         return SUCCESS;
-    if(check_echo_flag(token, current_token, data) == SUCCESS)
+    if (check_echo_flag(token, current_token, data) == SUCCESS)
         return SUCCESS;
-    if(check_flag(token, current_token, data) == SUCCESS)
+    if (check_flag(token, current_token, data) == SUCCESS)
         return SUCCESS;
     if (check_pipe(token, current_token, data) == SUCCESS)
         return SUCCESS;
@@ -58,11 +58,20 @@ void expand_token_if_needed(t_token *current_token, t_data *data)
     }
 }
 
-int line_tokenization(t_data *data)
+t_token *initialize_tokens(t_token **current_token, t_token **prev_token)
 {
     t_token *first_node = init_token();
-    t_token *current_token = first_node;
-    t_token *prev_token = NULL;
+    *current_token = first_node;
+    *prev_token = NULL;
+    return first_node;
+}
+
+int line_tokenization(t_data *data)
+{
+    t_token *current_token;
+    t_token *prev_token;
+    data->first_node = initialize_tokens(&current_token, &prev_token);
+
     data->vtoken = ft_strtok(data->line_read, data->deli, data, current_token);
         if (data->status == 963)
             return FAILURE;
@@ -82,6 +91,6 @@ int line_tokenization(t_data *data)
             prev_token = current_token->prev;
         }
     }
-    data->token = first_node;
+    data->token = data->first_node;
     return SUCCESS;//print_tokens(data);//debug
 }

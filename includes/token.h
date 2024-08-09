@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 11:35:39 by lstorey           #+#    #+#             */
-/*   Updated: 2024/08/14 16:17:06 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/14 16:19:32 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,12 @@ typedef struct s_token
  *****************************************/
 int		line_tokenization(t_data *data);
 int		chunky_checker(char *token, t_token *current_token, t_data *data);
+<<<<<<< HEAD
 int		check_and_handle_echo(t_token *current_token, t_token **prev_token, const char *delimiters, t_data *data);
+=======
+int check_and_handle_echo(t_token *current_token, t_token **prev_token, const char *delimiters, t_data *data);
+void free_tokens(t_token *head);
+>>>>>>> 668cfd8 (fixed echo when it deals with a (failed to expand variable) string solved and some memory leaks issue)
 
 /*****************************************
  * src/parse/helper.c
