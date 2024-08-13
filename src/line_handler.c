@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 12:23:49 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/08/09 15:00:36 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/13 10:01:08 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,6 @@ int sniff_line(t_data *data)
 	data->piped = false;
 	if (count_token(data->token, PIPE) >= 1)
 		data->piped = true;
-	if (count_token(data->token, RED_IN) >= 1
-		|| count_token(data->token, RED_OUT) >= 1
-		|| count_token(data->token, APPEND) >= 1
-		|| count_token(data->token, HEREDOC) >= 1)
-		data->redirections = true;
     return 0;
 }
 

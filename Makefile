@@ -17,19 +17,19 @@ INCFLAGS = -Iincludes -Ilibft/includes
 SRC_FILES = main.c\
 			init.c\
 			utils.c\
+			utils2.c\
 			signals.c\
 			ll_utils.c\
 			ll_utils2.c\
 			line_handler.c\
-			exit_handler.c\
 			src/execution/built_ins.c\
 			src/execution/built_ins2.c\
 			src/execution/execution.c\
 			src/execution/redirections.c\
+			src/execution/fd_dups.c\
+			src/execution/redirect_parse.c\
 			src/execution/execution_utils1.c\
 			src/execution/execution_utils2.c\
-			src/execution/execution_utils3.c\
-			src/execution/execution_utils4.c\
 			src/parse/tokenizer.c\
 			src/parse/ft_strtok.c\
 			src/parse/init_token.c\

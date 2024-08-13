@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/09 14:45:47 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/13 10:09:20 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,27 +131,28 @@ void	ft_exec(t_data *data, char **cmd_array);
 
 /* in redirections.c */
 void	redirections_handling(t_data *data, char **array);
-void	here_doc(t_data *data, char *delimiter);
+void	handle_heredoc(t_data *data, char *delimiter);
+char	*here_doc(char *delimiter);
+int		find_redirection(char **array);
 
 /* in execution_utils1.c */
 int		err_msg(char *obj, char *msg, int err_code);
-// int		how_many_children(t_token *token); DEPRECATED
 char	*access_path(char **path, char *cmd);
 void	close_fds(t_data *data);
 
 /* in execution_utils2.c */
-void	dup_fds(t_data *data, int child, char **array);
-void	open_fdin(t_data *data, char *infile);
-void	open_fdout(t_data *data, char *outfile, int flag);
-void	exit_child(char *file, int err_code);
-
-/* in execution_utils3.c */
 char	**cl_to_array(t_token *token);
 int		checking_access(t_data *data, char *instruction, int child);
 char	*get_binary(char *instruction);
 char	*abs_path(char *command);
 
-/* in execution_utils4.c */
+/* in fd_dups.c */
+void	dup_fds(t_data *data, int child, char **array);
+void	open_fdin(t_data *data, char *infile);
+void	open_fdout(t_data *data, char *outfile, int flag);
+void	exit_child(char *file, int err_code);
+
+/* in redirect_parsing.c */
 char	**parse_instruction(t_data *data, char **cmd_array);
 char	**remove_redirect(t_data *data, char **array, int len);
 
@@ -161,15 +162,16 @@ void	initializer(t_data *data, t_env **env_ll, char **env);
 void	find_bin(t_env **env_ll, t_data *data);
 char	*bin_extract(char *path);
 
-/* in exit_handler.c */
-void	error_exit(int num);
-
 /* in utils.c */
 void	free_data(t_data *data, char *path, t_env **env, char **command_array);
 void	free_token(t_token *token);
 int		check_bin_local(char *binary);
 int		check_bin_path(char *binary, char **paths);
 int		is_file(char *binary, char *path);
+
+/* in utils2.c */
+void	malloc_check_message(void *ptr);
+void	free_null(void *ptr);
 
 /* in line_handler.c */
 int		sniff_line(t_data *data);
@@ -212,5 +214,6 @@ void	handler(int sig);
 // void	single_child(t_data *data, t_token *token, t_env **env_ll); DEPRECRATED
 // int		single_parent(pid_t pid, int status); DEPRECATED
 // int 	lonely_execution(t_data *data, t_token *token, t_env **env_ll);
+// int		how_many_children(t_token *token); DEPRECATED
 
 #endif

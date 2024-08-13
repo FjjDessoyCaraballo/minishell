@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 13:03:21 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/09 14:45:42 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/13 10:18:22 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,19 +49,21 @@ void redirections_handling(t_data *data, char **array)
 				open_fdout(data, array[data->index + 1], 0);
 				dup2(data->fd_in, STDIN_FILENO);
 				close(data->fd_in);
-				dup2(data->pipe_fd[1], STDOUT_FILENO);	
+				if (data->piped == true)
+					dup2(data->pipe_fd[1], STDOUT_FILENO);	
 			}
 			else
 				err_msg("'newline'", SYNTAX, 2);		
 		}
-		else if (!ft_strcmp(array[data->index], "<<"))
+		else if (!ft_strcmp(array[data->index], "+"))
 		{
 			if (array[data->index + 1])
 			{
-				here_doc(data, array[data->index + 1]);
-				dup2(data->fd_in, STDIN_FILENO);
-				close(data->fd_in);
-				dup2(data->pipe_fd[1], STDOUT_FILENO);	
+				handle_heredoc(data, array[data->index + 1]);
+				// here_doc(data, array[data->index + 1]);
+				// dup2(data->fd_in, STDIN_FILENO);
+				// close(data->fd_in);
+				// dup2(data->pipe_fd[1], STDOUT_FILENO);	
 			}
 			else
 				err_msg("'newline'", SYNTAX, 2);		
@@ -70,23 +72,59 @@ void redirections_handling(t_data *data, char **array)
 	}
 }
 
-void	here_doc(t_data *data, char *delimiter)
+void	handle_heredoc(t_data *data, char *delimiter)
 {
-    char    buffer[1024];
-    ssize_t bytes_read;
+	char	*buffer;
+	
+	buffer = here_doc(delimiter);
+	write(data->pipe_fd[1], buffer, ft_strlen(buffer));
+	free(buffer);
+	close(data->pipe_fd[1]);
+	dup2(data->pipe_fd[0], STDIN_FILENO);
+	close(data->pipe_fd[0]);
+}
 
-    while (1)
-    {
-        bytes_read = read(STDIN_FILENO, buffer, sizeof(buffer) - 1);
-        if (bytes_read < 0)
-        {
-            perror("read");
-            break ;
-        }
-        buffer[bytes_read] = '\0'; // Null-terminate the string
-        if (strncmp(buffer, delimiter, 3) == 0 && (buffer[3] == '\n' || buffer[3] == '\0'))
-            break ;
-        if (write(data->fd_in, buffer, bytes_read) != bytes_read)
-            break ;
-    }
+char	*here_doc(char *delimiter)
+{
+	char	*input;
+	char	*buffer;
+	char	*tmp1;
+	char	*tmp2;
+
+	buffer = ft_strdup("");
+	malloc_check_message(buffer);
+	while (1)
+	{
+		input = readline("8==D ");
+		if (!ft_strncmp(input, delimiter, ft_strlen(delimiter)))
+			break ;
+		tmp1 = buffer;
+		buffer = ft_strjoin(buffer, input);
+		malloc_check_message(buffer);
+		tmp2 = buffer;
+		buffer = ft_strjoin(buffer, "\n");
+		malloc_check_message(buffer);
+		free_null(tmp2);
+		free_null(tmp1);
+		free_null(input);
+	}
+	free_null(input);
+	return (buffer);
+}
+
+int	find_redirection(char **array)
+{
+	int	i;
+
+	i = 0;
+	while (array[i])
+	{
+		if (!ft_strcmp(array[i], ">>")
+			|| !ft_strcmp(array[i], "<<")
+			|| !ft_strcmp(array[i], ">")
+			|| !ft_strcmp(array[i], "<"))
+			return (SUCCESS);
+		i++;
+	}
+	return (FAILURE);
 }

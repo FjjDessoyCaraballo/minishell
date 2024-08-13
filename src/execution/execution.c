@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/09 15:17:01 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/13 10:13:51 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ int    execution(t_data *data, t_env **env_ll)
 	data->nb_cmds = count_token(token, COMMAND);
 	if (data->nb_cmds == 0)
 		data->nb_cmds = 1;
-	printf("here? 1\n");
 	if (token->type != BUILTIN)
 		data->status = execution_prepping(data, token, env_ll);
 	else if (data->nb_cmds == 0)
@@ -65,7 +64,6 @@ int	execution_prepping(t_data *data, t_token *token, t_env **env_ll)
 	cmd_a = cl_to_array(token);
 	if (!cmd_a)
 		return (FAILURE);
-	printf("here? 2\n");
 	data->status = piping(data, env_ll, cmd_a, pids);
 	close_fds(data);
 	pids = wait(&data->status);
@@ -92,7 +90,6 @@ int	piping(t_data *data, t_env **env_ll, char **all_cmds, int pids)
 		data->env = env_arr_updater(env_ll);
 		if (!data->env)
 			return (FAILURE);
-		printf("here? 3\n");
 		if (pids == 0)
 			piped_execution(data, env_ll, all_cmds[data->index], data->index);
 		else
@@ -139,8 +136,6 @@ void	piped_execution(t_data *data, t_env **envll, char *instr, int child)
 		free_ll(*envll);
 		exit(FAILURE);
 	}
-	printf("here? 4\n");
-	printf("here? 5\n");
 	ft_exec(data, cmd_array);
 }
 
@@ -162,9 +157,8 @@ void	ft_exec(t_data *data, char **cmd_array)
 {
 	static char	*path;
 
-	printf("here? 6\n");
 	if (data->redirections == false)
-		dprintf(2, "something terrible has happened\n");
+		dprintf(2, "something terrible has happened [no redirects]\n");
 	if (data->redirections == true)
 	{
 		dprintf(2, "ok, something terrible did NOT happen\n");
@@ -186,7 +180,6 @@ void	ft_exec(t_data *data, char **cmd_array)
 		free_data(data, NULL, &data->envll, cmd_array);
 		exit (1);
 	}
-	printf("here? 7\n");
 	if (execve(path, cmd_array, data->env) == -1)	
 	{
 		perror("execve");
