@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 13:03:21 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/13 10:18:22 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/13 10:30:42 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void redirections_handling(t_data *data, char **array)
 				dup2(data->pipe_fd[1], STDOUT_FILENO);	
 			}
 			else
-				err_msg("'newline'", SYNTAX, 2);
+				exit(err_msg("'newline'", SYNTAX, 2));
 		}
 		else if (!ft_strcmp(array[data->index], ">"))
 		{
@@ -40,20 +40,20 @@ void redirections_handling(t_data *data, char **array)
 				close(data->fd_out);
 			}
 			else
-				err_msg("'newline'", SYNTAX, 2);
+				exit(err_msg("'newline'", SYNTAX, 2));
 		}
 		else if (!ft_strcmp(array[data->index], ">>"))
 		{
 			if (array[data->index + 1])
 			{
 				open_fdout(data, array[data->index + 1], 0);
-				dup2(data->fd_in, STDIN_FILENO);
-				close(data->fd_in);
 				if (data->piped == true)
-					dup2(data->pipe_fd[1], STDOUT_FILENO);	
+					dup2(data->read_end, STDIN_FILENO);
+				dup2(data->fd_out, STDOUT_FILENO);
+				close(data->fd_out);
 			}
 			else
-				err_msg("'newline'", SYNTAX, 2);		
+				exit(err_msg("'newline'", SYNTAX, 2));		
 		}
 		else if (!ft_strcmp(array[data->index], "+"))
 		{
@@ -66,7 +66,7 @@ void redirections_handling(t_data *data, char **array)
 				// dup2(data->pipe_fd[1], STDOUT_FILENO);	
 			}
 			else
-				err_msg("'newline'", SYNTAX, 2);		
+				exit(err_msg("'newline'", SYNTAX, 2));		
 		}
 		data->index++;
 	}

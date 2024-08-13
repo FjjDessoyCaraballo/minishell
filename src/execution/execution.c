@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/13 10:13:51 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/13 10:27:14 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int    execution(t_data *data, t_env **env_ll)
 		data->nb_cmds = 1;
 	if (token->type != BUILTIN)
 		data->status = execution_prepping(data, token, env_ll);
-	else if (data->nb_cmds == 0)
+	else
 		data->status = built_ins(data, token, env_ll);
 	return (data->status);
 }
