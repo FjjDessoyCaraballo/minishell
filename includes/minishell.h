@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/13 10:09:20 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/13 10:44:55 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ typedef struct s_data
 int		execution(t_data *data, t_env **env_ll);
 int		execution_prepping(t_data *data, t_token *token, t_env **env_ll);
 int		piping(t_data *data, t_env **env_ll, char **all_cmds, int pids);
-void	piped_execution(t_data *data, t_env **envll, char *instruction, int child);
+void	piped_execution(t_data *data, char *instruction, int child);
 void	ft_exec(t_data *data, char **cmd_array);
 
 /* in redirections.c */

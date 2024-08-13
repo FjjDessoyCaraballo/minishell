@@ -6,36 +6,36 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/13 10:27:14 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/13 10:59:19 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static void	line_printer(char **array)
-{
-	int i = 0;
+// static void	line_printer(char **array)
+// {
+// 	int i = 0;
 
-	while (array[i])
-	{
-		dprintf(2, "array[%i]: %s\n", i, array[i]);//debug
-		i++;
-	}
-}
+// 	while (array[i])
+// 	{
+// 		dprintf(2, "array[%i]: %s\n", i, array[i]);//debug
+// 		i++;
+// 	}
+// }
 
-/*static int	token_printer(t_token *token)
-{
-	t_token *head;
+// static int	token_printer(t_token *token)
+// {
+// 	t_token *head;
 	
-	head = token;
-	while (head != NULL)
-	{
-		dprintf(2, "[%s][%i]\n", head->value, head->type);
-		head = head->next;
-	}
-	head = NULL;
-	return (SUCCESS);
-}  // */
+// 	head = token;
+// 	while (head != NULL)
+// 	{
+// 		dprintf(2, "[%s][%i]\n", head->value, head->type);
+// 		head = head->next;
+// 	}
+// 	head = NULL;
+// 	return (SUCCESS);
+// }
 
 int    execution(t_data *data, t_env **env_ll)
 {
@@ -43,6 +43,7 @@ int    execution(t_data *data, t_env **env_ll)
 
 	token = data->token;
 	data->nb_cmds = count_token(token, COMMAND);
+	// token_printer(token);
 	if (data->nb_cmds == 0)
 		data->nb_cmds = 1;
 	if (token->type != BUILTIN)
@@ -60,7 +61,8 @@ int	execution_prepping(t_data *data, t_token *token, t_env **env_ll)
 {
 	static pid_t	pids;
 	static char		**cmd_a;
-
+	
+	dprintf(2, "we got here 1\n");
 	cmd_a = cl_to_array(token);
 	if (!cmd_a)
 		return (FAILURE);
@@ -78,6 +80,7 @@ int	piping(t_data *data, t_env **env_ll, char **all_cmds, int pids)
 	data->index = 0;
 	while (data->index < data->nb_cmds)
 	{
+		dprintf(2, "we got here 2\n");
 		if (pipe(data->pipe_fd) == -1)
 			return (err_msg(NULL, "Broken pipe\n", 141));
 		pids = fork();
@@ -91,7 +94,7 @@ int	piping(t_data *data, t_env **env_ll, char **all_cmds, int pids)
 		if (!data->env)
 			return (FAILURE);
 		if (pids == 0)
-			piped_execution(data, env_ll, all_cmds[data->index], data->index);
+			piped_execution(data, all_cmds[data->index], data->index);
 		else
 		{	
 			close(data->pipe_fd[1]);
@@ -122,19 +125,20 @@ int	piping(t_data *data, t_env **env_ll, char **all_cmds, int pids)
  * "> outfile"
  * "<< END"
  */
-void	piped_execution(t_data *data, t_env **envll, char *instr, int child)
+void	piped_execution(t_data *data, char *instr, int child)
 {
 	char		**cmd_array;
 
 	data->index = 0;
 	cmd_array = ft_split(instr, ' ');
 	dup_fds(data, child, cmd_array); // something wrong is happening in the middle children
-	if (checking_access(data, instr, child) != 0)
+	if (data->redirections == true)
+		cmd_array = parse_instruction(data, cmd_array);
+	if (!cmd_array || !*cmd_array)
 	{
 		free_array(cmd_array);
-		free_array(data->binary_paths);
-		free_ll(*envll);
-		exit(FAILURE);
+		free_data(data, NULL, &data->envll, NULL);
+		exit (-1);
 	}
 	ft_exec(data, cmd_array);
 }
@@ -157,33 +161,27 @@ void	ft_exec(t_data *data, char **cmd_array)
 {
 	static char	*path;
 
-	if (data->redirections == false)
-		dprintf(2, "something terrible has happened [no redirects]\n");
-	if (data->redirections == true)
-	{
-		dprintf(2, "ok, something terrible did NOT happen\n");
-		cmd_array = parse_instruction(data, cmd_array); // still not working
-	}
-	line_printer(cmd_array);
-	if (!cmd_array || !*cmd_array)
-	{
-		free_array(cmd_array);
-		free_data(data, NULL, &data->envll, NULL);
-		exit (-1);
-	}
-	if (ft_strchr(cmd_array[0], '/') == NULL)
+	// if (checking_access(data, instr, child) != 0)
+	// {
+	// 	free_array(cmd_array);
+	// 	free_array(data->binary_paths);
+	// 	exit(FAILURE);
+	// }
+	if (ft_strchr(cmd_array[0], '/') == NULL) // when we do NOT have slashes 
 		path = loop_path_for_binary(cmd_array[0], data->binary_paths);
-	else
-		path = abs_path(cmd_array[0]);
+	// else
+	// 	path = abs_path(cmd_array[0]);
 	if (!path)
 	{
-		free_data(data, NULL, &data->envll, cmd_array);
-		exit (1);
+		if (execve(cmd_array[0], cmd_array, data->env) == -1)	
+		{
+			free_data(data, NULL, &data->envll, cmd_array);
+			exit(err_msg(cmd_array[0], NO_EXEC, 127));
+		}
 	}
 	if (execve(path, cmd_array, data->env) == -1)	
 	{
-		perror("execve");
-		free_data(data, path, &data->envll, cmd_array);
-		exit(127);
+		free_data(data, NULL, &data->envll, cmd_array);
+		exit(err_msg(cmd_array[0], NO_EXEC, 127));
 	}
 }
