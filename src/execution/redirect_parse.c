@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 10:41:10 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/13 10:21:36 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/14 09:59:34 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,8 @@ char	**remove_redirect(t_data *data, char **array, int len) {
 
     while (array[index_a])
 	{
-		if (strcmp(array[index_a], "<") == 0 || strcmp(array[index_a], ">") == 0 || ft_strcmp(array[index_a], ">>") == 0)
+		if (!strcmp(array[index_a], "<") || !strcmp(array[index_a], ">")
+			|| !ft_strcmp(array[index_a], ">>") || !ft_strcmp(array[index_a], "<<"))
 		{
 			index_a += 2;
 			continue ;

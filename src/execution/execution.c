@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/13 10:59:19 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/14 09:59:45 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ int	execution_prepping(t_data *data, t_token *token, t_env **env_ll)
 	static pid_t	pids;
 	static char		**cmd_a;
 	
-	dprintf(2, "we got here 1\n");
 	cmd_a = cl_to_array(token);
 	if (!cmd_a)
 		return (FAILURE);
@@ -80,7 +79,6 @@ int	piping(t_data *data, t_env **env_ll, char **all_cmds, int pids)
 	data->index = 0;
 	while (data->index < data->nb_cmds)
 	{
-		dprintf(2, "we got here 2\n");
 		if (pipe(data->pipe_fd) == -1)
 			return (err_msg(NULL, "Broken pipe\n", 141));
 		pids = fork();
@@ -181,7 +179,7 @@ void	ft_exec(t_data *data, char **cmd_array)
 	}
 	if (execve(path, cmd_array, data->env) == -1)	
 	{
-		free_data(data, NULL, &data->envll, cmd_array);
+		free_data(data, path, &data->envll, cmd_array);
 		exit(err_msg(cmd_array[0], NO_EXEC, 127));
 	}
 }

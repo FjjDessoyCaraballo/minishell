@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 13:03:21 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/13 10:30:42 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/14 10:06:07 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,15 +55,14 @@ void redirections_handling(t_data *data, char **array)
 			else
 				exit(err_msg("'newline'", SYNTAX, 2));		
 		}
-		else if (!ft_strcmp(array[data->index], "+"))
+		else if (!ft_strcmp(array[data->index], "<<"))
 		{
 			if (array[data->index + 1])
 			{
-				handle_heredoc(data, array[data->index + 1]);
-				// here_doc(data, array[data->index + 1]);
-				// dup2(data->fd_in, STDIN_FILENO);
-				// close(data->fd_in);
-				// dup2(data->pipe_fd[1], STDOUT_FILENO);	
+				here_doc(data, array[data->index + 1]);
+				dup2(data->pipe_fd[0], STDIN_FILENO);
+				close(data->pipe_fd[0]);
+				close(data->pipe_fd[1]);
 			}
 			else
 				exit(err_msg("'newline'", SYNTAX, 2));		
@@ -72,44 +71,18 @@ void redirections_handling(t_data *data, char **array)
 	}
 }
 
-void	handle_heredoc(t_data *data, char *delimiter)
-{
-	char	*buffer;
-	
-	buffer = here_doc(delimiter);
-	write(data->pipe_fd[1], buffer, ft_strlen(buffer));
-	free(buffer);
-	close(data->pipe_fd[1]);
-	dup2(data->pipe_fd[0], STDIN_FILENO);
-	close(data->pipe_fd[0]);
-}
-
-char	*here_doc(char *delimiter)
+void here_doc(t_data *data, char *delimiter)
 {
 	char	*input;
-	char	*buffer;
-	char	*tmp1;
-	char	*tmp2;
 
-	buffer = ft_strdup("");
-	malloc_check_message(buffer);
 	while (1)
 	{
 		input = readline("8==D ");
 		if (!ft_strncmp(input, delimiter, ft_strlen(delimiter)))
 			break ;
-		tmp1 = buffer;
-		buffer = ft_strjoin(buffer, input);
-		malloc_check_message(buffer);
-		tmp2 = buffer;
-		buffer = ft_strjoin(buffer, "\n");
-		malloc_check_message(buffer);
-		free_null(tmp2);
-		free_null(tmp1);
-		free_null(input);
+		write(data->pipe_fd[1], input, ft_strlen(input));
+		write(data->pipe_fd[1], "\n", 1);
 	}
-	free_null(input);
-	return (buffer);
 }
 
 int	find_redirection(char **array)

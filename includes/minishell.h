@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/13 10:44:55 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/14 10:12:16 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,8 +131,7 @@ void	ft_exec(t_data *data, char **cmd_array);
 
 /* in redirections.c */
 void	redirections_handling(t_data *data, char **array);
-void	handle_heredoc(t_data *data, char *delimiter);
-char	*here_doc(char *delimiter);
+void	here_doc(t_data *data, char *delimiter);
 int		find_redirection(char **array);
 
 /* in execution_utils1.c */
@@ -211,9 +210,10 @@ void	handler(int sig);
 /* DEPRECATED FUNCTIONS */
 // int		built_in_or_garbage(t_data *data, t_env **env_ll, t_token *token);
 // int		single_execution(t_data *data, t_token *token, t_env **env_ll); DEPRECATED
-// void	single_child(t_data *data, t_token *token, t_env **env_ll); DEPRECRATED
+// void		single_child(t_data *data, t_token *token, t_env **env_ll); DEPRECRATED
 // int		single_parent(pid_t pid, int status); DEPRECATED
-// int 	lonely_execution(t_data *data, t_token *token, t_env **env_ll);
+// int 		lonely_execution(t_data *data, t_token *token, t_env **env_ll);
 // int		how_many_children(t_token *token); DEPRECATED
+// void		handle_heredoc(t_data *data, char *delimiter); DEPRECATED
 
 #endif
