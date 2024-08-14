@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   line_handler.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 12:23:49 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/08/07 15:24:43 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/13 10:01:08 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,16 +21,19 @@ void setup(t_data *data)
     data->echoed = false;
     data->echo_flag = false;
 	data->status = 0;
+	data->here_doc = false;
+	data->redirections = false;
+	data->piped = false;
+
 }
 /**
  * Here we are prompting the user to give input with the readline() and
  * tokenizing afterwards. After tokenizing, we are using the tokens to check
  * for invalid inputs. More information in closed issue #19 in the repository.
  */
-
 int sniff_line(t_data *data)
 {
-    data->line_read = readline("\e[45m[Happy birthday Felipe 🥳]\e[0m ");
+    data->line_read = readline("\e[45m[I can't believe this is not shell]\e[0m ");
     if (!data->line_read)
         return NULL_LINE;
     if (*data->line_read)
@@ -40,8 +43,9 @@ int sniff_line(t_data *data)
 		return 963;
     if (syntax_check(data->token) == 2)// Perform syntax check on the token list
 		return 2;
-    parse_token(data->token);// Parse the token
-    // print_tokens(data);
+	data->piped = false;
+	if (count_token(data->token, PIPE) >= 1)
+		data->piped = true;
     return 0;
 }
 

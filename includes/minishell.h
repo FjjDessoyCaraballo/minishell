@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/07 00:37:23 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/14 14:35:09 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,11 @@
 # define MALLOC "Malloc failure\n"
 # define EXIT "Exit\n"
 # define NO_EXEC "command not found"
-# define REDIRECT_OUT 2
-# define REDIRECT_IN 1
+# define NO_PERMISSION "permission denied"
+# define REDIRECT_OUT 222
+# define REDIRECT_IN 111
+# define HERE_DOC 333
+# define APP 444
 # define NO_FILE 100
 # define SYNTAX "syntax error near unexpected token "
 # define NULL_LINE 5
@@ -94,6 +97,8 @@ typedef struct s_data
 	bool		echoed;
 	bool		echo_flag;
 	bool		piped;
+	bool		here_doc;
+	bool		redirections;
 	char		*line_read;
 	int			id;
 	char		*vtoken;
@@ -121,29 +126,32 @@ typedef struct s_data
 /* in execution.c */
 int		execution(t_data *data, t_env **env_ll);
 int		execution_prepping(t_data *data, t_token *token, t_env **env_ll);
-int		piping(t_data *data, t_env **env_ll, char **all_cmds, int pids);
-void	piped_execution(t_data *data, t_env **envll, char *instruction, int child);
-void	ft_exec(t_data *data, char **cmd_array, int redirect, int child);
+int		forking(t_data *data, t_env **env_ll, char **all_cmds, pid_t pids);
+void	child_execution(t_data *data, t_env **env_ll, char *instr, int child);
+void	ft_exec(t_data *data, char **cmd_array, int child);
+
+/* in redirections.c */
+void	redirections_handling(t_data *data, char **array);
+void	here_doc(t_data *data, char *delimiter);
+int		find_redirection(char **array);
 
 /* in execution_utils1.c */
 int		err_msg(char *obj, char *msg, int err_code);
-int		how_many_children(t_token *token);
 char	*access_path(char **path, char *cmd);
 void	close_fds(t_data *data);
 
 /* in execution_utils2.c */
-void	dup_fds(t_data *data, int child, int fd_flag, char *file);
-void	open_fdin(t_data *data, char *infile);
-void	open_fdout(t_data *data, char *outfile);
-void	exit_child(char *file, int err_code);
-
-/* in execution_utils3.c */
 char	**cl_to_array(t_token *token);
 int		checking_access(t_data *data, char *instruction, int child);
 char	*get_binary(char *instruction);
-char	*abs_path(char *command);
 
-/* in execution_utils4.c */
+/* in fd_dups.c */
+void	dup_fds(t_data *data, int child, char **array);
+void	open_fdin(t_data *data, char *infile);
+void	open_fdout(t_data *data, char *outfile, int flag);
+void	exit_child(char *file, int err_code);
+
+/* in redirect_parsing.c */
 char	**parse_instruction(t_data *data, char **cmd_array);
 char	**remove_redirect(t_data *data, char **array, int len);
 
@@ -153,15 +161,16 @@ void	initializer(t_data *data, t_env **env_ll, char **env);
 void	find_bin(t_env **env_ll, t_data *data);
 char	*bin_extract(char *path);
 
-/* in exit_handler.c */
-void	error_exit(int num);
-
 /* in utils.c */
-void	free_data(t_data *data, char *path, t_env **env, char **command_array);
+void	free_data(t_data *data, char *path, char **command_array);
 void	free_token(t_token *token);
 int		check_bin_local(char *binary);
 int		check_bin_path(char *binary, char **paths);
 int		is_file(char *binary, char *path);
+
+/* in utils2.c */
+void	malloc_check_message(void *ptr);
+void	free_null(void *ptr);
 
 /* in line_handler.c */
 int		sniff_line(t_data *data);
@@ -201,8 +210,10 @@ void	handler(int sig);
 /* DEPRECATED FUNCTIONS */
 // int		built_in_or_garbage(t_data *data, t_env **env_ll, t_token *token);
 // int		single_execution(t_data *data, t_token *token, t_env **env_ll); DEPRECATED
-// void	single_child(t_data *data, t_token *token, t_env **env_ll); DEPRECRATED
+// void		single_child(t_data *data, t_token *token, t_env **env_ll); DEPRECRATED
 // int		single_parent(pid_t pid, int status); DEPRECATED
-// int 	lonely_execution(t_data *data, t_token *token, t_env **env_ll);
+// int 		lonely_execution(t_data *data, t_token *token, t_env **env_ll);
+// int		how_many_children(t_token *token); DEPRECATED
+// void		handle_heredoc(t_data *data, char *delimiter); DEPRECATED
 
 #endif

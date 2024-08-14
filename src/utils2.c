@@ -1,25 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exit_handler.c                                     :+:      :+:    :+:   */
+/*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/13 13:49:55 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/05/13 14:43:50 by fdessoy-         ###   ########.fr       */
+/*   Created: 2024/08/13 10:03:43 by fdessoy-          #+#    #+#             */
+/*   Updated: 2024/08/13 10:04:24 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	error_exit(int num)
+void	free_null(void *ptr)
 {
-	if (num == 1)
-		ft_putstr_fd(ERR, 2);
-	else if (num == 69)
-		ft_putstr_fd(EXIT, 2);
-	exit(1);
+	free(ptr);
+	ptr = NULL;
+	return ;
 }
 
-// // this is the error handler for allocations later
-// void	error_alloc(char **array, int num)
+void	malloc_check_message(void *ptr)
+{
+	if (!ptr)
+		exit(err_msg(NULL, MALLOC, -1));
+	else
+		return ;
+}
