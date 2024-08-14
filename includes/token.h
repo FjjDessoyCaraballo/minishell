@@ -149,7 +149,6 @@ int		check_builtin(char *token, t_token *current_token, t_data *data);
 int		check_echo_flag(char *token, t_token *current_token, t_data *data);
 int		check_flag(char *token, t_token *current_token, t_data *data);
 
-
 /***************************************
  * in src/parse/chunky_check_2.c
  ***************************************/

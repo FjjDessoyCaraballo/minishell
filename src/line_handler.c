@@ -92,8 +92,6 @@ int sniff_line(t_data *data)
 	data->piped = false;
 	if (count_token(data->token, PIPE) >= 1)
 		data->piped = true;
-
-    return 0;
 }
 
 //
