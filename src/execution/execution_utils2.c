@@ -3,86 +3,164 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils2.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/18 14:19:20 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/07 13:20:54 by walnaimi         ###   ########.fr       */
+/*   Created: 2024/07/23 10:19:57 by fdessoy-          #+#    #+#             */
+/*   Updated: 2024/08/14 14:18:53 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	dup_fds(t_data *data, int child, int fd_flag, char *file)
+/**
+ * COMMAND LINE TO ARRAY
+ * This function takes all tokens and organize them into elements of an array
+ * so that we can distribute instructions to each child process individually.
+ * 
+ * E.g.:
+ * *************** IN COMMAND LINE ********************
+ * %> ls -la | grep Makefile | cat > outfile
+ * ****************************************************
+ * The array will take the instructions and organize them as follows:
+ * pipe_array[0] = "ls -la"
+ * pipe_array[1] = "grep Makefile"
+ * pipe_array[2] = "cat > outfile"
+ * 
+ * ***NOTE: I dont think we need malloc checks after strdup, as its taken care of inside the function
+ * 			that should save a few lines at least***
+ */
+char	**cl_to_array(t_token *token)
 {
-	//dprintf(2, "status of redir flag:%d\n", fd_flag);//debug
-	if (fd_flag == REDIRECT_IN)
+	t_token	*head;
+	char	**pipe_array;
+	char	*instruction;
+	char	*tmp;
+	int		i;
+	int		nb_of_instructions;
+	
+	nb_of_instructions = count_token(token, PIPE) + 1;
+	pipe_array = (char **)malloc(sizeof(char *) * (nb_of_instructions + 1));
+	if (!pipe_array)
+		return (NULL);
+	i = 0;
+	head = token;
+	instruction = ft_strdup("");
+	if (!instruction)
+		return (NULL);
+	while (head)
 	{
-		open_fdin(data, file);
-		dup2(data->fd_in, STDIN_FILENO);
-		close(data->fd_in);
-	}
-	else if (fd_flag == REDIRECT_OUT)
+		instruction[0] = '\0';
+		while (head && head->type != PIPE)
+		{
+			tmp = ft_strjoin(instruction, head->value);
+			if (!tmp)
+				return (NULL);
+			free(instruction);
+			instruction = tmp;
+ 			tmp = ft_strjoin(instruction, " ");
+			if (!tmp)
+				return (NULL);
+            free(instruction);
+            instruction = tmp;
+            head = head->next;
+        }
+        if (instruction[ft_strlen(instruction) - 1] == ' ')
+            instruction[ft_strlen(instruction) - 1] = '\0';
+        pipe_array[i++] = ft_strdup(instruction);
+        if (!pipe_array[i - 1])
+            return (NULL);
+        if (head && head->type == PIPE)
+            head = head->next;
+    }
+    free(instruction);
+	instruction = NULL;
+    pipe_array[i] = NULL;
+    return (pipe_array);
+}
+
+/** checking_access() is mainly a last check for general binaries that
+ * the original shell uses. If the user inputs a binary of his own making
+ * it will fail this check, since it uses the paths that were stablished
+ * in the environment variable.
+ * 
+ * USAGE: pass the struct data and the instruction and it will find the
+ * binary by itself and check for existence (F_OK) and executability (X_OK)
+ * 
+ * RETURN VALUES: checking_access() either returns SUCCESS or FAILURE. If
+ * FAILURE is returned, it means that your binary cannot be found in the
+ * general concatenated paths in the environment pointers.
+ */
+int	checking_access(t_data *data, char *instruction, int child)
+{
+	int		i;
+	char	*binary_path;
+	char	*binary;
+	
+	i = 0;
+	binary = get_binary(instruction);
+	(void)child;
+	//dprintf(2, "\nThe binary in child %i is: %s\n\n", child, binary);//debug
+	while (data->binary_paths[i++])
 	{
-		open_fdout(data, file);
-		dup2(STDOUT_FILENO, data->fd_out);
-		close(data->fd_out);
-	}
-	else
-	{
-		if (child == 0)
-			dup2(data->pipe_fd[0], STDIN_FILENO);
+		binary_path = ft_strsjoin(data->binary_paths[i], binary, '/');
+		if (!access(binary_path, F_OK))
+		{
+			if(!access(binary_path, X_OK))
+			{
+				free(binary);
+				free(binary_path);
+				return (SUCCESS);
+			}
+			else
+			{
+				ft_putstr_fd(binary, 2);
+				ft_putstr_fd(": ", 2);
+				ft_putstr_fd("command not found\n", 2);
+				free(binary);
+				free(binary_path);
+				return (FAILURE);
+			}
+		}
 		else
-			dup2(data->read_end, STDIN_FILENO);
+			free(binary_path);
 	}
-	if (child != data->nb_cmds - 1)
-		dup2(data->pipe_fd[1], STDOUT_FILENO);
-	close(data->pipe_fd[0]);
-	close(data->pipe_fd[1]);
+	free(binary);
+	return (FAILURE);
 }
 
-void	open_fdin(t_data *data, char *infile)
+/**
+ * At this point we have an instruction that should follow this syntax:
+ * 
+ * "cmd -flag argument"
+ * "cmd -flag"
+ * "cmd argument"
+ * "redirection infile flag"
+ * "cmd redirection outfile"
+ * 
+ * All these cases will have spaces between them that were set manually in
+ * cl_to_array function.
+ * 
+ * RETURN VALUES: the function returns the binary upon success. If allocation
+ * fails at some point, it returns NULL and frees memory used in the function.
+ */
+char	*get_binary(char *instruction)
 {
-	errno = 0;
-	data->fd_in = open(infile, O_RDONLY);
-	if (errno == ENOENT)
-	{
-		close_fds(data);
-		exit_child(infile, NO_FILE);
-	}
-	else if (errno == EACCES)
-	{
-		close_fds(data);
-		exit_child(infile, FILE_PERMISSION_DENIED);
-	}
-	else if (errno == EISDIR)
-	{
-		close_fds(data);
-		exit_child(infile, EISDIR);
-	}
-}
+	char		**split_instruction;
+	static char	*binary;
 
-void	open_fdout(t_data *data, char *outfile)
-{
-	errno = 0;
-	data->fd_out = open(outfile, O_WRONLY | O_CREAT | O_APPEND, 0664);
-	if (errno == ENOENT)
-		exit_child(outfile, NO_FILE);
-	else if (errno == EACCES)
-		exit_child(outfile, FILE_PERMISSION_DENIED);
-	else if (errno == EISDIR)
-		exit_child(outfile, EISDIR);
-}
-
-void	exit_child(char *file, int err_code)
-{
-	ft_putstr_fd(file, 2);
-	ft_putstr_fd(": ", 2);
-	if (err_code == NO_FILE)
-		ft_putstr_fd("No such file or directory\n", 2);
-	else if (err_code == FILE_PERMISSION_DENIED)
-		ft_putstr_fd("Permission denied\n", 2);
-	else if (err_code == EISDIR)
-		ft_putstr_fd("Is a directory\n", 2);
-	err_code = 1;
-	exit(err_code);
+	split_instruction = ft_split(instruction, ' ');
+	if (!split_instruction)
+		return (NULL);
+	if (!ft_strcmp(split_instruction[0], "<"))
+		binary = ft_strdup(split_instruction[2]);
+	else
+		binary = ft_strdup(split_instruction[0]);
+	if (!binary)
+	{
+		dprintf(2, "\nwe got an empty binary at get_binary\n\n");
+		free_array(split_instruction);
+		return (NULL);
+	}
+	free_array(split_instruction);
+	return (binary);
 }

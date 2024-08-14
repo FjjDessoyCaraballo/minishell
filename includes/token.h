@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 11:35:39 by lstorey           #+#    #+#             */
-/*   Updated: 2024/08/14 04:51:50 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/14 16:28:24 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@ typedef struct s_env t_env;
  * 404. not found (default).
  ********************************************/
 
-typedef	enum e_type{
+typedef	enum e_type
+{
 	BUILTIN = 1,
 	COMMAND = 2,
 	ARGUMENT = 3,
@@ -57,7 +58,8 @@ typedef	enum e_type{
  * prev = points to the previous token.
  *******************************************/
 
-typedef struct s_token{
+typedef struct s_token
+{
 	t_type			type;
 	char			*value;
 	char			*path;
@@ -82,10 +84,7 @@ void 	free_tokens(t_token *head);
 t_token	*find_token(t_token *token, t_type type);
 int		search_token_type(t_token *token, t_type type);
 
-/*****************************************
- * src/parse/parse.c
- *****************************************/
-int    parse_token(t_token *token);
+
 
 /*****************************************
  * src/parse/expand_env.c
@@ -114,7 +113,6 @@ int		ft_strcmp(char *s1, char *s2);
  *****************************************/
 char 	*remove_quotes(const char *str, t_data *data);
 char 	*skip_starting_delim(const char *str, const char *delim, char **target);
-
 
 /*****************************************
  * in src/parse/echo.c
@@ -147,17 +145,17 @@ int		ft_argument_check(char *token, t_token *current_token);
 /***************************************
  * in src/parse/chunky_check_1.c
  ***************************************/
-int 	check_builtin(char *token, t_token *current_token, t_data *data);
-int 	check_echo_flag(char *token, t_token *current_token, t_data *data);
-int 	check_flag(char *token, t_token *current_token, t_data *data);
+int		check_builtin(char *token, t_token *current_token, t_data *data);
+int		check_echo_flag(char *token, t_token *current_token, t_data *data);
+int		check_flag(char *token, t_token *current_token, t_data *data);
 
 /***************************************
  * in src/parse/chunky_check_2.c
  ***************************************/
-int 	check_pipe(char *token, t_token *current_token, t_data *data);
-int 	check_redirect(char *token, t_token *current_token, t_data *data);
-int 	check_command(char *token, t_token *current_token, t_data *data);
-int 	check_argument(char *token, t_token *current_token, t_data *data);
+int		check_pipe(char *token, t_token *current_token, t_data *data);
+int		check_redirect(char *token, t_token *current_token, t_data *data);
+int		check_command(char *token, t_token *current_token, t_data *data);
+int		check_argument(char *token, t_token *current_token, t_data *data);
 
 /*****************************************
  * in src/parse/token_test.c
@@ -169,8 +167,6 @@ void	print_cmd(char **cmd_a);
  * in src/parse/check_utils.c
  *****************************************/
 char	*loop_path_for_binary(char *binary, char **paths);
-int		check_binary_locally(char *binary, char *path);
-int		is_file(char *binary, char *path);
 char	*ft_strndup(const char *s, size_t n);
 int		how_many_tokens(t_token *token);
 int		count_token(t_token *token, t_type type);

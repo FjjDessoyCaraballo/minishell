@@ -17,18 +17,19 @@ INCFLAGS = -Iincludes -Ilibft/includes
 SRC_FILES = main.c\
 			init.c\
 			utils.c\
+			utils2.c\
 			signals.c\
 			ll_utils.c\
 			ll_utils2.c\
 			line_handler.c\
-			exit_handler.c\
 			src/execution/built_ins.c\
 			src/execution/built_ins2.c\
 			src/execution/execution.c\
-			src/execution/execution_utils.c\
+			src/execution/redirections.c\
+			src/execution/fd_dups.c\
+			src/execution/redirect_parse.c\
+			src/execution/execution_utils1.c\
 			src/execution/execution_utils2.c\
-			src/execution/execution_utils3.c\
-			src/execution/execution_utils4.c\
 			src/parse/tokenizer.c\
 			src/parse/ft_strtok.c\
 			src/parse/init_token.c\
@@ -61,31 +62,30 @@ all: $(NAME)
 	@echo "\033[1;32m[✔] GOOD HEAVENS! LOOK AT THE EXECUTABLE!\033[0m"
 
 %.o: %.c #this part has been changed
-	$(CC) $(CFLAGS) $(INCFLAGS) $(LIBFT_INC) -g -c $< -o $@
+	@$(CC) $(CFLAGS) $(INCFLAGS) $(LIBFT_INC) -g -c $< -o $@
 
 $(NAME): $(OBJ_FILES) $(LIBFT)
-	$(CC) $(CFLAGS) $(OBJ_FILES) $(LIBFT_LINK) -o $(NAME) $(O_FLAGS)
+	@$(CC) $(CFLAGS) $(OBJ_FILES) $(LIBFT_LINK) -o $(NAME) $(O_FLAGS)
 	@echo "\033[1;33m[✔] Compiling minishell...\033[0m"
 
 $(LIBFT): $(LIBFT_MAKEFILE)
-	$(MAKE) -C $(LIBFT_DIR)
+	@$(MAKE) -C $(LIBFT_DIR)
 	@echo "\033[1;33m[✔] Linking to libft Makefile...\033[0m"
 
 $(LIBFT_MAKEFILE):
 	@echo "Creating symbolic link for libft Makefile..."
-	ln -s $(CURDIR)/$(LIBFT_MAKEFILE) $(LIBFT_MAKEFILE)
+	@ln -s $(CURDIR)/$(LIBFT_MAKEFILE) $(LIBFT_MAKEFILE)
 
 clean:
-	$(MAKE) -C $(LIBFT_DIR) clean
+	@$(MAKE) -C $(LIBFT_DIR) clean
 	@echo "\033[1;33m[X] Cleaning...\033[0m"
-	rm -f $(OBJ_FILES)
+	@rm -f $(OBJ_FILES)
 
 fclean: clean
-	$(MAKE) -C $(LIBFT_DIR) fclean
+	@$(MAKE) -C $(LIBFT_DIR) fclean
 	@echo "\033[1;31m[XXX] Cleaning it GOOOOOOD...\033[0m"
-	rm -f $(NAME)
+	@rm -f $(NAME)
 
 re: fclean all
 
-# Phony targets
 .PHONY: all clean fclean re

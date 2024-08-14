@@ -6,12 +6,20 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:33:43 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/09 03:34:00 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/14 16:20:27 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
+/**
+ * loop_path_for_binary function assumes that you have access to the PATH variable
+ * inside the environment pointer. In this shell we store the paths inside the env_ll
+ * after 'PATH='. Furthermore, the struct data should have binary_paths inside of it
+ * and one can use that array extract the same way.
+ * 
+ * RETURN VALUES: 
+ */
 char	*loop_path_for_binary(char *binary, char **paths)
 {
 	char	*token_with_path;
@@ -26,47 +34,15 @@ char	*loop_path_for_binary(char *binary, char **paths)
 			if (!access(token_with_path, X_OK))
 				return (token_with_path);
 			else
+			{
+				err_msg(binary, NO_PERMISSION, 1);
 				free(token_with_path);
+			}
 		}
 		free(token_with_path);
 		i++;
 	}
 	return (NULL);
-}
-
-int	check_binary_locally(char *binary, char *path)
-{
-	char	*binary_with_path;
-
-	binary_with_path = ft_strsjoin(path, binary, '/');
-	if (!access(binary_with_path, F_OK))
-	{
-		if (!access(binary_with_path, X_OK))
-		{
-			free(binary_with_path);
-			return (SUCCESS);
-		}
-	}
-	free(binary_with_path);
-	return (FAILURE);
-}
-
-int	is_file(char *binary, char *path)
-{
-	char	*file_with_path;
-
-	file_with_path = ft_strsjoin(path, binary, '/');
-	if (!access(file_with_path, F_OK))
-	{
-		if (!access(file_with_path, X_OK))
-		{
-			free(file_with_path);
-			return (FAILURE);
-		}
-		free(file_with_path);
-		return (SUCCESS);
-	}
-	return (FAILURE);
 }
 
 char	*ft_strndup(const char *s, size_t n)
@@ -87,23 +63,6 @@ char	*ft_strndup(const char *s, size_t n)
 	return (res);
 }
 
-// int	how_many_tokens(t_token *token)  DEPRECATED
-// {
-// 	t_token *head;
-// 	int		count;
-
-// 	count = 0;
-// 	head = token;
-// 	while (head)
-// 	{
-// 		if (token->type == PIPE)
-// 			head = head->next;
-// 		count++;
-// 		head = head->next;	
-// 	}
-// 	return (count);
-// }
-
 int	count_token(t_token *token, t_type type)
 {
 	t_token	*head;
@@ -113,9 +72,10 @@ int	count_token(t_token *token, t_type type)
 	head = token;
 	while (head)
 	{
-		if (token->type == type)
+		if (head->type == type)
 			count++;
-		head = head->next;	
+		head = head->next;
 	}
+	head = NULL;
 	return (count);
 }

@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 12:23:49 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/08/14 15:22:08 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/14 16:24:17 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,10 @@ void setup(t_data *data)
     data->echo_flag = false;
 	//data->exit_code;
 	data->status = 0;
+	data->here_doc = false;
+	data->redirections = false;
+	data->piped = false;
+
 }
 /**
  * Here we are prompting the user to give input with the readline() and
@@ -66,7 +70,7 @@ void setup(t_data *data)
  */
 int sniff_line(t_data *data)
 {
-    data->line_read = readline("\e[45m[Happy birthday Felipe 🥳]\e[0m ");
+    data->line_read = readline("\e[45m[I can't believe this is not shell]\e[0m ");
     if (!data->line_read)
         return NULL_LINE;
     if (*data->line_read)
@@ -85,7 +89,9 @@ int sniff_line(t_data *data)
     //print_tokens(data);
     if (syntax_check(data->token) == 2)// Perform syntax check on the token list
 		return 2;
-    return 0;
+	data->piped = false;
+	if (count_token(data->token, PIPE) >= 1)
+		data->piped = true;
 }
 
 //
