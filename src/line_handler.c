@@ -6,11 +6,26 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 12:23:49 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/08/14 16:20:16 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/14 16:22:20 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+void free_path(t_token *head)
+{
+	t_token *current = head;
+	t_token *next;
+
+	while (current != NULL)
+	{
+		next = current->next;
+		if (current->path)
+			free(current->path);
+		//free(current);
+		current = next;
+	}
+}
 
 void free_tokens(t_token *head)
 {
@@ -21,12 +36,10 @@ void free_tokens(t_token *head)
     {
         next = current->next; // Save the next node
 
-        // Free the dynamically allocated members of the current node
-        if (current->value)
-            free(current->value); // Free the value
-        if (current->path)
-            free(current->path); // Free the path
-        
+        if(current->value)// Free the dynamically allocated members of the current node
+        	free(current->value); // Free the value
+        if(current->path)
+			free(current->path); // Free the path
         // Free the current node itself
         free(current);
 
@@ -34,8 +47,6 @@ void free_tokens(t_token *head)
         current = next;
     }
 }
-
-
 
 void setup(t_data *data)
 {
@@ -67,11 +78,14 @@ int sniff_line(t_data *data)
 	setup(data);
     if (line_tokenization(data) == FAILURE)// Tokenize and parse the input line
 	{
-		free_tokens(data->token);
+		/*free_tokens(data->token);
+		free(data->vtoken);
+		free(data->ctoken);
+		free(data->line_read);
+		free(data->first_node);*/
 		return 963;
 	}
-	free(data->vtoken);
-	free(data->ctoken);
+		free(data->line_read); // 11bytes freed
     //print_tokens(data);
     if (syntax_check(data->token) == 2)// Perform syntax check on the token list
 		return 2;

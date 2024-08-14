@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:34:16 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/09 05:17:39 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/14 14:58:31 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void expand_token_if_needed(t_token *current_token, t_data *data)
             current_token->value = strdup("");  // Assign an empty string or handle as needed
     }
 }
-
+/*
 t_token *initialize_tokens(t_token **current_token, t_token **prev_token)
 {
     t_token *first_node = init_token();
@@ -65,6 +65,7 @@ t_token *initialize_tokens(t_token **current_token, t_token **prev_token)
     *prev_token = NULL;
     return first_node;
 }
+
 
 int line_tokenization(t_data *data)
 {
@@ -93,4 +94,49 @@ int line_tokenization(t_data *data)
     }
     data->token = data->first_node;
     return SUCCESS;//print_tokens(data);//debug
+}*/
+t_token *initialize_tokens(t_data *data)
+{
+    t_token *first_node = init_token();
+    data->current_token = first_node;
+    data->prev_token = NULL;
+    return first_node;
 }
+int line_tokenization(t_data *data)
+{
+    data->first_node = initialize_tokens(data);
+
+    data->vtoken = ft_strtok(data->line_read, data->deli, data, data->current_token);
+    if (data->status == 963)
+        return FAILURE;
+    while (data->vtoken != NULL && data->status != 963)
+    {
+        data->current_token->id = data->id;
+        data->current_token->prev = data->prev_token;
+        data->current_token->value = ft_strdup(data->vtoken);
+        
+        if (chunky_checker(data->current_token->value, data->current_token, data) == FAILURE)
+        {
+            free_tokens(data->first_node); // Free tokens on failure
+            return FAILURE;
+        }
+
+        data->vtoken = ft_strtok(NULL, data->deli, data, data->current_token);
+        if (data->status == 963)
+        {
+            free_tokens(data->first_node); // Free tokens on failure
+            return FAILURE;
+        }
+
+        if (data->vtoken != NULL && data->status != 963)
+        {
+            data->current_token = create_and_link_next_token(data->current_token, data);
+            data->prev_token = data->current_token->prev;
+        }
+    }
+    data->token = data->first_node;
+    return SUCCESS; // print_tokens(data); // debug
+}
+
+
+

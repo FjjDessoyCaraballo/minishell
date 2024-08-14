@@ -51,7 +51,9 @@ void handle_dollar_sign(const char *input, size_t *i, t_data *data, char *result
 {
     if (input[*i + 1] == ' ' || input[*i + 1] == '\0') 
         result[(*j)++] = input[(*i)++];
-    else if (data->d_quote_o && input[*i + 1] == '"')
+    else if (data->d_quote_o && (input[*i + 1] == '"' || input[*i + 1] == '\''))
+        result[(*j)++] = input[(*i)++];
+    else if (input[*i + 1] == '"')
         result[(*j)++] = input[(*i)++];
     else if (input[*i + 1] == '$')
     {
@@ -64,7 +66,11 @@ void handle_dollar_sign(const char *input, size_t *i, t_data *data, char *result
         handle_status_variable(data, result, j);
     }
     else
+    {
+        if(data->echoed == 1)
+        //printf("data->echoed:%d\n",data->echoed);//debug
         handle_env_variable(input, i, data, result, j);
+    }
 }
 
 
@@ -74,7 +80,9 @@ char *expand_env_variables(const char *input, t_data *data)
     char *result;
     size_t i;
     size_t j;
-    result = (char *)malloc(data->len_t * 2 + 1); // Allocate enough space for the expanded result
+    result = (char *)malloc(MAX_ARG_STR); // Allocate enough space for the expanded result
+    /*size_t bruh = data->len_t * 2 + 1;
+    printf("\nbruh: %lu\n", bruh);//debug*/
     if (!result)
         return NULL;
     i = 0;
@@ -86,7 +94,16 @@ char *expand_env_variables(const char *input, t_data *data)
         else if (input[i] == '"' && !data->s_quote_o)
             double_q(input, data, result, &i, &j);
         else if (input[i] == '$' && !data->s_quote_o)
+        {
             handle_dollar_sign(input, &i, data, result, &j);
+            /*if(data->env_copied == 1)
+            {
+                //printf("\n----------\ndata->len_c: %lu\n----------\n", data->len_env);//debug
+                //free(result);
+                ///result =(char *) malloc(data->len_env * 2 + 1);
+                data->env_copied = 0;
+            }*/
+        }
         else
             result[j++] = input[i++];
     }
