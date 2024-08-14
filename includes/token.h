@@ -6,11 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 11:35:39 by lstorey           #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2024/08/14 16:19:32 by walnaimi         ###   ########.fr       */
-=======
-/*   Updated: 2024/08/14 04:51:50 by walnaimi         ###   ########.fr       */
->>>>>>> 7273070 (cleaning up the code - finding memory issues - expanding variables -  improving the tester)
+/*   Updated: 2024/08/14 16:28:24 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,17 +75,8 @@ typedef struct s_token
  *****************************************/
 int		line_tokenization(t_data *data);
 int		chunky_checker(char *token, t_token *current_token, t_data *data);
-<<<<<<< HEAD
-<<<<<<< HEAD
-int		check_and_handle_echo(t_token *current_token, t_token **prev_token, const char *delimiters, t_data *data);
-=======
-int check_and_handle_echo(t_token *current_token, t_token **prev_token, const char *delimiters, t_data *data);
-void free_tokens(t_token *head);
->>>>>>> 668cfd8 (fixed echo when it deals with a (failed to expand variable) string solved and some memory leaks issue)
-=======
 int 	check_and_handle_echo(t_token *current_token, t_token **prev_token, const char *delimiters, t_data *data);
 void 	free_tokens(t_token *head);
->>>>>>> 7273070 (cleaning up the code - finding memory issues - expanding variables -  improving the tester)
 
 /*****************************************
  * src/parse/helper.c
@@ -120,17 +107,12 @@ void 	copy_env_value(char *result, const char *env_value, size_t *j, t_data *dat
 char	*ft_strtok(char *str, const char *delim, t_data *data, t_token *cur_tok);
 int		ft_charinstr(char c, const char *str);
 int		ft_strcmp(char *s1, char *s2);
-<<<<<<< HEAD
-char	*remove_quotes(const char *str, t_data *data);
-=======
 
 /*****************************************
  * in src/parse/ft_strtok_utils.c
  *****************************************/
 char 	*remove_quotes(const char *str, t_data *data);
 char 	*skip_starting_delim(const char *str, const char *delim, char **target);
-
->>>>>>> 7273070 (cleaning up the code - finding memory issues - expanding variables -  improving the tester)
 
 /*****************************************
  * in src/parse/echo.c
@@ -163,30 +145,18 @@ int		ft_argument_check(char *token, t_token *current_token);
 /***************************************
  * in src/parse/chunky_check_1.c
  ***************************************/
-<<<<<<< HEAD
 int		check_builtin(char *token, t_token *current_token, t_data *data);
 int		check_echo_flag(char *token, t_token *current_token, t_data *data);
 int		check_flag(char *token, t_token *current_token, t_data *data);
-=======
-int 	check_builtin(char *token, t_token *current_token, t_data *data);
-int 	check_echo_flag(char *token, t_token *current_token, t_data *data);
-int 	check_flag(char *token, t_token *current_token, t_data *data);
->>>>>>> 7273070 (cleaning up the code - finding memory issues - expanding variables -  improving the tester)
+
 
 /***************************************
  * in src/parse/chunky_check_2.c
  ***************************************/
-<<<<<<< HEAD
 int		check_pipe(char *token, t_token *current_token, t_data *data);
 int		check_redirect(char *token, t_token *current_token, t_data *data);
 int		check_command(char *token, t_token *current_token, t_data *data);
 int		check_argument(char *token, t_token *current_token, t_data *data);
-=======
-int 	check_pipe(char *token, t_token *current_token, t_data *data);
-int 	check_redirect(char *token, t_token *current_token, t_data *data);
-int 	check_command(char *token, t_token *current_token, t_data *data);
-int 	check_argument(char *token, t_token *current_token, t_data *data);
->>>>>>> 7273070 (cleaning up the code - finding memory issues - expanding variables -  improving the tester)
 
 /*****************************************
  * in src/parse/token_test.c
