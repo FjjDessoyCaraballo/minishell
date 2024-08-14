@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:33:43 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/14 16:20:27 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/14 14:22:59 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ char	*ft_strndup(const char *s, size_t n)
 	unsigned int	i;
 
 	i = 0;
-	res = malloc(sizeof(char) * (n + 1)); //1 -> chunky_check 57
+	res = malloc(sizeof(char) * (n + 1));
 	if (res == NULL)
 		return (NULL);
 	while (i < n)

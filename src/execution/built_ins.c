@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 14:18:24 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/12 17:45:41 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/07 15:27:11 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,12 +89,6 @@ int	yodeling(t_token *token)
 	{
 		head = head->next;
 		while(head->type == FLAG)
-		{
-			head = head->next;
-			if (head == NULL)
-				return FAILURE;
-		}
-		if(head->value[0] == '\0')
 			head = head->next;
 		while (head != NULL)
 		{
@@ -108,14 +102,11 @@ int	yodeling(t_token *token)
 	if (head->next->type == ARGUMENT)
 	{
 		head = head->next;
-		if(head->value[0] == '\0')
-			head = head->next;
 		while (head != NULL)
 		{
-			if (head->value[0] != '\0')
-				printf("%s", head->value);
+			printf("%s", head->value);
 			head = head->next;
-			if(head != NULL && head->value[0] != '\0') 
+			if(head != NULL)
 				printf(" ");
 			else if (head == NULL)
 				printf("\n");

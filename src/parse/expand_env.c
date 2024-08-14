@@ -1,15 +1,5 @@
 #include "../../includes/minishell.h"
 
-char *get_env_value(const char *input, size_t var_start, size_t var_len, t_data *data)
-{
-    char var_name[var_len + 1];
-    strncpy(var_name, &input[var_start], var_len);
-    var_name[var_len] = '\0';
-
-    return ft_getenv(var_name, data->envll);
-}
-
-
 char *expand_env_variable(const char *input, size_t *i, t_data *data, size_t *new_len)
 {
     size_t var_start = ++(*i);
@@ -19,7 +9,11 @@ char *expand_env_variable(const char *input, size_t *i, t_data *data, size_t *ne
     size_t var_len = *i - var_start;
     if (var_len > 0)
     {
-        char *env_value = get_env_value(input, var_start, var_len, data);
+        char var_name[var_len + 1];
+        strncpy(var_name, &input[var_start], var_len);
+        var_name[var_len] = '\0';
+
+        char *env_value = ft_getenv(var_name, data->envll);
         if (env_value)
         {
             *new_len = strlen(env_value);
@@ -35,78 +29,67 @@ char *expand_env_variable(const char *input, size_t *i, t_data *data, size_t *ne
     return NULL;
 }
 
-void handle_status_variable(t_data *data, char *result, size_t *j) 
+void copy_env_value(char *result, const char *env_value, size_t *j)
 {
-    char *status_str = ft_itoa(data->status); // Convert integer to string
-    if (status_str)
+    if (env_value)
     {
-        size_t k = 0;
-        while (status_str[k])
-            result[(*j)++] = status_str[k++]; // Append each character to result
-        free(status_str); // Free the dynamically allocated memory
+        size_t value_len;
+        value_len = ft_strlen(env_value);
+        strncpy(&result[*j], env_value, value_len);
+        *j += value_len;
+    }
+}
+void    expand_init(t_data *data, const char *input)
+{
+    data->len_t = strlen(input);
+    data->i_t = 0;
+    data->j_t = 0;
+    data->s_quote_o = 0;
+    data->d_quote_o = 0;
+}
+
+void handle_quotes(const char *input, t_data *data, char *result)
+{
+    if (input[data->i_t] == '\'' && !data->d_quote_o)
+    {
+        data->s_quote_o = !data->s_quote_o;
+        result[data->j_t++] = input[data->i_t++];
+    }
+    else if (input[data->i_t] == '"' && !data->s_quote_o)
+    {
+        data->d_quote_o = !data->d_quote_o;
+        result[data->j_t++] = input[data->i_t++];
     }
 }
 
-void handle_dollar_sign(const char *input, size_t *i, t_data *data, char *result, size_t *j)
+void expand_vars_and_copy(const char *input, t_data *data, char *result)
 {
-    if (input[*i + 1] == ' ' || input[*i + 1] == '\0') 
-        result[(*j)++] = input[(*i)++];
-    else if (data->d_quote_o && (input[*i + 1] == '"' || input[*i + 1] == '\''))
-        result[(*j)++] = input[(*i)++];
-    else if (input[*i + 1] == '"')
-        result[(*j)++] = input[(*i)++];
-    else if (input[*i + 1] == '$')
+    if (input[data->i_t] == '$' && !data->s_quote_o)
     {
-        (*i) += 2;
-        result[(*j)++] = '$';
-    }
-    else if (input[*i + 1] == '?')
-    {
-        (*i) += 2;
-        handle_status_variable(data, result, j);
+        size_t new_len;
+        char *env_value = expand_env_variable(input, &data->i_t, data, &new_len);
+        if (env_value)
+            copy_env_value(result, env_value, &data->j_t);
     }
     else
-    {
-        if(data->echoed == 1)
-        //printf("data->echoed:%d\n",data->echoed);//debug
-        handle_env_variable(input, i, data, result, j);
-    }
+        result[data->j_t++] = input[data->i_t++];
 }
-
 
 char *expand_env_variables(const char *input, t_data *data)
 {
-    setup_env_variables(input, data);
-    char *result;
-    size_t i;
-    size_t j;
-    result = (char *)malloc(MAX_ARG_STR); // Allocate enough space for the expanded result
-    /*size_t bruh = data->len_t * 2 + 1;
-    printf("\nbruh: %lu\n", bruh);//debug*/
-    if (!result)
-        return NULL;
-    i = 0;
-    j = 0;
-    while (input[i])
+    expand_init(data, input);
+    char *result = (char *)malloc(data->len_t * 2 + 1); // Allocate enough space for the expanded result
+    if (!result) return NULL;
+
+    while (input[data->i_t])
     {
-        if (input[i] == '\'' && !data->d_quote_o)
-            single_q(input, data, result, &i, &j);
-        else if (input[i] == '"' && !data->s_quote_o)
-            double_q(input, data, result, &i, &j);
-        else if (input[i] == '$' && !data->s_quote_o)
-        {
-            handle_dollar_sign(input, &i, data, result, &j);
-            /*if(data->env_copied == 1)
-            {
-                //printf("\n----------\ndata->len_c: %lu\n----------\n", data->len_env);//debug
-                //free(result);
-                ///result =(char *) malloc(data->len_env * 2 + 1);
-                data->env_copied = 0;
-            }*/
-        }
+        if (input[data->i_t] == '\'' && !data->d_quote_o)
+            handle_quotes(input, data, result); // Handle single and double quotes
+        else if (input[data->i_t] == '$' && !data->s_quote_o)
+            expand_vars_and_copy(input, data, result); // Expand environment variables
         else
-            result[j++] = input[i++];
+            result[data->j_t++] = input[data->i_t++]; // Copy characters directly
     }
-    result[j] = '\0'; // Null-terminate the result string
+    result[data->j_t] = '\0'; // Null-terminate the result string*/
     return result;
 }
