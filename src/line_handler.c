@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 12:23:49 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/08/14 16:22:20 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/14 16:24:17 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,7 @@ int sniff_line(t_data *data)
 	data->piped = false;
 	if (count_token(data->token, PIPE) >= 1)
 		data->piped = true;
+
     return 0;
 }
 
