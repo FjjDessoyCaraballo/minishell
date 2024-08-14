@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/14 14:35:09 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/14 16:22:02 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,8 +91,9 @@ typedef struct s_data
 	int			status;
 	char		**cmd; // need to insert pids, tokens, and commands
 	t_token		*token;
-	char		**builtins;
-	char		**redirect;
+	t_token		*first_node;
+	t_token		*current_token;
+	t_token		*prev_token;
 	char		**cmd_a;
 	bool		echoed;
 	bool		echo_flag;
@@ -112,10 +113,13 @@ typedef struct s_data
 	int			in_quotes;//ft_strtok
 	char		quote_char;//ft_strtok
 	size_t		len_t;
-	size_t		i_t;
-	size_t		j_t;
+	size_t		len_env;
+	int			env_copied;
 	int			s_quote_o;
 	int			d_quote_o;
+	int			exit_code;
+	char		*new_str;
+	char		*temp_str;
 	t_env		*envll;
 }	t_data;
 

@@ -3,14 +3,50 @@
 /*                                                        :::      ::::::::   */
 /*   line_handler.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 12:23:49 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/08/13 10:01:08 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/14 16:24:17 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+void free_path(t_token *head)
+{
+	t_token *current = head;
+	t_token *next;
+
+	while (current != NULL)
+	{
+		next = current->next;
+		if (current->path)
+			free(current->path);
+		//free(current);
+		current = next;
+	}
+}
+
+void free_tokens(t_token *head)
+{
+    t_token *current = head;
+    t_token *next;
+
+    while (current != NULL)
+    {
+        next = current->next; // Save the next node
+
+        if(current->value)// Free the dynamically allocated members of the current node
+        	free(current->value); // Free the value
+        if(current->path)
+			free(current->path); // Free the path
+        // Free the current node itself
+        free(current);
+
+        // Move to the next node
+        current = next;
+    }
+}
 
 void setup(t_data *data)
 {
@@ -20,6 +56,7 @@ void setup(t_data *data)
     data->cmd_ignore = false;
     data->echoed = false;
     data->echo_flag = false;
+	//data->exit_code;
 	data->status = 0;
 	data->here_doc = false;
 	data->redirections = false;
@@ -39,13 +76,23 @@ int sniff_line(t_data *data)
     if (*data->line_read)
 		add_history(data->line_read);
 	setup(data);
-    if (line_tokenization(data) == FAILURE)// Tokenize the input line
+    if (line_tokenization(data) == FAILURE)// Tokenize and parse the input line
+	{
+		/*free_tokens(data->token);
+		free(data->vtoken);
+		free(data->ctoken);
+		free(data->line_read);
+		free(data->first_node);*/
 		return 963;
+	}
+		free(data->line_read); // 11bytes freed
+    //print_tokens(data);
     if (syntax_check(data->token) == 2)// Perform syntax check on the token list
 		return 2;
 	data->piped = false;
 	if (count_token(data->token, PIPE) >= 1)
 		data->piped = true;
+
     return 0;
 }
 
