@@ -128,7 +128,6 @@ void handle_quote(const char *target, t_data *data, t_token *cur_tok)
         data->quote = data->in_quotes;
         cur_tok->expand = true;      // Double quotes typically expand variables
     }
-    
     data->quote_char = target[data->sindex]; // Record the quote character
     data->sindex++;                       // Skip the opening quote
 }
@@ -193,11 +192,23 @@ int unmatched_quote_check(t_data *data)
         if(data->echoed == 0)
             printf("unmatched quote\n");
         else
-            printf("unmatched quote");
+            printf("unmatched quote :3\n");
         return FAILURE;
     }
     return SUCCESS;
 }
+
+void remove_quotes_and_skip_delimiters(const char *delim, t_data *data, char **target)
+{
+    char *stripped_token;
+    stripped_token = remove_quotes(data->ctoken, data); // Remove quotes from the token
+    data->ctoken = stripped_token;
+    *target += data->sindex; // Move target pointer past the token
+
+    while (**target && ft_charinstr(**target, delim)) // Skip trailing delimiters for next call
+        (*target)++;
+}
+
 
 char *ft_strtok(char *str, const char *delim, t_data *data, t_token *cur_tok)
 {
@@ -205,7 +216,6 @@ char *ft_strtok(char *str, const char *delim, t_data *data, t_token *cur_tok)
     initialize_tokenization(data);
    if(set_target_and_skip_delimiters(str, delim, &target) == NULL)
         return NULL;
-
     data->token_start = data->sindex;// Token starts here
     process_quoting_and_delimiters(target, delim, data, cur_tok);
     if (unmatched_quote_check(data) == FAILURE)
@@ -217,12 +227,7 @@ char *ft_strtok(char *str, const char *delim, t_data *data, t_token *cur_tok)
     token = validate_and_process_token(target, data);
     if (!token)
         return NULL;
-    char *stripped_token;
-    stripped_token = remove_quotes(data->ctoken, data);// Remove quotes from the token
-    data->ctoken = stripped_token;
-    target += data->sindex;// Move target pointer past the token
+    remove_quotes_and_skip_delimiters(delim, data, &target);
 
-    while (*target && ft_charinstr(*target, delim))    // Skip trailing delimiters for next call
-        target++;
     return data->ctoken;
 }
