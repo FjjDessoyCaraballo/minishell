@@ -45,6 +45,7 @@ SRC_FILES = main.c\
 			src/parse/expand_env.c\
 			src/parse/expand_env_utils.c\
 			src/parse/modify_str.c\
+			src/parse/ft_strtok_utils.c\
 # Object files
 OBJ_FILES = $(SRC_FILES:.c=.o)
 
