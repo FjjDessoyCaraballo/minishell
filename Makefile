@@ -41,7 +41,6 @@ SRC_FILES = main.c\
 			src/parse/token_to_array.c\
 			src/parse/getenv.c\
 			src/parse/helper.c\
-			src/parse/parse.c\
 			src/parse/expand_env.c\
 			src/parse/expand_env_utils.c\
 			src/parse/modify_str.c\
