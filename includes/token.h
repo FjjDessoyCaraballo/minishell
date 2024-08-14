@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 11:35:39 by lstorey           #+#    #+#             */
-/*   Updated: 2024/08/14 16:13:06 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/14 16:17:06 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,11 @@ char 	*concatenate_echo_args(t_token *current_token, const char *delimiters, t_d
  * in src/parse/init_token.c
  *****************************************/
 t_token	*init_token();
+
+/*****************************************
+ * in src/parse/modify_str.c
+ *****************************************/
+void modify_str(char *str);
 
 /*****************************************
  * in src/parse/chunky_check.c
