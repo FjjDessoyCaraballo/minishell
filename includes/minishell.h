@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/14 10:12:16 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/14 14:35:09 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@
 # define MALLOC "Malloc failure\n"
 # define EXIT "Exit\n"
 # define NO_EXEC "command not found"
+# define NO_PERMISSION "permission denied"
 # define REDIRECT_OUT 222
 # define REDIRECT_IN 111
 # define HERE_DOC 333
@@ -125,9 +126,9 @@ typedef struct s_data
 /* in execution.c */
 int		execution(t_data *data, t_env **env_ll);
 int		execution_prepping(t_data *data, t_token *token, t_env **env_ll);
-int		piping(t_data *data, t_env **env_ll, char **all_cmds, int pids);
-void	piped_execution(t_data *data, char *instruction, int child);
-void	ft_exec(t_data *data, char **cmd_array);
+int		forking(t_data *data, t_env **env_ll, char **all_cmds, pid_t pids);
+void	child_execution(t_data *data, t_env **env_ll, char *instr, int child);
+void	ft_exec(t_data *data, char **cmd_array, int child);
 
 /* in redirections.c */
 void	redirections_handling(t_data *data, char **array);
@@ -143,7 +144,6 @@ void	close_fds(t_data *data);
 char	**cl_to_array(t_token *token);
 int		checking_access(t_data *data, char *instruction, int child);
 char	*get_binary(char *instruction);
-char	*abs_path(char *command);
 
 /* in fd_dups.c */
 void	dup_fds(t_data *data, int child, char **array);
@@ -162,7 +162,7 @@ void	find_bin(t_env **env_ll, t_data *data);
 char	*bin_extract(char *path);
 
 /* in utils.c */
-void	free_data(t_data *data, char *path, t_env **env, char **command_array);
+void	free_data(t_data *data, char *path, char **command_array);
 void	free_token(t_token *token);
 int		check_bin_local(char *binary);
 int		check_bin_path(char *binary, char **paths);

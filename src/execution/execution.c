@@ -6,36 +6,11 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/14 09:59:45 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/14 14:39:58 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-// static void	line_printer(char **array)
-// {
-// 	int i = 0;
-
-// 	while (array[i])
-// 	{
-// 		dprintf(2, "array[%i]: %s\n", i, array[i]);//debug
-// 		i++;
-// 	}
-// }
-
-// static int	token_printer(t_token *token)
-// {
-// 	t_token *head;
-	
-// 	head = token;
-// 	while (head != NULL)
-// 	{
-// 		dprintf(2, "[%s][%i]\n", head->value, head->type);
-// 		head = head->next;
-// 	}
-// 	head = NULL;
-// 	return (SUCCESS);
-// }
 
 int    execution(t_data *data, t_env **env_ll)
 {
@@ -65,7 +40,10 @@ int	execution_prepping(t_data *data, t_token *token, t_env **env_ll)
 	cmd_a = cl_to_array(token);
 	if (!cmd_a)
 		return (FAILURE);
-	data->status = piping(data, env_ll, cmd_a, pids);
+	// data->env = env_arr_updater(env_ll);
+	// if (!data->env)
+	// 	return (FAILURE);
+	data->status = forking(data, env_ll, cmd_a, pids);
 	close_fds(data);
 	pids = wait(&data->status);
 	while (pids > 0)
@@ -74,7 +52,7 @@ int	execution_prepping(t_data *data, t_token *token, t_env **env_ll)
 	return (WEXITSTATUS(data->status));
 }
 
-int	piping(t_data *data, t_env **env_ll, char **all_cmds, int pids)
+int		forking(t_data *data, t_env **env_ll, char **all_cmds, pid_t pids)
 {
 	data->index = 0;
 	while (data->index < data->nb_cmds)
@@ -88,11 +66,8 @@ int	piping(t_data *data, t_env **env_ll, char **all_cmds, int pids)
 			close(data->pipe_fd[1]);
 			return (err_msg(NULL, "Failed to fork\n", -1));
 		}
-		data->env = env_arr_updater(env_ll);
-		if (!data->env)
-			return (FAILURE);
 		if (pids == 0)
-			piped_execution(data, all_cmds[data->index], data->index);
+			child_execution(data, env_ll, all_cmds[data->index], data->index);
 		else
 		{	
 			close(data->pipe_fd[1]);
@@ -110,7 +85,7 @@ int	piping(t_data *data, t_env **env_ll, char **all_cmds, int pids)
  * redirections to know if the user wants the output/input to be redirected from/to
  * a file.
  * 
- * RETURN VALUES: piped_execution() does not return anything as it is just a pathway
+ * RETURN VALUES: child_execution() does not return anything as it is just a pathway
  * to the final part of the execution in ft_exet().
  * 
  * DETAILS: at this point we may use exit() function without worrying that we will
@@ -123,22 +98,40 @@ int	piping(t_data *data, t_env **env_ll, char **all_cmds, int pids)
  * "> outfile"
  * "<< END"
  */
-void	piped_execution(t_data *data, char *instr, int child)
+void	child_execution(t_data *data, t_env **env_ll, char *instr, int child)
 {
 	char		**cmd_array;
 
-	data->index = 0;
+	free_token(data->token);
+	free_ll(*env_ll);
 	cmd_array = ft_split(instr, ' ');
-	dup_fds(data, child, cmd_array); // something wrong is happening in the middle children
-	if (data->redirections == true)
-		cmd_array = parse_instruction(data, cmd_array);
-	if (!cmd_array || !*cmd_array)
+	if (!cmd_array)
 	{
-		free_array(cmd_array);
-		free_data(data, NULL, &data->envll, NULL);
-		exit (-1);
+		free_data(data, NULL, NULL);
+		exit (err_msg(NULL, MALLOC, -1));
 	}
-	ft_exec(data, cmd_array);
+	dup_fds(data, child, cmd_array);
+	if (data->redirections == true)
+	{
+		cmd_array = parse_instruction(data, cmd_array);
+		if (!cmd_array || !*cmd_array)
+		{
+			free_array(cmd_array);
+			free_data(data, NULL, NULL);
+			exit (err_msg(NULL, MALLOC, -1));
+		}
+	}
+	ft_exec(data, cmd_array, child);
+}
+static void	line_printer(char **array)
+{
+	int i = 0;
+
+	while (array[i])
+	{
+		dprintf(2, "array[%i]: %s\n", i, array[i]);//debug
+		i++;
+	}
 }
 
 /**
@@ -155,31 +148,53 @@ void	piped_execution(t_data *data, char *instr, int child)
  * 
  * [placeholder for more documentation]
  */
-void	ft_exec(t_data *data, char **cmd_array)
+void	ft_exec(t_data *data, char **cmd_array, int child)
 {
 	static char	*path;
 
-	// if (checking_access(data, instr, child) != 0)
-	// {
-	// 	free_array(cmd_array);
-	// 	free_array(data->binary_paths);
-	// 	exit(FAILURE);
-	// }
-	if (ft_strchr(cmd_array[0], '/') == NULL) // when we do NOT have slashes 
+	dprintf(2, "in child [%i]:\n", child);
+	line_printer(cmd_array);
+	if (ft_strchr(cmd_array[0], '/') == NULL)
+	{
 		path = loop_path_for_binary(cmd_array[0], data->binary_paths);
-	// else
-	// 	path = abs_path(cmd_array[0]);
+		if (!path)
+		{
+			free_data(data, NULL, cmd_array);
+			exit(err_msg(cmd_array[0], NO_EXEC, 127));
+		}
+	}
 	if (!path)
 	{
 		if (execve(cmd_array[0], cmd_array, data->env) == -1)	
 		{
-			free_data(data, NULL, &data->envll, cmd_array);
+			free_data(data, NULL, cmd_array);
 			exit(err_msg(cmd_array[0], NO_EXEC, 127));
 		}
 	}
+	dprintf(2, "we got to the last execve in child %i\n", child);
 	if (execve(path, cmd_array, data->env) == -1)	
 	{
-		free_data(data, path, &data->envll, cmd_array);
+		free_data(data, path, cmd_array);
 		exit(err_msg(cmd_array[0], NO_EXEC, 127));
 	}
 }
+
+/**
+ * DUMP
+ */
+
+
+
+// static int	token_printer(t_token *token)
+// {
+// 	t_token *head;
+	
+// 	head = token;
+// 	while (head != NULL)
+// 	{
+// 		dprintf(2, "[%s][%i]\n", head->value, head->type);
+// 		head = head->next;
+// 	}
+// 	head = NULL;
+// 	return (SUCCESS);
+// }

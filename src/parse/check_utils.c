@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:33:43 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/05 10:39:11 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/14 14:22:59 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,10 @@ char	*loop_path_for_binary(char *binary, char **paths)
 			if (!access(token_with_path, X_OK))
 				return (token_with_path);
 			else
+			{
+				err_msg(binary, NO_PERMISSION, 1);
 				free(token_with_path);
+			}
 		}
 		free(token_with_path);
 		i++;

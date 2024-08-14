@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 11:23:58 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/05 10:24:13 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/14 14:30:21 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,12 @@
  * env: our linked list that works as our environment pointer;
  * command_array: variable linked to the execution of single/multiple processes.
  */
-void	free_data(t_data *data, char *path, t_env **env, char **command_array)
+void	free_data(t_data *data, char *path, char **command_array)
 {
 	if (data->binary_paths)
 		free_array(data->binary_paths);
 	if (data->env)
 		free_array(data->env);
-	if (env)
-		free_ll(*env);
 	if (command_array)
 		free_array(command_array);
 	if (path)

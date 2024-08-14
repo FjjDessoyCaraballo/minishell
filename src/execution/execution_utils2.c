@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execution_utils3.c                                 :+:      :+:    :+:   */
+/*   execution_utils2.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 10:19:57 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/07 13:23:10 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/14 14:18:53 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,18 +163,4 @@ char	*get_binary(char *instruction)
 	}
 	free_array(split_instruction);
 	return (binary);
-}
-
-char	*abs_path(char *command)
-{
-	int		i;
-	char	*path;
-
-	i = 0;
-	while (command[i++])
-	{
-		if (ft_strchr(command, '/') != NULL)
-			return (path = ft_strchr(command, '/'));
-	}
-	return (NULL);
 }
