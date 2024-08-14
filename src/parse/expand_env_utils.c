@@ -6,13 +6,14 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 14:53:29 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/08/14 14:56:54 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/14 15:55:43 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 void copy_env_value(char *result, const char *env_value, size_t *j, t_data *data)
 {
+    (void) data;
     if (env_value)
     {
         size_t value_len;
