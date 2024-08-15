@@ -22,7 +22,7 @@ char *expand_env_variable(const char *input, size_t *i, t_data *data, size_t *ne
         char *env_value = get_env_value(input, var_start, var_len, data);
         if (env_value)
         {
-            *new_len = strlen(env_value);
+            *new_len = ft_strlen(env_value);
             return env_value;
         }
         else
@@ -67,8 +67,6 @@ void handle_dollar_sign(const char *input, size_t *i, t_data *data, char *result
     }
     else
     {
-        if(data->echoed == 1)
-        //printf("data->echoed:%d\n",data->echoed);//debug
         handle_env_variable(input, i, data, result, j);
     }
 }
@@ -81,8 +79,6 @@ char *expand_env_variables(const char *input, t_data *data)
     size_t i;
     size_t j;
     result = (char *)malloc(MAX_ARG_STR); // Allocate enough space for the expanded result
-    /*size_t bruh = data->len_t * 2 + 1;
-    printf("\nbruh: %lu\n", bruh);//debug*/
     if (!result)
         return NULL;
     i = 0;
@@ -96,13 +92,6 @@ char *expand_env_variables(const char *input, t_data *data)
         else if (input[i] == '$' && !data->s_quote_o)
         {
             handle_dollar_sign(input, &i, data, result, &j);
-            /*if(data->env_copied == 1)
-            {
-                //printf("\n----------\ndata->len_c: %lu\n----------\n", data->len_env);//debug
-                //free(result);
-                ///result =(char *) malloc(data->len_env * 2 + 1);
-                data->env_copied = 0;
-            }*/
         }
         else
             result[j++] = input[i++];

@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:33:52 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/14 13:05:43 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/15 15:27:35 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ void print_binary_paths(t_data *data)
     {
         printf("Path %d: %s\n", i, data->binary_paths[i]);
     }
-
 	if (!data->binary_paths)
     {
         printf("Binary paths are NULL\n");

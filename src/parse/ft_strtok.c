@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:34:00 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/14 14:52:59 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/14 19:36:14 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ char *ft_strtok(char *str, const char *delim, t_data *data, t_token *cur_tok)
         modify_str(str);
     if(skip_starting_delim(str, delim, &target) == NULL)
         return NULL;
-    data->token_start = data->sindex;// Token starts here
+    
     process_quoting_and_delimiters(target, delim, data, cur_tok);
     
     if (unmatched_quote_check(data) == FAILURE)
@@ -115,4 +115,3 @@ char *ft_strtok(char *str, const char *delim, t_data *data, t_token *cur_tok)
     //printf("ctoken:[%s]\n", data->ctoken);//debug
     return data->ctoken;
 }
-

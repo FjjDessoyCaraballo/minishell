@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:34:10 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/12 17:16:01 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/14 20:48:15 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ void print_tokens(t_data *data)
         token = token->next;
     }
     printf("======================================\n");
-    // Backward traversal to check prev pointers
 	token = last_token;
     /*while (token != NULL)
     {
