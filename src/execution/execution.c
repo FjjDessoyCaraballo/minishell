@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/15 15:12:13 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/15 15:42:05 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,18 +85,24 @@ int		forking(t_data *data, t_env **envll, char **all_cmds, pid_t pids)
 	data->index = 0;
 	while (data->index < data->nb_cmds)
 	{
-		if (pipe(data->pipe_fd) == -1)
-			return (err_msg(NULL, "Broken pipe\n", 141));
+		if (data->piped == true)
+		{
+			if (pipe(data->pipe_fd) == -1)
+				return (err_msg(NULL, "Broken pipe\n", 141));
+		}
 		pids = fork();
 		if (pids < 0)
 		{
-			close(data->pipe_fd[0]);
-			close(data->pipe_fd[1]);
+			if (data->piped == true)
+			{
+				close(data->pipe_fd[0]);
+				close(data->pipe_fd[1]);
+			}
 			return (err_msg(NULL, "Failed to fork\n", -1));
 		}
 		if (pids == 0)
 			child_execution(data, envll, all_cmds[data->index], data->index);
-		else
+		else if (data->piped == true)
 		{	
 			close(data->pipe_fd[1]);
 			if (data->index > 0)
@@ -105,7 +111,7 @@ int		forking(t_data *data, t_env **envll, char **all_cmds, pid_t pids)
 		}
 		data->index++;
 	}
-	return (data->index);
+	return (0);
 }
 
 /**
@@ -137,7 +143,6 @@ void	child_execution(t_data *data, t_env **envll, char *instr, int child)
 		free_data(data, NULL, NULL);
 		exit (err_msg(NULL, MALLOC, -1));
 	}
-	// line_printer(cmd_array);
 	dup_fds(data, child, cmd_array);
 	if (data->redirections == true)
 	{

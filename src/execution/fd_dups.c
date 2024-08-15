@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 10:06:30 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/13 10:06:32 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/15 15:39:08 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,15 +20,16 @@ void	dup_fds(t_data *data, int child, char **array)
 		redirections_handling(data, array);
 	else
 	{
-		if (child == 0 && data->piped == true)
-			dup2(data->pipe_fd[0], STDIN_FILENO);
-		else
+		if (child != 0 && data->piped == true)
 			dup2(data->read_end, STDIN_FILENO);
+		if (child != data->nb_cmds - 1)
+			dup2(data->pipe_fd[1], STDOUT_FILENO);
+		if (data->piped)
+		{
+			close(data->pipe_fd[0]);
+			close(data->pipe_fd[1]);
+		}
 	}
-	if (child != data->nb_cmds - 1)
-		dup2(data->pipe_fd[1], STDOUT_FILENO);
-	close(data->pipe_fd[0]);
-	close(data->pipe_fd[1]);
 }
 
 void	open_fdin(t_data *data, char *infile)
