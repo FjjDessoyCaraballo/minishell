@@ -16,18 +16,6 @@ int check_builtin(char *token, t_token *current_token, t_data *data)
     return FAILURE;
 }
 
-/*int check_echo_flag(char *token, t_token *current_token, t_data *data) 
-{
-    (void)token;
-    if (data->echo_flag && ft_strncmp(current_token->value, "-n", 3) == SUCCESS)
-    {
-        current_token->type = FLAG;
-        current_token->value = "-n";
-        return SUCCESS;
-    }
-    return FAILURE;
-}*/
-
 int check_echo_flag(char *token, t_token *current_token, t_data *data) 
 {
     if (data->echo_flag && token[0] == '-')

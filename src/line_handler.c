@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 12:23:49 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/08/14 16:53:37 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/15 13:57:53 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,6 @@ void setup(t_data *data)
     data->cmd_ignore = false;
     data->echoed = false;
     data->echo_flag = false;
-	//data->exit_code;
-	data->status = 0;
 	data->here_doc = false;
 	data->redirections = false;
 	data->piped = false;
@@ -86,13 +84,14 @@ int sniff_line(t_data *data)
 		return 963;
 	}
 		free(data->line_read); // 11bytes freed
-    //print_tokens(data);
     if (syntax_check(data->token) == 2)// Perform syntax check on the token list
-		return 2;
+		return 2;	
+	/*if(data->token != NULL)
+    	print_tokens(data);*/
 	data->piped = false;
 	if (count_token(data->token, PIPE) >= 1)
 		data->piped = true;
-	return SUCCESS;
+	return (SUCCESS);
 }
 
 //

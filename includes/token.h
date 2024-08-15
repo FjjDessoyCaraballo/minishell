@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 11:35:39 by lstorey           #+#    #+#             */
-/*   Updated: 2024/08/14 16:28:24 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/14 20:13:32 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <stdbool.h>
 typedef struct s_data t_data;
 typedef struct s_env t_env;
+typedef struct s_group t_group;
 /*******************************************
  * enum assign types
  * 1. echo,cd,pwd...
@@ -68,7 +69,16 @@ typedef struct s_token
 	bool			echo;
 	struct s_token	*next;
 	struct s_token  *prev;
+	struct s_group	*group;
 }		t_token;
+
+typedef struct s_group
+{
+	t_token *tokens;
+	int		nb_tokens;
+	int		id;
+	struct s_group *next;
+}		t_group;
 
 /*****************************************
  * in src/parse/tokenizer.c
