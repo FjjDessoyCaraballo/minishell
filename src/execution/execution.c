@@ -6,33 +6,64 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/14 14:39:58 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/15 15:12:13 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+/****************************************/
+/************* PRINTERS *****************/
+/****************************************/
+// static void	line_printer(char **array)
+// {
+// 	int i = 0;
+
+// 	while (array[i])
+// 	{
+// 		dprintf(2, "array[%i]: %s\n", i, array[i]);//debug
+// 		i++;
+// 	}
+// }
+
+// static int	token_printer(t_token *token)
+// {
+// 	t_token *head;
+	
+// 	head = token;
+// 	while (head != NULL)
+// 	{
+// 		dprintf(2, "[%s][%i]\n", head->value, head->type);
+// 		head = head->next;
+// 	}
+// 	head = NULL;
+// 	return (SUCCESS);
+// }
 
 int    execution(t_data *data, t_env **env_ll)
 {
     t_token    *token;
 
 	token = data->token;
-	data->nb_cmds = count_token(token, COMMAND);
-	// token_printer(token);
+	data->nb_cmds = count_token(token, PIPE) + 1;
+	data->env = env_arr_updater(env_ll);
+	if (!data->env)
+		return (FAILURE);
 	if (data->nb_cmds == 0)
 		data->nb_cmds = 1;
-	if (token->type != BUILTIN)
-		data->status = execution_prepping(data, token, env_ll);
-	else
+	if (token->type == BUILTIN && !find_token(token, PIPE))
 		data->status = built_ins(data, token, env_ll);
+	else
+		data->status = execution_prepping(data, env_ll, token);
 	return (data->status);
 }
 
 /**
- * This is the function that will be used when we get multiple instructions
- * by pipes. Its still underwork.
+ * execution_prepping() extract the information of our tokens into an array
+ * and we start forking for the children. Here is also where the parent waits
+ * for all of the children to be done with their executions.
  */
-int	execution_prepping(t_data *data, t_token *token, t_env **env_ll)
+int	execution_prepping(t_data *data, t_env **envll, t_token *token)
 {
 	static pid_t	pids;
 	static char		**cmd_a;
@@ -40,10 +71,7 @@ int	execution_prepping(t_data *data, t_token *token, t_env **env_ll)
 	cmd_a = cl_to_array(token);
 	if (!cmd_a)
 		return (FAILURE);
-	// data->env = env_arr_updater(env_ll);
-	// if (!data->env)
-	// 	return (FAILURE);
-	data->status = forking(data, env_ll, cmd_a, pids);
+	data->status = forking(data, envll, cmd_a, pids);
 	close_fds(data);
 	pids = wait(&data->status);
 	while (pids > 0)
@@ -52,7 +80,7 @@ int	execution_prepping(t_data *data, t_token *token, t_env **env_ll)
 	return (WEXITSTATUS(data->status));
 }
 
-int		forking(t_data *data, t_env **env_ll, char **all_cmds, pid_t pids)
+int		forking(t_data *data, t_env **envll, char **all_cmds, pid_t pids)
 {
 	data->index = 0;
 	while (data->index < data->nb_cmds)
@@ -67,7 +95,7 @@ int		forking(t_data *data, t_env **env_ll, char **all_cmds, pid_t pids)
 			return (err_msg(NULL, "Failed to fork\n", -1));
 		}
 		if (pids == 0)
-			child_execution(data, env_ll, all_cmds[data->index], data->index);
+			child_execution(data, envll, all_cmds[data->index], data->index);
 		else
 		{	
 			close(data->pipe_fd[1]);
@@ -98,18 +126,18 @@ int		forking(t_data *data, t_env **env_ll, char **all_cmds, pid_t pids)
  * "> outfile"
  * "<< END"
  */
-void	child_execution(t_data *data, t_env **env_ll, char *instr, int child)
+void	child_execution(t_data *data, t_env **envll, char *instr, int child)
 {
 	char		**cmd_array;
+	t_token		*token;
 
-	free_token(data->token);
-	free_ll(*env_ll);
 	cmd_array = ft_split(instr, ' ');
 	if (!cmd_array)
 	{
 		free_data(data, NULL, NULL);
 		exit (err_msg(NULL, MALLOC, -1));
 	}
+	// line_printer(cmd_array);
 	dup_fds(data, child, cmd_array);
 	if (data->redirections == true)
 	{
@@ -121,80 +149,8 @@ void	child_execution(t_data *data, t_env **env_ll, char *instr, int child)
 			exit (err_msg(NULL, MALLOC, -1));
 		}
 	}
-	ft_exec(data, cmd_array, child);
+	token = ft_builtin_exec(cmd_array, data->token);
+	if (token)
+		exit(built_ins(data, token, envll));
+	ft_exec(data, cmd_array);
 }
-static void	line_printer(char **array)
-{
-	int i = 0;
-
-	while (array[i])
-	{
-		dprintf(2, "array[%i]: %s\n", i, array[i]);//debug
-		i++;
-	}
-}
-
-/**
- * This is the second part of the execution where we are going to
- * check if we have the redirection flag (int redirect) and we are
- * parsing the commands differently if we do.
- * 
- * Redirections here take an even more strict definition:
- * - "%> cat << EOF | cat > outfile"
- * 
- * Therefore, in here, redirections will be strictly "<" and ">", while
- * HERE_DOC and APPEND will have explicit naming because they are able
- * to take arguments beforehand.
- * 
- * [placeholder for more documentation]
- */
-void	ft_exec(t_data *data, char **cmd_array, int child)
-{
-	static char	*path;
-
-	dprintf(2, "in child [%i]:\n", child);
-	line_printer(cmd_array);
-	if (ft_strchr(cmd_array[0], '/') == NULL)
-	{
-		path = loop_path_for_binary(cmd_array[0], data->binary_paths);
-		if (!path)
-		{
-			free_data(data, NULL, cmd_array);
-			exit(err_msg(cmd_array[0], NO_EXEC, 127));
-		}
-	}
-	if (!path)
-	{
-		if (execve(cmd_array[0], cmd_array, data->env) == -1)	
-		{
-			free_data(data, NULL, cmd_array);
-			exit(err_msg(cmd_array[0], NO_EXEC, 127));
-		}
-	}
-	dprintf(2, "we got to the last execve in child %i\n", child);
-	if (execve(path, cmd_array, data->env) == -1)	
-	{
-		free_data(data, path, cmd_array);
-		exit(err_msg(cmd_array[0], NO_EXEC, 127));
-	}
-}
-
-/**
- * DUMP
- */
-
-
-
-// static int	token_printer(t_token *token)
-// {
-// 	t_token *head;
-	
-// 	head = token;
-// 	while (head != NULL)
-// 	{
-// 		dprintf(2, "[%s][%i]\n", head->value, head->type);
-// 		head = head->next;
-// 	}
-// 	head = NULL;
-// 	return (SUCCESS);
-// }

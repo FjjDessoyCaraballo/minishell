@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/14 14:35:09 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/15 15:11:41 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,16 +43,16 @@
 /* macros ****************************************/
 /*************************************************/
 # define ERR "Error\n"
-# define MALLOC "Malloc failure\n"
+# define MALLOC ": Malloc failure\n"
 # define EXIT "Exit\n"
-# define NO_EXEC "command not found"
-# define NO_PERMISSION "permission denied"
+# define NO_EXEC ": command not found"
+# define NO_PERMISSION ": permission denied"
 # define REDIRECT_OUT 222
 # define REDIRECT_IN 111
 # define HERE_DOC 333
 # define APP 444
 # define NO_FILE 100
-# define SYNTAX "syntax error near unexpected token "
+# define SYNTAX ": syntax error near unexpected token "
 # define NULL_LINE 5
 # define DIRECTORY 69
 # define FILE 55
@@ -125,10 +125,13 @@ typedef struct s_data
 
 /* in execution.c */
 int		execution(t_data *data, t_env **env_ll);
-int		execution_prepping(t_data *data, t_token *token, t_env **env_ll);
-int		forking(t_data *data, t_env **env_ll, char **all_cmds, pid_t pids);
-void	child_execution(t_data *data, t_env **env_ll, char *instr, int child);
-void	ft_exec(t_data *data, char **cmd_array, int child);
+int		execution_prepping(t_data *data, t_env **envll, t_token *token);
+int		forking(t_data *data, t_env **envll, char **all_cmds, pid_t pids);
+void	child_execution(t_data *data, t_env **envll, char *instr, int child);
+
+/* in execution2.c */
+void	ft_exec(t_data *data, char **cmd_array);
+t_token	*ft_builtin_exec(char **array, t_token *token);
 
 /* in redirections.c */
 void	redirections_handling(t_data *data, char **array);
@@ -201,8 +204,6 @@ int		export(t_token *token, t_env **env_ll);
 int		print_export(t_env **env_ll);
 int		unset(t_token *token, t_env **env_ll);
 void 	alphabetical_printer(char **env_array);
-
-/* in built_ins3.c */
 
 /* signals.c */
 void	handler(int sig);
