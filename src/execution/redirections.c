@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 13:03:21 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/15 15:39:40 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/16 10:23:26 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,16 @@ void redirections_handling(t_data *data, char **array)
 					close(data->pipe_fd[0]);
 					close(data->pipe_fd[1]);
 				}
+				else
+				{
+					close(data->fd_in);
+					data->fd_in = open("/tmp/heredoc_tmp", O_RDONLY);
+					if (data->fd_in < 0)
+						exit(err_msg(NULL, SYSCALL, 1));
+					dup2(data->fd_in, STDIN_FILENO);
+					close(data->fd_in);
+					unlink("/tmp/heredoc_tmp");
+				}
 			}
 			else
 				exit(err_msg("'newline'", SYNTAX, 2));		
@@ -78,6 +88,12 @@ void here_doc(t_data *data, char *delimiter)
 {
 	char	*input;
 
+	if (data->piped == false)
+	{
+		data->fd_in = open("/tmp/heredoc_tmp", O_WRONLY | O_CREAT | O_TRUNC, 0664);
+		if (data->fd_in < 0)
+			exit(err_msg(NULL, SYSCALL, 1));
+	}
 	while (1)
 	{
 		input = readline("8==D ");
@@ -89,14 +105,12 @@ void here_doc(t_data *data, char *delimiter)
 			write(data->pipe_fd[1], "\n", 1);
 		}
 		else
-		{
-			// not working without pipes
-			data->fd_in = write(STDIN_FILENO, input, ft_strlen(delimiter));
+		{			
+			write(data->fd_in, input, ft_strlen(input));
+			write(data->fd_in, "\n", ft_strlen(input));
 		}
 		free(input);
 	}
-	if (input)
-		free(input);
 }
 
 int	find_redirection(char **array)

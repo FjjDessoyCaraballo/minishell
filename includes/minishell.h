@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/15 15:11:41 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/16 10:16:44 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@
 # define REDIRECT_OUT 222
 # define REDIRECT_IN 111
 # define HERE_DOC 333
+# define SYSCALL "Unable to create temporary for here_doc"
 # define APP 444
 # define NO_FILE 100
 # define SYNTAX ": syntax error near unexpected token "
