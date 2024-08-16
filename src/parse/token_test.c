@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:34:10 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/06 16:29:55 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/14 20:48:15 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,32 +26,46 @@ void print_tokens(t_data *data)
 {
     t_token *token = data->token;
 	t_token *last_token = NULL;
-
+    const char *type_names[] = 
+    {
+    "UNKNOWN",
+    "BUILTIN",
+    "COMMAND",
+    "ARGUMENT",
+    "PIPE",
+    "FLAG",
+    "ENVVAR",
+    "RED_IN",
+    "RED_OUT",
+    "HEREDOC",
+    "APPEND",
+    "UNKNOWN"
+    };
     // Forward traversal to print all tokens
     while (token != NULL)
     {
         printf("token value:[%s]\n", token->value);
-        printf("token type:[%i]\n", token->type);
+        printf("token type:[%s]\n", type_names[token->type]);
         printf("id:[%i]\n", token->id);
         printf("expand:[%i]\n",token->expand);
         if(token->echo == true || data->echoed == true) 
             printf("echo?:[%d]\n",token->echo);
 		if(token->path != NULL)
 			printf("token path:[%s]\n", token->path);
+        printf("\n");
         if (token->next == NULL) // Stop at the last token
             last_token = token;
         token = token->next;
     }
-
-    // Backward traversal to check prev pointers
+    printf("======================================\n");
 	token = last_token;
-    while (token != NULL)
+    /*while (token != NULL)
     {
-       /*printf("prev token value:[%s]\n", token->value);
+        printf("prev token value:[%s]\n", token->value);
         printf("prev token type:[%i]\n", token->type);
-        printf("prev id:[%i]\n", token->id);*/
+        printf("prev id:[%i]\n", token->id);
         token = token->prev;
-    }
+    }*/
 }
 
 void print_cmd(char **cmd_a)
