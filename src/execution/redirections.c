@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 13:03:21 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/16 13:11:34 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/16 14:49:39 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void redirections_handling(t_data *data, char **array)
 			else
 				exit(err_msg("'newline'", SYNTAX, 2));
 		}
-		if (!ft_strcmp(array[data->index], ">"))
+		else if (!ft_strcmp(array[data->index], ">"))
 		{
 			if (array[data->index + 1])
 			{
@@ -43,7 +43,7 @@ void redirections_handling(t_data *data, char **array)
 			else
 				exit(err_msg("'newline'", SYNTAX, 2));
 		}
-		else if (!ft_strncmp(array[data->index], ">>", 2))
+		else if (!ft_strcmp(array[data->index], ">>"))
 		{
 			if (array[data->index + 1])
 			{
@@ -98,7 +98,7 @@ void here_doc(t_data *data, char *delimiter)
 		input = readline("8==D ");
 		if (!ft_strncmp(input, delimiter, ft_strlen(delimiter)))
 			break ;
-		if (data->piped)
+		if (data->piped == true)
 		{
 			write(data->pipe_fd[1], input, ft_strlen(input));
 			write(data->pipe_fd[1], "\n", 1);

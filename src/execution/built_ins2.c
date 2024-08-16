@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 15:26:27 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/07 15:05:59 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/16 13:33:29 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ int	shell_cd(t_token *token, t_data *data)
 
 	if (token->next == NULL)
 	{
-		dprintf(2, "we have fallen into the first clause of shell_cd\n");
 		chdir(data->home_pwd);
 		return (SUCCESS);
 	}

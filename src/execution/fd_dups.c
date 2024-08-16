@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 10:06:30 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/16 12:46:53 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/16 13:45:17 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	open_fdin(t_data *data, char *infile)
 	data->fd_in = open(infile, O_RDONLY);
 	if (errno == ENOENT || errno == EACCES || errno == EISDIR)
 	{
-		dprintf(2, "entering open_fdin\n");
+		// dprintf(2, "entering open_fdin\n");
 		if (errno == ENOENT)
 			exit_child(infile, NO_FILE);
 		else if (errno == EACCES)

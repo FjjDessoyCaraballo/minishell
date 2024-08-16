@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/16 12:53:20 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/16 13:38:13 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,19 +26,19 @@ static void	line_printer(char **array)
 	}
 }
 
-// static int	token_printer(t_token *token)
-// {
-// 	t_token *head;
+static int	token_printer(t_token *token)
+{
+	t_token *head;
 	
-// 	head = token;
-// 	while (head != NULL)
-// 	{
-// 		dprintf(2, "[%s][%i]\n", head->value, head->type);
-// 		head = head->next;
-// 	}
-// 	head = NULL;
-// 	return (SUCCESS);
-// }
+	head = token;
+	while (head != NULL)
+	{
+		dprintf(2, "[%s][%i]\n", head->value, head->type);
+		head = head->next;
+	}
+	head = NULL;
+	return (SUCCESS);
+}
 
 int    execution(t_data *data, t_env **env_ll)
 {
@@ -49,6 +49,7 @@ int    execution(t_data *data, t_env **env_ll)
 	data->env = env_arr_updater(env_ll);
 	if (!data->env)
 		return (FAILURE);
+	token_printer(token);
 	if (data->nb_cmds == 0)
 		data->nb_cmds = 1;
 	if (token->type == BUILTIN && !find_token(token, PIPE))
@@ -144,6 +145,8 @@ void	child_execution(t_data *data, t_env **envll, char *instr, int child)
 		free_data(data, NULL, NULL);
 		exit (err_msg(NULL, MALLOC, -1));
 	}
+	data->here_doc = false;
+	line_printer(cmd_array);
 	dup_fds(data, child, cmd_array);
 	if (data->redirections == true)
 	{
@@ -155,9 +158,32 @@ void	child_execution(t_data *data, t_env **envll, char *instr, int child)
 			exit (err_msg(NULL, MALLOC, -1));
 		}
 	}
-	line_printer(cmd_array);
 	token = ft_builtin_exec(cmd_array, data->token);
 	if (token)
 		exit(built_ins(data, token, envll));
 	ft_exec(data, cmd_array);
 }
+
+// bool	is_heredoc_last(char **array, t_token *token)
+// {
+// 	int		i;
+// 	t_token	*tmp;
+
+// 	i = 0;
+// 	while (array[i])
+// 	{
+// 		tmp = token;
+// 		while (tmp)
+// 		{
+// 			if (!ft_strcmp(array[i], tmp->value))
+// 			{
+// 				if (tmp->type == BUILTIN)
+// 					return (true);
+// 			}
+// 			tmp = tmp->next;
+// 		}
+// 		i++;
+// 	}
+// 	tmp = NULL;
+// 	return (false);
+// }
