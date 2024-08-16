@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 10:06:30 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/15 15:39:08 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/16 12:46:53 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,20 +36,16 @@ void	open_fdin(t_data *data, char *infile)
 {
 	errno = 0;
 	data->fd_in = open(infile, O_RDONLY);
-	if (errno == ENOENT)
+	if (errno == ENOENT || errno == EACCES || errno == EISDIR)
 	{
+		dprintf(2, "entering open_fdin\n");
+		if (errno == ENOENT)
+			exit_child(infile, NO_FILE);
+		else if (errno == EACCES)
+			exit_child(infile, FILE_PERMISSION_DENIED);
+		else if (errno == EISDIR)
+			exit_child(infile, EISDIR);
 		close_fds(data);
-		exit_child(infile, NO_FILE);
-	}
-	else if (errno == EACCES)
-	{
-		close_fds(data);
-		exit_child(infile, FILE_PERMISSION_DENIED);
-	}
-	else if (errno == EISDIR)
-	{
-		close_fds(data);
-		exit_child(infile, EISDIR);
 	}
 }
 
@@ -60,20 +56,15 @@ void	open_fdout(t_data *data, char *outfile, int flag)
 		data->fd_out = open(outfile, O_RDWR | O_CREAT | O_APPEND, 0664);
 	else
 		data->fd_out = open(outfile, O_RDWR | O_CREAT | O_TRUNC, 0664);
-	if (errno == ENOENT)
+	if (errno == ENOENT || errno == EACCES || errno == EISDIR)
 	{
+		if (errno == ENOENT)
+			exit_child(outfile, NO_FILE);
+		else if (errno == EACCES)
+			exit_child(outfile, FILE_PERMISSION_DENIED);
+		else if (errno == EISDIR)
+			exit_child(outfile, EISDIR);
 		close_fds(data);
-		exit_child(outfile, NO_FILE);
-	}
-	else if (errno == EACCES)
-	{
-		close_fds(data);
-		exit_child(outfile, FILE_PERMISSION_DENIED);
-	}
-	else if (errno == EISDIR)
-	{
-		close_fds(data);
-		exit_child(outfile, EISDIR);
 	}
 }
 

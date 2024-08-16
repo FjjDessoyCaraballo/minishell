@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/16 10:16:44 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/16 11:46:01 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,16 +43,17 @@
 /* macros ****************************************/
 /*************************************************/
 # define ERR "Error\n"
-# define MALLOC ": Malloc failure\n"
+# define MALLOC ": Malloc failure"
 # define EXIT "Exit\n"
 # define NO_EXEC ": command not found"
 # define NO_PERMISSION ": permission denied"
 # define REDIRECT_OUT 222
 # define REDIRECT_IN 111
 # define HERE_DOC 333
-# define SYSCALL "Unable to create temporary for here_doc"
+# define HEREDOC_FAILURE "Unable to create temporary for here_doc"
 # define APP 444
 # define NO_FILE 100
+# define FILE_ERROR " No such file or directory"
 # define SYNTAX ": syntax error near unexpected token "
 # define NULL_LINE 5
 # define DIRECTORY 69

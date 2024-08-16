@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/15 15:42:05 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/16 12:53:20 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,16 @@
 /****************************************/
 /************* PRINTERS *****************/
 /****************************************/
-// static void	line_printer(char **array)
-// {
-// 	int i = 0;
+static void	line_printer(char **array)
+{
+	int i = 0;
 
-// 	while (array[i])
-// 	{
-// 		dprintf(2, "array[%i]: %s\n", i, array[i]);//debug
-// 		i++;
-// 	}
-// }
+	while (array[i])
+	{
+		dprintf(2, "array[%i]: %s\n", i, array[i]);//debug
+		i++;
+	}
+}
 
 // static int	token_printer(t_token *token)
 // {
@@ -55,6 +55,7 @@ int    execution(t_data *data, t_env **env_ll)
 		data->status = built_ins(data, token, env_ll);
 	else
 		data->status = execution_prepping(data, env_ll, token);
+
 	return (data->status);
 }
 
@@ -154,6 +155,7 @@ void	child_execution(t_data *data, t_env **envll, char *instr, int child)
 			exit (err_msg(NULL, MALLOC, -1));
 		}
 	}
+	line_printer(cmd_array);
 	token = ft_builtin_exec(cmd_array, data->token);
 	if (token)
 		exit(built_ins(data, token, envll));
