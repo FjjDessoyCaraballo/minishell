@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:34:16 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/15 02:21:22 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/15 22:45:23 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,26 +108,17 @@ int line_tokenization(t_data *data)
 
     data->vtoken = ft_strtok(data->line_read, data->deli, data, data->current_token);
     if (data->status == 963)
-        return FAILURE;
+        return (FAILURE);
     while (data->vtoken != NULL && data->status != 963)
     {
         data->current_token->id = data->id;
         data->current_token->prev = data->prev_token;
         data->current_token->value = ft_strdup(data->vtoken);
-        
         if (chunky_checker(data->current_token->value, data->current_token, data) == FAILURE)
-        {
-            free_tokens(data->first_node); // Free tokens on failure
-            return FAILURE;
-        }
-
+            return (FAILURE);
         data->vtoken = ft_strtok(NULL, data->deli, data, data->current_token);
         if (data->status == 963)
-        {
-            free_tokens(data->first_node); // Free tokens on failure
-            return FAILURE;
-        }
-
+            return (FAILURE);
         if (data->vtoken != NULL && data->status != 963)
         {
             data->current_token = create_and_link_next_token(data->current_token, data);
@@ -135,7 +126,7 @@ int line_tokenization(t_data *data)
         }
     }
     data->token = data->first_node;
-    return SUCCESS; // print_tokens(data); // debug
+    return (SUCCESS); // print_tokens(data); // debug
 }
 
 

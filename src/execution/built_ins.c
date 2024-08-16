@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 14:18:24 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/12 17:45:41 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/15 15:56:53 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,13 +113,19 @@ int	yodeling(t_token *token)
 		while (head != NULL)
 		{
 			if (head->value[0] != '\0')
+			{
+				//printf("printed\n");
 				printf("%s", head->value);
+			}
 			head = head->next;
 			if(head != NULL && head->value[0] != '\0') 
 				printf(" ");
-			else if (head == NULL)
+			/*else if (head == NULL)
 				printf("\n");
+			else
+				printf("\n");*/
 		}
+		printf("\n");
 		return (SUCCESS);
 	}
 	return (FAILURE);

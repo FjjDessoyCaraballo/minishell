@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/14 16:28:50 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/15 16:34:17 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,7 @@ static void	line_printer(char **array)
 
 	while (array[i])
 	{
-		dprintf(2, "array[%i]: %s\n", i, array[i]);//debug
+		//dprintf(2, "array[%i]: %s\n", i, array[i]);//debug
 		i++;
 	}
 }
@@ -152,7 +152,7 @@ void	ft_exec(t_data *data, char **cmd_array, int child)
 {
 	static char	*path;
 
-	dprintf(2, "in child [%i]:\n", child);
+	//dprintf(2, "in child [%i]:\n", child);
 	line_printer(cmd_array);
 	if (ft_strchr(cmd_array[0], '/') == NULL)
 	{
