@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 13:03:21 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/16 13:09:18 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/16 13:11:34 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ void redirections_handling(t_data *data, char **array)
 	{
 		if (!ft_strcmp(array[data->index], "<"))
 		{
-			dprintf(2, "we got here first");
 			if (array[data->index + 1])
 			{
 				open_fdin(data, array[data->index + 1]);
