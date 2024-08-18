@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/15 16:34:17 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/19 02:47:15 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int    execution(t_data *data, t_env **env_ll)
 
 	token = data->token;
 	data->nb_cmds = count_token(token, COMMAND);
-	// token_printer(token);
+	//token_printer(token);
 	if (data->nb_cmds == 0)
 		data->nb_cmds = 1;
 	if (token->type != BUILTIN)
@@ -151,7 +151,7 @@ static void	line_printer(char **array)
 void	ft_exec(t_data *data, char **cmd_array, int child)
 {
 	static char	*path;
-
+	(void) child;//for debug
 	//dprintf(2, "in child [%i]:\n", child);
 	line_printer(cmd_array);
 	if (ft_strchr(cmd_array[0], '/') == NULL)
@@ -171,7 +171,7 @@ void	ft_exec(t_data *data, char **cmd_array, int child)
 			exit(err_msg(cmd_array[0], NO_EXEC, 127));
 		}
 	}
-	dprintf(2, "we got to the last execve in child %i\n", child);
+	//dprintf(2, "we got to the last execve in child %i\n", child);//debug
 	if (execve(path, cmd_array, data->env) == -1)	
 	{
 		free_data(data, path, cmd_array);
@@ -184,17 +184,17 @@ void	ft_exec(t_data *data, char **cmd_array, int child)
  */
 
 
-
-// static int	token_printer(t_token *token)
-// {
-// 	t_token *head;
+/*
+static int	token_printer(t_token *token)
+{
+ 	t_token *head;
 	
-// 	head = token;
-// 	while (head != NULL)
-// 	{
-// 		dprintf(2, "[%s][%i]\n", head->value, head->type);
-// 		head = head->next;
-// 	}
-// 	head = NULL;
-// 	return (SUCCESS);
-// }
+ 	head = token;
+ 	while (head != NULL)
+ 	{
+ 		dprintf(2, "[%s][%i]\n", head->value, head->type);
+		head = head->next;
+ 	}
+ 	head = NULL;
+ 	return (SUCCESS);
+}*/

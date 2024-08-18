@@ -6,31 +6,40 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:34:16 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/15 22:45:23 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/18 13:50:54 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
+/**
+ * Checks the type of a given token and returns the corresponding status.
+ * 
+ * @param token The token to be checked.
+ * @param current_token The current token being processed.
+ * @param data The data structure containing info about the shell state.
+ * 
+ * @return SUCCESS if the token type is found, FAILURE otherwise.
+ */
 int chunky_checker(char *token, t_token *current_token, t_data *data)
 {
     if (check_builtin(token, current_token, data) == SUCCESS)
-        return SUCCESS;
+        return (SUCCESS);
     if (check_echo_flag(token, current_token, data) == SUCCESS)
-        return SUCCESS;
+        return (SUCCESS);
     if (check_flag(token, current_token, data) == SUCCESS)
-        return SUCCESS;
+        return (SUCCESS);
     if (check_pipe(token, current_token, data) == SUCCESS)
-        return SUCCESS;
+        return (SUCCESS);
     if (check_redirect(token, current_token, data) == SUCCESS)
-        return SUCCESS;
+        return (SUCCESS);
     if (check_command(token, current_token, data) == SUCCESS)
-        return SUCCESS;
+        return (SUCCESS);
     if (check_argument(token, current_token, data) == SUCCESS)
-        return SUCCESS;
+        return (SUCCESS);
     
     printf("couldn't find type for token\n");
-    return FAILURE;
+    return (FAILURE);
 }
 
 t_token *create_and_link_next_token(t_token *current_token, t_data *data)
@@ -42,6 +51,15 @@ t_token *create_and_link_next_token(t_token *current_token, t_data *data)
     return new_token;// Return the newly created token as the new current_token
 }
 
+/**
+ * Expands the value of a token if necessary,
+ * replacing environment variables with their actual values.
+ * 
+ * @param current_token The token to be expanded.
+ * @param data The data structure containing information about the shell state.
+ * 
+ * @return None
+ */
 void expand_token_if_needed(t_token *current_token, t_data *data)
 {
     if (current_token->expand && current_token->value && data->quote != 1)//TO EXPAND OR NOT TO EXPAND
@@ -54,47 +72,10 @@ void expand_token_if_needed(t_token *current_token, t_data *data)
             current_token->value = expanded_value;// Update the token's value with the expanded value
         }
         else
-            current_token->value = strdup("");  // Assign an empty string or handle as needed
+            current_token->value = ft_strdup("");  // Assign an empty string or handle as needed
     }
 }
-/*
-t_token *initialize_tokens(t_token **current_token, t_token **prev_token)
-{
-    t_token *first_node = init_token();
-    *current_token = first_node;
-    *prev_token = NULL;
-    return first_node;
-}
 
-
-int line_tokenization(t_data *data)
-{
-    t_token *current_token;
-    t_token *prev_token;
-    data->first_node = initialize_tokens(&current_token, &prev_token);
-
-    data->vtoken = ft_strtok(data->line_read, data->deli, data, current_token);
-        if (data->status == 963)
-            return FAILURE;
-    while (data->vtoken != NULL && data->status != 963)
-    {
-        current_token->id = data->id;
-        current_token->prev = prev_token;
-        current_token->value = ft_strdup(data->vtoken);
-        if (chunky_checker(current_token->value, current_token, data) == FAILURE)
-            return FAILURE;
-        data->vtoken = ft_strtok(NULL, data->deli, data, current_token);
-        if (data->status == 963)
-            return FAILURE;
-        if (data->vtoken != NULL && data->status != 963)
-        {
-            current_token = create_and_link_next_token(current_token, data);
-            prev_token = current_token->prev;
-        }
-    }
-    data->token = data->first_node;
-    return SUCCESS;//print_tokens(data);//debug
-}*/
 t_token *initialize_tokens(t_data *data)
 {
     t_token *first_node = init_token();
@@ -102,6 +83,7 @@ t_token *initialize_tokens(t_data *data)
     data->prev_token = NULL;
     return first_node;
 }
+
 int line_tokenization(t_data *data)
 {
     data->first_node = initialize_tokens(data);

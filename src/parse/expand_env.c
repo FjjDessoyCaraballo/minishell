@@ -51,16 +51,16 @@ char *expand_env_variable(const char *input, size_t *i, t_data *data, size_t *ne
         if (env_value)
         {
             *new_len = ft_strlen(env_value);
-            return env_value;
+            return (env_value);
         }
         else
         {
             *new_len = 0;
-            return NULL;
+            return (NULL);
         }
     }
     *new_len = 0;
-    return NULL;
+    return (NULL);
 }
 
 /**
@@ -144,7 +144,7 @@ char *expand_env_variables(const char *input, t_data *data)
     char *result;
     size_t i;
     size_t j;
-    result = (char *)malloc(MAX_ARG_STR); // Allocate enough space for the expanded result
+    result = (char *)malloc(MAX_ARG_STR); // must change to allocate size of env list and multiply if inside quotes
     if (!result)
         return NULL;
     i = 0;
@@ -161,5 +161,5 @@ char *expand_env_variables(const char *input, t_data *data)
             result[j++] = input[i++];
     }
     result[j] = '\0'; // Null-terminate the result string
-    return result;
+    return (result);
 }

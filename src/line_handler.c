@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 12:23:49 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/08/16 13:19:30 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/18 17:23:41 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ void free_tokens(t_token *head)
         // Free the current node itself
 		if(current != NULL)
         	free(current);
-
         // Move to the next node
         current = next;
     }
@@ -63,6 +62,7 @@ void setup(t_data *data)
 	data->piped = false;
 
 }
+
 /**
  * Here we are prompting the user to give input with the readline() and
  * tokenizing afterwards. After tokenizing, we are using the tokens to check
@@ -78,8 +78,8 @@ int sniff_line(t_data *data)
 	setup(data);
     if (line_tokenization(data) == FAILURE)// Tokenize and parse the input line
 	{
-		if(data->token != NULL)
-			free_tokens(data->token);
+		/*if(data->token != NULL)
+			free_tokens(data->token);*/
 		/*free(data->vtoken);
 		free(data->ctoken);
 		free(data->line_read);
@@ -91,7 +91,7 @@ int sniff_line(t_data *data)
     if (syntax_check(data->token) == 2)// Perform syntax check on the token list
 		return 2;	
 	/*if(data->token != NULL)
-    	print_tokens(data);*/
+    	print_tokens(data);*/ // print the tokens
 	data->piped = false;
 	if (count_token(data->token, PIPE) >= 1)
 		data->piped = true;
