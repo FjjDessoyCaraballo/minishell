@@ -3,15 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bposa <bposa@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 12:48:59 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/07/11 14:08:08 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/18 20:37:39 by bposa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIBFT_H
 # define LIBFT_H
+
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 10
+# endif
 
 # include <unistd.h>
 # include <stdlib.h>
@@ -73,13 +77,6 @@ void	ft_lstiter(t_list *lst, void (*f)(void *));
 char	*ft_strsjoin(const char *s1, const char *s2, const char sep);
 
 /* gnl */
-# ifndef GET_NEXT_LINE_H
-#  define GET_NEXT_LINE_H
-
-#  ifndef BUFFER_SIZE 
-#   define BUFFER_SIZE 10
-#  endif
-
 typedef struct s_lista
 {
 	char			*str_buf;
@@ -96,12 +93,7 @@ void	clean_the_list(t_lista **list);
 void	dealloc(t_lista **list, t_lista *clean_node, char *buf);
 t_lista	*ft_listlast(t_lista *list);
 
-# endif
-
 /* ft_printf */
-# ifndef FT_PRINTF_H
-#  define FT_PRINTF_H
-
 int		ft_printf(const char *format, ...);
 int		ft_str(char *s, int *check);
 int		ft_char(int c, int *check);
@@ -111,5 +103,4 @@ int		format_check(const char *format, va_list args, int *check);
 int		ft_hex(unsigned long n, int caps, int *check);
 int		ft_pointer(void *ptr, int *check);
 
-# endif
 #endif
