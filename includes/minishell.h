@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: bposa <bposa@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/15 02:04:00 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/18 16:08:05 by bposa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 /* User defined headers **************************/
 /*************************************************/
 # include "libft.h"
-# include "../libft/includes/libft.h" // <- just to silence the nvim errors
 # include "token.h"
 
 /*************************************************/
@@ -89,7 +88,7 @@ typedef struct s_data
 	int			fd_out;
 	char		*home_pwd;
 	int			status;
-	char		**cmd; // need to insert pids, tokens, and commands
+	char		**cmd;
 	t_token		*token;
 	t_group		*groups;
 	t_token		*first_node;
@@ -104,15 +103,15 @@ typedef struct s_data
 	char		*line_read;
 	int			id;
 	char		*vtoken;
-	const char *deli;
+	const char	*deli;
 	bool		cmd_ignore;
-	char		*ctoken;//ft_strtok
-	char		*cnew_token;//ft_strtok
-	int			quote;//ft_strtok
-	int			sindex;//ft_strtok
-	int			token_start;//ft_strtok
-	int			in_quotes;//ft_strtok
-	char		quote_char;//ft_strtok
+	char		*ctoken;
+	char		*cnew_token;
+	int			quote;
+	int			sindex;
+	int			token_start;
+	int			in_quotes;
+	char		quote_char;
 	size_t		len_t;
 	int			s_quote_o;
 	int			d_quote_o;
@@ -203,20 +202,11 @@ int		shell_cd(t_token *token, t_data *data);
 int		export(t_token *token, t_env **env_ll);
 int		print_export(t_env **env_ll);
 int		unset(t_token *token, t_env **env_ll);
-void 	alphabetical_printer(char **env_array);
+void	alphabetical_printer(char **env_array);
 
 /* in built_ins3.c */
 
 /* signals.c */
 void	handler(int sig);
-
-/* DEPRECATED FUNCTIONS */
-// int		built_in_or_garbage(t_data *data, t_env **env_ll, t_token *token);
-// int		single_execution(t_data *data, t_token *token, t_env **env_ll); DEPRECATED
-// void		single_child(t_data *data, t_token *token, t_env **env_ll); DEPRECRATED
-// int		single_parent(pid_t pid, int status); DEPRECATED
-// int 		lonely_execution(t_data *data, t_token *token, t_env **env_ll);
-// int		how_many_children(t_token *token); DEPRECATED
-// void		handle_heredoc(t_data *data, char *delimiter); DEPRECATED
 
 #endif
