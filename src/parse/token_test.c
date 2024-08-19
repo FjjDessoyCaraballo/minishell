@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:34:10 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/14 20:48:15 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/18 14:52:04 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@
  *		-in the while loop it will preform the function (in this case printf).
  *		-then we move to the next node of the token linked list with token = token->next.
  */
-
 void print_tokens(t_data *data)
 {
     t_token *token = data->token;
@@ -44,14 +43,14 @@ void print_tokens(t_data *data)
     // Forward traversal to print all tokens
     while (token != NULL)
     {
-        printf("token value:[%s]\n", token->value);
-        printf("token type:[%s]\n", type_names[token->type]);
-        printf("id:[%i]\n", token->id);
-        printf("expand:[%i]\n",token->expand);
-        if(token->echo == true || data->echoed == true) 
-            printf("echo?:[%d]\n",token->echo);
+        printf("---------------[%d]--------------\n", token->id);
+        printf("token value :[%s]\n", token->value);
+        printf("token type  :[%s]\n", type_names[token->type]);
+        //printf("id:[%i]\n", token->id);
+        if(token->echo == true) 
+            printf("echo?       :[%d]\n",token->echo);
 		if(token->path != NULL)
-			printf("token path:[%s]\n", token->path);
+			printf("token path  :[%s]\n", token->path);
         printf("\n");
         if (token->next == NULL) // Stop at the last token
             last_token = token;

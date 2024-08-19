@@ -12,20 +12,6 @@
 
 #include "../../includes/minishell.h"
 
-static int	token_printer(t_token *token)
-{
-	t_token *head;
-	
-	head = token;
-	while (head != NULL)
-	{
-		dprintf(2, "[%s][%i]\n", head->value, head->type);
-		head = head->next;
-	}
-	head = NULL;
-	return (SUCCESS);
-}
-
 /**
  * Executio  and execution prepping are just the same function broke
  * into two parts for norminetting reasons. These functions mainly deal
@@ -41,7 +27,7 @@ int    execution(t_data *data, t_env **env_ll)
 
 	token = data->token;
 	data->nb_cmds = count_token(token, COMMAND);
-	token_printer(token);
+	//token_printer(token);
 	if (data->nb_cmds == 0)
 		data->nb_cmds = 1;
 	if (token->type != BUILTIN)
@@ -145,7 +131,6 @@ void	child_execution(t_data *data, t_env **env_ll, char *instr, int child)
 // static void	line_printer(char **array)
 // {
 // 	int i = 0;
-
 // 	while (array[i])
 // 	{
 // 		dprintf(2, "array[%i]: %s\n", i, array[i]);//debug
@@ -171,8 +156,9 @@ void	ft_exec(t_data *data, char **cmd_array, int child)
 {
 	static char	*path;
 
-	dprintf(2, "in child [%i]:\n", child);
-	// line_printer(cmd_array);
+	(void) child;//for debug
+	//dprintf(2, "in child [%i]:\n", child);
+	//line_printer(cmd_array);
 	if (ft_strchr(cmd_array[0], '/') == NULL)
 	{
 		path = loop_path_for_binary(cmd_array[0], data->binary_paths);
@@ -208,6 +194,17 @@ void	ft_exec(t_data *data, char **cmd_array, int child)
  * DUMP
  */
 
-
-
-
+/*
+static int	token_printer(t_token *token)
+{
+ 	t_token *head;
+	
+ 	head = token;
+ 	while (head != NULL)
+ 	{
+ 		dprintf(2, "[%s][%i]\n", head->value, head->type);
+		head = head->next;
+ 	}
+ 	head = NULL;
+ 	return (SUCCESS);
+}*/
