@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 15:26:27 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/18 15:41:22 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/16 15:06:25 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,30 +43,36 @@ void alphabetical_printer(char **env_array)
 // removed get_cwd() and inserted into initialization (check README)
 int	shell_cd(t_token *token, t_data *data)
 {
-	char	*new_pwd;
-	char	*curr_pwd;
+	static char	*new_pwd;
+	char		*curr_pwd;
 
 	if (token->next == NULL)
 	{
-		dprintf(2, "we have fallen into the first clause of shell_cd\n");
 		chdir(data->home_pwd);
 		return (SUCCESS);
 	}
 	token = token->next; // this should have the path
-	new_pwd = NULL;
-	curr_pwd = getcwd(NULL, 0);
-	if (!curr_pwd)
+	if (ft_strchr(token->value, '/') == NULL)
 	{
-        free(curr_pwd);
-		curr_pwd = NULL;
-		ft_putstr_fd("The path ahead is blocked by nothingness\n", 2);
-		return (FAILURE);
+		curr_pwd = getcwd(NULL, 0);
+		if (!curr_pwd)
+		{
+			free(curr_pwd);
+			curr_pwd = NULL;
+			ft_putstr_fd("The path ahead is blocked by nothingness\n", 2);
+			return (FAILURE);
+		}
+		new_pwd = ft_strsjoin(curr_pwd, token->value, '/');
+		if (chdir(new_pwd) < 0)
+		{
+			dprintf(2, "we done fuck up\n");
+			return (FAILURE);
+		}
 	}
-	new_pwd = ft_strsjoin(curr_pwd, token->value, '/');
-	if (chdir(new_pwd) < 0)
+	else
 	{
-		dprintf(2, "we done fuck up\n");
-		return (FAILURE);
+		if (chdir(token->value) < 0)
+			return (FAILURE);
 	}
 	return (SUCCESS);
 }
