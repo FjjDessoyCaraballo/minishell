@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/19 10:40:50 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/19 15:17:24 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,12 @@ int    execution(t_data *data, t_env **env_ll)
 	//token_printer(token);
 	if (data->nb_cmds == 0)
 		data->nb_cmds = 1;
-	if (token->type != BUILTIN)
-		data->status = execution_prepping(data, token, env_ll);
-	else
+	if (!find_token(token, PIPE) && !find_token(token, RED_IN)
+		&& !find_token(token, RED_OUT) && !find_token(token, HEREDOC)
+		&& !find_token(token, APPEND) && !find_token(token, COMMAND))
 		data->status = built_ins(data, token, env_ll);
+	else
+		data->status = execution_prepping(data, token, env_ll);
 	return (data->status);
 }
 
