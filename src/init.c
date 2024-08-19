@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 12:38:16 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/19 15:56:34 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/19 16:41:23 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,5 +69,4 @@ void	initializer(t_data *data, t_env **env_ll, char **env)
 	data->echoed = false;
 	data->echoed = false;
 	data->cmd_ignore = false;
-	data->piped = false
 }
