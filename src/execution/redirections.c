@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 13:03:21 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/19 15:42:22 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/19 17:44:36 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,13 @@ void redirections_handling(t_data *data, char **array)
 	data->index = 0;
 	while (array[data->index])
 	{
-		if (!ft_strcmp(array[data->index], "<"))
+		if (!ft_strncmp(array[data->index], "<", 1))
 			input_redirection(data, array);
 		else if (!ft_strcmp(array[data->index], ">"))
 			output_redirection(data, array);
 		else if (!ft_strcmp(array[data->index], ">>"))
-			append_redirection(data, array);	
-		else if (!ft_strcmp(array[data->index], "<<"))
+			append_redirection(data, array);
+		else if (!ft_strncmp(array[data->index], "<<", 2))
 			heredoc_redirection(data, array);
 		data->index++;
 	}
@@ -31,16 +31,17 @@ void redirections_handling(t_data *data, char **array)
 
 void here_doc(t_data *data, char *delimiter)
 {
-	char	*input;
+	static char *input;
 
 	if (data->piped == false)
 	{
 		data->fd_in = open("/tmp/heredoc_tmp", O_WRONLY | O_CREAT | O_TRUNC, 0664);
 		if (data->fd_in < 0)
-			exit(err_msg(NULL, HEREDOC_FAILURE, 1));
+			exit(err_msg(NULL, "error", 1));
 	}
 	while (1)
 	{
+		// input = get_next_line(0);
 		input = readline("8==D ");
 		if (!ft_strncmp(input, delimiter, ft_strlen(delimiter)))
 			break ;
@@ -52,7 +53,7 @@ void here_doc(t_data *data, char *delimiter)
 		else
 		{			
 			write(data->fd_in, input, ft_strlen(input));
-			write(data->fd_in, "\n", ft_strlen(input));
+			write(data->fd_in, "\n", 1);
 		}
 		free(input);
 	}

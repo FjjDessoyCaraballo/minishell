@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 15:28:13 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/19 15:33:10 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/19 17:40:28 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	output_redirection(t_data *data, char **array)
 		exit(err_msg("'newline'", SYNTAX, 2));
 }
 
-void	heredoc_redirection(t_data *data, char **array)
+void	append_redirection(t_data *data, char **array)
 {
 	if (array[data->index + 1])
 	{
@@ -53,7 +53,7 @@ void	heredoc_redirection(t_data *data, char **array)
 		exit(err_msg("'newline'", SYNTAX, 2));		
 }
 	
-void	append_redirection(t_data *data, char **array)
+void	heredoc_redirection(t_data *data, char **array)
 {
 	if (array[data->index + 1])
 	{
