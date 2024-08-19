@@ -82,9 +82,9 @@ int unmatched_quote_check(t_data *data)
     if (data->in_quotes)
     {
         printf("unmatched quote 😳\n");
-        return FAILURE;
+        return 1;
     }
-    return SUCCESS;
+    return 0;
 }
 
 char *ft_strtok(char *str, const char *delim, t_data *data, t_token *cur_tok)
@@ -98,7 +98,7 @@ char *ft_strtok(char *str, const char *delim, t_data *data, t_token *cur_tok)
     
     process_quoting_and_delimiters(target, delim, data, cur_tok);
     
-    if (unmatched_quote_check(data) == FAILURE)
+    if (unmatched_quote_check(data) == 1)
     {
         data->status = 963;
         return (NULL);
