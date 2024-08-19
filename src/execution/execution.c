@@ -3,22 +3,45 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/14 16:28:50 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/19 10:40:50 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
+static int	token_printer(t_token *token)
+{
+	t_token *head;
+	
+	head = token;
+	while (head != NULL)
+	{
+		dprintf(2, "[%s][%i]\n", head->value, head->type);
+		head = head->next;
+	}
+	head = NULL;
+	return (SUCCESS);
+}
+
+/**
+ * Executio  and execution prepping are just the same function broke
+ * into two parts for norminetting reasons. These functions mainly deal
+ * with the general execution logic: separating built-ins execution from
+ * all the other executions (piped, piped with redirections, just
+ * redirection...). In here we fork and make the parent wait for execution
+ * of the children. Another important part of it is the cl_to_array() that
+ * turns our tokens into a 
+ */
 int    execution(t_data *data, t_env **env_ll)
 {
     t_token    *token;
 
 	token = data->token;
 	data->nb_cmds = count_token(token, COMMAND);
-	// token_printer(token);
+	token_printer(token);
 	if (data->nb_cmds == 0)
 		data->nb_cmds = 1;
 	if (token->type != BUILTIN)
@@ -28,10 +51,6 @@ int    execution(t_data *data, t_env **env_ll)
 	return (data->status);
 }
 
-/**
- * This is the function that will be used when we get multiple instructions
- * by pipes. Its still underwork.
- */
 int	execution_prepping(t_data *data, t_token *token, t_env **env_ll)
 {
 	static pid_t	pids;
@@ -40,9 +59,9 @@ int	execution_prepping(t_data *data, t_token *token, t_env **env_ll)
 	cmd_a = cl_to_array(token);
 	if (!cmd_a)
 		return (FAILURE);
-	// data->env = env_arr_updater(env_ll);
-	// if (!data->env)
-	// 	return (FAILURE);
+	data->env = env_arr_updater(env_ll);
+	if (!data->env)
+		return (FAILURE);
 	data->status = forking(data, env_ll, cmd_a, pids);
 	close_fds(data);
 	pids = wait(&data->status);
@@ -123,16 +142,16 @@ void	child_execution(t_data *data, t_env **env_ll, char *instr, int child)
 	}
 	ft_exec(data, cmd_array, child);
 }
-static void	line_printer(char **array)
-{
-	int i = 0;
+// static void	line_printer(char **array)
+// {
+// 	int i = 0;
 
-	while (array[i])
-	{
-		dprintf(2, "array[%i]: %s\n", i, array[i]);//debug
-		i++;
-	}
-}
+// 	while (array[i])
+// 	{
+// 		dprintf(2, "array[%i]: %s\n", i, array[i]);//debug
+// 		i++;
+// 	}
+// }
 
 /**
  * This is the second part of the execution where we are going to
@@ -153,7 +172,7 @@ void	ft_exec(t_data *data, char **cmd_array, int child)
 	static char	*path;
 
 	dprintf(2, "in child [%i]:\n", child);
-	line_printer(cmd_array);
+	// line_printer(cmd_array);
 	if (ft_strchr(cmd_array[0], '/') == NULL)
 	{
 		path = loop_path_for_binary(cmd_array[0], data->binary_paths);
@@ -171,7 +190,13 @@ void	ft_exec(t_data *data, char **cmd_array, int child)
 			exit(err_msg(cmd_array[0], NO_EXEC, 127));
 		}
 	}
-	dprintf(2, "we got to the last execve in child %i\n", child);
+	// dprintf(2, "we got to the last execve in child %i\n", child);
+	// int i = 0;
+	// while (data->env[i])
+	// {
+	// 	dprintf(2, "data->env[i]: %s", data->env[i]);
+	// 	i++;	
+	// }
 	if (execve(path, cmd_array, data->env) == -1)	
 	{
 		free_data(data, path, cmd_array);
@@ -185,16 +210,4 @@ void	ft_exec(t_data *data, char **cmd_array, int child)
 
 
 
-// static int	token_printer(t_token *token)
-// {
-// 	t_token *head;
-	
-// 	head = token;
-// 	while (head != NULL)
-// 	{
-// 		dprintf(2, "[%s][%i]\n", head->value, head->type);
-// 		head = head->next;
-// 	}
-// 	head = NULL;
-// 	return (SUCCESS);
-// }
+

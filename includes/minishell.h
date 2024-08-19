@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/15 02:04:00 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/19 10:57:48 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,8 @@
 typedef struct s_env
 {
 	char			*content;
+	char			*key;
+	char			*value;
 	struct s_env	*next;
 	struct s_env	*prev;
 }			t_env;
@@ -89,7 +91,7 @@ typedef struct s_data
 	int			fd_out;
 	char		*home_pwd;
 	int			status;
-	char		**cmd; // need to insert pids, tokens, and commands
+	char		**cmd;
 	t_token		*token;
 	t_group		*groups;
 	t_token		*first_node;
@@ -106,13 +108,13 @@ typedef struct s_data
 	char		*vtoken;
 	const char *deli;
 	bool		cmd_ignore;
-	char		*ctoken;//ft_strtok
-	char		*cnew_token;//ft_strtok
-	int			quote;//ft_strtok
-	int			sindex;//ft_strtok
-	int			token_start;//ft_strtok
-	int			in_quotes;//ft_strtok
-	char		quote_char;//ft_strtok
+	char		*ctoken;
+	char		*cnew_token;
+	int			quote;
+	int			sindex;
+	int			token_start;
+	int			in_quotes;
+	char		quote_char;
 	size_t		len_t;
 	int			s_quote_o;
 	int			d_quote_o;
@@ -204,8 +206,6 @@ int		export(t_token *token, t_env **env_ll);
 int		print_export(t_env **env_ll);
 int		unset(t_token *token, t_env **env_ll);
 void 	alphabetical_printer(char **env_array);
-
-/* in built_ins3.c */
 
 /* signals.c */
 void	handler(int sig);
