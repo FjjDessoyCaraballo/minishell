@@ -41,7 +41,7 @@ int    execution(t_data *data, t_env **env_ll)
 
 	token = data->token;
 	data->nb_cmds = count_token(token, COMMAND);
-	// token_printer(token);
+	//token_printer(token);
 	if (data->nb_cmds == 0)
 		data->nb_cmds = 1;
 	if (!find_token(token, PIPE) && !find_token(token, RED_IN)
@@ -149,7 +149,6 @@ void	child_execution(t_data *data, t_env **env_ll, char *instr, int child)
 // static void	line_printer(char **array)
 // {
 // 	int i = 0;
-
 // 	while (array[i])
 // 	{
 // 		dprintf(2, "array[%i]: %s\n", i, array[i]);//debug
@@ -174,6 +173,7 @@ void	child_execution(t_data *data, t_env **env_ll, char *instr, int child)
 void	ft_exec(t_data *data, t_env **env_ll,  char **cmd_array)
 {
 	static char	*path;
+
 
 	data->env = env_arr_updater(env_ll);
 	if (!data->env)
@@ -201,7 +201,4 @@ void	ft_exec(t_data *data, t_env **env_ll,  char **cmd_array)
 		exit(err_msg(cmd_array[0], NO_EXEC, 127));
 	}
 }
-
-
-
 

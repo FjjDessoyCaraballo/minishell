@@ -1,6 +1,15 @@
 
 #include "../../includes/minishell.h"
 
+/**
+ * Checks if the given token is a built-in command.
+ * 
+ * @param token The token to check.
+ * @param current_token The current token being processed.
+ * @param data The data structure containing information about the shell state.
+ * 
+ * @return SUCCESS if the token is a built-in command, FAILURE otherwise.
+ */
 int check_builtin(char *token, t_token *current_token, t_data *data)
 {
     if (data->echoed == false && ft_builtin_check(token, current_token) == SUCCESS)

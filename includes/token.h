@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 11:35:39 by lstorey           #+#    #+#             */
-/*   Updated: 2024/08/14 20:13:32 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/18 13:52:55 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,6 @@ typedef struct s_group
  *****************************************/
 int		line_tokenization(t_data *data);
 int		chunky_checker(char *token, t_token *current_token, t_data *data);
-int 	check_and_handle_echo(t_token *current_token, t_token **prev_token, const char *delimiters, t_data *data);
 void 	free_tokens(t_token *head);
 
 /*****************************************

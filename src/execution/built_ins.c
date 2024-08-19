@@ -117,9 +117,8 @@ int	yodeling(t_token *token)
 			head = head->next;
 			if(head != NULL && head->value[0] != '\0') 
 				printf(" ");
-			else if (head == NULL)
-				printf("\n");
 		}
+		printf("\n");
 		return (SUCCESS);
 	}
 	return (FAILURE);
