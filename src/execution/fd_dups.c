@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fd_dups.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 10:06:30 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/13 10:06:32 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/19 18:47:57 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,11 @@ void	dup_fds(t_data *data, int child, char **array)
 	}
 	if (child != data->nb_cmds - 1)
 		dup2(data->pipe_fd[1], STDOUT_FILENO);
-	close(data->pipe_fd[0]);
-	close(data->pipe_fd[1]);
+	if (data->piped == true)
+	{
+		close(data->pipe_fd[0]);
+		close(data->pipe_fd[1]);
+	}
 }
 
 void	open_fdin(t_data *data, char *infile)

@@ -6,11 +6,25 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/19 15:17:24 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/19 18:47:54 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+// static int	token_printer(t_token *token)
+// {
+// 	t_token *head;
+	
+// 	head = token;
+// 	while (head != NULL)
+// 	{
+// 		dprintf(2, "[%s][%i]\n", head->value, head->type);
+// 		head = head->next;
+// 	}
+// 	head = NULL;
+// 	return (SUCCESS);
+// }
 
 /**
  * Executio  and execution prepping are just the same function broke
@@ -47,9 +61,7 @@ int	execution_prepping(t_data *data, t_token *token, t_env **env_ll)
 	cmd_a = cl_to_array(token);
 	if (!cmd_a)
 		return (FAILURE);
-	data->env = env_arr_updater(env_ll);
-	if (!data->env)
-		return (FAILURE);
+	
 	data->status = forking(data, env_ll, cmd_a, pids);
 	close_fds(data);
 	pids = wait(&data->status);
@@ -64,8 +76,11 @@ int		forking(t_data *data, t_env **env_ll, char **all_cmds, pid_t pids)
 	data->index = 0;
 	while (data->index < data->nb_cmds)
 	{
-		if (pipe(data->pipe_fd) == -1)
-			return (err_msg(NULL, "Broken pipe\n", 141));
+		if (data->piped == true)
+		{
+			if (pipe(data->pipe_fd) == -1)
+				return (err_msg(NULL, "Broken pipe\n", 141));
+		}
 		pids = fork();
 		if (pids < 0)
 		{
@@ -75,7 +90,7 @@ int		forking(t_data *data, t_env **env_ll, char **all_cmds, pid_t pids)
 		}
 		if (pids == 0)
 			child_execution(data, env_ll, all_cmds[data->index], data->index);
-		else
+		else if (data->piped == true)
 		{	
 			close(data->pipe_fd[1]);
 			if (data->index > 0)
@@ -109,8 +124,9 @@ void	child_execution(t_data *data, t_env **env_ll, char *instr, int child)
 {
 	char		**cmd_array;
 
-	free_token(data->token);
-	free_ll(*env_ll);
+	
+	// free_token(data->token);
+	// free_ll(*env_ll);
 	cmd_array = ft_split(instr, ' ');
 	if (!cmd_array)
 	{
@@ -128,7 +144,7 @@ void	child_execution(t_data *data, t_env **env_ll, char *instr, int child)
 			exit (err_msg(NULL, MALLOC, -1));
 		}
 	}
-	ft_exec(data, cmd_array, child);
+	ft_exec(data, env_ll, cmd_array);
 }
 // static void	line_printer(char **array)
 // {
@@ -154,13 +170,14 @@ void	child_execution(t_data *data, t_env **env_ll, char *instr, int child)
  * 
  * [placeholder for more documentation]
  */
-void	ft_exec(t_data *data, char **cmd_array, int child)
+void	ft_exec(t_data *data, t_env **env_ll,  char **cmd_array)
 {
 	static char	*path;
 
-	(void) child;//for debug
-	//dprintf(2, "in child [%i]:\n", child);
-	//line_printer(cmd_array);
+
+	data->env = env_arr_updater(env_ll);
+	if (!data->env)
+		exit (1);
 	if (ft_strchr(cmd_array[0], '/') == NULL)
 	{
 		path = loop_path_for_binary(cmd_array[0], data->binary_paths);
@@ -178,13 +195,6 @@ void	ft_exec(t_data *data, char **cmd_array, int child)
 			exit(err_msg(cmd_array[0], NO_EXEC, 127));
 		}
 	}
-	// dprintf(2, "we got to the last execve in child %i\n", child);
-	// int i = 0;
-	// while (data->env[i])
-	// {
-	// 	dprintf(2, "data->env[i]: %s", data->env[i]);
-	// 	i++;	
-	// }
 	if (execve(path, cmd_array, data->env) == -1)	
 	{
 		free_data(data, path, cmd_array);
@@ -192,21 +202,3 @@ void	ft_exec(t_data *data, char **cmd_array, int child)
 	}
 }
 
-/**
- * DUMP
- */
-
-/*
-static int	token_printer(t_token *token)
-{
- 	t_token *head;
-	
- 	head = token;
- 	while (head != NULL)
- 	{
- 		dprintf(2, "[%s][%i]\n", head->value, head->type);
-		head = head->next;
- 	}
- 	head = NULL;
- 	return (SUCCESS);
-}*/

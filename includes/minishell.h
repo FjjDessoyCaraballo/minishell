@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/19 15:35:37 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/19 18:18:42 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,7 @@ int		execution(t_data *data, t_env **env_ll);
 int		execution_prepping(t_data *data, t_token *token, t_env **env_ll);
 int		forking(t_data *data, t_env **env_ll, char **all_cmds, pid_t pids);
 void	child_execution(t_data *data, t_env **env_ll, char *instr, int child);
-void	ft_exec(t_data *data, char **cmd_array, int child);
+void	ft_exec(t_data *data, t_env **env_ll, char **cmd_array);
 
 /* in redirections.c */
 void	redirections_handling(t_data *data, char **array);
