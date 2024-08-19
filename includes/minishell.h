@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/19 10:57:48 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/19 15:35:37 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,6 +139,12 @@ void	ft_exec(t_data *data, char **cmd_array, int child);
 void	redirections_handling(t_data *data, char **array);
 void	here_doc(t_data *data, char *delimiter);
 int		find_redirection(char **array);
+
+/* in redirections.c */
+void	input_redirection(t_data *data, char **array);
+void	output_redirection(t_data *data, char **array);
+void	heredoc_redirection(t_data *data, char **array);
+void	append_redirection(t_data *data, char **array);
 
 /* in execution_utils1.c */
 int		err_msg(char *obj, char *msg, int err_code);
