@@ -40,7 +40,7 @@ int    execution(t_data *data, t_env **env_ll)
     t_token    *token;
 
 	token = data->token;
-	data->nb_cmds = count_token(token, COMMAND);
+	data->nb_cmds = count_token(token, PIPE) + 1;
 	//token_printer(token);
 	if (data->nb_cmds == 0)
 		data->nb_cmds = 1;
