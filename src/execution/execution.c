@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/14 16:28:50 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/19 17:05:54 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,6 @@ int	execution_prepping(t_data *data, t_token *token, t_env **env_ll)
 	cmd_a = cl_to_array(token);
 	if (!cmd_a)
 		return (FAILURE);
-	// data->env = env_arr_updater(env_ll);
-	// if (!data->env)
-	// 	return (FAILURE);
 	data->status = forking(data, env_ll, cmd_a, pids);
 	close_fds(data);
 	pids = wait(&data->status);
@@ -121,18 +118,18 @@ void	child_execution(t_data *data, t_env **env_ll, char *instr, int child)
 			exit (err_msg(NULL, MALLOC, -1));
 		}
 	}
-	ft_exec(data, cmd_array, child);
+	ft_exec(data, env_ll, cmd_array);
 }
-static void	line_printer(char **array)
-{
-	int i = 0;
+// static void	line_printer(char **array)
+// {
+// 	int i = 0;
 
-	while (array[i])
-	{
-		dprintf(2, "array[%i]: %s\n", i, array[i]);//debug
-		i++;
-	}
-}
+// 	while (array[i])
+// 	{
+// 		dprintf(2, "array[%i]: %s\n", i, array[i]);//debug
+// 		i++;
+// 	}
+// }
 
 /**
  * This is the second part of the execution where we are going to
@@ -148,12 +145,16 @@ static void	line_printer(char **array)
  * 
  * [placeholder for more documentation]
  */
-void	ft_exec(t_data *data, char **cmd_array, int child)
+void	ft_exec(t_data *data, t_env **env_ll, char **cmd_array)
 {
 	static char	*path;
 
-	dprintf(2, "in child [%i]:\n", child);
-	line_printer(cmd_array);
+	data->env = env_arr_updater(env_ll);
+	if (!data->env)
+	{
+		dprintf(2, "work\n");
+		exit (1);
+	}
 	if (ft_strchr(cmd_array[0], '/') == NULL)
 	{
 		path = loop_path_for_binary(cmd_array[0], data->binary_paths);
@@ -171,7 +172,6 @@ void	ft_exec(t_data *data, char **cmd_array, int child)
 			exit(err_msg(cmd_array[0], NO_EXEC, 127));
 		}
 	}
-	dprintf(2, "we got to the last execve in child %i\n", child);
 	if (execve(path, cmd_array, data->env) == -1)	
 	{
 		free_data(data, path, cmd_array);
