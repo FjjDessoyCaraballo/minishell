@@ -3,16 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   ll_utils2.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bposa <bposa@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 11:35:09 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/06 13:39:28 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/19 14:11:52 by bposa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/* should probably not use getenv() here */
 char	**env_arr_updater(t_env **env_ll)
 {
 	int		i;
@@ -23,7 +22,7 @@ char	**env_arr_updater(t_env **env_ll)
 	i = 0;
 	tmp = (*env_ll);
 	size = ll_size(env_ll);
-	env = malloc(sizeof(char **) * (size + 1));// + 1
+	env = malloc(sizeof(char **) * (size + 1));
 	if (!env)
 	{
 		perror("Failed to allocate memory for data->env\n");
