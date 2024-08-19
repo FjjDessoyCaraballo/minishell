@@ -12,8 +12,8 @@ t_token *find_token(t_token *token, t_type type)
         head = token;
         while (head != NULL)
         {
-                if (type == token->type)
-                        return (token);
+                if (type == head->type)
+                        return (head);
                 head = head->next;
         }
         head = NULL;
