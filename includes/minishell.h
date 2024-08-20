@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/19 18:18:42 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/20 18:59:48 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,8 @@
 # define FILE_PERMISSION_DENIED 2
 # define PERMISSION_DENIED 126
 # define COMMAND_NOT_FOUND 127
-# define SUCCESS 1
-# define FAILURE 0
+# define SUCCESS 0
+# define FAILURE 1
 
 /*************************************************/
 /* structs ***************************************/
@@ -140,7 +140,7 @@ void	ft_exec(t_data *data, t_env **env_ll, char **cmd_array);
 
 /* in redirections.c */
 void	redirections_handling(t_data *data, char **array);
-void	here_doc(t_data *data, char *delimiter);
+int		here_doc(char *delimiter);
 int		find_redirection(char **array);
 
 /* in redirections.c */
