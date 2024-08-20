@@ -6,7 +6,7 @@
 /*   By: bposa <bposa@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 11:35:39 by lstorey           #+#    #+#             */
-/*   Updated: 2024/08/18 16:50:35 by bposa            ###   ########.fr       */
+/*   Updated: 2024/08/20 11:11:01 by bposa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,9 +87,7 @@ typedef struct s_group
  *****************************************/
 int		line_tokenization(t_data *data);
 int		chunky_checker(char *token, t_token *current_token, t_data *data);
-int		check_and_handle_echo(t_token *current_token, t_token **prev_token,
-			const char *delimiters, t_data *data);
-void	free_tokens(t_token *head);
+void 	free_tokens(t_token *head);
 
 /*****************************************
  * src/parse/helper.c

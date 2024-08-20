@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 14:18:24 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/12 17:45:41 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/19 10:58:26 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,10 +72,10 @@ an exit code that was manually inserted after exit */
 void	get_the_hell_out(t_data *data, t_token *token, t_env *env_ll)
 {
 	free_ll(env_ll);
-	printf("exit\n");
+	ft_printf("exit\n");
 	if (token->next)
 		exit(ft_atoi(token->next->value));
-	exit(data->status); // I think this is not right
+	exit(data->status);
 }
 
 int	yodeling(t_token *token)
@@ -117,9 +117,8 @@ int	yodeling(t_token *token)
 			head = head->next;
 			if(head != NULL && head->value[0] != '\0') 
 				printf(" ");
-			else if (head == NULL)
-				printf("\n");
 		}
+		printf("\n");
 		return (SUCCESS);
 	}
 	return (FAILURE);

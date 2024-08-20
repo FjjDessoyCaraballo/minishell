@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:12:51 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/15 13:46:32 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/19 18:32:08 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ void	free_gang(t_data *data)
 		data->ctoken = NULL;
 	}
 	free_tokens(data->token);
+
 }
 
 int	main(int argc, char **argv, char **env)
@@ -46,27 +47,20 @@ int	main(int argc, char **argv, char **env)
 			status = sniff_line(data);
 			if (status == NULL_LINE)
 			{
-				/*free_gang(data);
-				if(data)
-					free(data);*/
 				printf("exit\n");
 				break ;
 			}
 			else if (status == 963)
-			{
-				continue;
-			}
+				continue ;
 			else
-			{
 				execution(data, &env_ll);
-				//free_gang(data);
-			}
 		}
 		free_gang(data);
-		free(data);
+		free(data->line_read);
 	}
 	else
 		ft_putstr_fd(ERR_ARG, 2);
+	free_array(data->binary_paths);
 	free(data);
 	return (0);
 }

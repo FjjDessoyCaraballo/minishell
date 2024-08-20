@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:33:52 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/15 15:27:35 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/18 15:42:36 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	ft_builtin_check(char *token, t_token *current_token)
 	if(ft_strncmp(token, "echo", 5) == SUCCESS
 	|| ft_strncmp(token, "exit", 5) == SUCCESS
 	|| ft_strncmp(token, "pwd", 4) == SUCCESS
-	|| ft_strncmp(token, "cd", 3)== SUCCESS
+	|| ft_strncmp(token, "cd", 3) == SUCCESS
 	|| ft_strncmp(token, "export", 7) == SUCCESS
 	|| ft_strncmp(token, "unset", 6) == SUCCESS
 	|| ft_strncmp(token, "env", 3) == SUCCESS)

@@ -6,7 +6,7 @@
 /*   By: bposa <bposa@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/18 16:08:05 by bposa            ###   ########.fr       */
+/*   Updated: 2024/08/20 11:09:50 by bposa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,16 +42,20 @@
 /* macros ****************************************/
 /*************************************************/
 # define ERR "Error\n"
-# define MALLOC "Malloc failure\n"
+# define MALLOC ": Malloc failure"
 # define EXIT "Exit\n"
-# define NO_EXEC "command not found"
-# define NO_PERMISSION "permission denied"
+# define NO_EXEC ": Command not found"
+# define NO_PERMISSION ": Permission denied"
+# define HEREDOC_FAILURE "Unable to create temporary for here_doc"
+# define HEREDOC_FAILURE2 "Unable to read temporary for here_doc"
+# define FILE_ERROR ": No such file or directory"
+# define SYNTAX ": syntax error near unexpected token "
+# define ERR_ARG "Wrong number of arguments, Karen\n"
 # define REDIRECT_OUT 222
 # define REDIRECT_IN 111
 # define HERE_DOC 333
 # define APP 444
 # define NO_FILE 100
-# define SYNTAX "syntax error near unexpected token "
 # define NULL_LINE 5
 # define DIRECTORY 69
 # define FILE 55
@@ -59,9 +63,8 @@
 # define FILE_PERMISSION_DENIED 2
 # define PERMISSION_DENIED 126
 # define COMMAND_NOT_FOUND 127
-# define ERR_ARG "Wrong number of arguments, Karen\n"
-# define SUCCESS 0
-# define FAILURE 1
+# define SUCCESS 1
+# define FAILURE 0
 
 /*************************************************/
 /* structs ***************************************/
@@ -69,6 +72,8 @@
 typedef struct s_env
 {
 	char			*content;
+	char			*key;
+	char			*value;
 	struct s_env	*next;
 	struct s_env	*prev;
 }			t_env;
@@ -130,12 +135,18 @@ int		execution(t_data *data, t_env **env_ll);
 int		execution_prepping(t_data *data, t_token *token, t_env **env_ll);
 int		forking(t_data *data, t_env **env_ll, char **all_cmds, pid_t pids);
 void	child_execution(t_data *data, t_env **env_ll, char *instr, int child);
-void	ft_exec(t_data *data, char **cmd_array, int child);
+void	ft_exec(t_data *data, t_env **env_ll, char **cmd_array);
 
 /* in redirections.c */
 void	redirections_handling(t_data *data, char **array);
 void	here_doc(t_data *data, char *delimiter);
 int		find_redirection(char **array);
+
+/* in redirections.c */
+void	input_redirection(t_data *data, char **array);
+void	output_redirection(t_data *data, char **array);
+void	heredoc_redirection(t_data *data, char **array);
+void	append_redirection(t_data *data, char **array);
 
 /* in execution_utils1.c */
 int		err_msg(char *obj, char *msg, int err_code);
@@ -202,9 +213,7 @@ int		shell_cd(t_token *token, t_data *data);
 int		export(t_token *token, t_env **env_ll);
 int		print_export(t_env **env_ll);
 int		unset(t_token *token, t_env **env_ll);
-void	alphabetical_printer(char **env_array);
-
-/* in built_ins3.c */
+void 	alphabetical_printer(char **env_array);
 
 /* signals.c */
 void	handler(int sig);
