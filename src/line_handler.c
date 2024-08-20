@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   line_handler.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 12:23:49 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/08/18 17:23:41 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/20 19:33:46 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,30 +22,23 @@ void free_path(t_token *head)
 		next = current->next;
 		if (current->path)
 			free(current->path);
-		//free(current);
 		current = next;
 	}
 }
 
 void free_tokens(t_token *head)
 {
-    t_token *current = head;
-    t_token *next;
+    t_token *tmp;
 
-    while (current != NULL)
+    while (head != NULL)
     {
-		if(current->next != NULL)
-        	next = current->next; // Save the next node
-
-        if(current->value)// Free the dynamically allocated members of the current node
-        	free(current->value); // Free the value
-        if(current->path)
-			free(current->path); // Free the path
-        // Free the current node itself
-		if(current != NULL)
-        	free(current);
-        // Move to the next node
-        current = next;
+		tmp = head;
+        if (tmp->value)
+        	free(tmp->value);
+        if(tmp->path)
+			free(tmp->path);
+		head = head->next;
+		free_null(tmp);
     }
 }
 
@@ -60,7 +53,6 @@ void setup(t_data *data)
 	data->here_doc = false;
 	data->redirections = false;
 	data->piped = false;
-
 }
 
 /**
@@ -76,22 +68,14 @@ int sniff_line(t_data *data)
     if (*data->line_read)
 		add_history(data->line_read);
 	setup(data);
-    if (line_tokenization(data) == FAILURE)// Tokenize and parse the input line
+    if (line_tokenization(data) == FAILURE)
 	{
-		/*if(data->token != NULL)
-			free_tokens(data->token);*/
-		/*free(data->vtoken);
-		free(data->ctoken);
-		free(data->line_read);
-		free(data->first_node);*/
 		data->status = 0;
 		return 963;
 	}
-		free(data->line_read); // 11bytes freed
-    if (syntax_check(data->token) == 2)// Perform syntax check on the token list
+		free(data->line_read);
+    if (syntax_check(data->token) == 2)
 		return 2;	
-	/*if(data->token != NULL)
-    	print_tokens(data);*/ // print the tokens
 	data->piped = false;
 	if (count_token(data->token, PIPE) >= 1)
 		data->piped = true;

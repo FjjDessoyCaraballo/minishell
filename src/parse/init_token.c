@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_token.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:34:04 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/05 10:05:51 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/20 19:22:31 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,9 @@ t_token* init_token(void)
 {
 	t_token *token;
 
-	// t_token *token = (t_token *)malloc(sizeof(t_token));
 	token = (t_token *)ft_calloc(1, sizeof(t_token));
 	if (!token)
 		return NULL;
-	// ft_bzero(token, sizeof(t_token));
 	token->type = UNKNOWN;
 	token->value = NULL;
 	token->path = NULL;

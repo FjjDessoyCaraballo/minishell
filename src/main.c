@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:12:51 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/20 10:52:48 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/20 19:15:38 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ void	free_gang(t_data *data)
 		data->ctoken = NULL;
 	}
 	free_tokens(data->token);
-
 }
 
 int	main(int argc, char **argv, char **env)
@@ -41,7 +40,6 @@ int	main(int argc, char **argv, char **env)
 		return (1);
 	if (argc == 1)
 	{
-		// env_ll = NULL;
 		initializer(data, env_ll, env);
 		while (666)
 		{
@@ -56,11 +54,11 @@ int	main(int argc, char **argv, char **env)
 			else
 				execution(data, env_ll);
 		}
-		free_gang(data);
 		free(data->line_read);
 	}
 	else
 		ft_putstr_fd(ERR_ARG, 2);
+	free_gang(data);
 	free_array(data->binary_paths);
 	free_ll((*env_ll));
 	free_null(env_ll);
