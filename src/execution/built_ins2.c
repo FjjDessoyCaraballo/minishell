@@ -6,7 +6,7 @@
 /*   By: lstorey <lstorey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 15:26:27 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/20 09:27:13 by lstorey          ###   ########.fr       */
+/*   Updated: 2024/08/20 11:06:53 by lstorey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,13 +159,14 @@ int	unset(t_token *token, t_env **env_ll)
 		return (SUCCESS);
 	tmp = *env_ll;
 	head = head->next;
-	if (!ft_strncmp(head->value, tmp->content, ft_strlen(head->value)))
+	while (!ft_strncmp(head->value, tmp->content, ft_strlen(head->value)))
 	{
-		*env_ll = tmp->next;
+		tmp = tmp->next;
 		free(tmp);
 		tmp = NULL;
 		return (SUCCESS);
 	}
+	tmp = *env_ll;
 	while (tmp->next != NULL)
 	{
 		if (!ft_strncmp(head->value, tmp->next->content,
@@ -179,7 +180,7 @@ int	unset(t_token *token, t_env **env_ll)
 		}
 		tmp = tmp->next;
 	}
-	*env_ll = tmp;
+	// *env_ll = tmp;
 	tmp = NULL;
 	head = NULL;
 	return (SUCCESS);
