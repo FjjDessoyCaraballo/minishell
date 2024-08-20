@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/19 18:47:54 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/20 07:21:26 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@
 // 	head = token;
 // 	while (head != NULL)
 // 	{
-// 		dprintf(2, "[%s][%i]\n", head->value, head->type);
+// 		if(head->value != NULL)
+// 			dprintf(2, "[%s][%i]\n", head->value, head->type);
 // 		head = head->next;
 // 	}
 // 	head = NULL;
@@ -61,7 +62,6 @@ int	execution_prepping(t_data *data, t_token *token, t_env **env_ll)
 	cmd_a = cl_to_array(token);
 	if (!cmd_a)
 		return (FAILURE);
-	
 	data->status = forking(data, env_ll, cmd_a, pids);
 	close_fds(data);
 	pids = wait(&data->status);

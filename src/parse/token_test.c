@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:34:10 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/18 14:52:04 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/20 05:38:36 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,17 +43,21 @@ void print_tokens(t_data *data)
     // Forward traversal to print all tokens
     while (token != NULL)
     {
-        printf("---------------[%d]--------------\n", token->id);
-        printf("token value :[%s]\n", token->value);
-        printf("token type  :[%s]\n", type_names[token->type]);
-        //printf("id:[%i]\n", token->id);
-        if(token->echo == true) 
-            printf("echo?       :[%d]\n",token->echo);
-		if(token->path != NULL)
-			printf("token path  :[%s]\n", token->path);
-        printf("\n");
-        if (token->next == NULL) // Stop at the last token
-            last_token = token;
+        if(token->value != NULL)
+        {
+            printf("---------------[%d]--------------\n", token->id);
+            printf("token value :[%s]\n", token->value);
+            printf("token type  :[%s]\n", type_names[token->type]);
+            if(token->in_quotes == true)
+                printf("in quotes   :[%d]\n",token->in_quotes);
+            if(token->echo == true) 
+                printf("echo?       :[%d]\n",token->echo);
+            if(token->path != NULL)
+                printf("token path  :[%s]\n", token->path);
+            printf("\n");
+            if (token->next == NULL) // Stop at the last token
+                last_token = token;
+        }
         token = token->next;
     }
     printf("======================================\n");

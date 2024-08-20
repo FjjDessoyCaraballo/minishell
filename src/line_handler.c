@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 12:23:49 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/08/20 12:29:30 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/20 14:06:08 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,24 @@ void free_tokens(t_token *head)
     }
 }
 
+int total_env_len(t_env *head)
+{
+    int total_length = 0;
+    t_env *current = head;
+
+    // Traverse the list from the head to the end
+    while (current != NULL)
+    {
+        if (current->value) // Check if value is not NULL
+            total_length += strlen(current->value);
+        
+        // Move to the next node
+        current = current->next;
+    }
+
+    return total_length;
+}
+
 void setup(t_data *data)
 {
     data->deli = "  \t\n";
@@ -60,6 +78,7 @@ void setup(t_data *data)
 	data->here_doc = false;
 	data->redirections = false;
 	data->piped = false;
+	data->env_len = total_env_len(data->envll);
 
 }
 
@@ -76,22 +95,16 @@ int sniff_line(t_data *data)
     if (*data->line_read)
 		add_history(data->line_read);
 	setup(data);
-    if (line_tokenization(data) == FAILURE)// Tokenize and parse the input line
+    if (line_tokenization(data) == 1)// Tokenize and parse the input line
 	{
-		/*if(data->token != NULL)
-			free_tokens(data->token);*/
-		/*free(data->vtoken);
-		free(data->ctoken);
-		free(data->line_read);
-		free(data->first_node);*/
-		data->status = 0;
+		data->status = 0;//to unstuck the data->status
 		return 963;
 	}
-		free(data->line_read); // 11bytes freed
-    if (syntax_check(data->token) == 2)// Perform syntax check on the token list
+	free(data->line_read); // 11bytes freed
+	// if(data->token != NULL)
+	// 	print_tokens(data);
+	if (syntax_check(data->token) == 2)// Perform syntax check on the token list
 		return 2;	
-	/*if(data->token != NULL)
-    	print_tokens(data);*/ // print the tokens
 	data->piped = false;
 	if (count_token(data->token, PIPE) >= 1)
 		data->piped = true;

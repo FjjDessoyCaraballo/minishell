@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/20 18:59:48 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/20 15:13:33 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ typedef struct s_data
 	int			token_start;
 	int			in_quotes;
 	char		quote_char;
-	size_t		len_t;
+	size_t		env_len;
 	int			s_quote_o;
 	int			d_quote_o;
 	int			exit_code;
@@ -211,7 +211,7 @@ int		yodeling(t_token *token);
 
 /* in built_ins2.c */
 int		shell_cd(t_token *token, t_data *data);
-int		export(t_token *token, t_env **env_ll);
+int		export(t_token *token, t_env **env_ll, int i);
 int		print_export(t_env **env_ll);
 int		unset(t_token *token, t_env **env_ll);
 void 	alphabetical_printer(char **env_array);

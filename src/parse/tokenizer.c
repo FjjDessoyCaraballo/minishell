@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:34:16 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/18 13:50:54 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/20 07:18:16 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,27 +19,27 @@
  * @param current_token The current token being processed.
  * @param data The data structure containing info about the shell state.
  * 
- * @return SUCCESS if the token type is found, FAILURE otherwise.
+ * @return 0 if the token type is found, 1 otherwise.
  */
 int chunky_checker(char *token, t_token *current_token, t_data *data)
 {
-    if (check_builtin(token, current_token, data) == SUCCESS)
-        return (SUCCESS);
-    if (check_echo_flag(token, current_token, data) == SUCCESS)
-        return (SUCCESS);
-    if (check_flag(token, current_token, data) == SUCCESS)
-        return (SUCCESS);
-    if (check_pipe(token, current_token, data) == SUCCESS)
-        return (SUCCESS);
-    if (check_redirect(token, current_token, data) == SUCCESS)
-        return (SUCCESS);
-    if (check_command(token, current_token, data) == SUCCESS)
-        return (SUCCESS);
-    if (check_argument(token, current_token, data) == SUCCESS)
-        return (SUCCESS);
+    if (check_builtin(token, current_token, data) == 0)
+        return (0);
+    if (check_echo_flag(token, current_token, data) == 0)
+        return (0);
+    if (check_flag(token, current_token, data) == 0)
+        return (0);
+    if (check_pipe(token, current_token, data) == 0)
+        return (0);
+    if (check_redirect(token, current_token, data) == 0)
+        return (0);
+    if (check_command(token, current_token, data) == 0)
+        return (0);
+    if (check_argument(token, current_token, data) == 0)
+        return (0);
     
     printf("couldn't find type for token\n");
-    return (FAILURE);
+    return (1);
 }
 
 t_token *create_and_link_next_token(t_token *current_token, t_data *data)
@@ -87,28 +87,27 @@ t_token *initialize_tokens(t_data *data)
 int line_tokenization(t_data *data)
 {
     data->first_node = initialize_tokens(data);
-
     data->vtoken = ft_strtok(data->line_read, data->deli, data, data->current_token);
     if (data->status == 963)
-        return (FAILURE);
+        return (1);
     while (data->vtoken != NULL && data->status != 963)
     {
         data->current_token->id = data->id;
         data->current_token->prev = data->prev_token;
         data->current_token->value = ft_strdup(data->vtoken);
-        if (chunky_checker(data->current_token->value, data->current_token, data) == FAILURE)
-            return (FAILURE);
-        data->vtoken = ft_strtok(NULL, data->deli, data, data->current_token);
-        if (data->status == 963)
-            return (FAILURE);
+        if (chunky_checker(data->current_token->value, data->current_token, data) == 1)
+            return (1);
         if (data->vtoken != NULL && data->status != 963)
         {
             data->current_token = create_and_link_next_token(data->current_token, data);
             data->prev_token = data->current_token->prev;
         }
+        data->vtoken = ft_strtok(NULL, data->deli, data, data->current_token);
+        if (data->status == 963)
+            return (1);
     }
     data->token = data->first_node;
-    return (SUCCESS); // print_tokens(data); // debug
+    return (0); // print_tokens(data); // debug
 }
 
 
