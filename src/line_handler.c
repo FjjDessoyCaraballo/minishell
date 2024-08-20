@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 12:23:49 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/08/20 14:06:08 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/20 23:51:05 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,6 @@ int sniff_line(t_data *data)
 		data->status = 0;//to unstuck the data->status
 		return 963;
 	}
-	free(data->line_read); // 11bytes freed
 	// if(data->token != NULL)
 	// 	print_tokens(data);
 	if (syntax_check(data->token) == 2)// Perform syntax check on the token list
@@ -130,6 +129,7 @@ int	syntax_check(t_token *token)
 	else
 		return (SUCCESS);
 }
+
 /**
  * incorrect_syntax() checks for specific operators and checks if they're
  * being repeated by the users.
@@ -142,8 +142,9 @@ int	incorrect_syntax(t_token *token, t_type token_type)
 	t_token	*head;
 
 	head = token;
-	while (head)
+	while (head && head->next != NULL && head->in_quotes == false)
 	{
+		//printf("head->value: %s\nhead->in_quotes: %d\n", head->value, head->in_quotes);
 		if (head->next != NULL)
 		{
 			if ((head->type == token_type && head->next->type == token_type)
@@ -152,7 +153,7 @@ int	incorrect_syntax(t_token *token, t_type token_type)
 				|| (head->type == token_type && head->next->type == HEREDOC)
 				|| (head->type == token_type && head->next->type == APPEND)
 				|| (head->type == token_type && head->next->type == FLAG))
-				return (err_msg(head->value, SYNTAX, 2));
+					return (err_msg(head->value, SYNTAX, 2));
 		}
 		head = head->next;
 	}

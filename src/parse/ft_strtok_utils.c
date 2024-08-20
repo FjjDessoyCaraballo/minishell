@@ -58,6 +58,7 @@ char *substr_and_expand(const char *target, t_data *data)
     if (data->sindex == 0 && !data->in_quotes)// Check if no token was found
         return (NULL);
     data->ctoken = ft_substr(target, data->token_start, data->sindex - data->token_start);// Allocate token and copy substring, excluding the opening and closing quotes if present
+
     if (!data->ctoken)
         return (NULL);
     data->cnew_token = expand_env_variables(data->ctoken, data);// Expand environment variables in the token

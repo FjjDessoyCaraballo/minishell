@@ -6,14 +6,13 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 11:35:39 by lstorey           #+#    #+#             */
-/*   Updated: 2024/08/20 05:05:37 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/20 23:10:37 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef TOKEN_H
 # define TOKEN_H
 
-# define MAX_ARG_STR 10240
 # include "minishell.h"
 # include <stdbool.h>
 typedef struct s_data t_data;
@@ -142,7 +141,7 @@ t_token	*init_token();
 /*****************************************
  * in src/parse/modify_str.c
  *****************************************/
-void 	modify_str(char *str);
+char	*modify_str(char *str);
 
 /*****************************************
  * in src/parse/chunky_check.c

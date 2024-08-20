@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:34:16 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/20 07:18:16 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/20 23:25:49 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,7 @@ int line_tokenization(t_data *data)
         return (1);
     while (data->vtoken != NULL && data->status != 963)
     {
+        
         data->current_token->id = data->id;
         data->current_token->prev = data->prev_token;
         data->current_token->value = ft_strdup(data->vtoken);
@@ -107,7 +108,9 @@ int line_tokenization(t_data *data)
             return (1);
     }
     data->token = data->first_node;
-    return (0); // print_tokens(data); // debug
+    // if(data->token != NULL)
+	// 	print_tokens(data);
+    return (0);
 }
 
 

@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 14:53:29 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/08/20 15:07:41 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/20 21:08:48 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,37 +41,50 @@ int count_matching_keys(t_env *env_list, const char *input)
 {
     int count = 0;
     int index = 0;
-    char *word = NULL;
-    
+    int max_word_size = ft_strlen(input); // Get the length of the input string
+
+    // Allocate memory for the word buffer, with a little extra space for safety
+    char *word = (char *)malloc((max_word_size + 1) * sizeof(char)); 
+
+    if (!word) {
+        fprintf(stderr, "Memory allocation failed\n");
+        return -1; // Return an error code if malloc fails
+    }
     const char *ptr = input;
-    
+
     while (*ptr != '\0')
     {
-        while (*ptr != '\0' && isspace(*ptr))
+        while (*ptr != '\0' && isspace(*ptr))// Skip leading spaces
             ptr++;
-        if (*ptr == '\'' || *ptr == '"')
+        if (*ptr == '\'' || *ptr == '"')// Skip quotes
             ptr++;
-        if (*ptr == '$')
+        if (*ptr == '$')// Skip dollar sign
             ptr++;
-        index = 0;
-        while (*ptr != '\0' && !isspace(*ptr) && *ptr != '\'' && *ptr != '"')
+        index = 0;// Reset index for the new word
+        while (*ptr != '\0' && !isspace(*ptr) && *ptr != '\'' && *ptr != '"')// Extract the word
         {
-            word = (char *)realloc(word, index + 2); // Dynamic reallocation
-            word[index++] = *ptr++;
+            if (index < max_word_size) // Ensure we stay within bounds
+                word[index++] = *ptr++;
+            else
+                break;
         }
-        word[index] = '\0';
-        // If a word was found, check if it is in the env list
-        if (index > 0 && is_key_in_list(env_list, word))
+        word[index] = '\0';// Null-terminate the word
+        if (index > 0 && is_key_in_list(env_list, word))// Check if the word is in the environment list
             count++;
+        while (*ptr != '\0' && (isspace(*ptr) || *ptr == '\'' || *ptr == '"'))// Advance pointer to skip any trailing quote or space after the word
+            ptr++;
     }
-    free(word);
+    free(word); // Free the dynamically allocated memory
     return count;
 }
 
+
+
 void setup_env_variables(const char *input,t_data *data)
 {
-    (void) input;
-    //int i = count_matching_keys(data->envll, input);
+    data->num_of_envs = count_matching_keys(data->envll, input);
+    if (data->num_of_envs == 0)
+        data->num_of_envs = 1;
     data->s_quote_o = 0;
     data->d_quote_o = 0;
 }

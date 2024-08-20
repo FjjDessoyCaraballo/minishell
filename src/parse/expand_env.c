@@ -144,9 +144,13 @@ char *expand_env_variables(const char *input, t_data *data)
     char *result;
     size_t i;
     size_t j;
-    result = (char *)malloc(data->env_len); // must change to allocate size of env list and multiply if inside quotes
+    result = (char *)malloc(data->env_len * data->num_of_envs); // must change to allocate size of env list and multiply if inside quotes
     if (!result)
+    {
+        printf("Memory allocation failed.\n");
         return NULL;
+    }
+    //printf("env_len * num_of_envs = %ld\n", data->env_len * data->num_of_envs);
     i = 0;
     j = 0;
     while (input[i])

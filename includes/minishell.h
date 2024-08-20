@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/20 15:13:33 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/20 17:54:17 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,7 @@ typedef struct s_data
 	int			in_quotes;
 	char		quote_char;
 	size_t		env_len;
+	int			num_of_envs;
 	int			s_quote_o;
 	int			d_quote_o;
 	int			exit_code;
@@ -140,7 +141,11 @@ void	ft_exec(t_data *data, t_env **env_ll, char **cmd_array);
 
 /* in redirections.c */
 void	redirections_handling(t_data *data, char **array);
+<<<<<<< HEAD
 int		here_doc(char *delimiter);
+=======
+int		here_doc(t_data *data, char *delimiter);
+>>>>>>> 6071201 (more fixes and finald touches)
 int		find_redirection(char **array);
 
 /* in redirections.c */
