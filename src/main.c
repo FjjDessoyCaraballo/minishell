@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:12:51 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/19 18:32:08 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/20 15:18:30 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,17 +31,17 @@ void	free_gang(t_data *data)
 int	main(int argc, char **argv, char **env)
 {
 	t_data			*data;
-	t_env			*env_ll;
+	t_env			**env_ll;
 	static int		status;
 	
 	(void)argv;
 	data = ft_calloc(1, sizeof(t_data));
-	if (!data)
+	env_ll = ft_calloc(1, sizeof(t_env *));
+	if (!data  || !env_ll)
 		return (1);
 	if (argc == 1)
 	{
-		env_ll = NULL;
-		initializer(data, &env_ll, env);
+		initializer(data, env_ll, env);
 		while (666)
 		{
 			status = sniff_line(data);
@@ -53,7 +53,7 @@ int	main(int argc, char **argv, char **env)
 			else if (status == 963)
 				continue ;
 			else
-				execution(data, &env_ll);
+				execution(data, env_ll);
 		}
 		free_gang(data);
 		free(data->line_read);
@@ -61,6 +61,8 @@ int	main(int argc, char **argv, char **env)
 	else
 		ft_putstr_fd(ERR_ARG, 2);
 	free_array(data->binary_paths);
+	free_ll((*env_ll));
+	free_null(env_ll);
 	free(data);
 	return (0);
 }

@@ -67,6 +67,8 @@ typedef struct s_token
 	char			*value;
 	char			*path;
 	int				id;
+	int				bro;
+	bool			in_quotes;
 	bool			expand;
 	bool			echo;
 	struct s_token	*next;
