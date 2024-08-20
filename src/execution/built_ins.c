@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lstorey <lstorey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 14:18:24 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/19 10:58:26 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/20 09:24:40 by lstorey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	built_ins(t_data *data, t_token *token, t_env **env_ll)
 	else if (!ft_strncmp(token->value, "cd", 2))
 		status = shell_cd(token, data);
 	else if (!ft_strncmp(token->value, "export", 6))
-		status = export(token, env_ll); // 1/2 broken
+		status = export(token, env_ll, 0);
 	else if (!ft_strncmp(token->value, "unset", 5))
 		status = unset(token, env_ll); // broken
 	else
