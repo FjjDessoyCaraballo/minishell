@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:33:52 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/18 15:42:36 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/20 03:10:26 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ void print_binary_paths(t_data *data)
 int ft_command_check(char *token, t_token *current_token, t_data *data)
 {
     char **paths = ft_split(data->bin, ':');
-
     char *executable_path = loop_path_for_binary(token, paths);
     if (executable_path != NULL)
     {
@@ -62,8 +61,8 @@ int ft_command_check(char *token, t_token *current_token, t_data *data)
             current_token->value = ft_strdup(executable_path);
         }
         current_token->type = COMMAND;
-		free_my_boi(paths);
-        free(executable_path);  // Free the allocated path
+		//free_my_boi(paths);
+        //free(executable_path); <- the way I free this shi causes some problems in one edge case (thank armin for help :3)
         return 0;
     }
 	free_my_boi(paths);

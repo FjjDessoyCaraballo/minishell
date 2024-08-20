@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 11:35:39 by lstorey           #+#    #+#             */
-/*   Updated: 2024/08/18 13:52:55 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/20 05:05:37 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,8 @@ typedef struct s_token
 	char			*value;
 	char			*path;
 	int				id;
+	int				bro;
+	bool			in_quotes;
 	bool			expand;
 	bool			echo;
 	struct s_token	*next;
@@ -128,7 +130,7 @@ char 	*skip_starting_delim(const char *str, const char *delim, char **target);
  *****************************************/
 void 	echoing(t_token *current_token, t_token **prev_token, const char *delimiters, t_data *data);
 char 	*concatenate_echo_args(t_token *current_token, const char *delimiters, t_data *data);
-char 	*validate_and_process_token(const char *target, t_data *data);
+char 	*substr_and_expand(const char *target, t_data *data);
 void 	process_quoting_and_delimiters(const char *target, const char *delim, t_data *data, t_token *cur_tok);
 void 	handle_quote(const char *target, t_data *data, t_token *cur_tok);
 

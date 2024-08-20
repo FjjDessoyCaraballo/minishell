@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lstorey <lstorey@student.42.fr>            +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 14:18:24 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/20 09:24:40 by lstorey          ###   ########.fr       */
+/*   Updated: 2024/08/20 15:11:14 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,10 @@ int	built_ins(t_data *data, t_token *token, t_env **env_ll)
 {
 	int	status;
 	status = 0;
+	if(token->value == NULL)
+		return (status);
 	data->home_pwd = get_home((*env_ll));
-	if (!ft_strncmp(token->value, "env", 3))
+	if (!ft_strncmp(token->value, "env", 4))
 		status = print_env((*env_ll));
 	else if (!ft_strncmp(token->value, "pwd", 3))
 		status = print_pwd();
@@ -73,7 +75,7 @@ void	get_the_hell_out(t_data *data, t_token *token, t_env *env_ll)
 {
 	free_ll(env_ll);
 	ft_printf("exit\n");
-	if (token->next)
+	if (token->next != NULL && token->next->value != NULL)
 		exit(ft_atoi(token->next->value));
 	exit(data->status);
 }
@@ -105,21 +107,41 @@ int	yodeling(t_token *token)
 		}
 		return (SUCCESS);
 	}
-	if (head->next->type == ARGUMENT)
+	/*if (head->next->type == ARGUMENT)
 	{
 		head = head->next;
 		if(head->value[0] == '\0')
 			head = head->next;
 		while (head != NULL)
 		{
+			printf("brother\n");
 			if (head->value[0] != '\0')
+			printf("excuse me\n");
 				printf("%s", head->value);
 			head = head->next;
 			if(head != NULL && head->value[0] != '\0') 
 				printf(" ");
+			printf("what\n");
 		}
 		printf("\n");
 		return (SUCCESS);
+	}
+	return (FAILURE);*/
+	if (head != NULL && head->next != NULL && head->next->type == ARGUMENT)
+	{
+		head = head->next;
+		if (head->value != NULL && head->value[0] == '\0')
+			head = head->next;
+		while (head != NULL)
+		{
+			if (head->value != NULL && head->value[0] != '\0')
+				printf("%s", head->value);
+			head = head->next;
+			if (head != NULL && head->value != NULL && head->value[0] != '\0')
+				printf(" ");
+		}
+		printf("\n");
+		return (SUCCESS); 
 	}
 	return (FAILURE);
 }

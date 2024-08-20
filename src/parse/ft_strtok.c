@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:34:00 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/18 14:03:47 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/20 06:03:32 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void process_quoting_and_delimiters(const char *target, const char *delim, t_dat
         {
             if (target[data->sindex] == data->quote_char)
             {
-                data->in_quotes = 0;        // End quote state
+                data->in_quotes = 0;       // End quote state
                 data->quote_char = '\0';   // Clear quote character
                 data->sindex++;            // Move past the closing quote
                 continue;
@@ -82,9 +82,9 @@ int unmatched_quote_check(t_data *data)
     if (data->in_quotes)
     {
         printf("unmatched quote 😳\n");
-        return 1;
+        return (1);
     }
-    return 0;
+    return (0);
 }
 
 char *ft_strtok(char *str, const char *delim, t_data *data, t_token *cur_tok)
@@ -95,21 +95,20 @@ char *ft_strtok(char *str, const char *delim, t_data *data, t_token *cur_tok)
         modify_str(str);
     if(skip_starting_delim(str, delim, &target) == NULL)
         return (NULL);
-    
     process_quoting_and_delimiters(target, delim, data, cur_tok);
-    
     if (unmatched_quote_check(data) == 1)
     {
         data->status = 963;
         return (NULL);
     }
     char *token;
-    
-    token = validate_and_process_token(target, data);
+    token = substr_and_expand(target, data);
     //printf("token:[%s]\n", token);//debug
     if (!token)
         return (NULL);
-    
+    cur_tok->value = ft_strdup(token);
+    if (!cur_tok->value)
+        return (NULL);
     remove_quotes_and_skip_delimiters(delim, data, &target);
     free(token);
     //printf("ctoken:[%s]\n", data->ctoken);//debug

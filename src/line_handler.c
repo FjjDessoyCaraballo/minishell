@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 12:23:49 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/08/20 00:54:28 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/20 07:00:24 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,20 +78,14 @@ int sniff_line(t_data *data)
 	setup(data);
     if (line_tokenization(data) == 1)// Tokenize and parse the input line
 	{
-		/*if(data->token != NULL)
-			free_tokens(data->token);*/
-		/*free(data->vtoken);
-		free(data->ctoken);
-		free(data->line_read);
-		free(data->first_node);*/
-		data->status = 0;
+		data->status = 0;//to unstuck the data->status
 		return 963;
 	}
-		free(data->line_read); // 11bytes freed
-    if (syntax_check(data->token) == 2)// Perform syntax check on the token list
+	free(data->line_read); // 11bytes freed
+	// if(data->token != NULL)
+	// 	print_tokens(data);
+	if (syntax_check(data->token) == 2)// Perform syntax check on the token list
 		return 2;	
-	if(data->token != NULL)
-    	print_tokens(data); // print the tokens
 	data->piped = false;
 	if (count_token(data->token, PIPE) >= 1)
 		data->piped = true;
