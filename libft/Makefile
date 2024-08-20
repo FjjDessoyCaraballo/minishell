@@ -63,7 +63,7 @@ SRC =	ft_bzero.c\
 		get_next_line_utils.c
 
 
-CFLAGS = -Wall -Wextra  -MMD -g #-Werror
+CFLAGS = -Wall -Wextra -Werror -MMD -g
 INCFLAGS = -Iincludes
 
 all:  $(NAME)
