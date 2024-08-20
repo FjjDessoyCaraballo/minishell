@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   line_handler.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 12:23:49 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/08/20 23:51:05 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/20 19:33:46 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,30 +22,23 @@ void free_path(t_token *head)
 		next = current->next;
 		if (current->path)
 			free(current->path);
-		//free(current);
 		current = next;
 	}
 }
 
 void free_tokens(t_token *head)
 {
-    t_token *current = head;
-    t_token *next;
+    t_token *tmp;
 
-    while (current != NULL)
+    while (head != NULL)
     {
-		if(current->next != NULL)
-        	next = current->next; // Save the next node
-
-        if(current->value)// Free the dynamically allocated members of the current node
-        	free(current->value); // Free the value
-        if(current->path)
-			free(current->path); // Free the path
-        // Free the current node itself
-		if(current != NULL)
-        	free(current);
-        // Move to the next node
-        current = next;
+		tmp = head;
+        if (tmp->value)
+        	free(tmp->value);
+        if(tmp->path)
+			free(tmp->path);
+		head = head->next;
+		free_null(tmp);
     }
 }
 
@@ -78,8 +71,6 @@ void setup(t_data *data)
 	data->here_doc = false;
 	data->redirections = false;
 	data->piped = false;
-	data->env_len = total_env_len(data->envll);
-
 }
 
 /**
@@ -95,14 +86,13 @@ int sniff_line(t_data *data)
     if (*data->line_read)
 		add_history(data->line_read);
 	setup(data);
-    if (line_tokenization(data) == 1)// Tokenize and parse the input line
+    if (line_tokenization(data) == FAILURE)
 	{
-		data->status = 0;//to unstuck the data->status
+		data->status = 0;
 		return 963;
 	}
-	// if(data->token != NULL)
-	// 	print_tokens(data);
-	if (syntax_check(data->token) == 2)// Perform syntax check on the token list
+		free(data->line_read);
+    if (syntax_check(data->token) == 2)
 		return 2;	
 	data->piped = false;
 	if (count_token(data->token, PIPE) >= 1)

@@ -3,17 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-<<<<<<< HEAD
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 13:03:21 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/20 18:59:43 by fdessoy-         ###   ########.fr       */
-=======
-/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/09 13:03:21 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/20 17:31:12 by walnaimi         ###   ########.fr       */
->>>>>>> 6071201 (more fixes and finald touches)
+/*   Updated: 2024/08/20 19:16:56 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,16 +29,9 @@ void redirections_handling(t_data *data, char **array)
 	}
 }
 
-<<<<<<< HEAD
 int here_doc(char *delimiter)
 {
     static char *input;
-=======
-int here_doc(t_data *data, char *delimiter)
-{
-    static char *input;
-	(void) data;
->>>>>>> 6071201 (more fixes and finald touches)
     int pipe_fd[2];
     
     if(pipe(pipe_fd) == -1)
