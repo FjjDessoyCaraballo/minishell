@@ -32,7 +32,6 @@ void redirections_handling(t_data *data, char **array)
 int here_doc(char *delimiter)
 {
     static char *input;
-
     int pipe_fd[2];
     
     if(pipe(pipe_fd) == -1)

@@ -8,21 +8,21 @@
  * @param current_token The current token being processed.
  * @param data The data structure containing information about the shell state.
  * 
- * @return SUCCESS if the token is a built-in command, FAILURE otherwise.
+ * @return 0 if the token is a built-in command, 1 otherwise.
  */
 int check_builtin(char *token, t_token *current_token, t_data *data)
 {
-    if (data->echoed == false && ft_builtin_check(token, current_token) == SUCCESS)
+    if (data->echoed == false && ft_builtin_check(token, current_token) == 0)
     {
         data->cmd_ignore = true;
-        if (ft_strcmp(current_token->value, "echo") == SUCCESS)
+        if (ft_strcmp(current_token->value, "echo") == 0)
         {
             data->echoed = true;
             data->echo_flag = true;
         }
-        return SUCCESS;
+        return 0;
     }
-    return FAILURE;
+    return 1;
 }
 
 int check_echo_flag(char *token, t_token *current_token, t_data *data) 
@@ -36,10 +36,10 @@ int check_echo_flag(char *token, t_token *current_token, t_data *data)
         {
             current_token->type = FLAG;
             current_token->value = "-n";
-            return SUCCESS;
+            return 0;
         }
     }
-    return FAILURE;
+    return 1;
 }
 
 int check_flag(char *token, t_token *current_token, t_data *data)
@@ -50,7 +50,7 @@ int check_flag(char *token, t_token *current_token, t_data *data)
     {
         current_token->type = FLAG;
         current_token->value = ft_strdup(token);
-        return SUCCESS;
+        return 0;
     }
-    return FAILURE;
+    return 1;
 }

@@ -42,6 +42,24 @@ void free_tokens(t_token *head)
     }
 }
 
+int total_env_len(t_env *head)
+{
+    int total_length = 0;
+    t_env *current = head;
+
+    // Traverse the list from the head to the end
+    while (current != NULL)
+    {
+        if (current->value) // Check if value is not NULL
+            total_length += strlen(current->value);
+        
+        // Move to the next node
+        current = current->next;
+    }
+
+    return total_length;
+}
+
 void setup(t_data *data)
 {
     data->deli = "  \t\n";
@@ -101,6 +119,7 @@ int	syntax_check(t_token *token)
 	else
 		return (SUCCESS);
 }
+
 /**
  * incorrect_syntax() checks for specific operators and checks if they're
  * being repeated by the users.
@@ -113,8 +132,9 @@ int	incorrect_syntax(t_token *token, t_type token_type)
 	t_token	*head;
 
 	head = token;
-	while (head)
+	while (head && head->next != NULL && head->in_quotes == false)
 	{
+		//printf("head->value: %s\nhead->in_quotes: %d\n", head->value, head->in_quotes);
 		if (head->next != NULL)
 		{
 			if ((head->type == token_type && head->next->type == token_type)
@@ -123,7 +143,7 @@ int	incorrect_syntax(t_token *token, t_type token_type)
 				|| (head->type == token_type && head->next->type == HEREDOC)
 				|| (head->type == token_type && head->next->type == APPEND)
 				|| (head->type == token_type && head->next->type == FLAG))
-				return (err_msg(head->value, SYNTAX, 2));
+					return (err_msg(head->value, SYNTAX, 2));
 		}
 		head = head->next;
 	}

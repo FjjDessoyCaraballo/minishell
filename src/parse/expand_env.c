@@ -144,18 +144,22 @@ char *expand_env_variables(const char *input, t_data *data)
     char *result;
     size_t i;
     size_t j;
-    result = (char *)malloc(MAX_ARG_STR); // must change to allocate size of env list and multiply if inside quotes
+    result = (char *)malloc(data->env_len * data->num_of_envs); // must change to allocate size of env list and multiply if inside quotes
     if (!result)
+    {
+        printf("Memory allocation failed.\n");
         return NULL;
+    }
+    //printf("env_len * num_of_envs = %ld\n", data->env_len * data->num_of_envs);
     i = 0;
     j = 0;
     while (input[i])
     {
-        if (input[i] == '\'' && !data->d_quote_o)
+        if (input[i] == '\'' && !data->d_quote_o)//if we find single quote and not inside double quotes
             single_q(input, data, result, &i, &j);
-        else if (input[i] == '"' && !data->s_quote_o)
+        else if (input[i] == '"' && !data->s_quote_o)//if we find double quotes and not inside single quotes
             double_q(input, data, result, &i, &j);
-        else if (input[i] == '$' && !data->s_quote_o)
+        else if (input[i] == '$' && !data->s_quote_o)//if we find a dollar sign and not inside single quotes
             handle_dollar_sign(input, &i, data, result, &j);
         else
             result[j++] = input[i++];

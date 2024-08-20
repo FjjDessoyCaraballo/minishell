@@ -60,31 +60,53 @@ void process_characters(char *str, char *new_str, size_t *i, size_t *j, int *in_
     }
 }
 
-void modify_str(char *str)
+size_t count_special_characters(const char *str)
+{
+    size_t count = 0;
+    size_t i = 0;
+
+    while (str[i])
+    {
+        if (str[i] == '|')
+            count += 2;
+        else if (str[i] == '>' || str[i] == '<')
+        {
+            if (str[i + 1] == str[i]) // Check for ">>" or "<<"
+            {
+                count += 2;
+                i++; // Skip the next character as it's part of the special character
+            }
+            count += 2;
+        }
+        i++;
+    }
+
+    return count;
+}
+
+char *modify_str(char *str)
 {
     size_t len = strlen(str);
-    size_t new_len = len + 4; // Estimate new length with added spaces
-    size_t i;
-    i = 0;
-
-    char *new_str = malloc(new_len + 1); // +1 for null terminator
-
-    if (!new_str) {
+    size_t special_count = count_special_characters(str);
+    size_t new_len = 2 * special_count + len; // Adjust length with special characters
+    char *new_str = malloc(new_len + 1 * sizeof(char)); // +1 for null terminator
+    if (!new_str)
+    {
         perror("Failed to allocate memory");
         exit(EXIT_FAILURE);
     }
-
-    size_t j = 0; // Index for new_str
+    
+    size_t i = 0;  // Index for original string
+    size_t j = 0;  // Index for new_str
     int in_single_quote = 0;
     int in_double_quote = 0;
 
-    while (i < len)
+    while (i < len && str[i] != '\0')
     {
         process_characters(str, new_str, &i, &j, &in_single_quote, &in_double_quote);
         i++;
     }
     new_str[j] = '\0'; // Null-terminate the new string
-    strcpy(str, new_str);// Copy the modified string back to the original
 
-    free(new_str);
+    return new_str;
 }
