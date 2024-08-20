@@ -20,7 +20,9 @@ int	built_ins(t_data *data, t_token *token, t_env **env_ll)
 	if(token->value == NULL)
 		return (status);
 	data->home_pwd = get_home((*env_ll));
-	if (!ft_strncmp(token->value, "env", 4))
+	if (token->value == NULL)
+		return (status);
+	if (!ft_strncmp(token->value, "env", 3))
 		status = print_env((*env_ll));
 	else if (!ft_strncmp(token->value, "pwd", 4))
 		status = print_pwd();

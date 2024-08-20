@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections_utils.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 15:28:13 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/19 18:46:49 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/20 19:00:02 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,26 +54,14 @@ void	append_redirection(t_data *data, char **array)
 		exit(err_msg("'newline'", SYNTAX, 2));		
 }
 	
-void	heredoc_redirection(t_data *data, char **array)
+void        heredoc_redirection(t_data *data, char **array)
 {
-	here_doc(data, array[data->index + 1]);
 	if (array[data->index + 1])
 	{
-		if (data->piped == true)
-		{
-			dup2(data->pipe_fd[0], STDIN_FILENO);
-			// close(data->pipe_fd[0]);
-			// close(data->pipe_fd[1]);
-		}
-		else
-		{
-			data->fd_in = open("/tmp/heredoc_tmp", O_RDONLY);
-			if (data->fd_in < 0)
-				exit(err_msg(NULL, "error", 1));
-			dup2(data->fd_in, STDIN_FILENO);
-			close(data->fd_in);
-		}
-	}
+		data->fd_in = here_doc(array[data->index + 1]);
+		dup2(data->fd_in, STDIN_FILENO);
+		close(data->fd_in);
+    }
 	else
-		exit(err_msg("'newline'", SYNTAX, 2));	
+		exit(err_msg("'newline'", SYNTAX, 2));        
 }

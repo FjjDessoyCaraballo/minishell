@@ -41,7 +41,6 @@ int	main(int argc, char **argv, char **env)
 		return (1);
 	if (argc == 1)
 	{
-		// env_ll = NULL;
 		initializer(data, env_ll, env);
 		while (666)
 		{
