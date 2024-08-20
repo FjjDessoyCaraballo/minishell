@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 13:03:21 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/19 18:25:20 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/20 14:42:40 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,10 @@ void here_doc(t_data *data, char *delimiter)
 {
 	static char *input;
 
-	if (data->piped == false)
-	{
-		data->fd_in = open("/tmp/heredoc_tmp", O_WRONLY | O_CREAT | O_TRUNC, 0664);
-		if (data->fd_in < 0)
-			exit(err_msg(NULL, "error", 1));
-	}
+
+	data->fd_in = open("/tmp/heredoc_tmp", O_WRONLY | O_CREAT | O_TRUNC, 0664);
+	if (data->fd_in < 0)
+		exit(err_msg(NULL, "error", 1));
 	while (1)
 	{
 		input = readline("8==D ");
@@ -56,8 +54,7 @@ void here_doc(t_data *data, char *delimiter)
 		}
 		free(input);
 	}
-	if (data->piped == false)
-		close(data->fd_in);
+	close(data->fd_in);
 }
 
 int	find_redirection(char **array)

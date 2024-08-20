@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 15:28:13 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/19 18:46:49 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/20 14:43:21 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,13 +57,15 @@ void	append_redirection(t_data *data, char **array)
 void	heredoc_redirection(t_data *data, char **array)
 {
 	here_doc(data, array[data->index + 1]);
+	dprintf(2,"data->pipe_fd[1]: %i\n", data->pipe_fd[1]);
+	dprintf(2, "data->fd_in: %i\n", data->fd_in);
 	if (array[data->index + 1])
 	{
 		if (data->piped == true)
 		{
 			dup2(data->pipe_fd[0], STDIN_FILENO);
-			// close(data->pipe_fd[0]);
-			// close(data->pipe_fd[1]);
+			close(data->pipe_fd[0]);
+			close(data->pipe_fd[1]);
 		}
 		else
 		{

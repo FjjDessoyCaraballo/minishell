@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/19 18:18:42 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/20 14:10:03 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,16 +43,20 @@
 /* macros ****************************************/
 /*************************************************/
 # define ERR "Error\n"
-# define MALLOC "Malloc failure\n"
+# define MALLOC ": Malloc failure"
 # define EXIT "Exit\n"
-# define NO_EXEC "command not found"
-# define NO_PERMISSION "permission denied"
+# define NO_EXEC ": Command not found"
+# define NO_PERMISSION ": Permission denied"
+# define HEREDOC_FAILURE "Unable to create temporary for here_doc"
+# define HEREDOC_FAILURE2 "Unable to read temporary for here_doc"
+# define FILE_ERROR ": No such file or directory"
+# define SYNTAX ": syntax error near unexpected token "
+# define ERR_ARG "Wrong number of arguments, Karen\n"
 # define REDIRECT_OUT 222
 # define REDIRECT_IN 111
 # define HERE_DOC 333
 # define APP 444
 # define NO_FILE 100
-# define SYNTAX "syntax error near unexpected token "
 # define NULL_LINE 5
 # define DIRECTORY 69
 # define FILE 55
@@ -60,7 +64,6 @@
 # define FILE_PERMISSION_DENIED 2
 # define PERMISSION_DENIED 126
 # define COMMAND_NOT_FOUND 127
-# define ERR_ARG "Wrong number of arguments, Karen\n"
 # define SUCCESS 0
 # define FAILURE 1
 
