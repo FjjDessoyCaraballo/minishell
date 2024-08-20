@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lstorey <lstorey@student.42.fr>            +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 15:26:27 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/20 11:06:53 by lstorey          ###   ########.fr       */
+/*   Updated: 2024/08/20 15:16:49 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,8 @@ int	export(t_token *token, t_env **env_ll, int i)
 	i = 0;
 	while (head != NULL)
 	{
-		exp_list[i++] = ft_strdup(head->value);
+		if (head->value != NULL)
+			exp_list[i++] = ft_strdup(head->value);
 		head = head->next;
 	}
 	exp_list[i] = NULL;

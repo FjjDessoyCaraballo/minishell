@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 14:18:24 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/20 15:11:14 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/20 15:16:26 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,17 +22,17 @@ int	built_ins(t_data *data, t_token *token, t_env **env_ll)
 	data->home_pwd = get_home((*env_ll));
 	if (!ft_strncmp(token->value, "env", 4))
 		status = print_env((*env_ll));
-	else if (!ft_strncmp(token->value, "pwd", 3))
+	else if (!ft_strncmp(token->value, "pwd", 4))
 		status = print_pwd();
-	else if (!ft_strncmp(token->value, "exit", 4))
+	else if (!ft_strncmp(token->value, "exit", 5))
 		get_the_hell_out(data, token, (*env_ll));
-	else if (!ft_strncmp(token->value, "echo", 4))
+	else if (!ft_strncmp(token->value, "echo", 5))
 		status = yodeling(token);
-	else if (!ft_strncmp(token->value, "cd", 2))
+	else if (!ft_strncmp(token->value, "cd", 3))
 		status = shell_cd(token, data);
-	else if (!ft_strncmp(token->value, "export", 6))
+	else if (!ft_strncmp(token->value, "export", 7))
 		status = export(token, env_ll, 0);
-	else if (!ft_strncmp(token->value, "unset", 5))
+	else if (!ft_strncmp(token->value, "unset", 6))
 		status = unset(token, env_ll); // broken
 	else
 		printf("Unknown command: %s\n", token->value);
@@ -107,26 +107,6 @@ int	yodeling(t_token *token)
 		}
 		return (SUCCESS);
 	}
-	/*if (head->next->type == ARGUMENT)
-	{
-		head = head->next;
-		if(head->value[0] == '\0')
-			head = head->next;
-		while (head != NULL)
-		{
-			printf("brother\n");
-			if (head->value[0] != '\0')
-			printf("excuse me\n");
-				printf("%s", head->value);
-			head = head->next;
-			if(head != NULL && head->value[0] != '\0') 
-				printf(" ");
-			printf("what\n");
-		}
-		printf("\n");
-		return (SUCCESS);
-	}
-	return (FAILURE);*/
 	if (head != NULL && head->next != NULL && head->next->type == ARGUMENT)
 	{
 		head = head->next;

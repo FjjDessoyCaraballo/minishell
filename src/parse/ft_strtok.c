@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:34:00 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/20 06:03:32 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/20 13:02:14 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,9 +106,10 @@ char *ft_strtok(char *str, const char *delim, t_data *data, t_token *cur_tok)
     //printf("token:[%s]\n", token);//debug
     if (!token)
         return (NULL);
-    cur_tok->value = ft_strdup(token);
-    if (!cur_tok->value)
-        return (NULL);
+    if(token[0] == '\'' || token[0] == '\"')
+        cur_tok->in_quotes = true;
+    else
+        cur_tok->in_quotes = false;
     remove_quotes_and_skip_delimiters(delim, data, &target);
     free(token);
     //printf("ctoken:[%s]\n", data->ctoken);//debug

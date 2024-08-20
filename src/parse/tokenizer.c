@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:34:16 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/20 06:03:51 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/20 07:18:16 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,7 @@ int line_tokenization(t_data *data)
     {
         data->current_token->id = data->id;
         data->current_token->prev = data->prev_token;
+        data->current_token->value = ft_strdup(data->vtoken);
         if (chunky_checker(data->current_token->value, data->current_token, data) == 1)
             return (1);
         if (data->vtoken != NULL && data->status != 963)

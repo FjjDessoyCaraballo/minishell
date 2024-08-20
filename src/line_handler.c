@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 12:23:49 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/08/20 07:00:24 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/20 14:06:08 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,24 @@ void free_tokens(t_token *head)
     }
 }
 
+int total_env_len(t_env *head)
+{
+    int total_length = 0;
+    t_env *current = head;
+
+    // Traverse the list from the head to the end
+    while (current != NULL)
+    {
+        if (current->value) // Check if value is not NULL
+            total_length += strlen(current->value);
+        
+        // Move to the next node
+        current = current->next;
+    }
+
+    return total_length;
+}
+
 void setup(t_data *data)
 {
     data->deli = "  \t\n";
@@ -60,6 +78,7 @@ void setup(t_data *data)
 	data->here_doc = false;
 	data->redirections = false;
 	data->piped = false;
+	data->env_len = total_env_len(data->envll);
 
 }
 

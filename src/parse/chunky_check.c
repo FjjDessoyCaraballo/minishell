@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:33:52 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/20 03:10:26 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/20 13:05:22 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,25 +82,25 @@ int ft_pipe_check(char *token, t_token *current_token)
 
 int	ft_redirect_op_check(char *token,t_token *current_token)
 {
-	if(ft_strncmp(token,">",2) == 0)
+	if(ft_strncmp(token,">",2) == 0 && current_token->in_quotes == false)
 	{
 		current_token->value = ft_strdup(token);
 		current_token->type = RED_OUT;// > output
 		return(0);
 	}
-	else if (ft_strncmp(token,">>",3) == 0)
+	else if (ft_strncmp(token,">>",3) == 0 && current_token->in_quotes == false)
 	{
 		current_token->value = ft_strdup(token);
 		current_token->type = APPEND;// >> output
 		return(0);
 	}
-	else if (ft_strncmp(token,"<",2) == 0)
+	else if (ft_strncmp(token,"<",2) == 0 && current_token->in_quotes == false)
 	{
 		current_token->value = ft_strdup(token);
 		current_token->type = RED_IN;// < input
 		return(0);
 	}
-	else if (ft_strncmp(token,"<<",3) == 0)
+	else if (ft_strncmp(token,"<<",3) == 0 && current_token->in_quotes == false)
 	{
 		current_token->value = ft_strdup(token);
 		current_token->type = HEREDOC;// <<input

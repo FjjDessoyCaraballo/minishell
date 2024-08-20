@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/20 06:47:35 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/20 07:21:26 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ int	execution_prepping(t_data *data, t_token *token, t_env **env_ll)
 	cmd_a = cl_to_array(token);
 	if (!cmd_a)
 		return (FAILURE);
-	printf("hello\n");
 	data->status = forking(data, env_ll, cmd_a, pids);
 	close_fds(data);
 	pids = wait(&data->status);
