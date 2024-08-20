@@ -6,11 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:12:51 by fdessoy-          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2024/08/20 10:52:48 by fdessoy-         ###   ########.fr       */
-=======
-/*   Updated: 2024/08/20 06:05:54 by walnaimi         ###   ########.fr       */
->>>>>>> 01d4a45 (fixed tokenization order)
+/*   Updated: 2024/08/20 15:18:30 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
