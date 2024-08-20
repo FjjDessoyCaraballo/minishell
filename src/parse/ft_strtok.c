@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:34:00 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/20 23:48:19 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/21 01:46:36 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,6 @@ int unmatched_quote_check(t_data *data)
 char *ft_strtok(char *str, const char *delim, t_data *data, t_token *cur_tok)
 {
     static char *target = NULL;
-    data->new_str = NULL;
     char *token = NULL;
     if (str)
     {
@@ -139,20 +138,20 @@ char *ft_strtok(char *str, const char *delim, t_data *data, t_token *cur_tok)
     }
     if (!target || skip_starting_delim(target, delim, &target) == NULL)
     {
-        free(data->new_str);  // Free the modified string if it's no longer needed
+        //free(data->new_str);  // Free the modified string if it's no longer needed
         return NULL;
     }
     process_quoting_and_delimiters(target, delim, data, cur_tok);
     if (unmatched_quote_check(data) == 1)
     {
         data->status = 963;
-        free(data->new_str);  // Free the modified string in case of error
+        //free(data->new_str);  // Free the modified string in case of error
         return NULL;
     }
     token = substr_and_expand(target, data);  // Get the next token
     if (!token)
     {
-        free(data->new_str);  // Free the modified string if token is NULL
+        //free(data->new_str);  // Free the modified string if token is NULL
         return NULL;
     }
     // Set in_quotes based on the token

@@ -88,7 +88,7 @@ char *modify_str(char *str)
 {
     size_t len = strlen(str);
     size_t special_count = count_special_characters(str);
-    size_t new_len = 2 * special_count + len; // Adjust length with special characters
+    size_t new_len = 2 * special_count + 2 * len; // Adjust length with special characters
     char *new_str = malloc(new_len + 1 * sizeof(char)); // +1 for null terminator
     if (!new_str)
     {

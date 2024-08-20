@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 11:35:39 by lstorey           #+#    #+#             */
-/*   Updated: 2024/08/20 23:10:37 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/21 00:31:36 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,9 @@ typedef struct s_group
 	int		id;
 	struct s_group *next;
 }		t_group;
+
+
+void	free_gang(t_data *data);
 
 /*****************************************
  * in src/parse/tokenizer.c

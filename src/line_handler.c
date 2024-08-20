@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   line_handler.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 12:23:49 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/08/20 19:33:46 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/21 00:52:13 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ void setup(t_data *data)
 	data->here_doc = false;
 	data->redirections = false;
 	data->piped = false;
+	data->env_len = total_env_len(data->envll);
 }
 
 /**
@@ -88,6 +89,11 @@ int sniff_line(t_data *data)
 	setup(data);
     if (line_tokenization(data) == FAILURE)
 	{
+		free_gang(data);
+		free(data->line_read);
+		free(data->new_str);
+		free(data->first_node);
+		//free(data->line_read);
 		data->status = 0;
 		return 963;
 	}
