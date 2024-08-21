@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/21 13:05:32 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/21 14:48:23 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static void	line_printer(char **array)
 	int i = 0;
 	while (array[i])
 	{
-		dprintf(2, "array[%i]: %s\n", i, array[i]);//debug
+		//dprintf(2, "array[%i]: %s\n", i, array[i]);//debug
 		i++;
 	}
 }
@@ -147,7 +147,7 @@ void	child_execution(t_data *data, t_env **env_ll, char *instr, int child)
 		free_data(data, NULL, NULL);
 		exit (err_msg(NULL, MALLOC, -1));
 	}
-	line_printer(cmd_array);
+	line_printer(cmd_array); //debug
 	dup_fds(data, child, cmd_array);
 	if (data->redirections == true)
 	{

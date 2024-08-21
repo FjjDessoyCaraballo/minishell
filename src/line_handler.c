@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 12:23:49 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/08/21 13:18:09 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/21 14:47:30 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,9 @@ int sniff_line(t_data *data)
 		data->status = 0;
 		return 963;
 	}
-		free(data->line_read);
+	// if(data->token != NULL)
+	// 	print_tokens(data);
+	free(data->line_read);
 	data->piped = false;
 	if (count_token(data->token, PIPE) >= 1)
 		data->piped = true;
