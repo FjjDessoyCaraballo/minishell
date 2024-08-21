@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/21 13:00:41 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/21 13:18:15 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,8 +193,6 @@ void	free_null(void *ptr);
 
 /* in line_handler.c */
 int		sniff_line(t_data *data);
-int		syntax_check(t_token *token);
-int		incorrect_syntax(t_token *token, t_type token_type);
 
 /* in ll_utils.c */
 t_env	*ft_listnew(void *content);
