@@ -91,6 +91,8 @@ int sniff_line(t_data *data)
 		data->status = 0;
 		return 963;
 	}
+	// if(data->token != NULL)
+	// 	print_tokens(data);
 	free(data->line_read);
 	data->piped = false;
 	data->heredoc_exist = false;

@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 15:26:27 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/20 15:16:49 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/21 13:46:18 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ int	export(t_token *token, t_env **env_ll, int i)
 
 	head = token;
 	count = 0;
-	if (!head->next)
+	if (!head->next->value)
 	{
 		print_export(env_ll);
 		return (SUCCESS);
@@ -104,6 +104,7 @@ int	export(t_token *token, t_env **env_ll, int i)
 			}
 			tmp = tmp->next;
 		}
+		
 		head = head->next;
 		count++;
 	}
