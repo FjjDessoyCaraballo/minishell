@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 13:03:21 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/21 11:29:07 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/21 13:06:41 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,10 @@ void redirections_handling(t_data *data, char **array)
 			&& ft_strlen(array[data->index]) == 2)
 		{
 			if (data->index == last_heredoc_index)
+			{
 				heredoc_redirection(data, array);
+				write(data->sync_pipe[1], "1", 1);
+			}
 		}
 		data->index++;
 	}

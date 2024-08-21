@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/20 19:47:41 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/21 13:00:41 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,14 +43,14 @@
 /* macros ****************************************/
 /*************************************************/
 # define ERR "Error\n"
-# define MALLOC ": Malloc failure"
+# define MALLOC "Malloc failure"
 # define EXIT "Exit\n"
-# define NO_EXEC ": Command not found"
-# define NO_PERMISSION ": Permission denied"
+# define NO_EXEC "Command not found"
+# define NO_PERMISSION "Permission denied"
 # define HEREDOC_FAILURE "Unable to create temporary for here_doc"
 # define HEREDOC_FAILURE2 "Unable to read temporary for here_doc"
-# define FILE_ERROR ": No such file or directory"
-# define SYNTAX ": syntax error near unexpected token "
+# define FILE_ERROR "No such file or directory"
+# define SYNTAX "syntax error near unexpected token "
 # define ERR_ARG "Wrong number of arguments, Karen\n"
 # define REDIRECT_OUT 222
 # define REDIRECT_IN 111
@@ -64,6 +64,7 @@
 # define FILE_PERMISSION_DENIED 2
 # define PERMISSION_DENIED 126
 # define COMMAND_NOT_FOUND 127
+# define MAX_HEREDOC 1024
 # define SUCCESS 0
 # define FAILURE 1
 
@@ -90,6 +91,9 @@ typedef struct s_data
 	char		*path;
 	char		**binary_paths;
 	int			pipe_fd[2];
+	int			sync_pipe[2];
+	int			heredoc_fd[MAX_HEREDOC];
+	int			here_doc;
 	int			fd_in;
 	int			fd_out;
 	char		*home_pwd;
@@ -104,7 +108,6 @@ typedef struct s_data
 	bool		echoed;
 	bool		echo_flag;
 	bool		piped;
-	bool		here_doc;
 	bool		redirections;
 	char		*line_read;
 	int			id;
@@ -139,9 +142,9 @@ void	child_execution(t_data *data, t_env **env_ll, char *instr, int child);
 void	ft_exec(t_data *data, t_env **env_ll, char **cmd_array);
 
 /* in redirections.c */
+int		find_redirection(char **array);
 void	redirections_handling(t_data *data, char **array);
 int		here_doc(char *delimiter);
-int		find_redirection(char **array);
 
 /* in redirections.c */
 void	input_redirection(t_data *data, char **array);
@@ -153,6 +156,8 @@ void	append_redirection(t_data *data, char **array);
 int		err_msg(char *obj, char *msg, int err_code);
 char	*access_path(char **path, char *cmd);
 void	close_fds(t_data *data);
+void	execution_with_path(t_data *data, char **array, char *path);
+void	execution_absolute_path(t_data *data, char **array);
 
 /* in execution_utils2.c */
 char	**cl_to_array(t_token *token);
