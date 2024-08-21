@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
 /*   Updated: 2024/08/21 13:18:15 by fdessoy-         ###   ########.fr       */
@@ -100,7 +100,6 @@ typedef struct s_data
 	int			status;
 	char		**cmd;
 	t_token		*token;
-	t_group		*groups;
 	t_token		*first_node;
 	t_token		*current_token;
 	t_token		*prev_token;
@@ -111,17 +110,20 @@ typedef struct s_data
 	bool		redirections;
 	char		*line_read;
 	int			id;
-	char		*vtoken;
+	char		*tok_res;
+	char		*tok_str;
 	const char *deli;
 	bool		cmd_ignore;
 	char		*ctoken;
 	char		*cnew_token;
+	char		*str_token;
 	int			quote;
 	int			sindex;
 	int			token_start;
 	int			in_quotes;
 	char		quote_char;
-	size_t		len_t;
+	size_t		env_len;
+	int			num_of_envs;
 	int			s_quote_o;
 	int			d_quote_o;
 	int			exit_code;
@@ -214,7 +216,7 @@ int		yodeling(t_token *token);
 
 /* in built_ins2.c */
 int		shell_cd(t_token *token, t_data *data);
-int		export(t_token *token, t_env **env_ll);
+int		export(t_token *token, t_env **env_ll, int i);
 int		print_export(t_env **env_ll);
 int		unset(t_token *token, t_env **env_ll);
 void 	alphabetical_printer(char **env_array);

@@ -21,9 +21,9 @@ t_token *find_token(t_token *token, t_type type)
 }
 
 /**
- * this function will search for type of token and return SUCCESS (1) if
+ * this function will search for type of token and return 0 (1) if
  * the command can be found within the token list. In case it does not
- * find the specified type the function returns FAILURE (0).
+ * find the specified type the function returns 1 (0).
  */
 int     search_token_type(t_token *token, t_type type)
 {

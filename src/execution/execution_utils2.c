@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils2.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 10:19:57 by fdessoy-          #+#    #+#             */
 /*   Updated: 2024/08/21 11:54:22 by fdessoy-         ###   ########.fr       */
@@ -62,7 +62,10 @@ char	**cl_to_array(t_token *token)
 				return (NULL);
             free(instruction);
             instruction = tmp;
-            head = head->next;
+			if(head->next && head->next->value) 
+            	head = head->next;
+			else
+				break;
         }
         if (instruction[ft_strlen(instruction) - 1] == ' ')
             instruction[ft_strlen(instruction) - 1] = '\0';
@@ -71,6 +74,8 @@ char	**cl_to_array(t_token *token)
             return (NULL);
         if (head && head->type == PIPE)
             head = head->next;
+		else
+			break;
     }
     free(instruction);
 	instruction = NULL;

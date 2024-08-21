@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   line_handler.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 12:23:49 by walnaimi          #+#    #+#             */
 /*   Updated: 2024/08/21 13:18:09 by fdessoy-         ###   ########.fr       */
@@ -34,7 +34,10 @@ void free_tokens(t_token *head)
     {
 		tmp = head;
         if (tmp->value)
+		{
         	free(tmp->value);
+			tmp->value = NULL;
+		}
         if(tmp->path)
 			free(tmp->path);
 		head = head->next;
@@ -42,17 +45,36 @@ void free_tokens(t_token *head)
     }
 }
 
+int total_env_len(t_env *head)
+{
+    int total_length = 0;
+    t_env *current = head;
+
+    // Traverse the list from the head to the end
+    while (current != NULL)
+    {
+        if (current->value) // Check if value is not NULL
+            total_length += strlen(current->value);
+        
+        // Move to the next node
+        current = current->next;
+    }
+
+    return total_length;
+}
+
 void setup(t_data *data)
 {
     data->deli = "  \t\n";
     data->id = 0;
-    data->vtoken = 0;
+    data->tok_res = 0;
     data->cmd_ignore = false;
     data->echoed = false;
     data->echo_flag = false;
 	data->here_doc = false;
 	data->redirections = false;
 	data->piped = false;
+	data->env_len = total_env_len(data->envll);
 }
 
 /**
@@ -68,8 +90,13 @@ int sniff_line(t_data *data)
     if (*data->line_read)
 		add_history(data->line_read);
 	setup(data);
-    if (line_tokenization(data) == FAILURE)
+    if (line_tokenization(data) == 1)
 	{
+		free(data->line_read);
+		/*free(data->tok_str);
+		data->tok_str = NULL;*/
+		free_gang(data);
+		free_tokens(data->first_node);
 		data->status = 0;
 		return 963;
 	}
@@ -79,4 +106,3 @@ int sniff_line(t_data *data)
 		data->piped = true;
 	return (SUCCESS);
 }
-

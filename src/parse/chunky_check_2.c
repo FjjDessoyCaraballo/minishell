@@ -2,46 +2,46 @@
 
 int check_pipe(char *token, t_token *current_token, t_data *data)
 {
-    if (ft_pipe_check(token, current_token) == SUCCESS)
+    if (ft_pipe_check(token, current_token) == 0)
     {
         data->cmd_ignore = false;
         current_token->echo = false;
         data->echoed = false;
-        return SUCCESS;
+        return 0;
     }
-    return FAILURE;
+    return 1;
 }
 
 int check_redirect(char *token, t_token *current_token, t_data *data)
 {
-    if (ft_redirect_op_check(token, current_token) == SUCCESS)
+    if (ft_redirect_op_check(token, current_token) == 0)
     {
         current_token->echo = false;
         data->echoed = false;
-        return SUCCESS;
+        return 0;
     }
-    return FAILURE;
+    return 1;
 }
 
 int check_command(char *token, t_token *current_token, t_data *data)
 {
-    if (!data->echoed && !data->cmd_ignore && (ft_command_check(token, current_token, data) == SUCCESS))
+    if (!data->echoed && !data->cmd_ignore && (ft_command_check(token, current_token, data) == 0))
     {
         data->cmd_ignore = true;
-        return SUCCESS;
+        return 0;
     }
-    return FAILURE;
+    return 1;
 }
 
 int check_argument(char *token, t_token *current_token, t_data *data)
 {
-    if (ft_argument_check(token, current_token) == SUCCESS)
+    if (ft_argument_check(token, current_token) == 0)
     {
         if (current_token->id == 1 && current_token->prev->type == ARGUMENT)
             data->cmd_ignore = true;
         if (data->echoed == true)
             current_token->echo = true;
-        return SUCCESS;
+        return 0;
     }
-    return FAILURE;
+    return 1;
 }

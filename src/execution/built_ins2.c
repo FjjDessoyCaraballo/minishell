@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 15:26:27 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/16 15:06:25 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/20 15:16:49 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,27 +14,25 @@
 
 void alphabetical_printer(char **env_array)
 {
-    int i;
-    int j;
-    char c;
+    char	c;
+	int i;
+	
+	i = 0;
+    c = 32; // first printable char
 
-    i = 0;
-    j = 0;
-    c = 'A';
-
-    while (c < 91)
+    while (c < 127) // last printable char
     {
         while (env_array[i])
         {
-            if (env_array[i][j] == c)
+			//name = tmp->key;
+            if (env_array[i][0] == c)
             {
                 printf("declare -x ");
-                printf("%s\n", env_array[i]);
-                
+				printf("%s\n", env_array[i]);
             }
-            i++;
+			i++;
         }
-        i = 0;
+		i = 0;
         c++;
     }
 }
@@ -78,11 +76,10 @@ int	shell_cd(t_token *token, t_data *data)
 }
 
 /* export puts variables declared by user in the env */
-int	export(t_token *token, t_env **env_ll)
+int	export(t_token *token, t_env **env_ll, int i)
 {
 	t_env	*tmp;
 	char	**exp_list;
-	int		i;
 	int		count;
 	t_token	*head;
 
@@ -97,6 +94,16 @@ int	export(t_token *token, t_env **env_ll)
 	tmp = (*env_ll);
 	while (head != NULL)
 	{
+		while (tmp->next != NULL)
+		{
+			if (ft_strncmp(tmp->key, head->value, ft_strlen(tmp->key)) == 0)
+			{
+				tmp->content = head->value;
+				tmp->value = ft_substr(head->value, ft_strlen(tmp->key) + 1, ft_strlen(head->value) - ft_strlen(tmp->key)); 
+				return (SUCCESS);
+			}
+			tmp = tmp->next;
+		}
 		head = head->next;
 		count++;
 	}
@@ -107,7 +114,8 @@ int	export(t_token *token, t_env **env_ll)
 	i = 0;
 	while (head != NULL)
 	{
-		exp_list[i++] = ft_strdup(head->value);
+		if (head->value != NULL)
+			exp_list[i++] = ft_strdup(head->value);
 		head = head->next;
 	}
 	exp_list[i] = NULL;
@@ -152,13 +160,14 @@ int	unset(t_token *token, t_env **env_ll)
 		return (SUCCESS);
 	tmp = *env_ll;
 	head = head->next;
-	if (!ft_strncmp(head->value, tmp->content, ft_strlen(head->value)))
+	while (!ft_strncmp(head->value, tmp->content, ft_strlen(head->value)))
 	{
-		*env_ll = tmp->next;
+		tmp = tmp->next;
 		free(tmp);
 		tmp = NULL;
 		return (SUCCESS);
 	}
+	tmp = *env_ll;
 	while (tmp->next != NULL)
 	{
 		if (!ft_strncmp(head->value, tmp->next->content,
@@ -172,7 +181,7 @@ int	unset(t_token *token, t_env **env_ll)
 		}
 		tmp = tmp->next;
 	}
-	*env_ll = tmp;
+	// *env_ll = tmp;
 	tmp = NULL;
 	head = NULL;
 	return (SUCCESS);

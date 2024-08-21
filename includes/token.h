@@ -6,14 +6,13 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 11:35:39 by lstorey           #+#    #+#             */
-/*   Updated: 2024/08/18 13:52:55 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/21 12:54:36 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef TOKEN_H
 # define TOKEN_H
 
-# define MAX_ARG_STR 10240
 # include "minishell.h"
 # include <stdbool.h>
 typedef struct s_data t_data;
@@ -65,20 +64,14 @@ typedef struct s_token
 	char			*value;
 	char			*path;
 	int				id;
+	bool			in_quotes;
 	bool			expand;
 	bool			echo;
 	struct s_token	*next;
 	struct s_token  *prev;
-	struct s_group	*group;
 }		t_token;
 
-typedef struct s_group
-{
-	t_token *tokens;
-	int		nb_tokens;
-	int		id;
-	struct s_group *next;
-}		t_group;
+void	free_gang(t_data *data);
 
 /*****************************************
  * in src/parse/tokenizer.c
@@ -128,7 +121,7 @@ char 	*skip_starting_delim(const char *str, const char *delim, char **target);
  *****************************************/
 void 	echoing(t_token *current_token, t_token **prev_token, const char *delimiters, t_data *data);
 char 	*concatenate_echo_args(t_token *current_token, const char *delimiters, t_data *data);
-char 	*validate_and_process_token(const char *target, t_data *data);
+char 	*substr_and_expand(const char *target, t_data *data);
 void 	process_quoting_and_delimiters(const char *target, const char *delim, t_data *data, t_token *cur_tok);
 void 	handle_quote(const char *target, t_data *data, t_token *cur_tok);
 
@@ -140,7 +133,7 @@ t_token	*init_token();
 /*****************************************
  * in src/parse/modify_str.c
  *****************************************/
-void 	modify_str(char *str);
+char	*modify_str(char *str);
 
 /*****************************************
  * in src/parse/chunky_check.c

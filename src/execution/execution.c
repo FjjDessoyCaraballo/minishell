@@ -19,7 +19,8 @@
 // 	head = token;
 // 	while (head != NULL)
 // 	{
-// 		dprintf(2, "[%s][%i]\n", head->value, head->type);
+// 		if(head->value != NULL)
+// 			dprintf(2, "[%s][%i]\n", head->value, head->type);
 // 		head = head->next;
 // 	}
 // 	head = NULL;

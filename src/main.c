@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:12:51 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/20 19:15:38 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/21 13:24:35 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,32 @@
 
 void	free_gang(t_data *data)
 {
-	if(data->vtoken != NULL)
+	if(data->tok_res != NULL)
 	{
-		free(data->vtoken);
-		data->vtoken = NULL;
+		free(data->tok_res);
+		data->tok_res = NULL;
 	}
 	if(data->ctoken != NULL)
 	{
 		free(data->ctoken);
 		data->ctoken = NULL;
 	}
+	if(data->temp_str != NULL)
+	{
+		free(data->temp_str);
+		data->temp_str = NULL;
+	}
+	if(data->new_str != NULL)
+	{
+		free(data->new_str);
+		data->new_str = NULL;
+	}
 	free_tokens(data->token);
+	// if(data->tok_str != NULL)
+	// {
+	// 	free(data->tok_str);
+	// 	data->tok_str = NULL;
+	// }
 }
 
 int	main(int argc, char **argv, char **env)
@@ -53,7 +68,9 @@ int	main(int argc, char **argv, char **env)
 				continue ;
 			else
 				execution(data, env_ll);
+			free_gang(data);
 		}
+		free_gang(data);
 		free(data->line_read);
 	}
 	else
