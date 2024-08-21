@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   line_handler.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 12:23:49 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/08/21 13:18:09 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/21 13:50:28 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,13 +50,10 @@ int total_env_len(t_env *head)
     int total_length = 0;
     t_env *current = head;
 
-    // Traverse the list from the head to the end
     while (current != NULL)
     {
-        if (current->value) // Check if value is not NULL
+        if (current->value)
             total_length += strlen(current->value);
-        
-        // Move to the next node
         current = current->next;
     }
 
@@ -93,15 +90,14 @@ int sniff_line(t_data *data)
     if (line_tokenization(data) == 1)
 	{
 		free(data->line_read);
-		/*free(data->tok_str);
-		data->tok_str = NULL;*/
 		free_gang(data);
 		free_tokens(data->first_node);
 		data->status = 0;
 		return 963;
 	}
-		free(data->line_read);
+	free(data->line_read);
 	data->piped = false;
+	data->heredoc_exist = false;
 	if (count_token(data->token, PIPE) >= 1)
 		data->piped = true;
 	return (SUCCESS);
