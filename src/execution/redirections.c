@@ -6,29 +6,30 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 13:03:21 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/21 11:04:34 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/21 11:29:07 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-// static bool	last_heredoc(char **array)
-// {
-// 	int	i;
-// 	int	last_index;
+static int	last_heredoc(char **array)
+{
+	int	i;
+	int	last_index;
 
-// 	last_index = -1;
-// 	i = 0;
-// 	while (array[i])
-// 	{
-// 		if (!ft_strncmp(array[i], "<<", 2)
-// 			&& ft_strlen(array[i]) == 2)
-// 			last_index = i;
-// 		i++;
-// 	}
-// 	dprintf(2, "last_index: %i\n", last_index);
-// 	return (last_index);
-// }
+	last_index = -1;
+	i = 0;
+	while (array[i])
+	{
+		if (!ft_strncmp(array[i], "<<", 2)
+			&& ft_strlen(array[i]) == 2)
+			last_index = i;
+		i++;
+	}
+	dprintf(2, "last_heredoc_index: %i\n", last_index);
+	return (last_index);
+}
+
 int	find_redirection(char **array)
 {
 	int	i;
@@ -48,9 +49,9 @@ int	find_redirection(char **array)
 
 void redirections_handling(t_data *data, char **array)
 {
-	// int	last_heredoc_index;
+	int	last_heredoc_index;
 
-	// last_heredoc_index = last_heredoc(array);
+	last_heredoc_index = last_heredoc(array);
 	data->index = 0;
 	while (array[data->index])
 	{
@@ -65,10 +66,10 @@ void redirections_handling(t_data *data, char **array)
 			append_redirection(data, array);
 		else if (!ft_strncmp(array[data->index], "<<", 2)
 			&& ft_strlen(array[data->index]) == 2)
-		// {
-		// 	if (data->index == last_heredoc_index)
+		{
+			if (data->index == last_heredoc_index)
 				heredoc_redirection(data, array);
-		// }
+		}
 		data->index++;
 	}
 }
