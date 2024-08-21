@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   line_handler.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 12:23:49 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/08/21 14:47:30 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/21 14:24:15 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,8 @@ void free_tokens(t_token *head)
     {
 		tmp = head;
         if (tmp->value)
-		{
-        	free(tmp->value);
-			tmp->value = NULL;
-		}
-        if(tmp->path)
+			free_null(tmp->value);
+        if (tmp->path)
 			free(tmp->path);
 		head = head->next;
 		free_null(tmp);
@@ -50,13 +47,10 @@ int total_env_len(t_env *head)
     int total_length = 0;
     t_env *current = head;
 
-    // Traverse the list from the head to the end
     while (current != NULL)
     {
-        if (current->value) // Check if value is not NULL
+        if (current->value)
             total_length += strlen(current->value);
-        
-        // Move to the next node
         current = current->next;
     }
 
@@ -71,7 +65,6 @@ void setup(t_data *data)
     data->cmd_ignore = false;
     data->echoed = false;
     data->echo_flag = false;
-	data->here_doc = false;
 	data->redirections = false;
 	data->piped = false;
 	data->env_len = total_env_len(data->envll);
@@ -93,8 +86,6 @@ int sniff_line(t_data *data)
     if (line_tokenization(data) == 1)
 	{
 		free(data->line_read);
-		/*free(data->tok_str);
-		data->tok_str = NULL;*/
 		free_gang(data);
 		free_tokens(data->first_node);
 		data->status = 0;
@@ -104,6 +95,7 @@ int sniff_line(t_data *data)
 	// 	print_tokens(data);
 	free(data->line_read);
 	data->piped = false;
+	data->heredoc_exist = false;
 	if (count_token(data->token, PIPE) >= 1)
 		data->piped = true;
 	return (SUCCESS);

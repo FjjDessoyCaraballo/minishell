@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/21 13:18:15 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/21 14:11:07 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,6 @@ typedef struct s_data
 	int			pipe_fd[2];
 	int			sync_pipe[2];
 	int			heredoc_fd[MAX_HEREDOC];
-	int			here_doc;
 	int			fd_in;
 	int			fd_out;
 	char		*home_pwd;
@@ -105,6 +104,7 @@ typedef struct s_data
 	t_token		*prev_token;
 	char		**cmd_a;
 	bool		echoed;
+	bool		heredoc_exist;
 	bool		echo_flag;
 	bool		piped;
 	bool		redirections;

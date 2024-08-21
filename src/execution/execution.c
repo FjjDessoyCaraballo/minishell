@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/21 14:48:23 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/21 14:01:05 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,15 +27,15 @@
 // 	return (SUCCESS);
 // }
 
-static void	line_printer(char **array)
-{
-	int i = 0;
-	while (array[i])
-	{
-		//dprintf(2, "array[%i]: %s\n", i, array[i]);//debug
-		i++;
-	}
-}
+// static void	line_printer(char **array)
+// {
+// 	int i = 0;
+// 	while (array[i])
+// 	{
+// 		dprintf(2, "array[%i]: %s\n", i, array[i]);//debug
+// 		i++;
+// 	}
+// }
 
 /**
  * Executio  and execution prepping are just the same function broke
@@ -71,8 +71,12 @@ int	execution_prepping(t_data *data, t_token *token, t_env **env_ll)
 	cmd_a = cl_to_array(token);
 	if (!cmd_a)
 		return (FAILURE);
-	if (pipe(data->sync_pipe) == -1)
-		return (err_msg(NULL, "Broken pipe\n", 141));
+	if (count_token(token, HEREDOC))
+	{
+		data->heredoc_exist = true;
+		if (pipe(data->sync_pipe) == -1)
+			return (err_msg(NULL, "Broken pipe\n", 141));
+	}
 	data->status = forking(data, env_ll, cmd_a, pids);
 	close_fds(data);
 	pids = wait(&data->status);
@@ -99,11 +103,13 @@ int		forking(t_data *data, t_env **env_ll, char **all_cmds, pid_t pids)
 		{
 			close(data->pipe_fd[0]);
 			close(data->pipe_fd[1]);
+			close(data->sync_pipe[0]);
+			close(data->sync_pipe[1]);
 			return (err_msg(NULL, "Failed to fork\n", -1));
 		}
 		if (pids == 0)
 		{
-			if (data->index > 0)
+			if (data->index > 0 && data->heredoc_exist == true)
 				read(data->sync_pipe[0], &sync_signal, 1);
 			child_execution(data, env_ll, all_cmds[data->index], data->index);
 		}
@@ -147,7 +153,6 @@ void	child_execution(t_data *data, t_env **env_ll, char *instr, int child)
 		free_data(data, NULL, NULL);
 		exit (err_msg(NULL, MALLOC, -1));
 	}
-	line_printer(cmd_array); //debug
 	dup_fds(data, child, cmd_array);
 	if (data->redirections == true)
 	{

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections_utils.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 15:28:13 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/21 12:54:36 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/21 14:07:24 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,10 +71,9 @@ void        heredoc_redirection(t_data *data, char **array)
 		}
 		else if (data->piped == true)
 		{
-			data->heredoc_fd[data->here_doc] = here_doc(array[data->index +1]);
-			dup2(data->heredoc_fd[data->here_doc], STDIN_FILENO);
-			close(data->heredoc_fd[data->here_doc]);
-			++data->here_doc;
+			data->fd_in = here_doc(array[data->index + 1]);
+			dup2(data->fd_in, STDIN_FILENO);
+			close(data->fd_in);
 		}
 	}
 	else
