@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils1.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 15:29:42 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/18 15:41:24 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/21 13:12:03 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,23 +37,6 @@ char	*access_path(char **path, char *cmd)
 	return (NULL);
 }
 
-// int	how_many_children(t_token *token) DEPRECATED
-// {
-// 	int		cmds;
-// 	t_token	*tmp;
-
-// 	cmds = 0;
-// 	tmp = token;
-// 	while (tmp != NULL)
-// 	{
-// 		if (tmp->type == COMMAND)
-// 			cmds++;
-// 		tmp = tmp->next;
-// 	}
-// 	tmp = NULL;
-// 	return (cmds);
-// }
-
 /**
 * This is our standard error printer.
 * NEVER NULL THE FIRST PARAMETER!
@@ -79,4 +62,26 @@ void	close_fds(t_data *data)
         close(data->fd_out);
     if (data->read_end != 0)
         close(data->read_end);
+    if (data->sync_pipe[1] != 0)
+        close(data->sync_pipe[1]);
+    if (data->sync_pipe[0] != 0)
+        close(data->sync_pipe[0]);
+}
+
+void	execution_with_path(t_data *data, char **array, char *path)
+{
+	if (execve(path, array, data->env) == -1)	
+	{
+		free_data(data, path, array);
+		exit(err_msg(array[0], NO_EXEC, 127));
+	}
+}
+
+void	execution_absolute_path(t_data *data, char **array)
+{
+	if (execve(array[0], array, data->env) == -1)	
+	{
+		free_data(data, NULL, array);
+		exit(err_msg(array[0], NO_EXEC, 127));
+	}
 }

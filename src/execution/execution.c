@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/20 07:21:26 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/21 13:05:32 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,16 @@
 // 	return (SUCCESS);
 // }
 
+static void	line_printer(char **array)
+{
+	int i = 0;
+	while (array[i])
+	{
+		dprintf(2, "array[%i]: %s\n", i, array[i]);//debug
+		i++;
+	}
+}
+
 /**
  * Executio  and execution prepping are just the same function broke
  * into two parts for norminetting reasons. These functions mainly deal
@@ -42,7 +52,6 @@ int    execution(t_data *data, t_env **env_ll)
 
 	token = data->token;
 	data->nb_cmds = count_token(token, PIPE) + 1;
-	//token_printer(token);
 	if (data->nb_cmds == 0)
 		data->nb_cmds = 1;
 	if (!find_token(token, PIPE) && !find_token(token, RED_IN)
@@ -62,6 +71,8 @@ int	execution_prepping(t_data *data, t_token *token, t_env **env_ll)
 	cmd_a = cl_to_array(token);
 	if (!cmd_a)
 		return (FAILURE);
+	if (pipe(data->sync_pipe) == -1)
+		return (err_msg(NULL, "Broken pipe\n", 141));
 	data->status = forking(data, env_ll, cmd_a, pids);
 	close_fds(data);
 	pids = wait(&data->status);
@@ -73,6 +84,8 @@ int	execution_prepping(t_data *data, t_token *token, t_env **env_ll)
 
 int		forking(t_data *data, t_env **env_ll, char **all_cmds, pid_t pids)
 {
+	char	sync_signal;
+	
 	data->index = 0;
 	while (data->index < data->nb_cmds)
 	{
@@ -89,7 +102,11 @@ int		forking(t_data *data, t_env **env_ll, char **all_cmds, pid_t pids)
 			return (err_msg(NULL, "Failed to fork\n", -1));
 		}
 		if (pids == 0)
+		{
+			if (data->index > 0)
+				read(data->sync_pipe[0], &sync_signal, 1);
 			child_execution(data, env_ll, all_cmds[data->index], data->index);
+		}
 		else if (data->piped == true)
 		{	
 			close(data->pipe_fd[1]);
@@ -124,15 +141,13 @@ void	child_execution(t_data *data, t_env **env_ll, char *instr, int child)
 {
 	char		**cmd_array;
 
-	
-	// free_token(data->token);
-	// free_ll(*env_ll);
 	cmd_array = ft_split(instr, ' ');
 	if (!cmd_array)
 	{
 		free_data(data, NULL, NULL);
 		exit (err_msg(NULL, MALLOC, -1));
 	}
+	line_printer(cmd_array);
 	dup_fds(data, child, cmd_array);
 	if (data->redirections == true)
 	{
@@ -146,15 +161,6 @@ void	child_execution(t_data *data, t_env **env_ll, char *instr, int child)
 	}
 	ft_exec(data, env_ll, cmd_array);
 }
-// static void	line_printer(char **array)
-// {
-// 	int i = 0;
-// 	while (array[i])
-// 	{
-// 		dprintf(2, "array[%i]: %s\n", i, array[i]);//debug
-// 		i++;
-// 	}
-// }
 
 /**
  * This is the second part of the execution where we are going to
@@ -174,8 +180,9 @@ void	ft_exec(t_data *data, t_env **env_ll,  char **cmd_array)
 {
 	static char	*path;
 
-
 	data->env = env_arr_updater(env_ll);
+	free_token(data->token);
+	free_ll(*env_ll);
 	if (!data->env)
 		exit (1);
 	if (ft_strchr(cmd_array[0], '/') == NULL)
@@ -188,17 +195,9 @@ void	ft_exec(t_data *data, t_env **env_ll,  char **cmd_array)
 		}
 	}
 	if (!path)
-	{
-		if (execve(cmd_array[0], cmd_array, data->env) == -1)	
-		{
-			free_data(data, NULL, cmd_array);
-			exit(err_msg(cmd_array[0], NO_EXEC, 127));
-		}
-	}
-	if (execve(path, cmd_array, data->env) == -1)	
-	{
-		free_data(data, path, cmd_array);
-		exit(err_msg(cmd_array[0], NO_EXEC, 127));
-	}
+		execution_absolute_path(data, cmd_array);
+	execution_with_path(data, cmd_array, path);
+
 }
+
 
