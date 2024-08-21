@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/21 13:49:24 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/21 14:01:05 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int	execution_prepping(t_data *data, t_token *token, t_env **env_ll)
 	cmd_a = cl_to_array(token);
 	if (!cmd_a)
 		return (FAILURE);
-	if (count_token(token, HERE_DOC) >= 1)
+	if (count_token(token, HEREDOC))
 	{
 		data->heredoc_exist = true;
 		if (pipe(data->sync_pipe) == -1)
@@ -103,6 +103,8 @@ int		forking(t_data *data, t_env **env_ll, char **all_cmds, pid_t pids)
 		{
 			close(data->pipe_fd[0]);
 			close(data->pipe_fd[1]);
+			close(data->sync_pipe[0]);
+			close(data->sync_pipe[1]);
 			return (err_msg(NULL, "Failed to fork\n", -1));
 		}
 		if (pids == 0)

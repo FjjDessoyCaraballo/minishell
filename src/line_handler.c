@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 12:23:49 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/08/21 13:50:28 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/21 14:11:41 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,6 @@ void setup(t_data *data)
     data->cmd_ignore = false;
     data->echoed = false;
     data->echo_flag = false;
-	data->here_doc = false;
 	data->redirections = false;
 	data->piped = false;
 	data->env_len = total_env_len(data->envll);
