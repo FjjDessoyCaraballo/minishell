@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:12:51 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/21 13:48:40 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/21 14:25:46 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,11 +65,9 @@ int	main(int argc, char **argv, char **env)
 				execution(data, env_ll);
 			free_gang(data);
 		}
-		free_gang(data);
 	}
 	else
 		ft_putstr_fd(ERR_ARG, 2);
-	free_gang(data);
 	free_array(data->binary_paths);
 	free_ll((*env_ll));
 	free_null(env_ll);

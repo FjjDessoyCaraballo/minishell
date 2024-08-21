@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 12:23:49 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/08/21 14:11:41 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/21 14:24:15 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,8 @@ void free_tokens(t_token *head)
     {
 		tmp = head;
         if (tmp->value)
-		{
-        	free(tmp->value);
-			tmp->value = NULL;
-		}
-        if(tmp->path)
+			free_null(tmp->value);
+        if (tmp->path)
 			free(tmp->path);
 		head = head->next;
 		free_null(tmp);
