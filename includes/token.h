@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 11:35:39 by lstorey           #+#    #+#             */
-/*   Updated: 2024/08/21 00:31:36 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/21 12:54:36 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,23 +64,12 @@ typedef struct s_token
 	char			*value;
 	char			*path;
 	int				id;
-	int				bro;
 	bool			in_quotes;
 	bool			expand;
 	bool			echo;
 	struct s_token	*next;
 	struct s_token  *prev;
-	struct s_group	*group;
 }		t_token;
-
-typedef struct s_group
-{
-	t_token *tokens;
-	int		nb_tokens;
-	int		id;
-	struct s_group *next;
-}		t_group;
-
 
 void	free_gang(t_data *data);
 

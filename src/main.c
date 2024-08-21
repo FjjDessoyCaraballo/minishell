@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:12:51 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/21 01:33:22 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/21 13:24:35 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 void	free_gang(t_data *data)
 {
-	if(data->vtoken != NULL)
+	if(data->tok_res != NULL)
 	{
-		free(data->vtoken);
-		data->vtoken = NULL;
+		free(data->tok_res);
+		data->tok_res = NULL;
 	}
 	if(data->ctoken != NULL)
 	{
@@ -35,7 +35,11 @@ void	free_gang(t_data *data)
 		data->new_str = NULL;
 	}
 	free_tokens(data->token);
-
+	// if(data->tok_str != NULL)
+	// {
+	// 	free(data->tok_str);
+	// 	data->tok_str = NULL;
+	// }
 }
 
 int	main(int argc, char **argv, char **env)

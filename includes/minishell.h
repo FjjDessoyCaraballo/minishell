@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/21 00:31:24 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/21 12:27:34 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,11 +107,13 @@ typedef struct s_data
 	bool		redirections;
 	char		*line_read;
 	int			id;
-	char		*vtoken;
+	char		*tok_res;
+	char		*tok_str;
 	const char *deli;
 	bool		cmd_ignore;
 	char		*ctoken;
 	char		*cnew_token;
+	char		*str_token;
 	int			quote;
 	int			sindex;
 	int			token_start;

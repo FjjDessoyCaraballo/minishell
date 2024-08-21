@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:34:16 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/21 01:55:46 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/21 13:27:09 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,38 +82,38 @@ t_token *initialize_tokens(t_data *data)
     data->current_token = first_node;
     data->prev_token = NULL;
     data->new_str = NULL;
+    data->tok_str = NULL;
     return first_node;
 }
 
 int line_tokenization(t_data *data)
 {
     data->first_node = initialize_tokens(data);
-    data->vtoken = ft_strtok(data->line_read, data->deli, data, data->current_token);
+    data->tok_res = ft_strtok(data->line_read, data->deli, data, data->current_token);
     if (data->status == 963)
         return (1);
-    while (data->vtoken != NULL && data->status != 963)
+    while (data->tok_res != NULL && data->status != 963)
     {
         
         data->current_token->id = data->id;
         data->current_token->prev = data->prev_token;
-        data->current_token->value = ft_strdup(data->vtoken);
-        if (chunky_checker(data->current_token->value, data->current_token, data) == 1)
+        data->tok_str = ft_strdup(data->tok_res);
+        if (chunky_checker(data->tok_str, data->current_token, data) == 1)
             return (1);
-        if (data->vtoken != NULL && data->status != 963)
+        if (data->tok_res != NULL && data->status != 963)
         {
             data->current_token = create_and_link_next_token(data->current_token, data);
             data->prev_token = data->current_token->prev;
         }
-        data->vtoken = ft_strtok(NULL, data->deli, data, data->current_token);
+        data->tok_res = ft_strtok(NULL, data->deli, data, data->current_token);
         if (data->status == 963)
             return (1);
-        //free(data->new_str);
     }
     data->token = data->first_node;
     free(data->new_str);
     data->new_str = NULL;
-    free(data->vtoken);
-    data->vtoken = NULL;
+    free(data->tok_res);
+    data->tok_res = NULL;
     // if(data->token != NULL)
 	// 	print_tokens(data);
     return (0);
