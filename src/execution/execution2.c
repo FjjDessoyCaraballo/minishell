@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 13:30:29 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/22 14:03:14 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/22 14:20:11 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,18 +57,14 @@ t_token *find_token_exec(t_token *token, char **array)
 	t_token	*tmp;
 
 	i = 0;
+	tmp = token;
 	while (array[i])
 	{
-		tmp = token;
-		while (tmp != NULL && tmp->next != NULL)
+		while (tmp->next != NULL)
 		{
 			if (!ft_strncmp(array[i], tmp->value, ft_strlen(array[i]))
 				&& tmp->type == BUILTIN)
-			{
-				if (tmp->next && array[i + 1]
-					&&!ft_strncmp(array[i + 1], tmp->next->value, ft_strlen(array[i])))
 					return (tmp);
-			}
 			tmp = tmp->next;
 		}
 		i++;
@@ -83,7 +79,17 @@ void	ft_builtin_exec(t_data *data, t_token *token, t_env **env_ll)
 
 	status = 0;
 	if (token == NULL)
+	{
+		dprintf(2, "we exited with NULL token");
 		exit(status);
+	}
 	status = built_ins(data, token, env_ll);
 	exit(status);
+}
+
+bool binary_tree_discard(char *command)
+{
+	if (!ft_strncmp(command, "echo", 4))
+		return (true);
+	return (false);
 }

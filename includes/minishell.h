@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/22 14:03:39 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/22 14:20:35 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,6 +150,7 @@ void	ft_exec(t_data *data, t_env **env_ll, char **cmd_array);
 bool	builtin_filter(t_token *token, char *command);
 t_token *find_token_exec(t_token *token, char **array);
 void	ft_builtin_exec(t_data *data, t_token *token, t_env **env_ll);
+bool 	binary_tree_discard(char *command);
 
 /* in redirections.c */
 int		find_redirection(char **array);
