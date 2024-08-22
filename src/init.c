@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 12:38:16 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/22 17:03:49 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/22 17:37:56 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,6 @@ void	initializer(t_data *data, t_env **env_ll, char **env)
 {
 	signal(SIGINT, handler);
 	signal(SIGQUIT, SIG_IGN);
-	// add_shell_lvl()
 	ft_bzero(data, sizeof(t_data));
 	ll_env(env_ll, env);
 	find_bin(env_ll, data);

@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/22 17:05:09 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/22 17:42:06 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -222,6 +222,7 @@ void	free_ll(t_env *env_ll);
 char	**env_arr_updater(t_env **env_ll);
 int		ll_size(t_env **env_ll);
 void	free_all_ll(t_env **env_ll);
+char	**add_shell_lvl(char **env);
 
 /* in built_ins.c */
 int		built_ins(t_data *data, t_token *token, t_env **env_ll);
