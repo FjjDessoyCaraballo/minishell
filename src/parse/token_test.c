@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:34:10 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/20 05:38:36 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/22 02:46:51 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,13 @@ void print_tokens(t_data *data)
     {
         if(token->value != NULL)
         {
-            printf("---------------[%d]--------------\n", token->id);
+            printf("--------------[%d]--------------\n", token->id);
             printf("token value :[%s]\n", token->value);
+            if(token->value[0] == '\0')
+                printf("empty string\n");
             printf("token type  :[%s]\n", type_names[token->type]);
+            if(token->empty == true)
+                printf("empty?      :[%d]\n",token->empty);
             if(token->in_quotes == true)
                 printf("in quotes   :[%d]\n",token->in_quotes);
             if(token->echo == true) 

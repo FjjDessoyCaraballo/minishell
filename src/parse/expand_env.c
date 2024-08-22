@@ -114,6 +114,11 @@ void handle_dollar_sign(const char *input, size_t *i, t_data *data, char *result
         (*i) += 2;
         result[(*j)++] = '$';
     }
+    else if(input[*i + 1] >= '0' && input[*i + 1] <= '9')
+    {
+        (*i) += 2;
+        result[(*j)++] = input[(*i)++];
+    }
     else if (input[*i + 1] == '?')
     {
         (*i) += 2;
@@ -146,11 +151,7 @@ char *expand_env_variables(const char *input, t_data *data)
     size_t j;
     result = (char *)malloc(data->env_len * data->num_of_envs); // must change to allocate size of env list and multiply if inside quotes
     if (!result)
-    {
-        printf("Memory allocation failed.\n");
         return NULL;
-    }
-    //printf("env_len * num_of_envs = %ld\n", data->env_len * data->num_of_envs);
     i = 0;
     j = 0;
     while (input[i])
