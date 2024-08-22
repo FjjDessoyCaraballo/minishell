@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/22 06:31:54 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/22 10:56:01 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,7 +151,7 @@ int		find_redirection(char **array);
 void	redirections_handling(t_data *data, char **array);
 int		here_doc(char *delimiter);
 
-/* in redirections.c */
+/* in redirections_utils.c */
 void	input_redirection(t_data *data, char **array);
 void	output_redirection(t_data *data, char **array);
 void	heredoc_redirection(t_data *data, char **array);
