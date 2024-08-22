@@ -32,14 +32,18 @@ int check_echo_flag(char *token, t_token *current_token, t_data *data)
         int i = 1;
         while (token[i] == 'n')
             i++;
+        if(i == 1)
+            return (1);
         if (token[i] == '\0') // Ensures the token is only composed of '-n...n'
         {
             current_token->type = FLAG;
-            current_token->value = "-n";
-            return 0;
+            current_token->value = ft_strdup(token);
+            free(token);
+            token = NULL;
+            return (0);
         }
     }
-    return 1;
+    return (1);
 }
 
 int check_flag(char *token, t_token *current_token, t_data *data)
@@ -50,6 +54,8 @@ int check_flag(char *token, t_token *current_token, t_data *data)
     {
         current_token->type = FLAG;
         current_token->value = ft_strdup(token);
+        free(token);
+        token = NULL;
         return 0;
     }
     return 1;

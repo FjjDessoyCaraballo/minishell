@@ -3,39 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:12:51 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/21 14:25:46 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/22 05:17:37 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	free_gang(t_data *data)
-{
-	if(data->tok_res != NULL)
-	{
-		free(data->tok_res);
-		data->tok_res = NULL;
-	}
-	if(data->ctoken != NULL)
-	{
-		free(data->ctoken);
-		data->ctoken = NULL;
-	}
-	if(data->temp_str != NULL)
-	{
-		free(data->temp_str);
-		data->temp_str = NULL;
-	}
-	if(data->new_str != NULL)
-	{
-		free(data->new_str);
-		data->new_str = NULL;
-	}
-	free_tokens(data->token);
-}
 
 int	main(int argc, char **argv, char **env)
 {
@@ -59,9 +34,7 @@ int	main(int argc, char **argv, char **env)
 				printf("exit\n");
 				break ;
 			}
-			else if (status == 963)
-				continue ;
-			else
+			else if (status != 963)
 				execution(data, env_ll);
 			free_gang(data);
 		}

@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 15:26:27 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/21 13:46:18 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/22 06:31:28 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	shell_cd(t_token *token, t_data *data)
 	static char	*new_pwd;
 	char		*curr_pwd;
 
-	if (token->next == NULL)
+	if (token->next->value == NULL)
 	{
 		chdir(data->home_pwd);
 		return (SUCCESS);
@@ -63,7 +63,9 @@ int	shell_cd(t_token *token, t_data *data)
 		new_pwd = ft_strsjoin(curr_pwd, token->value, '/');
 		if (chdir(new_pwd) < 0)
 		{
-			dprintf(2, "we done fuck up\n");
+			free(curr_pwd);
+			curr_pwd = NULL;
+			dprintf(2, "we done freaked up\n");
 			return (FAILURE);
 		}
 	}
@@ -91,6 +93,8 @@ int	export(t_token *token, t_env **env_ll, int i)
 		return (SUCCESS);
 	}
 	head = token->next;
+	if(head->value[0] >= '0' && head->value[0] <= '9')
+		return(err_msg(head->value,ERR_EXP,FAILURE));
 	tmp = (*env_ll);
 	while (head != NULL)
 	{
@@ -129,7 +133,7 @@ int	export(t_token *token, t_env **env_ll, int i)
 		ft_listadd_back(env_ll, ft_listnew(exp_list[i++]));
 	(*env_ll) = tmp;
 	tmp = NULL;
-	// free_array(exp_list);
+	//free_array(exp_list);
 	return (SUCCESS);
 }
 
@@ -157,13 +161,15 @@ int	unset(t_token *token, t_env **env_ll)
 	t_token	*head;
 
 	head = token;
-	if (!head->next || !*env_ll || !env_ll)
+	if (!head->next->value || !*env_ll || !env_ll)
 		return (SUCCESS);
 	tmp = *env_ll;
 	head = head->next;
 	while (!ft_strncmp(head->value, tmp->content, ft_strlen(head->value)))
 	{
 		tmp = tmp->next;
+		free_null(tmp->key);
+		free_null(tmp->value);
 		free(tmp);
 		tmp = NULL;
 		return (SUCCESS);
@@ -176,13 +182,15 @@ int	unset(t_token *token, t_env **env_ll)
 		{
 			del = tmp->next;
 			tmp->next = tmp->next->next;
+			free_null(del->key);
+			free_null(del->value);
 			free(del);
 			del = NULL;
 			return (SUCCESS);
 		}
 		tmp = tmp->next;
 	}
-	// *env_ll = tmp;
+	//*env_ll = tmp;
 	tmp = NULL;
 	head = NULL;
 	return (SUCCESS);
