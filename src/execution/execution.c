@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/21 14:01:05 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/22 11:01:36 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,13 @@
 // 	int i = 0;
 // 	while (array[i])
 // 	{
-// 		dprintf(2, "array[%i]: %s\n", i, array[i]);//debug
+// 		//dprintf(2, "array[%i]: %s\n", i, array[i]);//debug
 // 		i++;
 // 	}
 // }
 
 /**
- * Executio  and execution prepping are just the same function broke
+ * Execution and execution prepping are just the same function broke
  * into two parts for norminetting reasons. These functions mainly deal
  * with the general execution logic: separating built-ins execution from
  * all the other executions (piped, piped with redirections, just
@@ -71,12 +71,8 @@ int	execution_prepping(t_data *data, t_token *token, t_env **env_ll)
 	cmd_a = cl_to_array(token);
 	if (!cmd_a)
 		return (FAILURE);
-	if (count_token(token, HEREDOC))
-	{
-		data->heredoc_exist = true;
-		if (pipe(data->sync_pipe) == -1)
-			return (err_msg(NULL, "Broken pipe\n", 141));
-	}
+	if (pipe(data->sync_pipe) == -1)
+		return (err_msg(NULL, "Broken pipe\n", 141));
 	data->status = forking(data, env_ll, cmd_a, pids);
 	close_fds(data);
 	pids = wait(&data->status);
@@ -150,6 +146,8 @@ void	child_execution(t_data *data, t_env **env_ll, char *instr, int child)
 	cmd_array = ft_split(instr, ' ');
 	if (!cmd_array)
 	{
+		free_ll((*env_ll));
+		free_null(env_ll);
 		free_data(data, NULL, NULL);
 		exit (err_msg(NULL, MALLOC, -1));
 	}
@@ -160,8 +158,10 @@ void	child_execution(t_data *data, t_env **env_ll, char *instr, int child)
 		if (!cmd_array || !*cmd_array)
 		{
 			free_array(cmd_array);
+			free_ll((*env_ll));
+			free_null(env_ll);
 			free_data(data, NULL, NULL);
-			exit (err_msg(NULL, MALLOC, -1));
+			exit (0);
 		}
 	}
 	ft_exec(data, env_ll, cmd_array);
@@ -186,8 +186,6 @@ void	ft_exec(t_data *data, t_env **env_ll,  char **cmd_array)
 	static char	*path;
 
 	data->env = env_arr_updater(env_ll);
-	free_token(data->token);
-	free_ll(*env_ll);
 	if (!data->env)
 		exit (1);
 	if (ft_strchr(cmd_array[0], '/') == NULL)
@@ -195,10 +193,16 @@ void	ft_exec(t_data *data, t_env **env_ll,  char **cmd_array)
 		path = loop_path_for_binary(cmd_array[0], data->binary_paths);
 		if (!path)
 		{
-			free_data(data, NULL, cmd_array);
-			exit(err_msg(cmd_array[0], NO_EXEC, 127));
+			free_array(cmd_array);
+			free_ll(*env_ll);
+			free_null(env_ll);
+			free_data(data, NULL, NULL);
+			exit(127);
 		}
 	}
+	free_tokens(data->token);
+	free_ll(*env_ll);
+	free_null(env_ll);
 	if (!path)
 		execution_absolute_path(data, cmd_array);
 	execution_with_path(data, cmd_array, path);

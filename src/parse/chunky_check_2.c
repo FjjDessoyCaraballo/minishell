@@ -37,7 +37,7 @@ int check_argument(char *token, t_token *current_token, t_data *data)
 {
     if (ft_argument_check(token, current_token) == 0)
     {
-        if (current_token->id == 1 && current_token->prev->type == ARGUMENT)
+        if (current_token->id == 1 && current_token->prev->type == ARG)
             data->cmd_ignore = true;
         if (data->echoed == true)
             current_token->echo = true;

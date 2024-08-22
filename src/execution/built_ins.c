@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 14:18:24 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/20 19:54:57 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/22 06:31:08 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	built_ins(t_data *data, t_token *token, t_env **env_ll)
 	data->home_pwd = get_home((*env_ll));
 	if (token->value == NULL)
 		return (status);
-	if (!ft_strncmp(token->value, "env", 3))
+	if (!ft_strncmp(token->value, "env", 4))
 		status = print_env((*env_ll));
 	else if (!ft_strncmp(token->value, "pwd", 4))
 		status = print_pwd();
@@ -37,7 +37,7 @@ int	built_ins(t_data *data, t_token *token, t_env **env_ll)
 	else if (!ft_strncmp(token->value, "unset", 6))
 		status = unset(token, env_ll); // broken
 	else
-		printf("Unknown command: %s\n", token->value);
+		return(err_msg(token->value, NO_EXEC, 127));
 	return (status);
 }
 
@@ -75,55 +75,78 @@ int	print_pwd(void)
 an exit code that was manually inserted after exit */
 void	get_the_hell_out(t_data *data, t_token *token, t_env *env_ll)
 {
+	int status;
+	status = 0;
 	free_ll(env_ll);
 	ft_printf("exit\n");
 	if (token->next != NULL && token->next->value != NULL)
-		exit(ft_atoi(token->next->value));
+	{
+		status = ft_atoi(token->next->value);
+		free_gang(data);
+		exit(status);
+	}
+	free_gang(data);
 	exit(data->status);
 }
 
-int	yodeling(t_token *token)
+int handle_flag_type(t_token *head)
 {
-	t_token	*head;
-
-	head = token;
-	if (head->next == NULL)
-		return (printf("\n"), SUCCESS);
-	if (head->next->type == FLAG)
-	{
 		head = head->next;
 		while(head->type == FLAG)
 		{
 			head = head->next;
-			if (head == NULL)
-				return FAILURE;
+			if (head->value == NULL)
+				return SUCCESS;
 		}
-		if(head->value[0] == '\0')
-			head = head->next;
-		while (head != NULL)
+		while(head->value != NULL)
 		{
+			while(head->value == NULL && head->type == ARG)
+				head = head->next;
+			if (head->value == NULL)
+				return SUCCESS;
 			printf("%s", head->value);
-			if(head->next != NULL)
+			if(head->next->value != NULL && head->next->empty == false)
 				printf(" ");
 			head = head->next;
 		}
 		return (SUCCESS);
-	}
-	if (head != NULL && head->next != NULL && head->next->type == ARGUMENT)
-	{
-		head = head->next;
-		if (head->value != NULL && head->value[0] == '\0')
-			head = head->next;
-		while (head != NULL)
-		{
-			if (head->value != NULL && head->value[0] != '\0')
-				printf("%s", head->value);
-			head = head->next;
-			if (head != NULL && head->value != NULL && head->value[0] != '\0')
-				printf(" ");
-		}
-		printf("\n");
-		return (SUCCESS); 
-	}
-	return (FAILURE);
+}
+
+int handle_arg_type(t_token *head)
+{
+    head = head->next;
+
+    if (head->value != NULL && head->value[0] == '\0')
+        head = head->next;
+
+    while (head != NULL)
+    {
+        if (head->value != NULL && head->value[0] != '\0')
+            printf("%s", head->value);
+
+        head = head->next;
+
+        if (head != NULL && head->value != NULL && head->value[0] != '\0')
+            printf(" ");
+    }
+
+    printf("\n");
+    return (SUCCESS);
+}
+
+int yodeling(t_token *token)
+{
+    t_token *head;
+
+    head = token;
+    if (head->next->value == NULL)
+        return (printf("\n"), SUCCESS);
+
+    if (head->next->type == FLAG)
+        return handle_flag_type(head);
+
+    if (head != NULL && head->next != NULL && head->next->type == ARG)
+        return handle_arg_type(head);
+
+    return (FAILURE);
 }

@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 10:41:10 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/14 09:59:34 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/22 11:00:07 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,15 +31,13 @@
  */
 char	**parse_instruction(t_data *data, char **cmd_array)
 {
-	int	index;
-	int	len;
+	static int	index;
+	static int	len;
 	char **parsed_array;
-	
-	index = 0;
-	len = 0;
+
 	while (cmd_array[index])
 	{
-		if (!ft_strcmp(cmd_array[index], ">") 
+		if (!ft_strcmp(cmd_array[index], ">")
 			|| !ft_strcmp(cmd_array[index], "<")
 			|| !ft_strcmp(cmd_array[index], "<<")
 			|| !ft_strcmp(cmd_array[index], ">>"))
@@ -53,12 +51,25 @@ char	**parse_instruction(t_data *data, char **cmd_array)
 	parsed_array = remove_redirect(data, cmd_array, len);
 	if (!parsed_array)
 	{
-		dprintf(2, "\n\n received null parsed_array in parse_instruction \n\n");
 		free_array(cmd_array);
 		return (NULL);
 	}
 	free_array(cmd_array);
 	return (parsed_array);
+}
+
+static int is_redirection(char *str)
+{
+    return (!ft_strcmp(str, "<")
+			|| !ft_strcmp(str, ">") 
+			|| !ft_strcmp(str, ">>")
+			|| !ft_strcmp(str, "<<"));
+}
+
+static int is_executable(char *str, t_data *data)
+{
+    return (check_bin_local(str) == EXECUTABLE
+	|| check_bin_path(str, data->binary_paths) == EXECUTABLE);
 }
 
 /**
@@ -72,102 +83,29 @@ char	**parse_instruction(t_data *data, char **cmd_array)
  * The first iteration (first while loop) will try to grab the executable
  * from the line given, if any if there.
  */
-char	**remove_redirect(t_data *data, char **array, int len) {
-    static char *cwd;
+char **remove_redirect(t_data *data, char **array, int len)
+{
     char **parsed_array;
-    int index_a;
-    int index_b;
-
-    parsed_array = (char **)malloc(sizeof(char *) * (len + 1));
-    if (!parsed_array)
-        return NULL;
-    
-    cwd = getcwd(NULL, 0);
-    index_b = 0;
-    index_a = 0;
-
-    while (array[index_a])
-	{
-		if (!strcmp(array[index_a], "<") || !strcmp(array[index_a], ">")
-			|| !ft_strcmp(array[index_a], ">>") || !ft_strcmp(array[index_a], "<<"))
-		{
-			index_a += 2;
-			continue ;
-		}
-		if (check_bin_local(array[index_a]) == EXECUTABLE || check_bin_path(array[index_a], data->binary_paths) == EXECUTABLE)
-		{
-			parsed_array[index_b] = ft_strdup(array[index_a]);
-			index_b++;
-		}
-		else if (index_a == 0 || (ft_strcmp(array[index_a - 1], "<") != 0 && ft_strcmp(array[index_a - 1], ">") != 0 && ft_strcmp(array[index_a - 1], ">>") != 0))
-		{
-			parsed_array[index_b] = ft_strdup(array[index_a]);
-			index_b++;
-		}
-        index_a++;
-    }
-    parsed_array[index_b] = NULL;
-    free(cwd);
-    return parsed_array;
-}
-
-/*************************************************************
- ************************* DUMP ******************************
- *************************************************************/
-
-// char	**parse_instruction(t_data *data, char **cmd_array)
-// {
-// 	int	index;
-// 	int	len;
-// 	char **parsed_array;
+    int i_a;
+    int i_b;
 	
-// 	index = 0;
-// 	len = 0;
-// 	while (cmd_array[index])
-// 	{
-// 		if (!ft_strcmp(cmd_array[index], ">") || !ft_strcmp(cmd_array[index], "<"))
-// 		{
-// 			if (cmd_array[index + 2])
-// 				index += 2;
-// 		}
-// 		len++;
-// 		index++;
-// 	}
-// 	parsed_array = remove_redirect(data, cmd_array, len);
-// 	if (!parsed_array)
-// 	{
-// 		dprintf(2, "\n\n received null parsed_array in parse_instruction \n\n");
-// 		free_array(cmd_array);
-// 		return (NULL);
-// 	}
-// 	free_array(cmd_array);
-// 	return (parsed_array);
-// }
-
-// char	**remove_redirect(t_data *data, char **array, int len)
-// {
-// 	static char	*cwd;
-// 	char		**parsed_array;
-// 	int			index_a;
-// 	int			index_b;
-
-// 	parsed_array = (char **)malloc(sizeof(char *) * (len + 1));
-// 	if (!parsed_array)
-// 		return (NULL);
-// 	cwd = getcwd(NULL, 0);
-// 	index_b = 0;
-// 	index_a = 0;
-// 	while (array[index_a])
-// 	{
-// 		if (check_bin_local(array[index_a]) == EXECUTABLE
-// 			|| check_bin_path(array[index_a], data->binary_paths) == EXECUTABLE) // need to check absolute path later
-// 		{
-// 			parsed_array[index_b] = ft_strdup(array[index_a]);
-// 			index_b++;
-// 		}
-// 		index_a++;
-// 	}
-// 	parsed_array[index_b] = NULL;
-// 	free(cwd);
-// 	return (parsed_array);
-// }
+	i_a = 0;
+	i_b = 0;
+	parsed_array = (char **)malloc(sizeof(char *) * (len + 1));
+	if (!parsed_array)
+        return (NULL);
+    while (array[i_a])
+    {
+        if (is_redirection(array[i_a]))
+        {
+            i_a += 2;
+            continue;
+		}
+        if (is_executable(array[i_a], data) || i_a == 0
+			|| !is_redirection(array[i_a - 1]))
+            parsed_array[i_b++] = ft_strdup(array[i_a]);
+        i_a++;
+    }
+    parsed_array[i_b] = NULL;
+    return (parsed_array);
+}

@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 15:29:42 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/21 13:12:03 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/22 10:30:14 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,11 @@ char	*access_path(char **path, char *cmd)
 * NEVER NULL THE FIRST PARAMETER!
 */
 int	err_msg(char *obj, char *msg, int err_code)
-{
-	if (*obj && *msg)
-		printf("%s: %s\n", obj, msg);
-	else if (!obj && *msg)
+{	
+	if (!obj && *msg)
 		printf("%s\n", msg);
+	else if (*obj && *msg)
+		printf("%s: %s\n", obj, msg);
 	return (err_code);
 }
 
@@ -72,8 +72,9 @@ void	execution_with_path(t_data *data, char **array, char *path)
 {
 	if (execve(path, array, data->env) == -1)	
 	{
+		err_msg(array[0], NO_EXEC, 127);
 		free_data(data, path, array);
-		exit(err_msg(array[0], NO_EXEC, 127));
+		exit(127);
 	}
 }
 
@@ -81,7 +82,8 @@ void	execution_absolute_path(t_data *data, char **array)
 {
 	if (execve(array[0], array, data->env) == -1)	
 	{
+		err_msg(array[0], NO_EXEC, 127);
 		free_data(data, NULL, array);
-		exit(err_msg(array[0], NO_EXEC, 127));
+		exit(127);
 	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_to_array.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 13:20:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/05 12:07:01 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/22 01:20:56 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ char **ttad(t_token *token_list, t_type delimiter)
     {
         while (current != NULL && current->type != delimiter)
         {
-            if (current->type == COMMAND || current->type == FLAG || current->type == ARGUMENT)
+            if (current->type == COMMAND || current->type == FLAG || current->type == ARG)
             {
                 length += ft_strlen(current->value) + 1;
             }
@@ -89,7 +89,7 @@ char **ttad(t_token *token_list, t_type delimiter)
         command[0] = '\0';
         while (segment_start != current)
         {
-            if (segment_start->type == COMMAND || segment_start->type == FLAG || segment_start->type == ARGUMENT)
+            if (segment_start->type == COMMAND || segment_start->type == FLAG || segment_start->type == ARG)
             {
                 ft_strcpy(command + pos, segment_start->value);
                 pos += ft_strlen(segment_start->value);
