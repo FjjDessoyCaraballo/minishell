@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lstorey <lstorey@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 15:26:27 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/22 13:52:44 by lstorey          ###   ########.fr       */
+/*   Updated: 2024/08/22 15:58:07 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,11 @@
 void alphabetical_printer(char **env_array)
 {
     char	c;
-	int i;
+	int		i;
 	
 	i = 0;
-    c = 32; // first printable char
-
-    while (c < 127) // last printable char
+    c = 32;
+    while (c < 127)
     {
         while (env_array[i])
         {
@@ -49,30 +48,32 @@ int	shell_cd(t_token *token, t_data *data)
 		chdir(data->home_pwd);
 		return (SUCCESS);
 	}
-	token = token->next; // this should have the path
+	token = token->next;
 	if (ft_strchr(token->value, '/') == NULL)
 	{
 		curr_pwd = getcwd(NULL, 0);
 		if (!curr_pwd)
 		{
-			free(curr_pwd);
-			curr_pwd = NULL;
-			ft_putstr_fd("The path ahead is blocked by nothingness\n", 2);
-			return (FAILURE);
+			free_null(curr_pwd);
+			chdir(data->home_pwd);
+			return (err_msg(token->value, "Nothingness ahead\n", 1));
 		}
 		new_pwd = ft_strsjoin(curr_pwd, token->value, '/');
+		if (!new_pwd)
+			return (err_msg(NULL, MALLOC, -1));
 		if (chdir(new_pwd) < 0)
 		{
-			free(curr_pwd);
-			curr_pwd = NULL;
-			dprintf(2, "we done freaked up\n");
-			return (FAILURE);
+			free_null(new_pwd);
+			free_null(curr_pwd);
+			return (err_msg(token->value, FILE_ERROR, 1));
 		}
+		free_null(curr_pwd);
+		free_null(new_pwd);
 	}
 	else
 	{
 		if (chdir(token->value) < 0)
-			return (FAILURE);
+			return (err_msg(token->value, FILE_ERROR, 1));
 	}
 	return (SUCCESS);
 }

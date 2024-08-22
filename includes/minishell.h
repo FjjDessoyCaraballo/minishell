@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/22 14:33:56 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/22 16:19:58 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,10 @@
 # define SUCCESS 0
 # define FAILURE 1
 
-extern int g_exit_code; //global
+/*************************************************/
+/* global variable *******************************/
+/*************************************************/
+extern int g_exit_code;
 
 /*************************************************/
 /* structs ***************************************/
@@ -203,6 +206,7 @@ int		is_file(char *binary, char *path);
 /* in utils2.c */
 void	malloc_check_message(void *ptr);
 void	free_null(void *ptr);
+void	super_free(t_data *data, t_env **env_ll);
 
 /* in line_handler.c */
 int		sniff_line(t_data *data);

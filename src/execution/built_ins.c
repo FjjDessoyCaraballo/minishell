@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 14:18:24 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/22 14:34:02 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/22 15:51:28 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ int	print_pwd(void)
 	if (!pwd)
 		return (FAILURE);
 	printf("%s\n", pwd);
+	free_null(pwd);
 	return (SUCCESS);
 }
 

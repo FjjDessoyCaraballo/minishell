@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/22 14:36:39 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/22 16:35:56 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,12 +54,13 @@ int    execution(t_data *data, t_env **env_ll)
 	data->nb_cmds = count_token(token, PIPE) + 1;
 	if (data->nb_cmds == 0)
 		data->nb_cmds = 1;
-	if (!find_token(token, PIPE) && !find_token(token, RED_IN)
-		&& !find_token(token, RED_OUT) && !find_token(token, HEREDOC)
-		&& !find_token(token, APPEND) && !find_token(token, COMMAND))
-		data->status = built_ins(data, token, env_ll);
-	else
+	if (find_token(token, PIPE) || find_token(token, RED_IN)
+		|| find_token(token, RED_OUT) || find_token(token, HEREDOC)
+		|| find_token(token, APPEND) || find_token(token, COMMAND)
+		|| find_token(token, ARG))
 		data->status = execution_prepping(data, token, env_ll);
+	else
+		data->status = built_ins(data, token, env_ll);
 	return (data->status);
 }
 
@@ -97,10 +98,6 @@ int		forking(t_data *data, t_env **env_ll, char **all_cmds, pid_t pids)
 		pids = fork();
 		if (pids < 0)
 		{
-			// close(data->pipe_fd[0]);
-			// close(data->pipe_fd[1]);
-			// close(data->sync_pipe[0]);
-			// close(data->sync_pipe[1]);
 			close_fds(data);
 			return (err_msg(NULL, "Failed to fork\n", -1));
 		}
