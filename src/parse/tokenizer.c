@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:34:16 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/22 01:55:37 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/22 13:34:27 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,16 @@ t_token *initialize_tokens(t_data *data)
     return first_node;
 }
 
+/**
+ * Performs line tokenization on the input data.
+ * 
+ * This function takes a pointer to a t_data structure as input, which contains the line to be tokenized.
+ * It initializes the tokenization process, splits the line into tokens, and checks each token type.
+ * If any token type check fails, the function returns 1. Otherwise, it returns 0.
+ * 
+ * @param data A pointer to a t_data structure containing the line to be tokenized.
+ * @return 0 on successful tokenization, 1 on failure.
+ */
 int line_tokenization(t_data *data)
 {
     data->first_node = initialize_tokens(data);
