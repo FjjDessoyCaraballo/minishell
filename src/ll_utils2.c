@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ll_utils2.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 11:35:09 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/06 13:39:28 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/22 14:32:49 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,4 +56,9 @@ int	ll_size(t_env **env_ll)
 	}
 	tmp = NULL;
 	return (i);
+}
+void	free_all_ll(t_env **env_ll)
+{
+	free_ll(*env_ll);
+	free_null(env_ll);
 }
