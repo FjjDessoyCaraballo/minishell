@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/22 11:01:36 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/22 14:02:47 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,10 +97,11 @@ int		forking(t_data *data, t_env **env_ll, char **all_cmds, pid_t pids)
 		pids = fork();
 		if (pids < 0)
 		{
-			close(data->pipe_fd[0]);
-			close(data->pipe_fd[1]);
-			close(data->sync_pipe[0]);
-			close(data->sync_pipe[1]);
+			// close(data->pipe_fd[0]);
+			// close(data->pipe_fd[1]);
+			// close(data->sync_pipe[0]);
+			// close(data->sync_pipe[1]);
+			close_fds(data);
 			return (err_msg(NULL, "Failed to fork\n", -1));
 		}
 		if (pids == 0)
@@ -146,8 +147,7 @@ void	child_execution(t_data *data, t_env **env_ll, char *instr, int child)
 	cmd_array = ft_split(instr, ' ');
 	if (!cmd_array)
 	{
-		free_ll((*env_ll));
-		free_null(env_ll);
+		free_all_ll(env_ll);
 		free_data(data, NULL, NULL);
 		exit (err_msg(NULL, MALLOC, -1));
 	}
@@ -157,15 +157,18 @@ void	child_execution(t_data *data, t_env **env_ll, char *instr, int child)
 		cmd_array = parse_instruction(data, cmd_array);
 		if (!cmd_array || !*cmd_array)
 		{
-			free_array(cmd_array);
-			free_ll((*env_ll));
-			free_null(env_ll);
-			free_data(data, NULL, NULL);
+			free_all_ll(env_ll);
+			free_data(data, NULL, cmd_array);
 			exit (0);
 		}
 	}
+	if (builtin_filter(data->token, cmd_array[0]) == true)
+	{
+		ft_builtin_exec(data, find_token_exec(data->token, cmd_array), env_ll);
+	}
 	ft_exec(data, env_ll, cmd_array);
 }
+		// ft_builtin_exec(data, find_token_exec(data->token, cmd_array), env_ll);
 
 /**
  * This is the second part of the execution where we are going to
@@ -206,7 +209,6 @@ void	ft_exec(t_data *data, t_env **env_ll,  char **cmd_array)
 	if (!path)
 		execution_absolute_path(data, cmd_array);
 	execution_with_path(data, cmd_array, path);
-
 }
 
 

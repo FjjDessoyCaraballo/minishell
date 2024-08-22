@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 15:26:27 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/22 06:31:28 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/22 12:41:15 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ int	export(t_token *token, t_env **env_ll, int i)
 
 	head = token;
 	count = 0;
-	if (!head->next->value)
+	if (!head->next)
 	{
 		print_export(env_ll);
 		return (SUCCESS);
@@ -103,6 +103,7 @@ int	export(t_token *token, t_env **env_ll, int i)
 			if (ft_strncmp(tmp->key, head->value, ft_strlen(tmp->key)) == 0)
 			{
 				tmp->content = head->value;
+				free_null(tmp->value);
 				tmp->value = ft_substr(head->value, ft_strlen(tmp->key) + 1, ft_strlen(head->value) - ft_strlen(tmp->key)); 
 				return (SUCCESS);
 			}

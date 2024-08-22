@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/22 10:56:01 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/22 14:03:39 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,6 +146,11 @@ int		forking(t_data *data, t_env **env_ll, char **all_cmds, pid_t pids);
 void	child_execution(t_data *data, t_env **env_ll, char *instr, int child);
 void	ft_exec(t_data *data, t_env **env_ll, char **cmd_array);
 
+/* in execution2.c */
+bool	builtin_filter(t_token *token, char *command);
+t_token *find_token_exec(t_token *token, char **array);
+void	ft_builtin_exec(t_data *data, t_token *token, t_env **env_ll);
+
 /* in redirections.c */
 int		find_redirection(char **array);
 void	redirections_handling(t_data *data, char **array);
@@ -209,6 +214,7 @@ void	free_ll(t_env *env_ll);
 /* in ll_utils2.c */
 char	**env_arr_updater(t_env **env_ll);
 int		ll_size(t_env **env_ll);
+void	free_all_ll(t_env **env_ll);
 
 /* in built_ins.c */
 int		built_ins(t_data *data, t_token *token, t_env **env_ll);
