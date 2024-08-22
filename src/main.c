@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:12:51 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/22 13:26:11 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/22 14:35:26 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,7 @@ int	main(int argc, char **argv, char **env)
 		ft_putstr_fd(ERR_ARG, 2);
 	free_null(data->fin_tok);
 	free_array(data->binary_paths);
-	free_ll((*env_ll));
-	free_null(env_ll);
+	free_all_ll(env_ll);
 	free(data);
 	return (0);
 }
