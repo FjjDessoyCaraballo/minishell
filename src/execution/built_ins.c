@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 14:18:24 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/22 06:31:08 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/22 13:32:49 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,21 +115,16 @@ int handle_flag_type(t_token *head)
 int handle_arg_type(t_token *head)
 {
     head = head->next;
-
     if (head->value != NULL && head->value[0] == '\0')
         head = head->next;
-
     while (head != NULL)
     {
         if (head->value != NULL && head->value[0] != '\0')
             printf("%s", head->value);
-
         head = head->next;
-
         if (head != NULL && head->value != NULL && head->value[0] != '\0')
             printf(" ");
     }
-
     printf("\n");
     return (SUCCESS);
 }
@@ -137,16 +132,12 @@ int handle_arg_type(t_token *head)
 int yodeling(t_token *token)
 {
     t_token *head;
-
     head = token;
     if (head->next->value == NULL)
         return (printf("\n"), SUCCESS);
-
     if (head->next->type == FLAG)
         return handle_flag_type(head);
-
     if (head != NULL && head->next != NULL && head->next->type == ARG)
         return handle_arg_type(head);
-
     return (FAILURE);
 }

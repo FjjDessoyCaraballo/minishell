@@ -32,14 +32,14 @@ void add_spaces_around_double_char(char *str, char *new_str, size_t *i, size_t *
     (*i)++; // Skip the next character
 }
 
-void process_characters(char *str, char *new_str, size_t *i, size_t *j, int *in_single_quote, int *in_double_quote)
+void process_characters(char *str, char *new_str, size_t *i, size_t *j, int *s_q, int *in_double_quote)
 {
     if (str[*i] == '\'' && !(*in_double_quote))
-        *in_single_quote = !(*in_single_quote); // Toggle single quote state
-    else if (str[*i] == '"' && !(*in_single_quote))
+        *s_q = !(*s_q); // Toggle single quote state
+    else if (str[*i] == '"' && !(*s_q))
         *in_double_quote = !(*in_double_quote); // Toggle double quote state
 
-    if (!(*in_single_quote) && !(*in_double_quote))
+    if (!(*s_q) && !(*in_double_quote))
     {
         if (str[*i] == '|')
             add_spaces_around_char(str, new_str, i, j, '|');
@@ -84,35 +84,78 @@ size_t count_special_characters(const char *str)
     return count;
 }
 
+// char *modify_str(char *str)
+// {
+//     size_t len;
+//     size_t special_count;
+//     size_t new_len;
+//     size_t i;
+//     size_t j;
+//     int in_single_quote;
+//     int in_double_quote;
+//     char *new_str;
+
+//     len = ft_strlen(str);
+//     special_count = count_special_characters(str);
+//     new_len = 2 * special_count + 2 * len;
+//     new_str = malloc(new_len + 1 * sizeof(char));
+//     if (!new_str)
+//     {
+//         perror("Failed to allocate memory");
+//         exit(EXIT_FAILURE);
+//     }
+//     i = 0;
+//     j = 0;
+//     in_single_quote = 0;
+//     in_double_quote = 0;
+//     while (i < len && str[i] != '\0')
+//     {
+//         process_characters(str, new_str, &i, &j, &in_single_quote, &in_double_quote);
+//         i++;
+//     }
+//     new_str[j] = '\0'; // Null-terminate the new string
+//     return new_str;
+// }
+
+void init_vars(size_t *i, size_t *j, int *s_q, int *d_q)
+{
+    *i = 0;
+    *j = 0;
+    *s_q = 0;
+    *d_q = 0;
+}
+
+void process_loop(char *s, char *ns, size_t l, size_t *i, size_t *j, int *sq, int *dq)
+{
+    while (*i < l && s[*i] != '\0')
+    {
+        process_characters(s, ns, i, j, sq, dq);
+        (*i)++;
+    }
+}
+
 char *modify_str(char *str)
 {
     size_t len;
     size_t special_count;
     size_t new_len;
+    char *new_str;
     size_t i;
     size_t j;
-    int in_single_quote;
-    int in_double_quote;
-    char *new_str;
+    int s_q;
+    int d_q;
 
     len = ft_strlen(str);
     special_count = count_special_characters(str);
     new_len = 2 * special_count + 2 * len;
     new_str = malloc(new_len + 1 * sizeof(char));
+
     if (!new_str)
-    {
-        perror("Failed to allocate memory");
         exit(EXIT_FAILURE);
-    }
-    i = 0;
-    j = 0;
-    in_single_quote = 0;
-    in_double_quote = 0;
-    while (i < len && str[i] != '\0')
-    {
-        process_characters(str, new_str, &i, &j, &in_single_quote, &in_double_quote);
-        i++;
-    }
-    new_str[j] = '\0'; // Null-terminate the new string
+
+    init_vars(&i, &j, &s_q, &d_q);
+    process_loop(str, new_str, len, &i, &j, &s_q, &d_q);
+    new_str[j] = '\0';
+    
     return new_str;
 }

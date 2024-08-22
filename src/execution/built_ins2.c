@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: lstorey <lstorey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 15:26:27 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/22 12:41:15 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/22 13:52:44 by lstorey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,12 +98,13 @@ int	export(t_token *token, t_env **env_ll, int i)
 	tmp = (*env_ll);
 	while (head != NULL)
 	{
-		while (tmp->next != NULL)
+		while (tmp)
 		{
 			if (ft_strncmp(tmp->key, head->value, ft_strlen(tmp->key)) == 0)
 			{
-				tmp->content = head->value;
-				free_null(tmp->value);
+				// free(tmp->content);
+				// free(tmp->value);
+				tmp->content = ft_strdup(head->value);
 				tmp->value = ft_substr(head->value, ft_strlen(tmp->key) + 1, ft_strlen(head->value) - ft_strlen(tmp->key)); 
 				return (SUCCESS);
 			}
@@ -196,42 +197,3 @@ int	unset(t_token *token, t_env **env_ll)
 	head = NULL;
 	return (SUCCESS);
 }
-
-
-/*************************************************************
- ************************* DUMP ******************************
- *************************************************************/
-
-// int	built_in_or_garbage(t_data *data, t_env **env_ll, t_token *token)
-// {
-// 	t_token 	*tmp;
-// 	static char	**message;
-
-// 	tmp = token;
-// 	int i = 0;
-// 	while (tmp)
-// 	{
-// 		printf("token [%i][%s]\n", i, tmp->value);
-// 		tmp = tmp->next;
-// 		i++;
-// 	}
-// 	tmp = token;
-// 	while (tmp != NULL)
-// 	{
-		
-// 		if (tmp->type == BUILTIN)
-// 			return (built_ins(data, token, env_ll));
-// 		tmp = tmp->next;
-// 	}
-// 	tmp = NULL;
-// 	if (token)
-// 	{
-// 		message = ft_split(token->value, ' ');
-// 		if (!message)
-// 			return (0);
-// 		err_msg(message[0], "command not found", 0);
-// 		free_array(message);
-// 		return (127);
-// 	}
-// 	return (0);
-// }
