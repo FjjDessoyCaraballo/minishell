@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   line_handler.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 12:23:49 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/08/22 11:24:01 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/22 14:16:43 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,6 @@ void	free_gang(t_data *data)
 		free_null(data->temp_str);
 	if(data->new_str != NULL)
 		free_null(data->new_str);
-	// if (data->fin_tok != NULL)
-	// 	free_null(data->fin_tok);
 	free_tokens(data->token);
 }
 
