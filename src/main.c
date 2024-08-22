@@ -3,21 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: lstorey <lstorey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:12:51 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/22 11:21:59 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/22 12:24:05 by lstorey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+int g_exit_code = 0;
+
 int	main(int argc, char **argv, char **env)
 {
 	t_data			*data;
 	t_env			**env_ll;
-	static int		status;
-	
+	int 			status;
+
 	(void)argv;
 	data = ft_calloc(1, sizeof(t_data));
 	env_ll = ft_calloc(1, sizeof(t_env *));

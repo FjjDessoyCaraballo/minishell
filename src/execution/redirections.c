@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lstorey <lstorey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 13:03:21 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/21 14:16:46 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/22 12:17:11 by lstorey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ int here_doc(char *delimiter)
         exit(err_msg(NULL, "pipe  error", 1));
     while (1)
     {
+		g_exit_code = HEREDOC;
         input = readline("8==D ");
         if (!ft_strncmp(input, delimiter, ft_strlen(delimiter)))
             break ;

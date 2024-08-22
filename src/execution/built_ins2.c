@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: lstorey <lstorey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 15:26:27 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/22 06:31:28 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/22 13:52:44 by lstorey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,11 +98,13 @@ int	export(t_token *token, t_env **env_ll, int i)
 	tmp = (*env_ll);
 	while (head != NULL)
 	{
-		while (tmp->next != NULL)
+		while (tmp)
 		{
 			if (ft_strncmp(tmp->key, head->value, ft_strlen(tmp->key)) == 0)
 			{
-				tmp->content = head->value;
+				// free(tmp->content);
+				// free(tmp->value);
+				tmp->content = ft_strdup(head->value);
 				tmp->value = ft_substr(head->value, ft_strlen(tmp->key) + 1, ft_strlen(head->value) - ft_strlen(tmp->key)); 
 				return (SUCCESS);
 			}
