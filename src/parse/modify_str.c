@@ -86,27 +86,33 @@ size_t count_special_characters(const char *str)
 
 char *modify_str(char *str)
 {
-    size_t len = strlen(str);
-    size_t special_count = count_special_characters(str);
-    size_t new_len = 2 * special_count + 2 * len; // Adjust length with special characters
-    char *new_str = malloc(new_len + 1 * sizeof(char)); // +1 for null terminator
+    size_t len;
+    size_t special_count;
+    size_t new_len;
+    size_t i;
+    size_t j;
+    int in_single_quote;
+    int in_double_quote;
+    char *new_str;
+
+    len = ft_strlen(str);
+    special_count = count_special_characters(str);
+    new_len = 2 * special_count + 2 * len;
+    new_str = malloc(new_len + 1 * sizeof(char));
     if (!new_str)
     {
         perror("Failed to allocate memory");
         exit(EXIT_FAILURE);
     }
-    
-    size_t i = 0;  // Index for original string
-    size_t j = 0;  // Index for new_str
-    int in_single_quote = 0;
-    int in_double_quote = 0;
-
+    i = 0;
+    j = 0;
+    in_single_quote = 0;
+    in_double_quote = 0;
     while (i < len && str[i] != '\0')
     {
         process_characters(str, new_str, &i, &j, &in_single_quote, &in_double_quote);
         i++;
     }
     new_str[j] = '\0'; // Null-terminate the new string
-
     return new_str;
 }
