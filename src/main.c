@@ -12,16 +12,19 @@
 
 #include "minishell.h"
 
-int g_exit_code = 0;
+int	g_exit_code = 0;
 
 int	main(int argc, char **argv, char **env)
 {
-	t_data			*data;
-	t_env			**env_ll;
-	int 			status;
+	t_data	*data;
+	t_env	**env_ll;
+	int		status;
 
+	status = 0;
 	(void)argc;
 	(void)argv;
+	if (!env || !*env)
+		return (1);
 	env = add_shell_lvl(env);
 	data = ft_calloc(1, sizeof(t_data));
 	if (!data)
