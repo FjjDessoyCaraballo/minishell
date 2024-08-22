@@ -87,7 +87,7 @@ int	export(t_token *token, t_env **env_ll, int i)
 
 	head = token;
 	count = 0;
-	if (!head->next->value)
+	if (!head->next)
 	{
 		print_export(env_ll);
 		return (SUCCESS);
@@ -197,42 +197,3 @@ int	unset(t_token *token, t_env **env_ll)
 	head = NULL;
 	return (SUCCESS);
 }
-
-
-/*************************************************************
- ************************* DUMP ******************************
- *************************************************************/
-
-// int	built_in_or_garbage(t_data *data, t_env **env_ll, t_token *token)
-// {
-// 	t_token 	*tmp;
-// 	static char	**message;
-
-// 	tmp = token;
-// 	int i = 0;
-// 	while (tmp)
-// 	{
-// 		printf("token [%i][%s]\n", i, tmp->value);
-// 		tmp = tmp->next;
-// 		i++;
-// 	}
-// 	tmp = token;
-// 	while (tmp != NULL)
-// 	{
-		
-// 		if (tmp->type == BUILTIN)
-// 			return (built_ins(data, token, env_ll));
-// 		tmp = tmp->next;
-// 	}
-// 	tmp = NULL;
-// 	if (token)
-// 	{
-// 		message = ft_split(token->value, ' ');
-// 		if (!message)
-// 			return (0);
-// 		err_msg(message[0], "command not found", 0);
-// 		free_array(message);
-// 		return (127);
-// 	}
-// 	return (0);
-// }
