@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 14:18:24 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/22 13:32:49 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/22 16:33:36 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,16 +98,15 @@ int handle_flag_type(t_token *head)
 			if (head->value == NULL)
 				return SUCCESS;
 		}
+		while (head->value != NULL && head->value[0] == '\0')
+        		head = head->next;
 		while(head->value != NULL)
 		{
-			while(head->value == NULL && head->type == ARG)
-				head = head->next;
-			if (head->value == NULL)
-				return SUCCESS;
-			printf("%s", head->value);
-			if(head->next->value != NULL && head->next->empty == false)
-				printf(" ");
+			if (head->value != NULL && head->value[0] != '\0')
+				printf("%s", head->value);
 			head = head->next;
+			if (head != NULL && head->value != NULL && head->value[0] != '\0')
+				printf(" ");
 		}
 		return (SUCCESS);
 }
@@ -115,8 +114,8 @@ int handle_flag_type(t_token *head)
 int handle_arg_type(t_token *head)
 {
     head = head->next;
-    if (head->value != NULL && head->value[0] == '\0')
-        head = head->next;
+    while (head->value != NULL && head->value[0] == '\0')
+		head = head->next;
     while (head != NULL)
     {
         if (head->value != NULL && head->value[0] != '\0')

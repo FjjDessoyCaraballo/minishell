@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lstorey <lstorey@student.42.fr>            +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/22 12:19:42 by lstorey          ###   ########.fr       */
+/*   Updated: 2024/08/22 15:13:08 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,8 +123,8 @@ typedef struct s_data
 	char		*cnew_token;
 	char		*str_token;
 	int			quote;
-	int			sindex;
-	int			token_start;
+	int			i;
+	int			tok_srt;
 	int			in_quotes;
 	char		quote_char;
 	size_t		env_len;

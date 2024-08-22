@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 14:42:40 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/08/22 15:00:45 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/22 15:07:03 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,22 @@ void add_spaces_d_c(char *s, char *ns, int *i, int *j, char ch)
 
     (*i)++;
 }
-
-void process_characters(char *s, char *n_s, int *i, int *j, int *s_q, int *d_q)
+/**
+ * Processes a character in a string, handling quote states and adding 
+ * spaces around certain characters.
+ *
+ * Parameters:
+ *  @param s (char *): The original string.
+ *  @param n_s (char *): The new string with added spaces.
+ *  @param i (int *): The index of the current character in the string.
+ *  @param j (int *): The index of the current character in the new string.
+ *  @param s_q (int *): A flag indicating whether a single quote is active.
+ *  @param d_q (int *): A flag indicating whether a double quote is active.
+ *
+ * Returns:
+ *  None
+ */
+void process_chars(char *s, char *n_s, int *i, int *j, int *s_q, int *d_q)
 {
     if (s[*i] == '\'' && !(*d_q))
         *s_q = !(*s_q); // Toggle single quote state
@@ -104,6 +118,15 @@ void process_characters(char *s, char *n_s, int *i, int *j, int *s_q, int *d_q)
         n_s[(*j)++] = s[*i];
 }
 
+/**
+ * Counts the number of special characters in a given string.
+ *
+ * @param str The input string.
+ *
+ * @return The number of special characters in the input string.
+ *
+ * @throws None.
+ */
 int count_special_characters(const char *str)
 {
     int count = 0;
@@ -128,39 +151,16 @@ int count_special_characters(const char *str)
     return count;
 }
 
-// char *modify_str(char *str)
-// {
-//     int len;
-//     int special_count;
-//     int new_len;
-//     int i;
-//     int j;
-//     int in_single_quote;
-//     int in_double_quote;
-//     char *new_str;
-
-//     len = ft_strlen(str);
-//     special_count = count_special_characters(str);
-//     new_len = 2 * special_count + 2 * len;
-//     new_str = malloc(new_len + 1 * sizeof(char));
-//     if (!new_str)
-//     {
-//         perror("Failed to allocate memory");
-//         exit(EXIT_FAILURE);
-//     }
-//     i = 0;
-//     j = 0;
-//     in_single_quote = 0;
-//     in_double_quote = 0;
-//     while (i < len && str[i] != '\0')
-//     {
-//         process_characters(str, new_str, &i, &j, &in_single_quote, &in_double_quote);
-//         i++;
-//     }
-//     new_str[j] = '\0'; // Null-terminate the new string
-//     return new_str;
-// }
-
+/**
+ * Initializes variables to zero.
+ * 
+ * @param i Pointer to an integer to be initialized.
+ * @param j Pointer to an integer to be initialized.
+ * @param s_q Pointer to an integer to be initialized.
+ * @param d_q Pointer to an integer to be initialized.
+ * 
+ * @return None
+ */
 void init_vars(int *i, int *j, int *s_q, int *d_q)
 {
     *i = 0;
@@ -169,15 +169,37 @@ void init_vars(int *i, int *j, int *s_q, int *d_q)
     *d_q = 0;
 }
 
+/**
+ * Iterates over the input string `s` and processes special characters
+ * until the end of the string is reached.
+ * 
+ * @param s The input string to process.
+ * @param ns The new string to store the processed characters.
+ * @param l The length of the input string.
+ * @param i A pointer to the current index in the input string.
+ * @param j A pointer to the current index in the new string.
+ * @param sq A pointer to the flag indicating if we are inside a single quote.
+ * @param dq A pointer to the flag indicating if we are inside a double quote.
+ * 
+ * @return None
+ */
 void process_loop(char *s, char *ns, int l, int *i, int *j, int *sq, int *dq)
 {
     while (*i < l && s[*i] != '\0')
     {
-        process_characters(s, ns, i, j, sq, dq);
+        process_chars(s, ns, i, j, sq, dq);
         (*i)++;
     }
 }
 
+/**
+ * Modifies the input string by processing special characters and returns
+ * the modified string.
+ * 
+ * @param str The input string to be modified.
+ * 
+ * @return A newly allocated string with the modifications applied.
+ */
 char *modify_str(char *str)
 {
     int len;

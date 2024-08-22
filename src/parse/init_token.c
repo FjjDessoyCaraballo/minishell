@@ -3,15 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   init_token.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:34:04 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/20 19:22:31 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/22 15:08:05 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
+/**
+ * Initializes a new token.
+ *
+ * @return A pointer to the newly created token,
+ * or NULL if memory allocation fails.
+ */
 t_token* init_token(void)
 {
 	t_token *token;
