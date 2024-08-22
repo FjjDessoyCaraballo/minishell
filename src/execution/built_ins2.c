@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 15:26:27 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/22 15:58:07 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/22 17:26:49 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ int	export(t_token *token, t_env **env_ll, int i)
 
 	head = token;
 	count = 0;
-	if (!head->next)
+	if (!head->next->value)
 	{
 		print_export(env_ll);
 		return (SUCCESS);
