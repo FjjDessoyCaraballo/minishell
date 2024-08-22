@@ -12,12 +12,14 @@
 
 #include "minishell.h"
 
+int g_exit_code = 0;
+
 int	main(int argc, char **argv, char **env)
 {
 	t_data			*data;
 	t_env			**env_ll;
-	static int		status;
-	
+	int 			status;
+
 	(void)argv;
 	data = ft_calloc(1, sizeof(t_data));
 	env_ll = ft_calloc(1, sizeof(t_env *));
