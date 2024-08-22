@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lstorey <lstorey@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/22 12:19:42 by lstorey          ###   ########.fr       */
+/*   Updated: 2024/08/22 14:33:56 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -223,7 +223,7 @@ void	free_all_ll(t_env **env_ll);
 int		built_ins(t_data *data, t_token *token, t_env **env_ll);
 int		print_env(t_env *env_ll);
 int		print_pwd(void);
-void	get_the_hell_out(t_data *data, t_token *token, t_env *env_ll);
+void	get_the_hell_out(t_data *data, t_token *token, t_env **env_ll);
 int		yodeling(t_token *token);
 
 /* in built_ins2.c */

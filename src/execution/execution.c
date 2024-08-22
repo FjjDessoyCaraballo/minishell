@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/22 14:20:15 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/22 14:36:39 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,15 +196,13 @@ void	ft_exec(t_data *data, t_env **env_ll,  char **cmd_array)
 		if (!path)
 		{
 			free_array(cmd_array);
-			free_ll(*env_ll);
-			free_null(env_ll);
+			free_all_ll(env_ll);
 			free_data(data, NULL, NULL);
 			exit(127);
 		}
 	}
 	free_tokens(data->token);
-	free_ll(*env_ll);
-	free_null(env_ll);
+	free_all_ll(env_ll);
 	if (!path)
 		execution_absolute_path(data, cmd_array);
 	execution_with_path(data, cmd_array, path);
