@@ -6,19 +6,31 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 13:19:55 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/18 19:02:15 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/22 15:09:10 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
+/**
+ * Retrieves the value associated with a given key from the environment linked list.
+ * 
+ * @param key The key to search for in the environment linked list.
+ * @param env_ll The head of the environment linked list.
+ * 
+ * @return A pointer to the value associated with the key if found, NULL otherwise.
+ */
+
 char	*ft_getenv(const char *key, t_env *env_ll)
 {
-	t_env *env = env_ll;
-	size_t key_len = ft_strlen(key);
+	t_env *env;
+	size_t key_len;
+	env = env_ll;
+	key_len = ft_strlen(key);
 	while(env)
 	{
-		if(ft_strncmp(env->content, key, key_len) == 0 && env->content[key_len] == '=')
+		if(ft_strncmp(env->content, key, key_len) == 0 
+			&& env->content[key_len] == '=')
 			return env->content + key_len + 1;
 		env = env->next;
 	}

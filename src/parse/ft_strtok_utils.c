@@ -1,14 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_strtok_utils.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/08/22 15:11:11 by walnaimi          #+#    #+#             */
+/*   Updated: 2024/08/22 16:34:20 by walnaimi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
-int	ft_strcmp(char *s1, char *s2)
-{
-	unsigned int i;
-	
-    i = 0;
-	while (s1[i] == s2[i] && s1[i])
-		i++;
-	return (s1[i] - s2[i]);
-}
 
 int ft_charinstr(char c, const char *str)
 {
@@ -36,18 +39,39 @@ int ft_strlencount(const char *str, char c, int numtof)
     return(i);
 }
 
-void handle_quote(const char *target, t_data *data, t_token *cur_tok)
+/**
+ * Handles a quote character in the target string,
+ * updating the data structure accordingly.
+ * It checks if the current character is a single quote and sets the
+ * in_quotes flag and quote_char variable in the data structure.
+ * The function also increments the index in the data structure.
+ *
+ * @param target The string being processed.
+ * @param data The data structure containing the current index and quote state.
+ *
+ * @return None
+ */
+void handle_quote(const char *target, t_data *data)
 {
-    (void) cur_tok;
-    // Check the type of quote and update data accordingly
-    if (target[data->sindex] == '\'')
-        data->in_quotes = 1;         // Single quote state
+    if (target[data->i] == '\'')
+        data->in_quotes = 1;
     else
-        data->in_quotes = 2;         // Double quote state
-    data->quote_char = target[data->sindex]; // Record the quote character
-    data->sindex++;                       // Skip the opening quote
+        data->in_quotes = 2;
+    data->quote_char = target[data->i];
+    data->i++;
 }
 
+/**
+ * Extracts a substring from the target string based on the data structure's
+ * current index and token start position, and then expands any environment
+ * variables within the substring.
+ *
+ * @param target The string from which to extract the substring.
+ * @param data   The data structure containing the current index and token start
+ *               position, as well as the environment variables to expand.
+ *
+ * @return The expanded substring, or NULL if an error occurs or no token is found.
+ */
 char *substr_and_expand(const char *target, t_data *data)
 {
     if (data->in_quotes)// Check for unmatched quotes
@@ -55,86 +79,53 @@ char *substr_and_expand(const char *target, t_data *data)
         data->status = 963;
         return (NULL);
     }
-    if (data->sindex == 0 && !data->in_quotes)// Check if no token was found
+    if (data->i == 0 && !data->in_quotes)// Check if no token was found
         return (NULL);
-    data->ctoken = ft_substr(target, data->token_start, data->sindex - data->token_start);// Allocate token and copy substring, excluding the opening and closing quotes if present
+    data->ctoken = ft_substr(target, data->tok_srt, data->i - data->tok_srt);
 
     if (!data->ctoken)
         return (NULL);
-    data->cnew_token = expand_env_variables(data->ctoken, data);// Expand environment variables in the token
+    data->cnew_token = expand_env_variables(data->ctoken, data);
     if (data->cnew_token)
     {
-        free(data->ctoken); // Free the old token with quotes
-        data->ctoken = data->cnew_token; // Update token to the expanded version
-        //free(data->cnew_token);
+        free(data->ctoken);
+        data->ctoken = data->cnew_token;
     }
     else
     {
-        free(data->ctoken); // Handle failure to expand
+        free(data->ctoken);
         data->ctoken = NULL;
     }
     return (data->ctoken);
 }
 
-int handle_special_chars(const char *target, const char *special_chars, t_data *data)
-{
-    // Check for multi-character special tokens first
-    if (strncmp(&target[data->sindex], ">>", 2) == 0 || strncmp(&target[data->sindex], "<<", 2) == 0)
-    {
-        data->sindex += 2; // Skip the multi-character token
-        return (2); // Indicate that a multi-character special token was found and handled
-    }
-    // Check for single-character special tokens
-    if (ft_charinstr(target[data->sindex], special_chars))
-    {
-        data->sindex++; // Skip the single-character token
-        return (1); // Indicate that a single-character special token was found and handled
-    }
-    return (0); // No special character found
-}
+// int handle_special_chars(const char *tgt, const char *s_chars, t_data *data)
+// {
+//     // Check for multi-character special tokens first
+//     if (strncmp(&tgt[data->i], ">>", 2) == 0 
+//         || strncmp(&tgt[data->i], "<<", 2) == 0)
+//     {
+//         data->i += 2;
+//         return (2);
+//     }
+//     // Check for single-character special tokens
+//     if (ft_charinstr(tgt[data->i], s_chars))
+//     {
+//         data->i++;
+//         return (1);
+//     }
+//     return (0); // No special character found
+// }
 
-
-
-/*char *remove_quotes(const char *str, t_data *data)
-{
-    int i;
-    int j;
-    int len = ft_strlen(str);
-    char *new_str = NULL;
-    char *temp_str = NULL;
-
-    new_str = (char *)malloc(len + 1); // Max possible length, Allocate space for the result
-    if (!new_str)
-        return (NULL);
-
-    i = 0;
-    j = 0;
-    while (str[i])
-    {
-        if (str[i] == '"' || str[i] == '\'')
-        {
-            data->quote_char = str[i];// Skip the opening quote
-            i++;
-            while (str[i] && str[i] != data->quote_char)
-                new_str[j++] = str[i++];// Append characters between quotes
-            if (str[i] == data->quote_char)
-                i++;// Skip the closing quote
-        }
-        else
-            new_str[j++] = str[i++];// Copy characters outside of quotes
-    }
-    new_str[j] = '\0'; // Null-terminate the new string
-    temp_str = (char *)malloc(j + 1);// Allocate and copy the final cleaned string
-    if (!temp_str)
-    {
-        free(new_str);
-        return (NULL);
-    }
-    ft_memcpy(temp_str, new_str, j + 1);
-    free(new_str); // Free the old string
-
-    return (temp_str);
-}*/
+/**
+ * Handles a quoted segment within a string, extracting the characters between quotes.
+ * 
+ * @param str The original string containing the quoted segment.
+ * @param i A pointer to the current index within the string.
+ * @param j A pointer to the current index within the new string.
+ * @param new_str The new string to store the extracted characters.
+ * @param data A pointer to the data structure containing relevant information.
+ */
 void handle_quoted_segment(const char *str, int *i, int *j, char *new_str, t_data *data)
 {
     data->quote_char = str[*i]; // Use a local variable for the quote character
@@ -145,6 +136,13 @@ void handle_quoted_segment(const char *str, int *i, int *j, char *new_str, t_dat
         (*i)++; // Skip the closing quote
 }
 
+/**
+ * Removes quotes from a string and returns a new string without the quotes.
+ *
+ * @param str The input string to remove quotes from.
+ * @param data Pointer to a t_data struct used for handling quoted segments.
+ * @return A new string without the quotes, or NULL if memory allocation fails.
+ */
 char *remove_quotes(const char *str, t_data *data)
 {
     int i;

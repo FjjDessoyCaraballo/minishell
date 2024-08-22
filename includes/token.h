@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 11:35:39 by lstorey           #+#    #+#             */
-/*   Updated: 2024/08/22 04:27:55 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/22 15:25:33 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,8 +120,8 @@ char 	*skip_starting_delim(const char *str, const char *delim, char **target);
 void 	echoing(t_token *current_token, t_token **prev_token, const char *delimiters, t_data *data);
 char 	*concatenate_echo_args(t_token *current_token, const char *delimiters, t_data *data);
 char 	*substr_and_expand(const char *target, t_data *data);
-void 	process_quoting_and_delimiters(const char *target, const char *delim, t_data *data, t_token *cur_tok);
-void 	handle_quote(const char *target, t_data *data, t_token *cur_tok);
+void 	process_quotes_n_deli(const char *target, const char *delim, t_data *data);
+void 	handle_quote(const char *target, t_data *data);
 
 /*****************************************
  * in src/parse/init_token.c
