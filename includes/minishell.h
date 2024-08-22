@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/21 14:11:07 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/22 06:31:54 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@
 # define FILE_ERROR "No such file or directory"
 # define SYNTAX "syntax error near unexpected token "
 # define ERR_ARG "Wrong number of arguments, Karen\n"
+# define ERR_EXP "export: not a valid identifier\n"
 # define REDIRECT_OUT 222
 # define REDIRECT_IN 111
 # define HERE_DOC 333
@@ -112,6 +113,8 @@ typedef struct s_data
 	int			id;
 	char		*tok_res;
 	char		*tok_str;
+	char		*new_tok;
+	char		*fin_tok;
 	const char *deli;
 	bool		cmd_ignore;
 	char		*ctoken;

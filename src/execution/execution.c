@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/21 14:01:05 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/22 03:43:27 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@
 // 	int i = 0;
 // 	while (array[i])
 // 	{
-// 		dprintf(2, "array[%i]: %s\n", i, array[i]);//debug
+// 		//dprintf(2, "array[%i]: %s\n", i, array[i]);//debug
 // 		i++;
 // 	}
 // }
@@ -71,12 +71,8 @@ int	execution_prepping(t_data *data, t_token *token, t_env **env_ll)
 	cmd_a = cl_to_array(token);
 	if (!cmd_a)
 		return (FAILURE);
-	if (count_token(token, HEREDOC))
-	{
-		data->heredoc_exist = true;
-		if (pipe(data->sync_pipe) == -1)
-			return (err_msg(NULL, "Broken pipe\n", 141));
-	}
+	if (pipe(data->sync_pipe) == -1)
+		return (err_msg(NULL, "Broken pipe\n", 141));
 	data->status = forking(data, env_ll, cmd_a, pids);
 	close_fds(data);
 	pids = wait(&data->status);
@@ -85,6 +81,44 @@ int	execution_prepping(t_data *data, t_token *token, t_env **env_ll)
 	free_array(cmd_a);
 	return (WEXITSTATUS(data->status));
 }
+
+// int		forking(t_data *data, t_env **env_ll, char **all_cmds, pid_t pids)
+// {
+// 	char	sync_signal;
+	
+// 	data->index = 0;
+// 	while (data->index < data->nb_cmds)
+// 	{
+// 		if (data->piped == true)
+// 		{
+// 			if (pipe(data->pipe_fd) == -1)
+// 				return (err_msg(NULL, "Broken pipe\n", 141));
+// 		}
+// 		pids = fork();
+// 		if (pids < 0)
+// 		{
+// 			close(data->pipe_fd[0]);
+// 			close(data->pipe_fd[1]);
+// 			return (err_msg(NULL, "Failed to fork\n", -1));
+// 		}
+// 		if (pids == 0)
+// 		{
+// 			if (data->index > 0)
+// 				read(data->sync_pipe[0], &sync_signal, 1);
+// 			dprintf(2, "executing children\n");
+// 			child_execution(data, env_ll, all_cmds[data->index], data->index);
+// 		}
+// 		else if (data->piped == true)
+// 		{	
+// 			close(data->pipe_fd[1]);
+// 			if (data->index > 0)
+// 				close(data->read_end);
+// 			data->read_end = data->pipe_fd[0];
+// 		}
+// 		data->index++;
+// 	}
+// 	return (data->index);
+// }
 
 int		forking(t_data *data, t_env **env_ll, char **all_cmds, pid_t pids)
 {
@@ -143,6 +177,58 @@ int		forking(t_data *data, t_env **env_ll, char **all_cmds, pid_t pids)
  * "> outfile"
  * "<< END"
  */
+// void	child_execution(t_data *data, t_env **env_ll, char *instr, int child)
+// {
+// 	char		**cmd_array;
+// 	cmd_array = ft_split(instr, ' ');
+// 	if (!cmd_array)
+// 	{
+// 		free_data(data, NULL, NULL);
+// 		exit (err_msg(NULL, MALLOC, -1));
+// 	}
+// 	line_printer(cmd_array); //debug
+// 	dup_fds(data, child, cmd_array);
+// 	if (data->redirections == true)
+// 	{
+// 		cmd_array = parse_instruction(data, cmd_array);
+// 		if (!cmd_array || !*cmd_array)
+// 		{
+// 			free_array(cmd_array);
+// 			free_data(data, NULL, NULL);
+// 			exit (err_msg(NULL, MALLOC, -1));
+// 		}
+// 	}
+// 	ft_exec(data, env_ll, cmd_array);
+// }
+
+// void    child_execution(t_data *data, t_env **env_ll, char *instr, int child)
+// {
+//     static char    **cmd_array;
+//     static char    **parsed_array;	
+// 	printf("instruction: %s\n", instr);
+//     cmd_array = ft_split(instr, ' ');
+//     if (!cmd_array)
+//     {
+//         free_data(data, NULL, NULL);
+//         exit (err_msg(NULL, MALLOC, -1));
+//     }
+//     dup_fds(data, child, cmd_array);
+//     if (data->redirections == true)
+//     {
+//         parsed_array = parse_instruction(data, cmd_array);
+//         free_array(cmd_array);
+//         if (!parsed_array || !*parsed_array)
+//         {
+//             free_data(data, NULL, NULL);
+//             exit (err_msg(NULL, MALLOC, -1));
+//         }
+//         ft_exec(data, env_ll, parsed_array);
+//     }
+// 	dprintf(2, "executing here\n");
+
+//     ft_exec(data, env_ll, cmd_array);
+	
+// }
 void	child_execution(t_data *data, t_env **env_ll, char *instr, int child)
 {
 	char		**cmd_array;
@@ -186,7 +272,7 @@ void	ft_exec(t_data *data, t_env **env_ll,  char **cmd_array)
 	static char	*path;
 
 	data->env = env_arr_updater(env_ll);
-	free_token(data->token);
+	free_tokens(data->token);
 	free_ll(*env_ll);
 	if (!data->env)
 		exit (1);
@@ -195,8 +281,9 @@ void	ft_exec(t_data *data, t_env **env_ll,  char **cmd_array)
 		path = loop_path_for_binary(cmd_array[0], data->binary_paths);
 		if (!path)
 		{
-			free_data(data, NULL, cmd_array);
-			exit(err_msg(cmd_array[0], NO_EXEC, 127));
+			free_array(cmd_array);
+			free_data(data, NULL, NULL);
+			exit(127);
 		}
 	}
 	if (!path)

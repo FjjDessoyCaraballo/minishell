@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect_parse.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 10:41:10 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/14 09:59:34 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/21 23:56:56 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ char	**parse_instruction(t_data *data, char **cmd_array)
 	
 	index = 0;
 	len = 0;
+	dprintf(2, "parse instruction\n");
 	while (cmd_array[index])
 	{
 		if (!ft_strcmp(cmd_array[index], ">") 
