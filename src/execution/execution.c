@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/22 16:35:56 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/22 16:55:53 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,8 +159,7 @@ void	child_execution(t_data *data, t_env **env_ll, char *instr, int child)
 			exit (0);
 		}
 	}
-	if (builtin_filter(data->token, cmd_array[0]) == true &&
-		binary_tree_discard(cmd_array[0]) == false)
+	if (builtin_filter(data->token, cmd_array[0]) == true)
 		ft_builtin_exec(data, find_token_exec(data->token, cmd_array), env_ll);
 	ft_exec(data, env_ll, cmd_array);
 }

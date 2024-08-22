@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/22 16:19:58 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/22 17:05:09 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,7 +155,6 @@ void	ft_exec(t_data *data, t_env **env_ll, char **cmd_array);
 bool	builtin_filter(t_token *token, char *command);
 t_token *find_token_exec(t_token *token, char **array);
 void	ft_builtin_exec(t_data *data, t_token *token, t_env **env_ll);
-bool 	binary_tree_discard(char *command);
 
 /* in redirections.c */
 int		find_redirection(char **array);
@@ -177,7 +176,7 @@ void	execution_absolute_path(t_data *data, char **array);
 
 /* in execution_utils2.c */
 char	**cl_to_array(t_token *token);
-int		checking_access(t_data *data, char *instruction, int child);
+int		checking_access(t_data *data, char *instruction);
 char	*get_binary(char *instruction);
 
 /* in fd_dups.c */
@@ -207,6 +206,7 @@ int		is_file(char *binary, char *path);
 void	malloc_check_message(void *ptr);
 void	free_null(void *ptr);
 void	super_free(t_data *data, t_env **env_ll);
+int		wow_loop(t_data *data, t_env **env_ll);
 
 /* in line_handler.c */
 int		sniff_line(t_data *data);

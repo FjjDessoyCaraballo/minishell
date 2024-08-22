@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:12:51 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/22 16:23:24 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/22 17:06:46 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,22 +23,16 @@ int	main(int argc, char **argv, char **env)
 	(void)argc;
 	(void)argv;
 	data = ft_calloc(1, sizeof(t_data));
-	env_ll = ft_calloc(1, sizeof(t_env *));
-	if (!data  || !env_ll)
+	if (!data)
 		return (1);
-	initializer(data, env_ll, env);
-	while (666)
+	env_ll = ft_calloc(1, sizeof(t_env *));
+	if (!env_ll)
 	{
-		status = sniff_line(data);
-		if (status == NULL_LINE)
-		{
-			printf("exit\n");
-			break ;
-		}
-		else if (status != 963)
-			execution(data, env_ll);
-		free_gang(data);
+		free_null(data);
+		return (1);
 	}
+	initializer(data, env_ll, env);
+	status = wow_loop(data, env_ll);
 	super_free(data, env_ll);
-	return (0);
+	return (status);
 }

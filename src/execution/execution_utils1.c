@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 15:29:42 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/22 15:49:40 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/22 16:40:06 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,6 @@ void	execution_with_path(t_data *data, char **array, char *path)
 
 void	execution_absolute_path(t_data *data, char **array)
 {
-	dprintf(2, "we got to the right execution");
 	if (execve(array[0], array, data->env) == -1)	
 	{
 		err_msg(array[0], NO_EXEC, 127);

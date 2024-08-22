@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 13:30:29 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/22 14:29:26 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/22 16:54:26 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,17 +79,8 @@ void	ft_builtin_exec(t_data *data, t_token *token, t_env **env_ll)
 
 	status = 0;
 	if (token == NULL)
-	{
-		dprintf(2, "we exited with NULL token");
 		exit(status);
-	}
 	status = built_ins(data, token, env_ll);
 	exit(status);
 }
 
-bool binary_tree_discard(char *command)
-{
-	if (!ft_strncmp(command, "echo", 4))
-		return (true);
-	return (false);
-}
