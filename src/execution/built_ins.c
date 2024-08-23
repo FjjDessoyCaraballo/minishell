@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 14:18:24 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/23 14:37:31 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/23 16:13:55 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,25 +93,28 @@ void	get_the_hell_out(t_data *data, t_token *token, t_env **env_ll)
 
 int handle_flag_type(t_token *head)
 {
+	head = head->next;
+	while(head->type == FLAG)
+	{
 		head = head->next;
-		while(head->type == FLAG)
-		{
+		if (head->value == NULL)
+			return (SUCCESS);
+	}
+	while(head->value != NULL)
+	{
+		while(head->value == NULL && head->type == ARG)
 			head = head->next;
-			if (head->value == NULL)
-				return SUCCESS;
-		}
-		while(head->value != NULL)
-		{
-			while(head->value == NULL && head->type == ARG)
-				head = head->next;
-			if (head->value == NULL)
-				return SUCCESS;
-			printf("%s", head->value);
-			if(head->next->value != NULL && head->next->empty == false)
-				printf(" ");
-			head = head->next;
-		}
-		return (SUCCESS);
+		if (head->value == NULL)
+			return (SUCCESS);
+		if (head->type == RED_IN || head->type == RED_OUT
+			|| head->type == APP || head->type == HEREDOC)
+			break ;
+		printf("%s", head->value);
+		if(head->next->value != NULL && head->next->empty == false)
+			printf(" ");
+		head = head->next;
+	}
+	return (SUCCESS);
 }
 
 int handle_arg_type(t_token *head)
@@ -122,8 +125,13 @@ int handle_arg_type(t_token *head)
     while (head != NULL)
     {
         if (head->value != NULL && head->value[0] != '\0')
-            printf("%s", head->value);
-        head = head->next;
+		{
+			if (head->type == RED_IN || head->type == RED_OUT
+				|| head->type == APP || head->type == HEREDOC)
+				break ;
+			printf("%s", head->value);
+		}
+		head = head->next;
         if (head != NULL && head->value != NULL && head->value[0] != '\0')
             printf(" ");
     }
