@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/23 14:33:22 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/23 16:54:57 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,17 +53,14 @@ int	execution(t_data *data, t_env **env_ll)
 	data->nb_cmds = count_token(token, PIPE) + 1;
 	if (data->nb_cmds == 0)
 		data->nb_cmds = 1;
-	if ((find_token(token, PIPE) || find_token(token, RED_IN)
-		|| find_token(token, RED_OUT) || find_token(token, HEREDOC)
-		|| find_token(token, APPEND) || find_token(token, COMMAND))
+	if ((token->type == BUILTIN) && (!find_token(token, PIPE))
 		&& (ft_strncmp(token->value, "cd", 2)
 		|| ft_strncmp(token->value, "exit", 4)
 		|| ft_strncmp(token->value, "export", 6)))
-		data->status = execution_prepping(data, token, env_ll);
-	else
-	{
 		data->status = built_ins(data, token, env_ll);
-	}
+	else
+		data->status = execution_prepping(data, token, env_ll);
+
 	return (data->status);
 }
 
@@ -187,6 +184,8 @@ void	ft_exec(t_data *data, t_env **env_ll,  char **cmd_array)
 
 	if (cmd_array[0] == NULL)
 		exit(0);
+	if (check_path_unset(env_ll))
+		exit(err_msg(cmd_array[0], NO_EXEC, 127));
 	data->env = env_arr_updater(env_ll);
 	if (!data->env)
 		exit (1);
@@ -207,5 +206,4 @@ void	ft_exec(t_data *data, t_env **env_ll,  char **cmd_array)
 		execution_absolute_path(data, cmd_array);
 	execution_with_path(data, cmd_array, path);
 }
-
 

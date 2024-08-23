@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/23 14:59:55 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/23 17:22:02 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,6 +158,10 @@ void	ft_exec(t_data *data, t_env **env_ll, char **cmd_array);
 bool	builtin_filter(t_token *token, char *command);
 t_token *find_token_exec(t_token *token, char **array);
 void	ft_builtin_exec(t_data *data, t_token *token, t_env **env_ll);
+int		check_path_unset(t_env **env_ll);
+
+/* in syntax.c */
+int	syntax_check(t_token *token);
 
 /* in redirections.c */
 int		find_redirection(char **array);

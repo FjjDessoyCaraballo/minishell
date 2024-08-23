@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 13:03:21 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/22 16:10:24 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/23 16:15:51 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ int here_doc(char *delimiter)
     int pipe_fd[2];
     
     if(pipe(pipe_fd) == -1)
-        exit(err_msg(NULL, "pipe  error", 1));
+        exit(err_msg(NULL, "pipe error", 1));
     while (1)
     {
 		g_exit_code = HEREDOC;

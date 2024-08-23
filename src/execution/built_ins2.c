@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 15:26:27 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/23 14:36:07 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/23 17:00:33 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@ int	export(t_token *token, t_env **env_ll)
 			array = ft_split(tmp_tok->value, '=');
 			if (!array)
 				return (FAILURE);
-			dprintf(2, "%p %p\n", tmp_ll, array[0]);	
 			if (!ft_strncmp(tmp_ll->key, array[0], ft_strlen(tmp_ll->key)))
 			{
 				found = 1;
@@ -136,6 +135,7 @@ int	unset(t_token *token, t_env **env_ll)
 		tmp = tmp->next;
 		free_null(tmp->key);
 		free_null(tmp->value);
+		free_null(tmp->content);
 		free(tmp);
 		tmp = NULL;
 		return (SUCCESS);
@@ -150,6 +150,7 @@ int	unset(t_token *token, t_env **env_ll)
 			tmp->next = tmp->next->next;
 			free_null(del->key);
 			free_null(del->value);
+			free_null(del->content);
 			free(del);
 			del = NULL;
 			return (SUCCESS);
