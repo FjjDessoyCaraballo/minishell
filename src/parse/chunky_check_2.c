@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 04:35:52 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/08/23 14:23:42 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/23 14:59:52 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
  * @param data The data structure to be updated.
  *
  * @return 0 if the token is a pipe, 1
+ */
 int	check_pipe(char *token, t_token *current_token, t_data *data)
 {
 	if (ft_pipe_check(token, current_token) == 0)

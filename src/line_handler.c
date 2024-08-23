@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   line_handler.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bposa <bposa@student.hive.fi>              +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 12:23:49 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/08/22 23:08:30 by bposa            ###   ########.fr       */
+/*   Updated: 2024/08/23 14:59:59 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	setup(t_data *data)
 	data->deli = "  \t\n";
 	data->id = 0;
 	data->tok_res = 0;
-	data->cmd_ignore = false;
+	data->ignore_cmd = false;
 	data->echoed = false;
 	data->echo_flag = false;
 	data->redirections = false;
