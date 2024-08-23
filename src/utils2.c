@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: bposa <bposa@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 10:03:43 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/22 18:05:30 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/23 00:30:25 by bposa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,12 +37,11 @@ void	super_free(t_data *data, t_env **env_ll)
 
 int	wow_loop(t_data *data, t_env **env_ll)
 {
-	int status;
-	
+	int	status;
+
 	status = 0;
 	while (666)
 	{
-		
 		status = sniff_line(data);
 		if (status == NULL_LINE)
 		{
@@ -74,12 +73,9 @@ char	**add_shell_lvl(char **env)
 			if (!new_level)
 				return (NULL);
 			new_env_entry = ft_strjoin("SHLVL=", new_level);
-			if (!new_env_entry)
-			{
-				free_null(new_level);
-				return (NULL);
-			}
 			free_null(new_level);
+			if (!new_env_entry)
+				return (NULL);
 			env[i] = ft_strdup(new_env_entry);
 			free_null(new_env_entry);
 		}

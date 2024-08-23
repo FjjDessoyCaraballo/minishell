@@ -19,6 +19,7 @@ SRC_FILES = main.c\
 			utils.c\
 			utils2.c\
 			signals.c\
+			freeing.c\
 			ll_utils.c\
 			ll_utils2.c\
 			line_handler.c\
