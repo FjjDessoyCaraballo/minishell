@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/23 11:03:13 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/23 14:37:13 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -224,6 +224,7 @@ char	**env_arr_updater(t_env **env_ll);
 int		ll_size(t_env **env_ll);
 void	free_all_ll(t_env **env_ll);
 char	**add_shell_lvl(char **env);
+void	lstadd_front(t_env **lst, t_env *new);
 
 /* in built_ins.c */
 int		built_ins(t_data *data, t_token *token, t_env **env_ll);
@@ -234,7 +235,7 @@ int		yodeling(t_token *token);
 
 /* in built_ins2.c */
 int		shell_cd(t_token *token, t_data *data);
-int		export(t_token *token, t_env **env_ll, int i);
+int		export(t_token *token, t_env **env_ll);
 int		print_export(t_env **env_ll);
 int		unset(t_token *token, t_env **env_ll);
 void 	alphabetical_printer(char **env_array);

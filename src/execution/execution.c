@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/23 11:04:35 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/23 14:33:22 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,8 @@ int    execution(t_data *data, t_env **env_ll)
 		|| find_token(token, RED_OUT) || find_token(token, HEREDOC)
 		|| find_token(token, APPEND) || find_token(token, COMMAND))
 		&& (ft_strncmp(token->value, "cd", 2)
-		|| ft_strncmp(token->value, "exit", 4)))
+		|| ft_strncmp(token->value, "exit", 4)
+		|| ft_strncmp(token->value, "export", 6)))
 		data->status = execution_prepping(data, token, env_ll);
 	else
 		data->status = built_ins(data, token, env_ll);

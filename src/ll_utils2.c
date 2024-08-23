@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ll_utils2.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bposa <bposa@student.hive.fi>              +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 11:35:09 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/22 23:17:16 by bposa            ###   ########.fr       */
+/*   Updated: 2024/08/23 13:46:46 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,4 +61,14 @@ void	free_all_ll(t_env **env_ll)
 {
 	free_ll(*env_ll);
 	free_null(env_ll);
+}
+
+void	lstadd_front(t_env **lst, t_env *new)
+{
+	if (lst)
+	{
+		if (*lst)
+			new -> next = *lst;
+		*lst = new;
+	}
 }

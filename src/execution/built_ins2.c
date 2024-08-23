@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 15:26:27 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/23 10:50:23 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/23 14:36:07 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,108 +36,70 @@ void alphabetical_printer(char **env_array)
     }
 }
 
-// suscetible to changes after parsing commands from line
-// removed get_cwd() and inserted into initialization (check README)
-// int	shell_cd(t_token *token, t_data *data)
-// {
-// 	static char	*new_pwd;
-// 	char		*curr_pwd;
-
-// 	if (token->next->value == NULL)
-// 	{
-// 		chdir(data->home_pwd);
-// 		return (SUCCESS);
-// 	}
-// 	token = token->next;
-// 	if (ft_strchr(token->value, '/') == NULL)
-// 	{
-// 		curr_pwd = getcwd(NULL, 0);
-// 		if (!curr_pwd)
-// 		{
-// 			free_null(curr_pwd);
-// 			chdir(data->home_pwd);
-// 			return (err_msg(token->value, "Nothingness ahead\n", 1));
-// 		}
-// 		new_pwd = ft_strsjoin(curr_pwd, token->value, '/');
-// 		dprintf(2, "new_pwd: %s\n", new_pwd);
-// 		if (!new_pwd)
-// 			return (err_msg(NULL, MALLOC, -1));
-// 		if (chdir(new_pwd) < 0)
-// 		{
-// 			free_null(new_pwd);
-// 			free_null(curr_pwd);
-// 			return (err_msg(token->value, FILE_ERROR, 1));
-// 		}
-// 		free_null(curr_pwd);
-// 		free_null(new_pwd);
-// 	}
-// 	else
-// 	{
-// 		if (chdir(token->value) < 0)
-// 			return (err_msg(token->value, FILE_ERROR, 1));
-// 	}
-// 	return (SUCCESS);
-// }
-
 /* export puts variables declared by user in the env */
-int	export(t_token *token, t_env **env_ll, int i)
+int	export(t_token *token, t_env **env_ll)
 {
-	t_env	*tmp;
-	char	**exp_list;
-	int		count;
-	t_token	*head;
+	t_token *tmp_tok;
+	t_env	*tmp_ll;
+	char	**array;
 
-	head = token;
-	count = 0;
-	if (!head->next)
+	if (find_token(token, APP)
+	|| find_token(token, HERE_DOC)
+	|| find_token(token, RED_IN)
+	|| find_token(token, RED_OUT))
+		return (SUCCESS);
+	if (token->next->value == NULL)
 	{
 		print_export(env_ll);
 		return (SUCCESS);
 	}
-	head = token->next;
-	if(head->value[0] >= '0' && head->value[0] <= '9')
-		return(err_msg(head->value,ERR_EXP,FAILURE));
-	tmp = (*env_ll);
-	while (head != NULL)
+	token = token->next;
+	tmp_tok = token;
+	while (tmp_tok->next != NULL)
 	{
-		while (tmp)
+		int found = 0;
+		tmp_ll = (*env_ll);
+		while (tmp_ll != NULL)
 		{
-			if (ft_strncmp(tmp->key, head->value, ft_strlen(tmp->key)) == 0)
+			array = ft_split(tmp_tok->value, '=');
+			if (!array)
+				return (FAILURE);
+			dprintf(2, "%p %p\n", tmp_ll, array[0]);	
+			if (!ft_strncmp(tmp_ll->key, array[0], ft_strlen(tmp_ll->key)))
 			{
-				// free(tmp->content);
-				// free(tmp->value);
-				tmp->content = ft_strdup(head->value);
-				tmp->value = ft_substr(head->value, ft_strlen(tmp->key) + 1, ft_strlen(head->value) - ft_strlen(tmp->key)); 
-				return (SUCCESS);
+				found = 1;
+				free_array(array);
+				break;
 			}
-			tmp = tmp->next;
+			free_array(array);
+			tmp_ll = tmp_ll->next;
 		}
-		
-		head = head->next;
-		count++;
+		if (found)
+		{
+			free_null(tmp_ll->value);
+			free_null(tmp_ll->key);
+			free_null(tmp_ll->content);
+			tmp_ll->content = ft_strdup(tmp_tok->value);
+			array = ft_split(tmp_tok->value, '=');
+			tmp_ll->key = ft_strdup(array[0]);
+			if (!tmp_ll)
+			{
+				free_array(array);
+				return (FAILURE);
+			}
+			tmp_ll->value = ft_strdup(ft_strchr(tmp_tok->value, '='));
+			if (!tmp_ll->value)
+			{
+				free_array(array);
+				free_null(tmp_ll->key);
+				return (FAILURE);
+			}
+			free_array(array);
+		}
+		else
+			ft_listadd_back(env_ll, ft_listnew(tmp_tok->value));
+		tmp_tok = tmp_tok->next;
 	}
-	exp_list = (char **)malloc(sizeof(char *) * (count + 1));
-	if (!exp_list)
-		return (FAILURE);
-	head = token->next;
-	i = 0;
-	while (head != NULL)
-	{
-		if (head->value != NULL)
-			exp_list[i++] = ft_strdup(head->value);
-		head = head->next;
-	}
-	exp_list[i] = NULL;
-	i = 0;
-	tmp = (*env_ll);
-	if (!*env_ll)
-		(*env_ll) = ft_listnew(exp_list[i++]);
-	i = 0;
-	while (exp_list[i])
-		ft_listadd_back(env_ll, ft_listnew(exp_list[i++]));
-	(*env_ll) = tmp;
-	tmp = NULL;
-	//free_array(exp_list);
 	return (SUCCESS);
 }
 
@@ -199,3 +161,65 @@ int	unset(t_token *token, t_env **env_ll)
 	head = NULL;
 	return (SUCCESS);
 }
+
+
+// {
+// 	t_env	*tmp;
+// 	char	**exp_list;
+// 	int		count;
+// 	t_token	*head;
+
+// 	head = token;
+// 	count = 0;
+// 	if (!head->next->value)
+// 	{
+// 		print_export(env_ll);
+// 		return (SUCCESS);
+// 	}
+// 	head = token->next;
+// 	if(head->value[0] >= '0' && head->value[0] <= '9')
+// 		return(err_msg(head->value,ERR_EXP,FAILURE));
+// 	tmp = (*env_ll);
+// 	while (head != NULL)
+// 	{
+// 		while (tmp)
+// 		{
+// 			if (ft_strncmp(tmp->key, head->value, ft_strlen(tmp->key)) == 0)
+// 			{
+// 				free(tmp->content);
+// 				free(tmp->value);
+// 				tmp->content = ft_strdup(head->value);
+// 				tmp->value = ft_substr(head->value, ft_strlen(tmp->key) + 1, ft_strlen(head->value) - ft_strlen(tmp->key)); 
+// 				return (SUCCESS);
+// 			}
+// 			tmp = tmp->next;
+// 		}
+		
+// 		head = head->next;
+// 		count++;
+// 	}
+// 	exp_list = (char **)malloc(sizeof(char *) * (count + 1));
+// 	if (!exp_list)
+// 		return (FAILURE);
+// 	head = token->next;
+// 	i = 0;
+// 	while (head != NULL)
+// 	{
+// 		if (head->value != NULL)
+// 			exp_list[i++] = ft_strdup(head->value);
+// 		head = head->next;
+// 	}
+// 	exp_list[i] = NULL;
+// 	i = 0;
+// 	tmp = (*env_ll);
+// 	if (!*env_ll)
+// 		(*env_ll) = ft_listnew(exp_list[i++]);
+// 	i = 0;
+// 	while (exp_list[i])
+// 		ft_listadd_back(env_ll, ft_listnew(exp_list[i++]));
+// 	(*env_ll) = tmp;
+// 	tmp = NULL;
+// 	free_array(exp_list);
+// 	return (SUCCESS);
+// }
+
