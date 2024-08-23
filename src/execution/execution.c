@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/22 16:35:56 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/22 21:42:35 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,9 @@
  * of the children. Another important part of it is the cl_to_array() that
  * turns our tokens into a 
  */
-int    execution(t_data *data, t_env **env_ll)
+int	execution(t_data *data, t_env **env_ll)
 {
-    t_token    *token;
+	t_token	*token;
 
 	token = data->token;
 	data->nb_cmds = count_token(token, PIPE) + 1;
@@ -60,7 +60,9 @@ int    execution(t_data *data, t_env **env_ll)
 		|| find_token(token, ARG))
 		data->status = execution_prepping(data, token, env_ll);
 	else
+	{
 		data->status = built_ins(data, token, env_ll);
+	}
 	return (data->status);
 }
 
