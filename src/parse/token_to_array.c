@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 13:20:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/22 01:20:56 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/23 01:41:49 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,13 +36,13 @@ static char	*ft_strcpy(char *s1, char *s2)
  */
 char **ttad(t_token *token_list, t_type delimiter)
 {
-    int 		count;
-    t_token 	*current;
+	t_token		*current;
+	t_token		*segment_start;
 	char		**array;
+	char		*command;
+	int			count;
 	int			length;
 	int			index;
-	char		*command;
-	t_token 	*segment_start;
 	int			i;
 	int			pos;
 
