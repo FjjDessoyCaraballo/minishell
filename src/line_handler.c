@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 12:23:49 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/08/23 17:20:46 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/23 17:35:15 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,10 @@ int	sniff_line(t_data *data)
 	check_and_mark_empty_tokens(data->token);
 	free(data->line_read);
 	if (syntax_check(data->token) == FAILURE)
+	{
+		data->status = 2;
 		return (2);
+	}
 	data->piped = false;
 	data->heredoc_exist = false;
 	if (count_token(data->token, PIPE) >= 1)
