@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 13:30:29 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/22 16:54:26 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/23 10:59:35 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ bool	builtin_filter(t_token *token, char *command)
 {
 	t_token	*tmp;
 
+	if (command == NULL)
+		return (false);
 	tmp = token;
 	while (tmp->next != NULL)
 	{

@@ -23,6 +23,7 @@ SRC_FILES = main.c\
 			ll_utils.c\
 			ll_utils2.c\
 			line_handler.c\
+			src/execution/cd.c\
 			src/execution/built_ins.c\
 			src/execution/built_ins2.c\
 			src/execution/execution.c\

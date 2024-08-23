@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 14:18:24 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/22 16:48:54 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/23 10:55:43 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 int	built_ins(t_data *data, t_token *token, t_env **env_ll)
 {
 	int	status;
+
 	status = 0;
 	if(token->value == NULL)
 		return (status);

@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 15:26:27 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/22 15:58:07 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/23 10:50:23 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,45 +38,46 @@ void alphabetical_printer(char **env_array)
 
 // suscetible to changes after parsing commands from line
 // removed get_cwd() and inserted into initialization (check README)
-int	shell_cd(t_token *token, t_data *data)
-{
-	static char	*new_pwd;
-	char		*curr_pwd;
+// int	shell_cd(t_token *token, t_data *data)
+// {
+// 	static char	*new_pwd;
+// 	char		*curr_pwd;
 
-	if (token->next->value == NULL)
-	{
-		chdir(data->home_pwd);
-		return (SUCCESS);
-	}
-	token = token->next;
-	if (ft_strchr(token->value, '/') == NULL)
-	{
-		curr_pwd = getcwd(NULL, 0);
-		if (!curr_pwd)
-		{
-			free_null(curr_pwd);
-			chdir(data->home_pwd);
-			return (err_msg(token->value, "Nothingness ahead\n", 1));
-		}
-		new_pwd = ft_strsjoin(curr_pwd, token->value, '/');
-		if (!new_pwd)
-			return (err_msg(NULL, MALLOC, -1));
-		if (chdir(new_pwd) < 0)
-		{
-			free_null(new_pwd);
-			free_null(curr_pwd);
-			return (err_msg(token->value, FILE_ERROR, 1));
-		}
-		free_null(curr_pwd);
-		free_null(new_pwd);
-	}
-	else
-	{
-		if (chdir(token->value) < 0)
-			return (err_msg(token->value, FILE_ERROR, 1));
-	}
-	return (SUCCESS);
-}
+// 	if (token->next->value == NULL)
+// 	{
+// 		chdir(data->home_pwd);
+// 		return (SUCCESS);
+// 	}
+// 	token = token->next;
+// 	if (ft_strchr(token->value, '/') == NULL)
+// 	{
+// 		curr_pwd = getcwd(NULL, 0);
+// 		if (!curr_pwd)
+// 		{
+// 			free_null(curr_pwd);
+// 			chdir(data->home_pwd);
+// 			return (err_msg(token->value, "Nothingness ahead\n", 1));
+// 		}
+// 		new_pwd = ft_strsjoin(curr_pwd, token->value, '/');
+// 		dprintf(2, "new_pwd: %s\n", new_pwd);
+// 		if (!new_pwd)
+// 			return (err_msg(NULL, MALLOC, -1));
+// 		if (chdir(new_pwd) < 0)
+// 		{
+// 			free_null(new_pwd);
+// 			free_null(curr_pwd);
+// 			return (err_msg(token->value, FILE_ERROR, 1));
+// 		}
+// 		free_null(curr_pwd);
+// 		free_null(new_pwd);
+// 	}
+// 	else
+// 	{
+// 		if (chdir(token->value) < 0)
+// 			return (err_msg(token->value, FILE_ERROR, 1));
+// 	}
+// 	return (SUCCESS);
+// }
 
 /* export puts variables declared by user in the env */
 int	export(t_token *token, t_env **env_ll, int i)
