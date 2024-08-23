@@ -3,21 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   freedom.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 13:19:49 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/23 01:26:05 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/07/22 13:19:50 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	free_my_boi(char **paths)
+void free_my_boi(char **paths)
 {
-	int	i;
-
+	int i;
 	i = 0;
-	while (paths[i])
+	while(paths[i])
 	{
 		free(paths[i]);
 		i++;
@@ -35,9 +34,7 @@ value of paths is ??????
 instead we calloc(1, sizeof(t_data));
 paths is 0x0;
 
-if (paths) if we malloc, we don't know address of paths,
-might be trying to free random mem
+if (paths) if we malloc, we don't know address of paths, might be trying to free random mem
 	free(paths);
-if we calloc we guarantee that paths == NULL, so it will not go
-into this condition if we did not assign something to paths;
+if we calloc we guarantee that paths == NULL, so it will not go into this condition if we did not assign something to paths;
 */ 

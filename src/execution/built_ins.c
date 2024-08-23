@@ -120,8 +120,8 @@ int handle_flag_type(t_token *head)
 int handle_arg_type(t_token *head)
 {
     head = head->next;
-    while (head->value != NULL && head->value[0] == '\0')
-		head = head->next;
+    if (head->value != NULL && head->value[0] == '\0')
+        head = head->next;
     while (head != NULL)
     {
         if (head->value != NULL && head->value[0] != '\0')

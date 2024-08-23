@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
 /*   Updated: 2024/08/23 17:22:02 by fdessoy-         ###   ########.fr       */
@@ -107,9 +107,8 @@ typedef struct s_data
 	char		**cmd;
 	t_token		*token;
 	t_token		*first_node;
-	t_token		*cur_tok;
+	t_token		*current_token;
 	t_token		*prev_token;
-	t_index		indexx;
 	char		**cmd_a;
 	bool		echoed;
 	bool		heredoc_exist;
@@ -117,26 +116,25 @@ typedef struct s_data
 	bool		piped;
 	bool		redirections;
 	char		*line_read;
-	char		*var_name;
 	int			id;
 	char		*tok_res;
 	char		*tok_str;
 	char		*new_tok;
 	char		*fin_tok;
-	const char	*deli;
-	bool		ignore_cmd;
+	const char *deli;
+	bool		cmd_ignore;
 	char		*ctoken;
 	char		*cnew_token;
 	char		*str_token;
 	int			quote;
-	int			i;
-	int			tok_srt;
+	int			sindex;
+	int			token_start;
 	int			in_quotes;
 	char		quote_char;
 	size_t		env_len;
 	int			num_of_envs;
 	int			s_quote_o;
-	int			dbl_q;
+	int			d_quote_o;
 	int			exit_code;
 	char		*new_str;
 	char		*temp_str;

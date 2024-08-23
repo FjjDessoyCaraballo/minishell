@@ -33,7 +33,7 @@ void	setup(t_data *data)
 	data->deli = "  \t\n";
 	data->id = 0;
 	data->tok_res = 0;
-	data->ignore_cmd = false;
+	data->cmd_ignore = false;
 	data->echoed = false;
 	data->echo_flag = false;
 	data->redirections = false;

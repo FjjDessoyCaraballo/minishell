@@ -1,158 +1,168 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_strtok_utils.c                                  :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/22 15:11:11 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/08/23 13:55:51 by walnaimi         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../../includes/minishell.h"
 
-/**
- * Skips the starting delimiters in a string.
- *
- * This function takes a string, a delimiter string,
- * and a target pointer as input.
- * 
- * It returns a pointer to the first character
- * in the string that is not a delimiter.
- * 
- * If the string is empty or only contains delimiters, it returns NULL.
- *
- * @param str The input string.
- * @param delim The delimiter string.
- * @param target A pointer to a pointer that will be set to
- * the first non-delimiter character in the string.
- *
- * @return A pointer to the first non-delimiter character in the string,
- * or NULL if the string is empty or only contains delimiters.
- */
-char	*skip_starting_delim(const char *str, const char *delim, char **target)
+int	ft_strcmp(char *s1, char *s2)
 {
-	if (str)
-		*target = (char *)str;
-	if (!*target || **target == '\0')
-		return (NULL);
-	while (**target && ft_charinstr(**target, delim))
-	{
-		(*target)++;
-		if (**target == '\0')
-			return (NULL);
-	}
-	return (*target);
+	unsigned int i;
+	
+    i = 0;
+	while (s1[i] == s2[i] && s1[i])
+		i++;
+	return (s1[i] - s2[i]);
 }
 
-/**
- * Removes quotes from the current token and skips any delimiters.
- *
- * @param delim A string of delimiter characters.
- * @param data  A pointer to the tokenization data structure.
- * @param target A pointer to a pointer to the current
- * position in the token string.
- *
- * @return None
- */
-void	rm_quotes_and_skil_deli(const char *delim, t_data *data, char **target)
+int ft_charinstr(char c, const char *str)
 {
-	data->ctoken = remove_quotes(data->ctoken, data);
-	*target += data->i;
-	if (data->fin_tok != NULL)
-		free_null(data->fin_tok);
-	data->fin_tok = ft_strdup(data->ctoken);
-	free_null(data->ctoken);
-	while (**target && ft_charinstr(**target, delim))
-		(*target)++;
-}
-
-/**
- * Process quoting and delimiters in a target string.
- * 
- * This function iterates through the target string,
- * handling quoting and delimiters, it updates the data structure accordingly.
- * and tracks the current index and quote status.
- * 
- * @param target The target string to process.
- * @param delim The delimiter string.
- * @param data The data structure to update.
- * @param cur_tok The current token.
- * 
- * @return None
- */
-void	process_quotes_n_deli(const char *target, t_data *data)
-{
-	data->i = 0;
-	while (target[data->i])
+	while (*str)
 	{
-		if (data->in_quotes)
-		{
-			if (target[data->i] == data->quote_char)
-			{
-				data->in_quotes = 0;
-				data->quote_char = '\0';
-				data->i++;
-				continue ;
-			}
-		}
-		else if (target[data->i] == '"' || target[data->i] == '\'')
-		{
-			handle_quote(target, data);
-			continue ;
-		}
-		else if (ft_charinstr(target[data->i], data->deli) && !data->in_quotes)
-			break ;
-		data->i++;
-	}
-}
-
-/**
- * Checks if there are any unmatched quotes in the input data.
- *
- * @param data The input data structure to check for unmatched quotes.
- *
- * @return 1 if there are unmatched quotes, 0 otherwise.
- */
-int	unmatched_quote_check(t_data *data)
-{
-	if (data->in_quotes)
-	{
-		printf("syntax error: unmatched quote 😳\n");
-		return (1);
+		if (c == *str)
+			return (1);
+		str++;
 	}
 	return (0);
 }
 
-/**
- * Handles tokenization of a given token string.
- * 
- * This function takes a token string, a token structure, a data structure, 
- * and a target string pointer as parameters. It checks if the token string is 
- * empty and frees the new string in the data structure if so. It then checks 
- * if the first character of the token string is a quote and sets the in_quotes 
- * flag in the token structure accordingly. Finally, it calls the 
- * rm_quotes_and_skil_deli function and returns 1 if successful, 0 otherwise.
- * 
- * @param tok The token string to handle.
- * @param c_t The token structure to update.
- * @param d The data structure containing the new string to free.
- * @param tgt The target string pointer.
- * 
- * @return 1 if successful, 0 if the token string is empty.
- */
-int	handle_tok(char *tok, t_token *c_t, t_data *d, char **tgt)
+int ft_strlencount(const char *str, char c, int numtof)
 {
-	if (!tok)
-	{
-		free_null(d->new_str);
-		return (0);
-	}
-	if (tok[0] == '\'' || tok[0] == '\"')
-		c_t->in_q = true;
-	else
-		c_t->in_q = false;
-	rm_quotes_and_skil_deli(d->deli, d, tgt);
-	return (1);
+    int i;
+    i = 0;
+    int found;
+    found = 0;
+    while(str[i] && found != numtof)
+    {
+        if(str[i] == c)
+            found++;
+        i++;
+    }
+    return(i);
 }
+
+void handle_quote(const char *target, t_data *data, t_token *cur_tok)
+{
+    (void) cur_tok;
+    // Check the type of quote and update data accordingly
+    if (target[data->sindex] == '\'')
+        data->in_quotes = 1;         // Single quote state
+    else
+        data->in_quotes = 2;         // Double quote state
+    data->quote_char = target[data->sindex]; // Record the quote character
+    data->sindex++;                       // Skip the opening quote
+}
+
+char *substr_and_expand(const char *target, t_data *data)
+{
+    if (data->in_quotes)// Check for unmatched quotes
+    {
+        data->status = 963;
+        return (NULL);
+    }
+    if (data->sindex == 0 && !data->in_quotes)// Check if no token was found
+        return (NULL);
+    data->ctoken = ft_substr(target, data->token_start, data->sindex - data->token_start);// Allocate token and copy substring, excluding the opening and closing quotes if present
+
+    if (!data->ctoken)
+        return (NULL);
+    data->cnew_token = expand_env_variables(data->ctoken, data);// Expand environment variables in the token
+    if (data->cnew_token)
+    {
+        free(data->ctoken); // Free the old token with quotes
+        data->ctoken = data->cnew_token; // Update token to the expanded version
+        //free(data->cnew_token);
+    }
+    else
+    {
+        free(data->ctoken); // Handle failure to expand
+        data->ctoken = NULL;
+    }
+    return (data->ctoken);
+}
+
+int handle_special_chars(const char *target, const char *special_chars, t_data *data)
+{
+    // Check for multi-character special tokens first
+    if (strncmp(&target[data->sindex], ">>", 2) == 0 || strncmp(&target[data->sindex], "<<", 2) == 0)
+    {
+        data->sindex += 2; // Skip the multi-character token
+        return (2); // Indicate that a multi-character special token was found and handled
+    }
+    // Check for single-character special tokens
+    if (ft_charinstr(target[data->sindex], special_chars))
+    {
+        data->sindex++; // Skip the single-character token
+        return (1); // Indicate that a single-character special token was found and handled
+    }
+    return (0); // No special character found
+}
+
+
+
+/*char *remove_quotes(const char *str, t_data *data)
+{
+    int i;
+    int j;
+    int len = ft_strlen(str);
+    char *new_str = NULL;
+    char *temp_str = NULL;
+
+    new_str = (char *)malloc(len + 1); // Max possible length, Allocate space for the result
+    if (!new_str)
+        return (NULL);
+
+    i = 0;
+    j = 0;
+    while (str[i])
+    {
+        if (str[i] == '"' || str[i] == '\'')
+        {
+            data->quote_char = str[i];// Skip the opening quote
+            i++;
+            while (str[i] && str[i] != data->quote_char)
+                new_str[j++] = str[i++];// Append characters between quotes
+            if (str[i] == data->quote_char)
+                i++;// Skip the closing quote
+        }
+        else
+            new_str[j++] = str[i++];// Copy characters outside of quotes
+    }
+    new_str[j] = '\0'; // Null-terminate the new string
+    temp_str = (char *)malloc(j + 1);// Allocate and copy the final cleaned string
+    if (!temp_str)
+    {
+        free(new_str);
+        return (NULL);
+    }
+    ft_memcpy(temp_str, new_str, j + 1);
+    free(new_str); // Free the old string
+
+    return (temp_str);
+}*/
+void handle_quoted_segment(const char *str, int *i, int *j, char *new_str, t_data *data)
+{
+    data->quote_char = str[*i]; // Use a local variable for the quote character
+    (*i)++; // Skip the opening quote
+    while (str[*i] && str[*i] != data->quote_char)
+        new_str[(*j)++] = str[(*i)++]; // Append characters between quotes
+    if (str[*i] == data->quote_char)
+        (*i)++; // Skip the closing quote
+}
+
+char *remove_quotes(const char *str, t_data *data)
+{
+    int i;
+    int j;
+    i = 0;
+    j = 0;
+    char *new_str = (char *)malloc(ft_strlen(str) + 1);
+    if (!new_str)
+        return NULL;
+
+    while (str[i])
+    {
+        if (str[i] == '"' || str[i] == '\'')
+            handle_quoted_segment(str, &i, &j, new_str, data);
+        else
+            new_str[j++] = str[i++];
+    }
+    new_str[j] = '\0';
+    return new_str;
+}
+

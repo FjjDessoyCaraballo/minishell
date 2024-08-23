@@ -1,161 +1,161 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   modify_str.c                                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/22 14:42:40 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/08/23 14:26:07 by walnaimi         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../../includes/minishell.h"
 
-/**
- * Adds spaces around a single character in a string if necessary.
- *
- *  It checks the character before and after the current character in the string.
- * 
- *  If the previous character is not a space
- *  and the current character is not the first,
- *  it adds a space before the character.
- * 
- *  If the next character is not a space
- *  and the current character is not the last,
- *  it adds a space after the character.
- *
- * Parameters:
- *  @param str (char *): The original string.
- *  @param n_str (char *): The new string with added spaces.
- *  @param i (int *): The index of the current character in the string.
- *  @param j (int *): The index of the current character in the new string.
- */
-void	add_spaces_s_c(char *str, char *n_str, int *i, int *j)
+void add_spaces_around_char(char *str, char *new_str, size_t *i, size_t *j, char ch)
 {
-	int	len;
+    size_t len = strlen(str);
 
-	len = ft_strlen(str);
-	if (*i > 0 && !ft_isspace(str[*i - 1]))
-		n_str[(*j)++] = ' ';
-	n_str[(*j)++] = str[*i];
-	if (*i < len - 1 && !ft_isspace(str[*i + 1]))
-		n_str[(*j)++] = ' ';
+    // Add a space before the character if it's not the first character and the previous character is not a space
+    if (*i > 0 && !isspace(str[*i - 1]))
+        new_str[(*j)++] = ' ';
+    new_str[(*j)++] = ch;
+
+    // Add a space after the character if it's not the last character and the next character is not a space
+    if (*i < len - 1 && !isspace(str[*i + 1]))
+        new_str[(*j)++] = ' ';
 }
 
-/**
- * Adds spaces around a double character in a string.
- *
- * Add a space before the double character if it's not the first character
- * and the previous character is not a space.
- * 
- * Add a space after the double character if it's not the last character
- * and the next character is not a space.
- * 
- * Parameters:
- *  @param s (char *): The original string.
- *  @param ns(char *): The new string with added spaces.
- *  @param i (int *): The index of the current character in the string.
- *  @param j (int *): The index of the current character in the new string.
- *  @param ch (char): The double character to add spaces around.
- *
- * Returns:
- *  None
- */
-void	add_spaces_d_c(char *str, char *n_str, int *i, int *j)
+void add_spaces_around_double_char(char *str, char *new_str, size_t *i, size_t *j, char ch)
 {
-	int	len;
+    size_t len = strlen(str);
 
-	len = ft_strlen(str);
-	if (*i > 0 && !ft_isspace(str[*i - 1]))
-		n_str[(*j)++] = ' ';
-	n_str[(*j)++] = str[*i];
-	n_str[(*j)++] = str[*i];
-	if (*i < len - 2 && !ft_isspace(str[*i + 2]))
-		n_str[(*j)++] = ' ';
-	(*i)++;
+    // Add a space before the double character if it's not the first character and the previous character is not a space
+    if (*i > 0 && !isspace(str[*i - 1]))
+        new_str[(*j)++] = ' ';
+
+    new_str[(*j)++] = ch;
+    new_str[(*j)++] = ch;
+
+    // Add a space after the double character if it's not the last character and the next character is not a space
+    if (*i < len - 2 && !isspace(str[*i + 2]))
+        new_str[(*j)++] = ' ';
+
+    (*i)++; // Skip the next character
 }
 
-/**
- * Processes a character in a string, handling quote states and adding 
- * spaces around certain characters.
- *
- * Parameters:
- *  @param str (char *): The original string.
- *  @param n_str (char *): The new string with added spaces.
- *  @param pos (t_vars *): A structure containing the current position 
- *                        in the string and the quote states.
- */
-void	process_chars(char *str, char *n_str, t_vars *pos)
+void process_characters(char *str, char *new_str, size_t *i, size_t *j, int *s_q, int *in_double_quote)
 {
-	if (str[pos->i] == '\'' && !(pos->double_q))
-		pos->single_q = !(pos->single_q);
-	else if (str[pos->i] == '"' && !(pos->single_q))
-		pos->double_q = !(pos->double_q);
-	if (!(pos->single_q) && !(pos->double_q))
-	{
-		if (str[pos->i] == '|')
-			add_spaces_s_c(str, n_str, &pos->i, &pos->j);
-		else if (str[pos->i] == '>' && str[pos->i + 1] == '>')
-			add_spaces_d_c(str, n_str, &pos->i, &pos->j);
-		else if (str[pos->i] == '<' && str[pos->i + 1] == '<')
-			add_spaces_d_c(str, n_str, &pos->i, &pos->j);
-		else if (str[pos->i] == '>')
-			add_spaces_s_c(str, n_str, &pos->i, &pos->j);
-		else if (str[pos->i] == '<')
-			add_spaces_s_c(str, n_str, &pos->i, &pos->j);
-		else
-			n_str[pos->j++] = str[pos->i];
-	}
-	else
-		n_str[pos->j++] = str[pos->i];
+    if (str[*i] == '\'' && !(*in_double_quote))
+        *s_q = !(*s_q); // Toggle single quote state
+    else if (str[*i] == '"' && !(*s_q))
+        *in_double_quote = !(*in_double_quote); // Toggle double quote state
+
+    if (!(*s_q) && !(*in_double_quote))
+    {
+        if (str[*i] == '|')
+            add_spaces_around_char(str, new_str, i, j, '|');
+        else if (str[*i] == '>' && str[*i + 1] == '>')
+            add_spaces_around_double_char(str, new_str, i, j, '>');
+        else if (str[*i] == '<' && str[*i + 1] == '<')
+            add_spaces_around_double_char(str, new_str, i, j, '<');
+        else if (str[*i] == '>')
+            add_spaces_around_char(str, new_str, i, j, '>');
+        else if (str[*i] == '<')
+            add_spaces_around_char(str, new_str, i, j, '<');
+        else
+            new_str[(*j)++] = str[*i];
+    }
+    else
+    {
+        new_str[(*j)++] = str[*i];
+    }
 }
 
-/**
- * Iterates over the input string `str` and processes special characters
- * until the end of the string is reached.
- * 
- * @param str The input string to process.
- * @param n_str The new string to store the processed characters.
- * @param len The length of the input string.
- * @param pos A pointer to the struct containing the current indices
- * and quote flags.
- * 
- * @return None
- */
-void	loop(char *str, char *n_str, int len, t_vars *pos)
+size_t count_special_characters(const char *str)
 {
-	while (pos->i < len && str[pos->i] != '\0')
-	{
-		process_chars(str, n_str, pos);
-		pos->i++;
-	}
+    size_t count = 0;
+    size_t i = 0;
+
+    while (str[i])
+    {
+        if (str[i] == '|')
+            count += 2;
+        else if (str[i] == '>' || str[i] == '<')
+        {
+            if (str[i + 1] == str[i]) // Check for ">>" or "<<"
+            {
+                count += 2;
+                i++; // Skip the next character as it's part of the special character
+            }
+            count += 2;
+        }
+        i++;
+    }
+
+    return count;
 }
 
-/**
- * Modifies the input string by processing special characters and returns
- * the modified string.
- * 
- * @param str The input string to be modified.
- * 
- * @return A newly allocated string with the modifications applied.
- */
-char	*modify_str(char *str)
-{
-	int		len;
-	int		special_count;
-	int		new_len;
-	char	*new_str;
-	t_vars	vars;
+// char *modify_str(char *str)
+// {
+//     size_t len;
+//     size_t special_count;
+//     size_t new_len;
+//     size_t i;
+//     size_t j;
+//     int in_single_quote;
+//     int in_double_quote;
+//     char *new_str;
 
-	len = ft_strlen(str);
-	special_count = count_special_characters(str);
-	new_len = 2 * special_count + 2 * len;
-	new_str = malloc(new_len + 1 * sizeof(char));
-	if (!new_str)
-		exit(EXIT_FAILURE);
-	vars = init_vars();
-	loop(str, new_str, len, &vars);
-	new_str[vars.j] = '\0';
-	return (new_str);
+//     len = ft_strlen(str);
+//     special_count = count_special_characters(str);
+//     new_len = 2 * special_count + 2 * len;
+//     new_str = malloc(new_len + 1 * sizeof(char));
+//     if (!new_str)
+//     {
+//         perror("Failed to allocate memory");
+//         exit(EXIT_FAILURE);
+//     }
+//     i = 0;
+//     j = 0;
+//     in_single_quote = 0;
+//     in_double_quote = 0;
+//     while (i < len && str[i] != '\0')
+//     {
+//         process_characters(str, new_str, &i, &j, &in_single_quote, &in_double_quote);
+//         i++;
+//     }
+//     new_str[j] = '\0'; // Null-terminate the new string
+//     return new_str;
+// }
+
+void init_vars(size_t *i, size_t *j, int *s_q, int *d_q)
+{
+    *i = 0;
+    *j = 0;
+    *s_q = 0;
+    *d_q = 0;
+}
+
+void process_loop(char *s, char *ns, size_t l, size_t *i, size_t *j, int *sq, int *dq)
+{
+    while (*i < l && s[*i] != '\0')
+    {
+        process_characters(s, ns, i, j, sq, dq);
+        (*i)++;
+    }
+}
+
+char *modify_str(char *str)
+{
+    size_t len;
+    size_t special_count;
+    size_t new_len;
+    char *new_str;
+    size_t i;
+    size_t j;
+    int s_q;
+    int d_q;
+
+    len = ft_strlen(str);
+    special_count = count_special_characters(str);
+    new_len = 2 * special_count + 2 * len;
+    new_str = malloc(new_len + 1 * sizeof(char));
+
+    if (!new_str)
+        exit(EXIT_FAILURE);
+
+    init_vars(&i, &j, &s_q, &d_q);
+    process_loop(str, new_str, len, &i, &j, &s_q, &d_q);
+    new_str[j] = '\0';
+    
+    return new_str;
 }
