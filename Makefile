@@ -47,7 +47,6 @@ SRC_FILES = main.c\
 			src/parse/redirection_check.c\
 			src/parse/exe_check.c\
 			src/parse/check_utils.c\
-			src/parse/freedom.c\
 			src/parse/token_to_array.c\
 			src/parse/getenv.c\
 			src/parse/setup_env.c\

@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 15:26:27 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/23 17:00:33 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/23 17:44:56 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	export(t_token *token, t_env **env_ll)
 	t_env	*tmp_ll;
 	char	**array;
 
-	if (find_token(token, APP)
+	if (find_token(token, APPEND)
 	|| find_token(token, HERE_DOC)
 	|| find_token(token, RED_IN)
 	|| find_token(token, RED_OUT))
