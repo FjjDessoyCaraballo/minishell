@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 11:35:39 by lstorey           #+#    #+#             */
-/*   Updated: 2024/08/22 15:25:33 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/23 04:34:51 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,20 +63,55 @@ typedef struct s_token
 	char			*value;
 	char			*path;
 	int				id;
-	bool			in_quotes;
+	bool			in_q;
 	bool			empty;
 	bool			echo;
 	struct s_token	*next;
-	struct s_token  *prev;
+	struct s_token	*prev;
 }		t_token;
 
+typedef struct s_vars
+{
+	int	i;
+	int	j;
+	int	single_q;
+	int	double_q;
+}	t_vars;
+
+typedef struct s_add_spaces_vars
+{
+	char	*str;
+	char	*new_str;
+	int		*i;
+	int		*j;
+	char	ch;
+}	t_add_spaces_vars;
+
+typedef struct s_index
+{
+	int	i;
+	int	j;
+}	t_index;
+
 void	free_gang(t_data *data);
+char	*ft_strncpy(char *s1, const char *s2, int n);
 /*****************************************
- * in src/parse/tokenizer.c
+ * modify_str.c
+ *****************************************/
+
+
+/*****************************************
+ * modify_str_utils.c
+ *****************************************/
+int		count_special_characters(const char *str);
+t_vars	init_vars(void);
+int		ft_isspace(char c);
+/*****************************************
+ * src/parse/tokenizer.c
  *****************************************/
 int		line_tokenization(t_data *data);
 int		chunky_checker(char *token, t_token *current_token, t_data *data);
-void 	free_tokens(t_token *head);
+void	free_tokens(t_token *head);
 
 /*****************************************
  * src/parse/helper.c
@@ -84,43 +119,53 @@ void 	free_tokens(t_token *head);
 t_token	*find_token(t_token *token, t_type type);
 int		search_token_type(t_token *token, t_type type);
 
-
-
 /*****************************************
  * src/parse/expand_env.c
  *****************************************/
-char 	*expand_env_variable(const char *input, size_t *i, t_data *data, size_t *new_len);
-char 	*expand_env_variables(const char *input, t_data *data);
+void	setup_env_variables(const char *input,t_data *data);
+char	*expand_env_variables(const char *input, t_data *data);
+void	single_q(const char *input, t_data *data, char *res, t_index *num);
+void	double_q(const char *input, t_data *data, char *res, t_index *num);
+void	dollar_sign(const char *str, t_index *num, t_data *data, char *result);
+
+/*****************************************
+ * src/parse/setup_env.c
+ ****************************************/
+int		count_matching_keys(t_env *env_list, const char *input);
+void	skip_non_word_characters(const char **ptr);
+char	*extract_word(const char **ptr, int max_word_size);
+int		is_key_in_list(t_env *head, const char *word);
 
 /****************************************
  * src/parse/expand_env_utils.c
  ****************************************/
-void 	setup_env_variables(const char *input,t_data *data);
-void 	single_q(const char *input, t_data *data, char *res, size_t *i, size_t *j);
-void 	double_q(const char *input, t_data *data, char *res, size_t *i, size_t *j);
-void 	handle_env_variable(const char *input, size_t *i, t_data *data, char *result, size_t *j);
-void 	copy_env_value(char *result, const char *env_value, size_t *j, t_data *data);
+void handle_env_var(const char *input, t_index *num, t_data *data, char *result);
+char *feting_env(const char *input, t_index *num, t_data *data, size_t *new_len);
+void handle_status_variable(t_data *data, char *result, t_index *num);
 
 /*****************************************
  * in src/parse/ft_strtok.c
  *****************************************/
-char	*ft_strtok(char *str, const char *delim, t_data *data, t_token *cur_tok);
+char	*ft_strtok(char *str, t_data *data, t_token *cur_tok);
 int		ft_charinstr(char c, const char *str);
 int		ft_strcmp(char *s1, char *s2);
-
+void	initialize_tokenization(t_data *data);
+char	*skip_starting_delim(const char *str, const char *delim, char **target);
 /*****************************************
  * in src/parse/ft_strtok_utils.c
  *****************************************/
 char 	*remove_quotes(const char *str, t_data *data);
 char 	*skip_starting_delim(const char *str, const char *delim, char **target);
-
+void	rm_quotes_and_skil_deli(const char *delim, t_data *data, char **target);
+void	process_quotes_n_deli(const char *target, t_data *data);
+int		unmatched_quote_check(t_data *data);
+int		handle_tok(char *tok, t_token *c_t, t_data *d, char **tgt);
 /*****************************************
  * in src/parse/echo.c
  *****************************************/
 void 	echoing(t_token *current_token, t_token **prev_token, const char *delimiters, t_data *data);
 char 	*concatenate_echo_args(t_token *current_token, const char *delimiters, t_data *data);
 char 	*substr_and_expand(const char *target, t_data *data);
-void 	process_quotes_n_deli(const char *target, const char *delim, t_data *data);
 void 	handle_quote(const char *target, t_data *data);
 
 /*****************************************
@@ -137,7 +182,7 @@ char	*modify_str(char *str);
  * in src/parse/chunky_check.c
  *****************************************/
 int		ft_builtin_check(char *token, t_token *current_token);
-int		ft_command_check(char *token, t_token *current_token, t_data *data);
+int		cmd_check(char *token, t_token *current_token, t_data *data);
 int		ft_pipe_check(char *token, t_token *current_token);
 int		ft_redirect_op_check(char *token, t_token *current_token);
 int		ft_argument_check(char *token, t_token *current_token);
@@ -157,6 +202,19 @@ int		check_redirect(char *token, t_token *current_token, t_data *data);
 int		check_command(char *token, t_token *current_token, t_data *data);
 int		check_argument(char *token, t_token *current_token, t_data *data);
 
+/*****************************************
+ * in src/parse/redirection_check.c
+ * ***************************************/
+int		handle_redirect_out(char *token, t_token *current_token);
+int		handle_append(char *token, t_token *current_token);
+int		handle_redirect_in(char *token, t_token *current_token);
+int		handle_heredoc(char *token, t_token *current_token);
+
+/******************************************
+ * in src/parse/exe_check.c
+ *****************************************/
+int		handle_absolute_path(char *token, t_token *current_token);
+int		handle_cmd_exe(char *token, t_token *current_token, t_data *data);
 /*****************************************
  * in src/parse/token_test.c
  *****************************************/
@@ -185,6 +243,6 @@ char	**ttad(t_token *token_list, t_type delimiter);
 /*******************************************
  * in src/parse/ft-getenv.c
  * *****************************************/
-char	*ft_getenv(const char *token, t_env *env_ll);
+char	*ft_getenv(char *token, t_env *env_ll);
 
 # endif

@@ -6,161 +6,153 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 15:11:11 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/08/22 16:34:20 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/23 13:55:51 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-
-int ft_charinstr(char c, const char *str)
+/**
+ * Skips the starting delimiters in a string.
+ *
+ * This function takes a string, a delimiter string,
+ * and a target pointer as input.
+ * 
+ * It returns a pointer to the first character
+ * in the string that is not a delimiter.
+ * 
+ * If the string is empty or only contains delimiters, it returns NULL.
+ *
+ * @param str The input string.
+ * @param delim The delimiter string.
+ * @param target A pointer to a pointer that will be set to
+ * the first non-delimiter character in the string.
+ *
+ * @return A pointer to the first non-delimiter character in the string,
+ * or NULL if the string is empty or only contains delimiters.
+ */
+char	*skip_starting_delim(const char *str, const char *delim, char **target)
 {
-	while (*str)
+	if (str)
+		*target = (char *)str;
+	if (!*target || **target == '\0')
+		return (NULL);
+	while (**target && ft_charinstr(**target, delim))
 	{
-		if (c == *str)
-			return (1);
-		str++;
+		(*target)++;
+		if (**target == '\0')
+			return (NULL);
+	}
+	return (*target);
+}
+
+/**
+ * Removes quotes from the current token and skips any delimiters.
+ *
+ * @param delim A string of delimiter characters.
+ * @param data  A pointer to the tokenization data structure.
+ * @param target A pointer to a pointer to the current
+ * position in the token string.
+ *
+ * @return None
+ */
+void	rm_quotes_and_skil_deli(const char *delim, t_data *data, char **target)
+{
+	data->ctoken = remove_quotes(data->ctoken, data);
+	*target += data->i;
+	if (data->fin_tok != NULL)
+		free_null(data->fin_tok);
+	data->fin_tok = ft_strdup(data->ctoken);
+	free_null(data->ctoken);
+	while (**target && ft_charinstr(**target, delim))
+		(*target)++;
+}
+
+/**
+ * Process quoting and delimiters in a target string.
+ * 
+ * This function iterates through the target string,
+ * handling quoting and delimiters, it updates the data structure accordingly.
+ * and tracks the current index and quote status.
+ * 
+ * @param target The target string to process.
+ * @param delim The delimiter string.
+ * @param data The data structure to update.
+ * @param cur_tok The current token.
+ * 
+ * @return None
+ */
+void	process_quotes_n_deli(const char *target, t_data *data)
+{
+	data->i = 0;
+	while (target[data->i])
+	{
+		if (data->in_quotes)
+		{
+			if (target[data->i] == data->quote_char)
+			{
+				data->in_quotes = 0;
+				data->quote_char = '\0';
+				data->i++;
+				continue ;
+			}
+		}
+		else if (target[data->i] == '"' || target[data->i] == '\'')
+		{
+			handle_quote(target, data);
+			continue ;
+		}
+		else if (ft_charinstr(target[data->i], data->deli) && !data->in_quotes)
+			break ;
+		data->i++;
+	}
+}
+
+/**
+ * Checks if there are any unmatched quotes in the input data.
+ *
+ * @param data The input data structure to check for unmatched quotes.
+ *
+ * @return 1 if there are unmatched quotes, 0 otherwise.
+ */
+int	unmatched_quote_check(t_data *data)
+{
+	if (data->in_quotes)
+	{
+		printf("syntax error: unmatched quote 😳\n");
+		return (1);
 	}
 	return (0);
 }
 
-int ft_strlencount(const char *str, char c, int numtof)
-{
-    int i;
-    i = 0;
-    int found;
-    found = 0;
-    while(str[i] && found != numtof)
-    {
-        if(str[i] == c)
-            found++;
-        i++;
-    }
-    return(i);
-}
-
 /**
- * Handles a quote character in the target string,
- * updating the data structure accordingly.
- * It checks if the current character is a single quote and sets the
- * in_quotes flag and quote_char variable in the data structure.
- * The function also increments the index in the data structure.
- *
- * @param target The string being processed.
- * @param data The data structure containing the current index and quote state.
- *
- * @return None
- */
-void handle_quote(const char *target, t_data *data)
-{
-    if (target[data->i] == '\'')
-        data->in_quotes = 1;
-    else
-        data->in_quotes = 2;
-    data->quote_char = target[data->i];
-    data->i++;
-}
-
-/**
- * Extracts a substring from the target string based on the data structure's
- * current index and token start position, and then expands any environment
- * variables within the substring.
- *
- * @param target The string from which to extract the substring.
- * @param data   The data structure containing the current index and token start
- *               position, as well as the environment variables to expand.
- *
- * @return The expanded substring, or NULL if an error occurs or no token is found.
- */
-char *substr_and_expand(const char *target, t_data *data)
-{
-    if (data->in_quotes)// Check for unmatched quotes
-    {
-        data->status = 963;
-        return (NULL);
-    }
-    if (data->i == 0 && !data->in_quotes)// Check if no token was found
-        return (NULL);
-    data->ctoken = ft_substr(target, data->tok_srt, data->i - data->tok_srt);
-
-    if (!data->ctoken)
-        return (NULL);
-    data->cnew_token = expand_env_variables(data->ctoken, data);
-    if (data->cnew_token)
-    {
-        free(data->ctoken);
-        data->ctoken = data->cnew_token;
-    }
-    else
-    {
-        free(data->ctoken);
-        data->ctoken = NULL;
-    }
-    return (data->ctoken);
-}
-
-// int handle_special_chars(const char *tgt, const char *s_chars, t_data *data)
-// {
-//     // Check for multi-character special tokens first
-//     if (strncmp(&tgt[data->i], ">>", 2) == 0 
-//         || strncmp(&tgt[data->i], "<<", 2) == 0)
-//     {
-//         data->i += 2;
-//         return (2);
-//     }
-//     // Check for single-character special tokens
-//     if (ft_charinstr(tgt[data->i], s_chars))
-//     {
-//         data->i++;
-//         return (1);
-//     }
-//     return (0); // No special character found
-// }
-
-/**
- * Handles a quoted segment within a string, extracting the characters between quotes.
+ * Handles tokenization of a given token string.
  * 
- * @param str The original string containing the quoted segment.
- * @param i A pointer to the current index within the string.
- * @param j A pointer to the current index within the new string.
- * @param new_str The new string to store the extracted characters.
- * @param data A pointer to the data structure containing relevant information.
+ * This function takes a token string, a token structure, a data structure, 
+ * and a target string pointer as parameters. It checks if the token string is 
+ * empty and frees the new string in the data structure if so. It then checks 
+ * if the first character of the token string is a quote and sets the in_quotes 
+ * flag in the token structure accordingly. Finally, it calls the 
+ * rm_quotes_and_skil_deli function and returns 1 if successful, 0 otherwise.
+ * 
+ * @param tok The token string to handle.
+ * @param c_t The token structure to update.
+ * @param d The data structure containing the new string to free.
+ * @param tgt The target string pointer.
+ * 
+ * @return 1 if successful, 0 if the token string is empty.
  */
-void handle_quoted_segment(const char *str, int *i, int *j, char *new_str, t_data *data)
+int	handle_tok(char *tok, t_token *c_t, t_data *d, char **tgt)
 {
-    data->quote_char = str[*i]; // Use a local variable for the quote character
-    (*i)++; // Skip the opening quote
-    while (str[*i] && str[*i] != data->quote_char)
-        new_str[(*j)++] = str[(*i)++]; // Append characters between quotes
-    if (str[*i] == data->quote_char)
-        (*i)++; // Skip the closing quote
+	if (!tok)
+	{
+		free_null(d->new_str);
+		return (0);
+	}
+	if (tok[0] == '\'' || tok[0] == '\"')
+		c_t->in_q = true;
+	else
+		c_t->in_q = false;
+	rm_quotes_and_skil_deli(d->deli, d, tgt);
+	return (1);
 }
-
-/**
- * Removes quotes from a string and returns a new string without the quotes.
- *
- * @param str The input string to remove quotes from.
- * @param data Pointer to a t_data struct used for handling quoted segments.
- * @return A new string without the quotes, or NULL if memory allocation fails.
- */
-char *remove_quotes(const char *str, t_data *data)
-{
-    int i;
-    int j;
-    i = 0;
-    j = 0;
-    char *new_str = (char *)malloc(ft_strlen(str) + 1);
-    if (!new_str)
-        return NULL;
-
-    while (str[i])
-    {
-        if (str[i] == '"' || str[i] == '\'')
-            handle_quoted_segment(str, &i, &j, new_str, data);
-        else
-            new_str[j++] = str[i++];
-    }
-    new_str[j] = '\0';
-    return new_str;
-}
-
