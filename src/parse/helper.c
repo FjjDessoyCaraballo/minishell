@@ -1,40 +1,59 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   helper.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/08/22 15:08:47 by walnaimi          #+#    #+#             */
+/*   Updated: 2024/08/22 23:52:25 by walnaimi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 /**
- * this function operates in the same fashion as strchr()
- * by returning a pointer to the token specified by the type
- * which is given as a second parameter.
+ * Searches for a specific token type within a linked list of tokens.
+ *
+ * @param token The head of the linked list of tokens.
+ * @param type The type of token to search for.
+ *
+ * @return A pointer to the first token of 
+ * the specified type if found, NULL otherwise.
  */
-t_token *find_token(t_token *token, t_type type)
+t_token	*find_token(t_token *token, t_type type)
 {
-        t_token *head;
+	t_token	*head;
 
-        head = token;
-        while (head != NULL)
-        {
-                if (type == head->type)
-                        return (head);
-                head = head->next;
-        }
-        head = NULL;
-        return (NULL);
+	head = token;
+	while (head != NULL)
+	{
+		if (type == head->type)
+			return (head);
+		head = head->next;
+	}
+	head = NULL;
+	return (NULL);
 }
 
 /**
- * this function will search for type of token and return 0 (1) if
- * the command can be found within the token list. In case it does not
- * find the specified type the function returns 1 (0).
+ * Searches for a specific token type within a linked list of tokens.
+ *
+ * @param token The head of the linked list of tokens.
+ * @param type The type of token to search for.
+ *
+ * @return 1 if the token type is found, 0 otherwise.
  */
-int     search_token_type(t_token *token, t_type type)
+int	search_token_type(t_token *token, t_type type)
 {
-        t_token *head;
+	t_token	*head;
 
-        head = token;
-        while (head != NULL)
-        {
-                if (head->type == type)
-                        return (1);
-                head = head->next;
-        }
-        return (0);
+	head = token;
+	while (head != NULL)
+	{
+		if (head->type == type)
+			return (1);
+		head = head->next;
+	}
+	return (0);
 }

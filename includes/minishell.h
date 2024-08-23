@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/23 14:37:13 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/23 04:36:26 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,8 +107,9 @@ typedef struct s_data
 	char		**cmd;
 	t_token		*token;
 	t_token		*first_node;
-	t_token		*current_token;
+	t_token		*cur_tok;
 	t_token		*prev_token;
+	t_index		indexx;
 	char		**cmd_a;
 	bool		echoed;
 	bool		heredoc_exist;
@@ -116,25 +117,26 @@ typedef struct s_data
 	bool		piped;
 	bool		redirections;
 	char		*line_read;
+	char		*var_name;
 	int			id;
 	char		*tok_res;
 	char		*tok_str;
 	char		*new_tok;
 	char		*fin_tok;
-	const char *deli;
-	bool		cmd_ignore;
+	const char	*deli;
+	bool		ignore_cmd;
 	char		*ctoken;
 	char		*cnew_token;
 	char		*str_token;
 	int			quote;
-	int			sindex;
-	int			token_start;
+	int			i;
+	int			tok_srt;
 	int			in_quotes;
 	char		quote_char;
 	size_t		env_len;
 	int			num_of_envs;
 	int			s_quote_o;
-	int			d_quote_o;
+	int			dbl_q;
 	int			exit_code;
 	char		*new_str;
 	char		*temp_str;

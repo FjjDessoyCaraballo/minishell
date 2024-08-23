@@ -3,23 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   check_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:33:43 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/21 13:58:51 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/23 04:41:38 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-/**
- * loop_path_for_binary function assumes that you have access to the PATH variable
- * inside the environment pointer. In this shell we store the paths inside the env_ll
- * after 'PATH='. Furthermore, the struct data should have binary_paths inside of it
- * and one can use that array extract the same way.
- * 
- * RETURN VALUES: 
- */
 char	*loop_path_for_binary(char *binary, char **paths)
 {
 	char	*token_with_path;
@@ -51,7 +43,7 @@ char	*ft_strndup(const char *s, size_t n)
 	unsigned int	i;
 
 	i = 0;
-	res = malloc(sizeof(char) * (n + 1)); //1 -> chunky_check 57
+	res = malloc(sizeof(char) * (n + 1));
 	if (res == NULL)
 		return (NULL);
 	while (i < n)
