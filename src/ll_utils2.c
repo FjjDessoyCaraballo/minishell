@@ -6,13 +6,12 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 11:35:09 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/22 14:32:49 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/23 13:46:46 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/* should probably not use getenv() here */
 char	**env_arr_updater(t_env **env_ll)
 {
 	int		i;
@@ -23,7 +22,7 @@ char	**env_arr_updater(t_env **env_ll)
 	i = 0;
 	tmp = (*env_ll);
 	size = ll_size(env_ll);
-	env = malloc(sizeof(char **) * (size + 1));// + 1
+	env = malloc(sizeof(char **) * (size + 1));
 	if (!env)
 	{
 		perror("Failed to allocate memory for data->env\n");
@@ -57,8 +56,19 @@ int	ll_size(t_env **env_ll)
 	tmp = NULL;
 	return (i);
 }
+
 void	free_all_ll(t_env **env_ll)
 {
 	free_ll(*env_ll);
 	free_null(env_ll);
+}
+
+void	lstadd_front(t_env **lst, t_env *new)
+{
+	if (lst)
+	{
+		if (*lst)
+			new -> next = *lst;
+		*lst = new;
+	}
 }

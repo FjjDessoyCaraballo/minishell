@@ -6,39 +6,37 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:12:51 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/22 21:42:30 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/22 18:02:04 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int g_exit_code = 0;
+int	g_exit_code = 0;
 
 int	main(int argc, char **argv, char **env)
 {
-	t_data			*data;
-	t_env			**env_ll;
-	int 			status;
+	t_data	*data;
+	t_env	**env_ll;
+	int		status;
 
+	status = 0;
 	(void)argc;
 	(void)argv;
-	data = ft_calloc(1, sizeof(t_data));
-	env_ll = ft_calloc(1, sizeof(t_env *));
-	if (!data  || !env_ll)
+	if (!env || !*env)
 		return (1);
-	initializer(data, env_ll, env);
-	while (666)
+	env = add_shell_lvl(env);
+	data = ft_calloc(1, sizeof(t_data));
+	if (!data)
+		return (1);
+	env_ll = ft_calloc(1, sizeof(t_env *));
+	if (!env_ll)
 	{
-		status = sniff_line(data);
-		if (status == NULL_LINE)
-		{
-			printf("exit\n");
-			break ;
-		}
-		else if (status != 963)
-			execution(data, env_ll);
-		free_gang(data);
+		free_null(data);
+		return (1);
 	}
+	initializer(data, env_ll, env);
+	status = wow_loop(data, env_ll);
 	super_free(data, env_ll);
-	return (0);
+	return (status);
 }

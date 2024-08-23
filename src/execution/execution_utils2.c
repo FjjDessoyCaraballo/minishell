@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils2.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 10:19:57 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/21 21:14:06 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/22 16:56:18 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ char	**cl_to_array(t_token *token)
  * FAILURE is returned, it means that your binary cannot be found in the
  * general concatenated paths in the environment pointers.
  */
-int	checking_access(t_data *data, char *instruction, int child)
+int	checking_access(t_data *data, char *instruction)
 {
 	int		i;
 	char	*binary_path;
@@ -103,8 +103,6 @@ int	checking_access(t_data *data, char *instruction, int child)
 	
 	i = 0;
 	binary = get_binary(instruction);
-	(void)child;
-	//dprintf(2, "\nThe binary in child %i is: %s\n\n", child, binary);//debug
 	while (data->binary_paths[i++])
 	{
 		binary_path = ft_strsjoin(data->binary_paths[i], binary, '/');
@@ -162,7 +160,6 @@ char	*get_binary(char *instruction)
 		binary = ft_strdup(split_instruction[0]);
 	if (!binary)
 	{
-		dprintf(2, "\nwe got an empty binary at get_binary\n\n");
 		free_array(split_instruction);
 		return (NULL);
 	}

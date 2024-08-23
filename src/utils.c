@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: bposa <bposa@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 11:23:58 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/14 14:30:21 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/22 23:34:32 by bposa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-/* These functions are general utils used throughout the code */
 
 /**
  * Frees the shell most used data allocators.
@@ -40,7 +38,7 @@ void	free_data(t_data *data, char *path, char **command_array)
 void	free_token(t_token *token)
 {
 	t_token	*tmp;
-	
+
 	while (token != NULL)
 	{
 		tmp = token;
@@ -64,7 +62,7 @@ void	free_token(t_token *token)
 int	check_bin_local(char *binary)
 {
 	char		*binary_with_path;
-	static char *cwd;
+	static char	*cwd;
 
 	cwd = getcwd(NULL, 0);
 	binary_with_path = ft_strsjoin(cwd, binary, '/');

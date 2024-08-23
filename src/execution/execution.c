@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/22 21:42:35 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/23 14:33:22 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@
 // 	head = NULL;
 // 	return (SUCCESS);
 // }
-
 // static void	line_printer(char **array)
 // {
 // 	int i = 0;
@@ -54,10 +53,12 @@ int	execution(t_data *data, t_env **env_ll)
 	data->nb_cmds = count_token(token, PIPE) + 1;
 	if (data->nb_cmds == 0)
 		data->nb_cmds = 1;
-	if (find_token(token, PIPE) || find_token(token, RED_IN)
+	if ((find_token(token, PIPE) || find_token(token, RED_IN)
 		|| find_token(token, RED_OUT) || find_token(token, HEREDOC)
-		|| find_token(token, APPEND) || find_token(token, COMMAND)
-		|| find_token(token, ARG))
+		|| find_token(token, APPEND) || find_token(token, COMMAND))
+		&& (ft_strncmp(token->value, "cd", 2)
+		|| ft_strncmp(token->value, "exit", 4)
+		|| ft_strncmp(token->value, "export", 6)))
 		data->status = execution_prepping(data, token, env_ll);
 	else
 	{
@@ -161,12 +162,10 @@ void	child_execution(t_data *data, t_env **env_ll, char *instr, int child)
 			exit (0);
 		}
 	}
-	if (builtin_filter(data->token, cmd_array[0]) == true &&
-		binary_tree_discard(cmd_array[0]) == false)
+	if (builtin_filter(data->token, cmd_array[0]) == true)
 		ft_builtin_exec(data, find_token_exec(data->token, cmd_array), env_ll);
 	ft_exec(data, env_ll, cmd_array);
 }
-		// ft_builtin_exec(data, find_token_exec(data->token, cmd_array), env_ll);
 
 /**
  * This is the second part of the execution where we are going to
@@ -186,6 +185,8 @@ void	ft_exec(t_data *data, t_env **env_ll,  char **cmd_array)
 {
 	static char	*path;
 
+	if (cmd_array[0] == NULL)
+		exit(0);
 	data->env = env_arr_updater(env_ll);
 	if (!data->env)
 		exit (1);

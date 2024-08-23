@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 10:41:10 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/22 11:00:07 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/22 16:55:12 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
  * 
  * Return values: upon success, this function will return an array with only
  * the commands that will be used in execve(). In case of any failures, the
- * function returns NULL.dprintf(2, "we got here\n");
+ * function returns NULL
  */
 char	**parse_instruction(t_data *data, char **cmd_array)
 {

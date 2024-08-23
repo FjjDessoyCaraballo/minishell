@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 14:18:24 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/22 16:33:36 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/23 14:37:31 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 int	built_ins(t_data *data, t_token *token, t_env **env_ll)
 {
 	int	status;
+
 	status = 0;
 	if(token->value == NULL)
 		return (status);
@@ -33,9 +34,9 @@ int	built_ins(t_data *data, t_token *token, t_env **env_ll)
 	else if (!ft_strncmp(token->value, "cd", 3))
 		status = shell_cd(token, data);
 	else if (!ft_strncmp(token->value, "export", 7))
-		status = export(token, env_ll, 0);
+		status = export(token, env_ll);
 	else if (!ft_strncmp(token->value, "unset", 6))
-		status = unset(token, env_ll); // broken
+		status = unset(token, env_ll);
 	else
 		return(err_msg(token->value, NO_EXEC, 127));
 	return (status);

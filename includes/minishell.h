@@ -53,6 +53,7 @@
 # define SYNTAX "syntax error near unexpected token "
 # define ERR_ARG "Wrong number of arguments, Karen\n"
 # define ERR_EXP "export: not a valid identifier\n"
+# define EXEC_ENV_NULL "envir"
 # define REDIRECT_OUT 222
 # define REDIRECT_IN 111
 # define HERE_DOC 333
@@ -157,7 +158,6 @@ void	ft_exec(t_data *data, t_env **env_ll, char **cmd_array);
 bool	builtin_filter(t_token *token, char *command);
 t_token *find_token_exec(t_token *token, char **array);
 void	ft_builtin_exec(t_data *data, t_token *token, t_env **env_ll);
-bool 	binary_tree_discard(char *command);
 
 /* in redirections.c */
 int		find_redirection(char **array);
@@ -179,7 +179,7 @@ void	execution_absolute_path(t_data *data, char **array);
 
 /* in execution_utils2.c */
 char	**cl_to_array(t_token *token);
-int		checking_access(t_data *data, char *instruction, int child);
+int		checking_access(t_data *data, char *instruction);
 char	*get_binary(char *instruction);
 
 /* in fd_dups.c */
@@ -209,6 +209,7 @@ int		is_file(char *binary, char *path);
 void	malloc_check_message(void *ptr);
 void	free_null(void *ptr);
 void	super_free(t_data *data, t_env **env_ll);
+int		wow_loop(t_data *data, t_env **env_ll);
 
 /* in line_handler.c */
 int		sniff_line(t_data *data);
@@ -224,6 +225,8 @@ void	free_ll(t_env *env_ll);
 char	**env_arr_updater(t_env **env_ll);
 int		ll_size(t_env **env_ll);
 void	free_all_ll(t_env **env_ll);
+char	**add_shell_lvl(char **env);
+void	lstadd_front(t_env **lst, t_env *new);
 
 /* in built_ins.c */
 int		built_ins(t_data *data, t_token *token, t_env **env_ll);
@@ -234,7 +237,7 @@ int		yodeling(t_token *token);
 
 /* in built_ins2.c */
 int		shell_cd(t_token *token, t_data *data);
-int		export(t_token *token, t_env **env_ll, int i);
+int		export(t_token *token, t_env **env_ll);
 int		print_export(t_env **env_ll);
 int		unset(t_token *token, t_env **env_ll);
 void 	alphabetical_printer(char **env_array);
