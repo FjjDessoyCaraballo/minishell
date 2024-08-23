@@ -37,6 +37,7 @@ SRC_FILES = main.c\
 			src/parse/tokenizer.c\
 			src/parse/ft_strtok.c\
 			src/parse/init_token.c\
+			src/parse/syntax.c\
 			src/parse/token_test.c\
 			src/parse/chunky_check.c\
 			src/parse/chunky_check_1.c\

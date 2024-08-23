@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 10:03:43 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/23 14:24:40 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/23 17:33:03 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,16 +39,16 @@ int	wow_loop(t_data *data, t_env **env_ll)
 {
 	int	status;
 
-	status = 0;
 	while (666)
 	{
+		status = 0;
 		status = sniff_line(data);
 		if (status == NULL_LINE)
 		{
 			printf("boobs\n");
 			break ;
 		}
-		else if (status != 963)
+		else if (status == 0)
 			execution(data, env_ll);
 		free_gang(data);
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   line_handler.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bposa <bposa@student.hive.fi>              +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 12:23:49 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/08/22 23:08:30 by bposa            ###   ########.fr       */
+/*   Updated: 2024/08/23 17:20:46 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,8 @@ int	sniff_line(t_data *data)
 	data->status = 0;
 	check_and_mark_empty_tokens(data->token);
 	free(data->line_read);
+	if (syntax_check(data->token) == FAILURE)
+		return (2);
 	data->piped = false;
 	data->heredoc_exist = false;
 	if (count_token(data->token, PIPE) >= 1)
