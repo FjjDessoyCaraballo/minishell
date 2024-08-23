@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 15:26:27 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/23 16:18:06 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/23 17:00:33 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,6 +135,7 @@ int	unset(t_token *token, t_env **env_ll)
 		tmp = tmp->next;
 		free_null(tmp->key);
 		free_null(tmp->value);
+		free_null(tmp->content);
 		free(tmp);
 		tmp = NULL;
 		return (SUCCESS);
@@ -149,6 +150,7 @@ int	unset(t_token *token, t_env **env_ll)
 			tmp->next = tmp->next->next;
 			free_null(del->key);
 			free_null(del->value);
+			free_null(del->content);
 			free(del);
 			del = NULL;
 			return (SUCCESS);
