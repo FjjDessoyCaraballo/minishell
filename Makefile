@@ -40,7 +40,6 @@ SRC_FILES = main.c\
 			src/parse/ft_strtok_utils_1.c\
 			src/parse/init_token.c\
 			src/parse/syntax.c\
-			src/parse/token_test.c\
 			src/parse/chunky_check.c\
 			src/parse/chunky_check_1.c\
 			src/parse/chunky_check_2.c\
@@ -56,7 +55,7 @@ SRC_FILES = main.c\
 			src/parse/modify_str.c\
 			src/parse/modify_str_utils.c\
 			src/parse/helper.c\
-			src/parse/token_test.c\
+			src/parse/token_test.c
 
 # Object files
 OBJ_FILES = $(SRC_FILES:.c=.o)
