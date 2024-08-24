@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   freeing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: bposa <bposa@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 22:21:18 by bposa             #+#    #+#             */
-/*   Updated: 2024/08/23 13:49:01 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/24 22:37:11 by bposa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,4 +57,27 @@ void	free_tokens(t_token *head)
 		head = head->next;
 		free_null(tmp);
 	}
+}
+
+void	*free_arr_retnull(char **array)
+{
+	int	i;
+
+	i = 0;
+	while (array[i])
+	{
+		free(array[i]);
+		array[i] = NULL;
+		i++;
+	}
+	free(array);
+	array = NULL;
+	return (NULL);
+}
+
+int	free_retstatus(char *array, int status)
+{
+	free(array);
+	array = NULL;
+	return (status);
 }

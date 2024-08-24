@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: bposa <bposa@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 11:35:39 by lstorey           #+#    #+#             */
-/*   Updated: 2024/08/23 04:34:51 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/24 20:08:39 by bposa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,6 @@ typedef struct s_index
 	int	j;
 }	t_index;
 
-void	free_gang(t_data *data);
 char	*ft_strncpy(char *s1, const char *s2, int n);
 /*****************************************
  * modify_str.c
@@ -111,7 +110,6 @@ int		ft_isspace(char c);
  *****************************************/
 int		line_tokenization(t_data *data);
 int		chunky_checker(char *token, t_token *current_token, t_data *data);
-void	free_tokens(t_token *head);
 
 /*****************************************
  * src/parse/helper.c
