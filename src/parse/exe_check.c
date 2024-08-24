@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 04:08:46 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/08/23 16:43:38 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/23 22:44:49 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,15 +25,13 @@ int	handle_absolute_path(char *token, t_token *current_token)
 			path_len = last_slash - token + 1;
 			current_token->path = ft_strndup(token, path_len);
 			current_token->value = ft_strdup(token);
-			free(token);
-			token = NULL;
+			free_null(token);
 		}
 		else
 		{
 			current_token->path = NULL;
 			current_token->value = ft_strdup(token);
-			free(token);
-			token = NULL;
+			free_null(token);
 		}
 		current_token->type = COMMAND;
 		return (0);
@@ -52,8 +50,7 @@ void	handle_slash(char *exe_path, char *token, t_token *current_token)
 		path_len = last_slash - exe_path + 1;
 		current_token->path = ft_strndup(exe_path, path_len);
 		current_token->value = ft_strdup(last_slash + 1);
-		free(token);
-		token = NULL;
+		free_null(token);
 	}
 }
 
@@ -61,8 +58,7 @@ void	handle_no_slash(char *exe_path, char *token, t_token *current_token)
 {
 	current_token->path = NULL;
 	current_token->value = ft_strdup(exe_path);
-	free(token);
-	token = NULL;
+	free_null(token);
 }
 
 int	handle_cmd_exe(char *token, t_token *current_token, t_data *data)
@@ -82,7 +78,7 @@ int	handle_cmd_exe(char *token, t_token *current_token, t_data *data)
 			handle_no_slash(executable_path, token, current_token);
 		current_token->type = COMMAND;
 		free_my_boi(paths);
-		free(executable_path);
+		free_null(executable_path);
 		return (0);
 	}
 	free_my_boi(paths);

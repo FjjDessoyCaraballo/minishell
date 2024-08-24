@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 22:21:18 by bposa             #+#    #+#             */
-/*   Updated: 2024/08/23 16:49:58 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/23 22:49:02 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,27 +19,27 @@ void	free_my_boi(char **paths)
 	i = 0;
 	while (paths[i])
 	{
-		free(paths[i]);
+		free_null(paths[i]);
 		i++;
 	}
-	free(paths);
+	free_null(paths);
 }
 
-void	free_path(t_token *head)
-{
-	t_token	*current;
-	t_token	*next;
+// void	free_path(t_token *head)
+// {
+// 	t_token	*current;
+// 	t_token	*next;
 
-	current = head;
-	next = NULL;
-	while (current != NULL)
-	{
-		next = current->next;
-		if (current->path)
-			free(current->path);
-		current = next;
-	}
-}
+// 	current = head;
+// 	next = NULL;
+// 	while (current != NULL)
+// 	{
+// 		next = current->next;
+// 		if (current->path)
+// 			free(current->path);
+// 		current = next;
+// 	}
+// }
 
 void	free_gang(t_data *data)
 {
@@ -66,7 +66,7 @@ void	free_tokens(t_token *head)
 			tmp->value = NULL;
 		}
 		if (tmp->path)
-			free(tmp->path);
+			free_null(tmp->path);
 		head = head->next;
 		free_null(tmp);
 	}

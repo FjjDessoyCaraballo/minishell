@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/23 16:54:57 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/23 17:57:13 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ int	execution_prepping(t_data *data, t_token *token, t_env **env_ll)
 int		forking(t_data *data, t_env **env_ll, char **all_cmds, pid_t pids)
 {
 	char	sync_signal;
-	
+
 	data->index = 0;
 	while (data->index < data->nb_cmds)
 	{
@@ -108,7 +108,7 @@ int		forking(t_data *data, t_env **env_ll, char **all_cmds, pid_t pids)
 			child_execution(data, env_ll, all_cmds[data->index], data->index);
 		}
 		else if (data->piped == true)
-		{	
+		{
 			close(data->pipe_fd[1]);
 			if (data->index > 0)
 				close(data->read_end);

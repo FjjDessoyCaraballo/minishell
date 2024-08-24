@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 03:25:26 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/08/23 13:25:09 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/23 22:42:05 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ int	count_matching_keys(t_env *env_list, const char *input)
 		{
 			if (ft_strlen(word) > 0 && is_key_in_list(env_list, word))
 				count++;
-			free(word);
+			free_null(word);
 		}
 	}
 	return (count);

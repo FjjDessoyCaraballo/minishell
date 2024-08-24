@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 21:55:38 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/08/23 16:43:40 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/25 01:35:25 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,10 @@ char	*get_env_value(const char *input, size_t v_s, size_t v_l, t_data *data)
  * @param num A pointer to the index of the current position in the input string.
  * @param data A pointer to the data structure 
  * containing the environment variables.
- * @param n_len A pointer to store the length of the expanded variable.
  * @return A pointer to the expanded environment variable,
  * or NULL if the variable is not found.
  */
-char	*feting_env(const char *str, t_index *num, t_data *data, size_t *n_len)
+char	*fetching_env(const char *str, t_index *num, t_data *data)
 {
 	size_t	var_start;
 	size_t	var_len;
@@ -64,17 +63,10 @@ char	*feting_env(const char *str, t_index *num, t_data *data, size_t *n_len)
 	{
 		env_value = get_env_value(str, var_start, var_len, data);
 		if (env_value)
-		{
-			*n_len = ft_strlen(env_value);
 			return (env_value);
-		}
 		else
-		{
-			*n_len = 0;
 			return (NULL);
-		}
 	}
-	*n_len = 0;
 	return (NULL);
 }
 
@@ -100,7 +92,7 @@ void	handle_status_variable(t_data *data, char *result, t_index *num)
 		k = 0;
 		while (status_str[k])
 			result[num->j++] = status_str[k++];
-		free(status_str);
+		free_null(status_str);
 	}
 }
 
@@ -129,10 +121,7 @@ void	dollar_sign(const char *str, t_index *num, t_data *data, char *result)
 		result[num->j++] = '$';
 	}
 	else if (str[num->i + 1] >= '0' && str[num->i + 1] <= '9')
-	{
 		num->i += 2;
-		result[num->j++] = str[num->i++];
-	}
 	else if (str[num->i + 1] == '?')
 	{
 		num->i += 2;
@@ -164,7 +153,7 @@ char	*expand_env_variables(const char *input, t_data *data)
 	t_index	num;
 
 	setup_env_variables(input, data);
-	result = (char *)malloc(data->env_len * data->num_of_envs);
+	result = (char *)malloc(data->env_len * data->num_of_envs * sizeof(char));
 	if (!result)
 		return (NULL);
 	num.i = 0;

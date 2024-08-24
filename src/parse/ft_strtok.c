@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:34:00 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/23 16:09:19 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/25 01:22:11 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,6 @@ char	*ft_strtok(char *str, t_data *data, t_token *cur_tok)
 	token = substr_and_expand(target, data);
 	if (!handle_tok(token, cur_tok, data, &target))
 		return (NULL);
-	free(token);
+	free_null(token);
 	return (data->fin_tok);
 }

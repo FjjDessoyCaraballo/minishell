@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/02 11:35:39 by lstorey           #+#    #+#             */
-/*   Updated: 2024/08/23 17:42:53 by walnaimi         ###   ########.fr       */
+/*   Created: 2024/07/15 16:27:10 by walnaimi          #+#    #+#             */
+/*   Updated: 2024/08/25 01:26:03 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@
 # include "minishell.h"
 # include <stdbool.h>
 
-typedef struct s_data t_data;
-typedef struct s_env t_env;
+typedef struct s_data	t_data;
+typedef struct s_env	t_env;
 /*******************************************
  * enum assign types
  * 1. echo,cd,pwd...
@@ -33,7 +33,7 @@ typedef struct s_env t_env;
  * 404. not found (default).
  ********************************************/
 
-typedef	enum e_type
+typedef enum e_type
 {
 	BUILTIN = 1,
 	COMMAND = 2,
@@ -93,6 +93,8 @@ typedef struct s_index
 	int	i;
 	int	j;
 }	t_index;
+
+void	print_tokens(t_data *data);
 
 //* ---------------------------------------------- */
 //              src/parse/freeing.c                //
@@ -168,7 +170,7 @@ char	*remove_quotes(const char *str, t_data *data);
 char	*expand_env_variables(const char *input, t_data *data);
 void	dollar_sign(const char *str, t_index *num, t_data *data, char *result);
 void	handle_status_variable(t_data *data, char *result, t_index *num);
-char	*feting_env(const char *str, t_index *num, t_data *data, size_t *n_len);
+char	*fetching_env(const char *str, t_index *num, t_data *data);
 char	*get_env_value(const char *input, size_t v_s, size_t v_l, t_data *data);
 
 //*----------------------------------------------*/
