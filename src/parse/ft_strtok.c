@@ -6,21 +6,21 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:34:00 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/23 01:22:22 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/25 01:22:11 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 /**
- * Initializes the tokenization data structure.
+ * Initializes the string tokenization data structure.
  *
  * @param data Pointer to the tokenization data structure.
  *
  * @return void
  *
  */
-void	initialize_tokenization(t_data *data)
+void	init_strtok(t_data *data)
 {
 	data->i = 0;
 	data->tok_srt = 0;
@@ -46,7 +46,7 @@ char	*ft_strtok(char *str, t_data *data, t_token *cur_tok)
 	token = NULL;
 	if (str)
 	{
-		initialize_tokenization(data);
+		init_strtok(data);
 		data->new_str = modify_str(str);
 		target = data->new_str;
 	}
@@ -61,6 +61,6 @@ char	*ft_strtok(char *str, t_data *data, t_token *cur_tok)
 	token = substr_and_expand(target, data);
 	if (!handle_tok(token, cur_tok, data, &target))
 		return (NULL);
-	free(token);
+	free_null(token);
 	return (data->fin_tok);
 }

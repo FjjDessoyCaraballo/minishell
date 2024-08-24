@@ -3,30 +3,43 @@
 /*                                                        :::      ::::::::   */
 /*   freeing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 22:21:18 by bposa             #+#    #+#             */
-/*   Updated: 2024/08/23 13:49:01 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/23 22:49:02 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	free_path(t_token *head)
+void	free_my_boi(char **paths)
 {
-	t_token	*current;
-	t_token	*next;
+	int	i;
 
-	current = head;
-	next = NULL;
-	while (current != NULL)
+	i = 0;
+	while (paths[i])
 	{
-		next = current->next;
-		if (current->path)
-			free(current->path);
-		current = next;
+		free_null(paths[i]);
+		i++;
 	}
+	free_null(paths);
 }
+
+// void	free_path(t_token *head)
+// {
+// 	t_token	*current;
+// 	t_token	*next;
+
+// 	current = head;
+// 	next = NULL;
+// 	while (current != NULL)
+// 	{
+// 		next = current->next;
+// 		if (current->path)
+// 			free(current->path);
+// 		current = next;
+// 	}
+// }
 
 void	free_gang(t_data *data)
 {
@@ -53,7 +66,7 @@ void	free_tokens(t_token *head)
 			tmp->value = NULL;
 		}
 		if (tmp->path)
-			free(tmp->path);
+			free_null(tmp->path);
 		head = head->next;
 		free_null(tmp);
 	}

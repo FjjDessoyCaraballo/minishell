@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:33:43 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/23 04:41:38 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/23 23:00:22 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,10 @@ char	*loop_path_for_binary(char *binary, char **paths)
 			else
 			{
 				err_msg(binary, NO_PERMISSION, 1);
-				free(token_with_path);
+				free_null(token_with_path);
 			}
 		}
-		free(token_with_path);
+		free_null(token_with_path);
 		i++;
 	}
 	return (NULL);

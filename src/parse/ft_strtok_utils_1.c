@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 00:32:24 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/08/23 14:27:44 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/25 01:22:00 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,12 +80,12 @@ char	*substr_and_expand(const char *target, t_data *data)
 	data->cnew_token = expand_env_variables(data->ctoken, data);
 	if (data->cnew_token)
 	{
-		free(data->ctoken);
+		free_null(data->ctoken);
 		data->ctoken = data->cnew_token;
 	}
 	else
 	{
-		free(data->ctoken);
+		free_null(data->ctoken);
 		data->ctoken = NULL;
 	}
 	return (data->ctoken);

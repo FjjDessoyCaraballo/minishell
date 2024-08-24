@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:34:10 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/23 04:54:47 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/23 22:56:03 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
  * @param data A pointer to the t_data structure
  * containing the token linked list.
  * 
+ * 
  * @return None
  */
 void	print_tokens(t_data *data)
@@ -26,8 +27,8 @@ void	print_tokens(t_data *data)
 	t_token	*token;
 	t_token	*last_token;
 
-	const char *type_names[] =
-	{
+	const char *type_names[]
+	= {
 		"UNKNOWN",
 		"BUILTIN",
 		"COMMAND",
@@ -39,7 +40,6 @@ void	print_tokens(t_data *data)
 		"RED_OUT",
 		"HEREDOC",
 		"APPEND",
-		"UNKNOWN"
 	};
 
 	token = data->token;
@@ -67,33 +67,26 @@ void	print_tokens(t_data *data)
 		}
 		token = token->next;
 	}
-	printf("======================================\n");
+	printf("#####################################\n");
 	token = last_token;
-	/*while (token != NULL)
-	{
-		printf("prev token value:[%s]\n", token->value);
-		printf("prev token type:[%i]\n", token->type);
-		printf("prev id:[%i]\n", token->id);
-		token = token->prev;
-	}*/
 }
 
-void	print_cmd(char **cmd_a)
-{
-	int	i;
+// void	print_cmd(char **cmd_a)
+// {
+// 	int	i;
 
-	i = 0;
-	if (cmd_a == NULL)
-	{
-		printf("cmd_a is NULL\n");
-		return ;
-	}
-	while (cmd_a[i])
-	{
-		printf("[%s]\n", cmd_a[i]);
-		i++;
-	}
-}
+// 	i = 0;
+// 	if (cmd_a == NULL)
+// 	{
+// 		printf("cmd_a is NULL\n");
+// 		return ;
+// 	}
+// 	while (cmd_a[i])
+// 	{
+// 		printf("[%s]\n", cmd_a[i]);
+// 		i++;
+// 	}
+// }
 
 /*
 void print_env_ll(t_data *data) 
