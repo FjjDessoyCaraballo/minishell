@@ -6,7 +6,7 @@
 /*   By: bposa <bposa@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/25 00:42:18 by bposa            ###   ########.fr       */
+/*   Updated: 2024/08/25 23:03:10 by bposa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@
 # define REDIRECT_OUT 222
 # define REDIRECT_IN 111
 # define HERE_DOC 333
-# define APP 444
+# define APPEND 444
 # define NO_FILE 100
 # define NULL_LINE 5
 # define DIRECTORY 69
@@ -184,8 +184,7 @@ void	execution_absolute_path(t_data *data, char **array);
 
 /* in execution_utils2.c */
 char	**cl_to_array(t_token *token);
-int		alloc_memory(char ***pipe_array, char **instruction, t_token **token);
-int		fill_instr_loop(char **instruction, t_token **head);
+char	*build_instruction(t_token **head);
 int		checking_access(t_data *data, char *instruction);
 char	*get_binary(char *instruction);
 
@@ -245,6 +244,8 @@ int		yodeling(t_token *token);
 /* in built_ins2.c */
 int		shell_cd(t_token *token, t_data *data);
 int		export(t_token *token, t_env **env_ll);
+int	export_util(t_env **env_ll, t_token *tmp_tok);
+int	export_util_two(t_env *tmp_ll, t_token *tmp_tok, char **array);
 int		print_export(t_env **env_ll);
 int		unset(t_token *token, t_env **env_ll);
 void	alphabetical_printer(char **env_array);
@@ -257,7 +258,7 @@ void	*free_arr_retnull(char **array);
 int		free_retstatus(char *array, int status);
 void	free_tokens(t_token *head);
 void	free_gang(t_data *data);
-void	free_path(t_token *head);
+void	free_my_boi(char **paths);
 
 /* DEPRECATED FUNCTIONS */
 // int		built_in_or_garbage(t_data *data, t_env **env_ll, t_token *token);

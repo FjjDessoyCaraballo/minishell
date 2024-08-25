@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: bposa <bposa@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 14:18:24 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/23 20:31:45 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/25 23:04:35 by bposa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ int	handle_flag_type(t_token *head)
 		if (head->value == NULL)
 			return (SUCCESS);
 		if (head->type == RED_IN || head->type == RED_OUT
-			|| head->type == APP || head->type == HEREDOC)
+			|| head->type == APPEND || head->type == HEREDOC)
 			break ;
 		printf("%s", head->value);
 		if (head->next->value != NULL && head->next->empty == false)
@@ -128,7 +128,7 @@ int	handle_arg_type(t_token *head)
 		if (head->value != NULL && head->value[0] != '\0')
 		{
 			if (head->type == RED_IN || head->type == RED_OUT
-				|| head->type == APP || head->type == HEREDOC)
+				|| head->type == APPEND || head->type == HEREDOC)
 				break ;
 			printf("%s", head->value);
 		}
