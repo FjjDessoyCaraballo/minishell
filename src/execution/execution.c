@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/25 22:20:00 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/25 23:01:49 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ int	execution(t_data *data, t_env **env_ll)
 	data->nb_cmds = count_token(token, PIPE) + 1;
 	if (data->nb_cmds == 0)
 		data->nb_cmds = 1;
-	dprintf(2, "man wtf\n");
 	if ((token->type == BUILTIN) && (!find_token(token, PIPE))
 		&& (ft_strncmp(token->value, "cd", 2)
 			|| ft_strncmp(token->value, "exit", 4)

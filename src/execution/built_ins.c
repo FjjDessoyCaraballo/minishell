@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 14:18:24 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/25 21:28:55 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/25 22:56:24 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,8 @@ int	handle_flag_type(t_token *head)
 		if (head->value == NULL)
 			return (SUCCESS);
 	}
+	while (head->value != NULL && head->value[0] == '\0')
+		head = head->next;
 	while (head != NULL)
 	{
 		if (head->value != NULL && head->value[0] != '\0')

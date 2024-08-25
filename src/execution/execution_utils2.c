@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 10:19:57 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/25 22:30:00 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/25 22:48:43 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ char	**cl_to_array(t_token *token)
 		if (fill_instr_loop(&instruction, &head) == FAILURE)
 			return (free_arr_retnull(pipe_array));
 		pipe_array[i] = ft_strdup(instruction);
-		printf("%s\n", pipe_array[i]);
 		if (!pipe_array[i])
 			return (NULL);
 		i++;
