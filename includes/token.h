@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 16:27:10 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/08/25 18:44:09 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/25 21:25:01 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,8 @@ void	free_my_boi(char **paths);
 //* ---------------------------------------------- */
 t_token	*find_token(t_token *token, t_type type);
 int		search_token_type(t_token *token, t_type type);
+int		ft_isalpha_str(const char *str);
+
 
 //* ---------------------------------------------- */
 //              src/parse/init_token.c             //

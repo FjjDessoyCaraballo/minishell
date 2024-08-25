@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/25 17:18:11 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/25 21:31:31 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@
 # define ERR_ARG "Wrong number of arguments, Karen\n"
 # define ERR_EXP "export: not a valid identifier\n"
 # define EXEC_ENV_NULL "envir"
+# define SYNTAX_EXIT ": exit: numeric argument required"
 # define REDIRECT_OUT 222
 # define REDIRECT_IN 111
 # define HERE_DOC 333
@@ -238,7 +239,7 @@ int		built_ins(t_data *data, t_token *token, t_env **env_ll);
 int		print_env(t_env *env_ll);
 int		print_pwd(void);
 void	get_the_hell_out(t_data *data, t_token *token, t_env **env_ll);
-int		yodeling(t_token *token, t_data *data);
+int		yodeling(t_token *token);
 
 /* in built_ins2.c */
 int		shell_cd(t_token *token, t_data *data);
