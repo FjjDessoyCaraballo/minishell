@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 03:58:57 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/08/23 13:27:47 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/23 22:43:09 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,7 @@ int	handle_redirect_out(char *token, t_token *current_token)
 	{
 		current_token->value = ft_strdup(token);
 		current_token->type = RED_OUT;
-		free(token);
-		token = NULL;
+		free_null(token);
 		return (0);
 	}
 	return (1);
@@ -47,8 +46,7 @@ int	handle_append(char *token, t_token *current_token)
 	{
 		current_token->value = ft_strdup(token);
 		current_token->type = APPEND;
-		free(token);
-		token = NULL;
+		free_null(token);
 		return (0);
 	}
 	return (1);
@@ -68,8 +66,7 @@ int	handle_redirect_in(char *token, t_token *current_token)
 	{
 		current_token->value = ft_strdup(token);
 		current_token->type = RED_IN;
-		free(token);
-		token = NULL;
+		free_null(token);
 		return (0);
 	}
 	return (1);
@@ -89,8 +86,7 @@ int	handle_heredoc(char *token, t_token *current_token)
 	{
 		current_token->value = ft_strdup(token);
 		current_token->type = HEREDOC;
-		free(token);
-		token = NULL;
+		free_null(token);
 		return (0);
 	}
 	return (1);

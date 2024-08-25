@@ -12,21 +12,18 @@
 
 #include "../includes/minishell.h"
 
-void	free_path(t_token *head)
+void	free_my_boi(char **paths)
 {
-	t_token	*current;
-	t_token	*next;
+	int	i;
 
-	current = head;
-	next = NULL;
-	while (current != NULL)
+	i = 0;
+	while (paths[i])
 	{
-		next = current->next;
-		if (current->path)
-			free(current->path);
-		current = next;
+		free_null(paths[i]);
+		i++;
 	}
-}
+	free_null(paths);
+}6
 
 void	free_gang(t_data *data)
 {
@@ -53,7 +50,7 @@ void	free_tokens(t_token *head)
 			tmp->value = NULL;
 		}
 		if (tmp->path)
-			free(tmp->path);
+			free_null(tmp->path);
 		head = head->next;
 		free_null(tmp);
 	}

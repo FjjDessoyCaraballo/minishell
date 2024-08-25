@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 14:42:40 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/08/23 14:26:07 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/25 00:33:57 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,20 +44,23 @@ void	add_spaces_s_c(char *str, char *n_str, int *i, int *j)
 }
 
 /**
- * Adds spaces around a double character in a string.
+ * Adds spaces around a double character in a string if necessary.
  *
- * Add a space before the double character if it's not the first character
- * and the previous character is not a space.
+ * It checks the character before and after the current character in the string.
  * 
- * Add a space after the double character if it's not the last character
- * and the next character is not a space.
+ * If the previous character is not a space and the
+ * current character is not the first,
+ * it adds a space before the double character.
  * 
+ * If the next character is not a space and the
+ * current character is not the last,
+ * it adds a space after the double character.
+ *
  * Parameters:
- *  @param s (char *): The original string.
- *  @param ns(char *): The new string with added spaces.
+ *  @param str (char *): The original string.
+ *  @param n_str (char *): The new string with added spaces.
  *  @param i (int *): The index of the current character in the string.
  *  @param j (int *): The index of the current character in the new string.
- *  @param ch (char): The double character to add spaces around.
  *
  * Returns:
  *  None

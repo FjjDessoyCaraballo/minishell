@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 14:18:24 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/23 16:13:55 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/23 20:31:45 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,18 +91,19 @@ void	get_the_hell_out(t_data *data, t_token *token, t_env **env_ll)
 	exit(data->status);
 }
 
-int handle_flag_type(t_token *head)
+int	handle_flag_type(t_token *head)
 {
 	head = head->next;
-	while(head->type == FLAG)
+	while (head->type == FLAG)
 	{
 		head = head->next;
 		if (head->value == NULL)
 			return (SUCCESS);
 	}
-	while(head->value != NULL)
+	while (head->value != NULL)
 	{
-		while(head->value == NULL && head->type == ARG)
+		while (head->value != NULL && head->type == ARG
+			&& head->value[0] == '\0')
 			head = head->next;
 		if (head->value == NULL)
 			return (SUCCESS);
@@ -110,21 +111,21 @@ int handle_flag_type(t_token *head)
 			|| head->type == APP || head->type == HEREDOC)
 			break ;
 		printf("%s", head->value);
-		if(head->next->value != NULL && head->next->empty == false)
+		if (head->next->value != NULL && head->next->empty == false)
 			printf(" ");
 		head = head->next;
 	}
 	return (SUCCESS);
 }
 
-int handle_arg_type(t_token *head)
+int	handle_arg_type(t_token *head)
 {
-    head = head->next;
-    while (head->value != NULL && head->value[0] == '\0')
+	head = head->next;
+	while (head->value != NULL && head->value[0] == '\0')
 		head = head->next;
-    while (head != NULL)
-    {
-        if (head->value != NULL && head->value[0] != '\0')
+	while (head != NULL)
+	{
+		if (head->value != NULL && head->value[0] != '\0')
 		{
 			if (head->type == RED_IN || head->type == RED_OUT
 				|| head->type == APP || head->type == HEREDOC)
@@ -132,14 +133,14 @@ int handle_arg_type(t_token *head)
 			printf("%s", head->value);
 		}
 		head = head->next;
-        if (head != NULL && head->value != NULL && head->value[0] != '\0')
-            printf(" ");
-    }
-    printf("\n");
-    return (SUCCESS);
+		if (head != NULL && head->value != NULL && head->value[0] != '\0')
+			printf(" ");
+	}
+	printf("\n");
+	return (SUCCESS);
 }
 
-int yodeling(t_token *token)
+int	yodeling(t_token *token)
 {
     t_token *head;
     head = token;

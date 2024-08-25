@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 14:53:29 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/08/23 14:33:34 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/25 01:26:06 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,10 @@ void	copy_env_value(char *result, const char *env_value, t_index *num)
 void	setup_env_variables(const char *input, t_data *data)
 {
 	data->num_of_envs = count_matching_keys(data->envll, input);
+	dprintf(2, "%i\n", data->num_of_envs);
 	if (data->num_of_envs == 0)
 		data->num_of_envs = 1;
+	dprintf(2, "%i\n", data->num_of_envs);
 	data->s_quote_o = 0;
 	data->dbl_q = 0;
 }
@@ -95,10 +97,9 @@ void	double_q(const char *input, t_data *data, char *res, t_index *num)
  */
 void	handle_env_var(const char *str, t_index *num, t_data *data, char *res)
 {
-	size_t	new_len;
 	char	*env_value;
 
-	env_value = feting_env(str, num, data, &new_len);
+	env_value = fetching_env(str, num, data);
 	if (env_value)
 		copy_env_value(res, env_value, num);
 }

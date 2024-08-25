@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   line_handler.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 12:23:49 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/08/23 17:35:15 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/25 01:33:29 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void	check_and_mark_empty_tokens(t_token *first_token)
  */
 int	sniff_line(t_data *data)
 {
-	data->line_read = readline("\e[45m[I can't believe this is"
+	data->line_read = readline("\e[1;45m[I can't believe this is"
 			" not shell]\e[0m ");
 	if (!data->line_read)
 		return (NULL_LINE);

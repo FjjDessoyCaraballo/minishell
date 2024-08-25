@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 12:38:16 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/22 17:37:56 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/23 17:35:32 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ void	initializer(t_data *data, t_env **env_ll, char **env)
 		free_all_ll(env_ll);
 		exit(1);
 	}
+	data->status = 0;
 	data->envll = *env_ll;
 	data->in_quotes = 0;
 	data->echoed = false;
