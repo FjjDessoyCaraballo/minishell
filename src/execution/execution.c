@@ -3,38 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: bposa <bposa@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/23 17:57:13 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/25 00:42:10 by bposa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-// static int	token_printer(t_token *token)
-// {
-// 	t_token *head;
-	
-// 	head = token;
-// 	while (head != NULL)
-// 	{
-// 		if(head->value != NULL)
-// 			dprintf(2, "[%s][%i]\n", head->value, head->type);
-// 		head = head->next;
-// 	}
-// 	head = NULL;
-// 	return (SUCCESS);
-// }
-// static void	line_printer(char **array)
-// {
-// 	int i = 0;
-// 	while (array[i])
-// 	{
-// 		//dprintf(2, "array[%i]: %s\n", i, array[i]);//debug
-// 		i++;
-// 	}
-// }
 
 /**
  * Execution and execution prepping are just the same function broke
@@ -55,12 +31,11 @@ int	execution(t_data *data, t_env **env_ll)
 		data->nb_cmds = 1;
 	if ((token->type == BUILTIN) && (!find_token(token, PIPE))
 		&& (ft_strncmp(token->value, "cd", 2)
-		|| ft_strncmp(token->value, "exit", 4)
-		|| ft_strncmp(token->value, "export", 6)))
+			|| ft_strncmp(token->value, "exit", 4)
+			|| ft_strncmp(token->value, "export", 6)))
 		data->status = built_ins(data, token, env_ll);
 	else
 		data->status = execution_prepping(data, token, env_ll);
-
 	return (data->status);
 }
 
@@ -68,7 +43,7 @@ int	execution_prepping(t_data *data, t_token *token, t_env **env_ll)
 {
 	static pid_t	pids;
 	static char		**cmd_a;
-	
+
 	cmd_a = cl_to_array(token);
 	if (!cmd_a)
 		return (FAILURE);
@@ -83,18 +58,15 @@ int	execution_prepping(t_data *data, t_token *token, t_env **env_ll)
 	return (WEXITSTATUS(data->status));
 }
 
-int		forking(t_data *data, t_env **env_ll, char **all_cmds, pid_t pids)
+int	forking(t_data *data, t_env **env_ll, char **all_cmds, pid_t pids)
 {
 	char	sync_signal;
 
 	data->index = 0;
 	while (data->index < data->nb_cmds)
 	{
-		if (data->piped == true)
-		{
-			if (pipe(data->pipe_fd) == -1)
-				return (err_msg(NULL, "Broken pipe\n", 141));
-		}
+		if (data->piped == true && pipe(data->pipe_fd) == -1)
+			return (err_msg(NULL, "Broken pipe\n", 141));
 		pids = fork();
 		if (pids < 0)
 		{
@@ -108,12 +80,7 @@ int		forking(t_data *data, t_env **env_ll, char **all_cmds, pid_t pids)
 			child_execution(data, env_ll, all_cmds[data->index], data->index);
 		}
 		else if (data->piped == true)
-		{
-			close(data->pipe_fd[1]);
-			if (data->index > 0)
-				close(data->read_end);
-			data->read_end = data->pipe_fd[0];
-		}
+			handle_pipefd_readend(data);
 		data->index++;
 	}
 	return (data->index);
@@ -121,16 +88,16 @@ int		forking(t_data *data, t_env **env_ll, char **all_cmds, pid_t pids)
 
 /**
  * The piped execution is where the child processes go. Here we will check for
- * redirections to know if the user wants the output/input to be redirected from/to
- * a file.
+ * redirections to know if the user wants the output/input to be redirected
+ * from/to a file.
  * 
- * RETURN VALUES: child_execution() does not return anything as it is just a pathway
- * to the final part of the execution in ft_exet().
+ * RETURN VALUES: child_execution() does not return anything as it is just a
+ * pathway to the final part of the execution in ft_exet().
  * 
- * DETAILS: at this point we may use exit() function without worrying that we will
- * end the whole program. Also, at this point we are working with fully parsed out
- * strings, our only concern should be if files/commands don't exist. Examples of
- * instruction:
+ * DETAILS: at this point we may use exit() function without worrying that we
+ * will end the whole program. Also, at this point we are working with fully
+ * parsed out strings, our only concern should be if files/commands don't exist.
+ * Examples of instruction:
  * "< infile cat"
  * "cat > outfile"
  * "ls -la Makefile"
@@ -178,7 +145,7 @@ void	child_execution(t_data *data, t_env **env_ll, char *instr, int child)
  * 
  * [placeholder for more documentation]
  */
-void	ft_exec(t_data *data, t_env **env_ll,  char **cmd_array)
+void	ft_exec(t_data *data, t_env **env_ll, char **cmd_array)
 {
 	static char	*path;
 
@@ -206,4 +173,3 @@ void	ft_exec(t_data *data, t_env **env_ll,  char **cmd_array)
 		execution_absolute_path(data, cmd_array);
 	execution_with_path(data, cmd_array, path);
 }
-
