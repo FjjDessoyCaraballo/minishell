@@ -6,47 +6,39 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 15:28:13 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/25 23:23:49 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/25 23:28:55 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void compare_and_print_type(int array_index, char **array, t_token *tokens)
-{
-    t_token *current = tokens;
-
-    // Traverse the linked list to find the token with the matching index
-    while (current)
-    {
-        if (current->id == array_index)
-        {
-            // Compare the token's value with the corresponding array element
-            if (strcmp(current->value, array[array_index]) == 0)
-            {
-                // Print the token type if the id and value match
-                printf("Token ID: %d, Token Value: %s, Token Type: %d\n", current->id, current->value, current->type);
-                return;
-            }
-            else
-            {
-                printf("Mismatch: Token Value: %s, Array Value: %s\n", current->value, array[array_index]);
-                return;
-            }
-        }
-        current = current->next;
-    }
-
-    // If no matching token is found, optionally handle this case
-    printf("No token found with ID: %d\n", array_index);
-}
+// void compare_and_print_type(int array_index, char **array, t_token *tokens)
+// {
+//     t_token *current = tokens;
+//     while (current)
+//     {
+//         if (current->id == array_index)
+//         {
+//             if (strcmp(current->value, array[array_index]) == 0)
+//             {
+//                 printf("Token ID: %d, Token Value: %s, Token Type: %d\n", current->id, current->value, current->type);
+//                 return;
+//             }
+//             else
+//             {
+//                 printf("Mismatch: Token Value: %s, Array Value: %s\n", current->value, array[array_index]);
+//                 return;
+//             }
+//         }
+//         current = current->next;
+//     }
+//     printf("No token found with ID: %d\n", array_index);
+// }
 
 void	input_redirection(t_data *data, char **array)
 {
 	if (array[data->index + 1])
 	{
-		if (data->token)
-			compare_and_print_type(data->index, array, data->token);
 		if (!access(array[data->index + 1], F_OK))
 		{
 			open_fdin(data, array[data->index + 1]);
