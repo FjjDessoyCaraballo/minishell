@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 15:29:42 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/22 16:40:06 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/25 05:20:44 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,14 @@ char	*access_path(char **path, char *cmd)
 * NEVER NULL THE FIRST PARAMETER!
 */
 int	err_msg(char *obj, char *msg, int err_code)
-{	
+{
 	if (!obj && *msg)
-		printf("%s\n", msg);
+		ft_putendl_fd(msg, 2);
 	else if (*obj && *msg)
-		printf("%s: %s\n", obj, msg);
+	{
+		ft_putstr_fd(obj, 2);
+		ft_putendl_fd(msg, 2);
+	}
 	return (err_code);
 }
 

@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/23 17:57:13 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/25 18:03:22 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,6 @@ int	execution(t_data *data, t_env **env_ll)
 		data->status = built_ins(data, token, env_ll);
 	else
 		data->status = execution_prepping(data, token, env_ll);
-
 	return (data->status);
 }
 
@@ -68,7 +67,7 @@ int	execution_prepping(t_data *data, t_token *token, t_env **env_ll)
 {
 	static pid_t	pids;
 	static char		**cmd_a;
-	
+
 	cmd_a = cl_to_array(token);
 	if (!cmd_a)
 		return (FAILURE);
@@ -194,10 +193,11 @@ void	ft_exec(t_data *data, t_env **env_ll,  char **cmd_array)
 		path = loop_path_for_binary(cmd_array[0], data->binary_paths);
 		if (!path)
 		{
+			err_msg(cmd_array[0], NO_EXEC, 127);
 			free_array(cmd_array);
 			free_all_ll(env_ll);
 			free_data(data, NULL, NULL);
-			exit(127);
+			exit(0);
 		}
 	}
 	free_tokens(data->token);
@@ -206,4 +206,3 @@ void	ft_exec(t_data *data, t_env **env_ll,  char **cmd_array)
 		execution_absolute_path(data, cmd_array);
 	execution_with_path(data, cmd_array, path);
 }
-

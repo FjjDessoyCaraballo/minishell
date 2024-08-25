@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 13:30:29 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/23 16:52:03 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/25 04:09:56 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ void	ft_builtin_exec(t_data *data, t_token *token, t_env **env_ll)
 	status = built_ins(data, token, env_ll);
 	exit(status);
 }
+
 int	check_path_unset(t_env **env_ll)
 {
 	t_env *tmp;
