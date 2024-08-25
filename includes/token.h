@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 16:27:10 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/08/25 23:12:05 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/25 23:20:57 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,8 @@ char	*ft_strncpy(char *s1, const char *s2, int n);
 //* ---------------------------------------------- */
 t_token	*find_token(t_token *token, t_type type);
 int		search_token_type(t_token *token, t_type type);
+int		ft_isalpha_str(const char *str);
+
 
 //* ---------------------------------------------- */
 //              src/parse/init_token.c             //
