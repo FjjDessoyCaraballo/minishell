@@ -6,11 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2024/08/25 23:20:40 by walnaimi         ###   ########.fr       */
-=======
-/*   Updated: 2024/08/25 21:55:12 by walnaimi         ###   ########.fr       */
->>>>>>> 922b2ba (testing array to token)
+/*   Updated: 2024/08/25 23:25:14 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
