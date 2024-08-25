@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 12:23:49 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/08/25 21:31:05 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/25 22:24:32 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,32 @@ int	token_only_arg(t_data *data)
 	return (SUCCESS);
 }
 
+void remove_last_empty_token(t_token **head)
+{
+    if (!head || !(*head))  // Check if the list is empty
+        return;
 
+    t_token *current = *head;
+    t_token *prev = NULL;
+
+    // Traverse the list to find the second-to-last token
+    while (current->next != NULL)
+    {
+        prev = current;
+        current = current->next;
+    }
+
+    // If the last token's fields are all NULL, remove it
+    if (current->value == NULL && current->type == 0 && current->id == 0)
+    {
+        if (prev)
+            prev->next = NULL; // Detach the last token
+        else
+            *head = NULL; // Handle case where the list only had one node
+
+        free(current); // Free the last empty token
+    }
+}
 
 /**
  * Here we are prompting the user to give input with the readline() and
@@ -114,13 +139,16 @@ int	sniff_line(t_data *data)
 		free(data->line_read);
 		return (963);
 	}
+	remove_last_empty_token(&(data->token));
 	check_and_mark_empty_tokens(data->token);
+	if(data->token != NULL)
+		print_tokens(data);
 	free(data->line_read);
-	if (syntax_check(data->token) == FAILURE)
-	{
-		data->status = 2;
-		return (2);
-	}
+	// if (syntax_check(data->token) == FAILURE)
+	// {
+	// 	data->status = 2;
+	// 	return (2);
+	// }
 	token_only_arg(data);
 	data->piped = false;
 	data->heredoc_exist = false;

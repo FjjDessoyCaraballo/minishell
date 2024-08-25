@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils2.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bposa <bposa@student.hive.fi>              +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 10:19:57 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/24 22:52:44 by bposa            ###   ########.fr       */
+/*   Updated: 2024/08/25 22:30:00 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,11 +40,12 @@ char	**cl_to_array(t_token *token)
 	head = token;
 	if (alloc_memory(&pipe_array, &instruction, &token) == FAILURE)
 		return (NULL);
-	while (head)
+	while (head->value)
 	{
 		if (fill_instr_loop(&instruction, &head) == FAILURE)
 			return (free_arr_retnull(pipe_array));
 		pipe_array[i] = ft_strdup(instruction);
+		printf("%s\n", pipe_array[i]);
 		if (!pipe_array[i])
 			return (NULL);
 		i++;
