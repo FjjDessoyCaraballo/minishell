@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   line_handler.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bposa <bposa@student.hive.fi>              +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 12:23:49 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/08/25 20:20:51 by bposa            ###   ########.fr       */
+/*   Updated: 2024/08/25 23:14:23 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ void	setup(t_data *data)
 	data->env_len = total_env_len(data->envll);
 	if (data->status == 963)
 		data->status = 2;
+	else if (data->no_cmd_flag == 1)
+		data->status = 127;
 }
 
 void	check_and_mark_empty_tokens(t_token *first_token)
@@ -61,6 +63,36 @@ void	check_and_mark_empty_tokens(t_token *first_token)
 		current_token = current_token->next;
 	}
 }
+
+int	token_only_arg(t_data *data)
+{
+	t_token	*head;
+	int		expect_command;
+
+	head = data->token;
+	expect_command = 1;
+	data->no_cmd_flag = 0;
+	while (head)
+	{
+		if (head->type == PIPE)
+		{
+			expect_command = 1;
+			data->no_cmd_flag = 1;
+		}
+		else if (expect_command && head->type == ARG)
+			data->no_cmd_flag = 1;
+		else if (head->type == COMMAND || head->type == BUILTIN)
+		{
+			expect_command = 0;
+			data->no_cmd_flag = 0;
+		}
+		head = head->next;
+	}
+
+	return (SUCCESS);
+}
+
+
 
 /**
  * Here we are prompting the user to give input with the readline() and
@@ -87,6 +119,7 @@ int	sniff_line(t_data *data)
 		data->status = 2;
 		return (2);
 	}
+	token_only_arg(data);
 	data->piped = false;
 	data->heredoc_exist = false;
 	if (count_token(data->token, PIPE) >= 1)

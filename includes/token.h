@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bposa <bposa@student.hive.fi>              +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/02 11:35:39 by lstorey           #+#    #+#             */
-/*   Updated: 2024/08/24 20:08:39 by bposa            ###   ########.fr       */
+/*   Created: 2024/07/15 16:27:10 by walnaimi          #+#    #+#             */
+/*   Updated: 2024/08/25 23:12:05 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,17 @@ typedef struct s_token
 	struct s_token	*next;
 	struct s_token	*prev;
 }		t_token;
+
+// typedef struct s_hdoc_exp
+// {
+// 	t_env *envll;
+// 	int		num_of_envs;
+// 	int		env_len;
+// 	int		s_quote_o;
+// 	int		dbl_q;
+	
+	
+// }
 
 typedef struct s_vars
 {

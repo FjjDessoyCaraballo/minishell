@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 13:03:21 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/23 22:00:42 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/25 23:17:39 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	find_redirection(char **array)
 	return (FAILURE);
 }
 
-void redirections_handling(t_data *data, char **array)
+void	redirections_handling(t_data *data, char **array)
 {
 	int	last_heredoc_index;
 
@@ -76,28 +76,38 @@ void redirections_handling(t_data *data, char **array)
 	}
 }
 
-int here_doc(char *delimiter)
+void	process_and_write_input(char *input, int *pipe_fd, t_data *data)
 {
-    static char *input;
-    int pipe_fd[2];
-    
-    if(pipe(pipe_fd) == -1)
-        exit(err_msg(NULL, "pipe error", 1));
-    while (1)
-    {
+	char	*exp_input;
+
+	exp_input = expand_env_variables(input, data);
+	write(pipe_fd[1], exp_input, ft_strlen(exp_input));
+	free_null(exp_input);
+}
+
+int	here_doc(char *delimiter, t_data *data)
+{
+	static char	*input;
+	int			pipe_fd[2];
+
+	if (pipe(pipe_fd) == -1)
+		exit(err_msg(NULL, "pipe error", 1));
+
+	while (1)
+	{
 		g_exit_code = HEREDOC;
-        input = readline("8==D ");
+		input = readline("8==D ");
 		if (!input)
 		{
 			close(pipe_fd[1]);
 			return (pipe_fd[0]);
 		}
-        if (!ft_strncmp(input, delimiter, ft_strlen(delimiter)))
-            break ;
-        write(pipe_fd[1], input, ft_strlen(input));
-        write(pipe_fd[1], "\n", 1);
-        free(input);
-    }
-    close(pipe_fd[1]);
-    return(pipe_fd[0]);
+		if (!ft_strncmp(input, delimiter, ft_strlen(delimiter)))
+			break ;
+		process_and_write_input(input, pipe_fd, data);
+		write(pipe_fd[1], "\n", 1);
+		free_null(input);
+	}
+	close(pipe_fd[1]);
+	return (pipe_fd[0]);
 }

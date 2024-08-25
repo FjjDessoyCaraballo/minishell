@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils1.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bposa <bposa@student.hive.fi>              +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 15:29:42 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/24 23:18:42 by bposa            ###   ########.fr       */
+/*   Updated: 2024/08/25 23:12:56 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,14 @@ char	*access_path(char **path, char *cmd)
 * NEVER NULL THE FIRST PARAMETER!
 */
 int	err_msg(char *obj, char *msg, int err_code)
-{	
+{
 	if (!obj && *msg)
-		printf("%s\n", msg);
+		ft_putendl_fd(msg, 2);
 	else if (*obj && *msg)
-		printf("%s: %s\n", obj, msg);
+	{
+		ft_putstr_fd(obj, 2);
+		ft_putendl_fd(msg, 2);
+	}
 	return (err_code);
 }
 

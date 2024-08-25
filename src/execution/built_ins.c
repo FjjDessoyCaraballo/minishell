@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 14:18:24 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/23 20:31:45 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/25 05:56:41 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	built_ins(t_data *data, t_token *token, t_env **env_ll)
 	else if (!ft_strncmp(token->value, "exit", 5))
 		get_the_hell_out(data, token, env_ll);
 	else if (!ft_strncmp(token->value, "echo", 5))
-		status = yodeling(token);
+		status = yodeling(token, data);
 	else if (!ft_strncmp(token->value, "cd", 3))
 		status = shell_cd(token, data);
 	else if (!ft_strncmp(token->value, "export", 7))
@@ -140,15 +140,19 @@ int	handle_arg_type(t_token *head)
 	return (SUCCESS);
 }
 
-int	yodeling(t_token *token)
+int	yodeling(t_token *token,t_data *data)
 {
-    t_token *head;
-    head = token;
-    if (head->next->value == NULL)
-        return (printf("\n"), SUCCESS);
-    if (head->next->type == FLAG)
-        return handle_flag_type(head);
-    if (head != NULL && head->next != NULL && head->next->type == ARG)
-        return handle_arg_type(head);
-    return (FAILURE);
+	t_token *head;
+
+	head = token;
+	if (head->next->value == NULL)
+		return (printf("\n"), SUCCESS);
+	if (head->next->type == FLAG)
+	{
+		data->status = 0;
+		return (handle_flag_type(head));
+	}
+	if (head != NULL && head->next != NULL && head->next->type == ARG)
+		return (handle_arg_type(head));
+	return (FAILURE);
 }
