@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_env_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bposa <bposa@student.hive.fi>              +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 14:53:29 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/08/25 18:03:05 by bposa            ###   ########.fr       */
+/*   Updated: 2024/08/25 23:09:39 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,8 @@ void	copy_env_value(char *result, const char *env_value, t_index *num)
 void	setup_env_variables(const char *input, t_data *data)
 {
 	data->num_of_envs = count_matching_keys(data->envll, input);
-	// dprintf(2, "%i\n", data->num_of_envs);
 	if (data->num_of_envs == 0)
 		data->num_of_envs = 1;
-	// dprintf(2, "%i\n", data->num_of_envs);
 	data->s_quote_o = 0;
 	data->dbl_q = 0;
 }
