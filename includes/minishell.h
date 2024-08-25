@@ -6,7 +6,11 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2024/08/25 21:55:12 by walnaimi         ###   ########.fr       */
+=======
+/*   Updated: 2024/08/25 23:25:14 by walnaimi         ###   ########.fr       */
+>>>>>>> BrunoPosa-main
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,8 +190,7 @@ void	execution_absolute_path(t_data *data, char **array);
 
 /* in execution_utils2.c */
 char	**cl_to_array(t_token *token);
-int		alloc_memory(char ***pipe_array, char **instruction, t_token **token);
-int		fill_instr_loop(char **instruction, t_token **head);
+char	*build_instruction(t_token **head);
 int		checking_access(t_data *data, char *instruction);
 char	*get_binary(char *instruction);
 
@@ -259,7 +262,10 @@ void	*free_arr_retnull(char **array);
 int		free_retstatus(char *array, int status);
 void	free_tokens(t_token *head);
 void	free_gang(t_data *data);
-void	free_path(t_token *head);
+void	free_my_boi(char **paths);
+
+void	free_my_boi(char **paths);
+
 
 void	free_my_boi(char **paths);
 

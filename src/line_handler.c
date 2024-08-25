@@ -6,7 +6,11 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 12:23:49 by walnaimi          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2024/08/25 22:49:48 by walnaimi         ###   ########.fr       */
+=======
+/*   Updated: 2024/08/25 23:30:14 by walnaimi         ###   ########.fr       */
+>>>>>>> BrunoPosa-main
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,10 +112,15 @@ int	sniff_line(t_data *data)
 	setup(data);
 	line_tokenization(data);
 	if (data->status == 963)
+<<<<<<< HEAD
 	{
 		free(data->line_read);
 		return (963);
 	}
+=======
+		return (free_retstatus(data->line_read, 963));
+	data->status = 0;
+>>>>>>> BrunoPosa-main
 	check_and_mark_empty_tokens(data->token);
 	free(data->line_read);
 	if (syntax_check(data->token) == FAILURE)

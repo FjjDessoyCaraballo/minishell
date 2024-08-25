@@ -53,7 +53,6 @@ SRC_FILES = main.c\
 			src/parse/modify_str.c\
 			src/parse/modify_str_utils.c\
 			src/parse/helper.c\
-			token_test.c\
 
 # Object files
 OBJ_FILES = $(SRC_FILES:.c=.o)

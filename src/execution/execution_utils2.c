@@ -6,7 +6,11 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 10:19:57 by fdessoy-          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2024/08/25 22:48:43 by walnaimi         ###   ########.fr       */
+=======
+/*   Updated: 2024/08/25 23:30:13 by walnaimi         ###   ########.fr       */
+>>>>>>> BrunoPosa-main
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,74 +37,55 @@ char	**cl_to_array(t_token *token)
 {
 	t_token	*head;
 	char	**pipe_array;
-	char	*instruction;
 	int		i;
 
 	i = 0;
 	head = token;
-	if (alloc_memory(&pipe_array, &instruction, &token) == FAILURE)
+	pipe_array = ft_calloc((count_token(token, PIPE) + 2), sizeof(char *));
+	if (!pipe_array)
 		return (NULL);
 	while (head->value)
 	{
-		if (fill_instr_loop(&instruction, &head) == FAILURE)
-			return (free_arr_retnull(pipe_array));
-		pipe_array[i] = ft_strdup(instruction);
+		pipe_array[i] = build_instruction(&head);
 		if (!pipe_array[i])
-			return (NULL);
+			return (free_arr_retnull(pipe_array));
 		i++;
-		if (!head || head->type != PIPE)
+		if (head && head->type == PIPE)
+			head = head->next;
+		else
 			break ;
-		head = head->next;
 	}
-	free(instruction);
-	instruction = NULL;
 	pipe_array[i] = NULL;
 	return (pipe_array);
 }
 
-int	fill_instr_loop(char **instruction, t_token **head)
+char	*build_instruction(t_token **head)
 {
+	char	*instruction;
 	char	*tmp;
 
 	tmp = NULL;
-	(*instruction)[0] = '\0';
+	instruction = ft_strdup("");
 	while ((*head) && (*head)->type != PIPE)
 	{
-		tmp = ft_strjoin(*instruction, (*head)->value);
-		free(*instruction);
+		tmp = ft_strjoin(instruction, (*head)->value);
+		free(instruction);
 		if (!tmp)
-			return (FAILURE);
-		*instruction = tmp;
-		tmp = ft_strjoin(*instruction, " ");
-		free(*instruction);
+			return (NULL);
+		instruction = tmp;
+		tmp = ft_strjoin(instruction, " ");
+		free(instruction);
 		if (!tmp)
-			return (FAILURE);
-		*instruction = tmp;
+			return (NULL);
+		instruction = tmp;
 		if (!(*head)->next || !(*head)->next->value)
 			break ;
 		(*head) = (*head)->next;
 	}
-	if ((*instruction)[ft_strlen(*instruction) - 1] == ' ')
-		(*instruction)[ft_strlen(*instruction) - 1] = '\0';
-	return (SUCCESS);
-}
-
-int	alloc_memory(char ***pipe_array, char **instruction, t_token **token)
-{
-	int		nb_of_instructions;
-
-	nb_of_instructions = count_token((*token), PIPE) + 1;
-	(*pipe_array) = (char **)malloc(sizeof(char *) * (nb_of_instructions + 1));
-	if (!(*pipe_array))
-		return (FAILURE);
-	(*instruction) = ft_strdup("");
-	if (!instruction)
-	{
-		free_null((*pipe_array));
-		pipe_array = NULL;
-		return (FAILURE);
-	}
-	return (SUCCESS);
+	head = NULL;
+	if (instruction[ft_strlen(instruction) - 1] == ' ')
+		instruction[ft_strlen(instruction) - 1] = '\0';
+	return (instruction);
 }
 
 /** checking_access() is mainly a last check for general binaries that

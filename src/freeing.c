@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   freeing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: bposa <bposa@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 22:21:18 by bposa             #+#    #+#             */
-/*   Updated: 2024/08/25 10:00:31 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/25 19:14:28 by bposa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,8 @@ void	*free_arr_retnull(char **array)
 	int	i;
 
 	i = 0;
+	if (!array)
+		return (NULL);
 	while (array[i])
 	{
 		free(array[i]);

@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils1.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bposa <bposa@student.hive.fi>              +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 15:29:42 by fdessoy-          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2024/08/25 05:20:44 by walnaimi         ###   ########.fr       */
+=======
+/*   Updated: 2024/08/25 23:12:56 by walnaimi         ###   ########.fr       */
+>>>>>>> BrunoPosa-main
 /*                                                                            */
 /* ************************************************************************** */
 
