@@ -99,7 +99,6 @@ int	check_path_unset(t_env **env_ll)
 	}
 	return (FAILURE);
 }
-
 void	handle_pipefd_readend(t_data *data)
 {
 	close(data->pipe_fd[1]);

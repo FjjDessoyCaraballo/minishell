@@ -45,7 +45,7 @@
 # define ERR "Error\n"
 # define MALLOC "Malloc failure"
 # define EXIT "Exit\n"
-# define NO_EXEC "Command not found"
+# define NO_EXEC ": command not found"
 # define NO_PERMISSION "Permission denied"
 # define HEREDOC_FAILURE "Unable to create temporary for here_doc"
 # define HEREDOC_FAILURE2 "Unable to read temporary for here_doc"
@@ -104,6 +104,7 @@ typedef struct s_data
 	int			fd_out;
 	char		*home_pwd;
 	int			status;
+	int			no_cmd_flag;
 	char		**cmd;
 	t_token		*token;
 	t_token		*first_node;
@@ -167,7 +168,7 @@ int		syntax_check(t_token *token);
 /* in redirections.c */
 int		find_redirection(char **array);
 void	redirections_handling(t_data *data, char **array);
-int		here_doc(char *delimiter);
+int		here_doc(char *delimiter, t_data *data);
 
 /* in redirections_utils.c */
 void	input_redirection(t_data *data, char **array);
@@ -240,7 +241,7 @@ int		built_ins(t_data *data, t_token *token, t_env **env_ll);
 int		print_env(t_env *env_ll);
 int		print_pwd(void);
 void	get_the_hell_out(t_data *data, t_token *token, t_env **env_ll);
-int		yodeling(t_token *token);
+int		yodeling(t_token *token, t_data *data);
 
 /* in built_ins2.c */
 int		shell_cd(t_token *token, t_data *data);

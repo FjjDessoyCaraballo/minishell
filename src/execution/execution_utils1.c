@@ -42,11 +42,14 @@ char	*access_path(char **path, char *cmd)
 * NEVER NULL THE FIRST PARAMETER!
 */
 int	err_msg(char *obj, char *msg, int err_code)
-{	
+{
 	if (!obj && *msg)
-		printf("%s\n", msg);
+		ft_putendl_fd(msg, 2);
 	else if (*obj && *msg)
-		printf("%s: %s\n", obj, msg);
+	{
+		ft_putstr_fd(obj, 2);
+		ft_putendl_fd(msg, 2);
+	}
 	return (err_code);
 }
 
