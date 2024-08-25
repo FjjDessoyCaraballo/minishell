@@ -6,11 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 10:19:57 by fdessoy-          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2024/08/25 22:48:43 by walnaimi         ###   ########.fr       */
-=======
-/*   Updated: 2024/08/25 23:30:13 by walnaimi         ###   ########.fr       */
->>>>>>> BrunoPosa-main
+/*   Updated: 2024/08/25 23:40:54 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +40,7 @@ char	**cl_to_array(t_token *token)
 	pipe_array = ft_calloc((count_token(token, PIPE) + 2), sizeof(char *));
 	if (!pipe_array)
 		return (NULL);
-	while (head->value)
+	while (head)
 	{
 		pipe_array[i] = build_instruction(&head);
 		if (!pipe_array[i])
