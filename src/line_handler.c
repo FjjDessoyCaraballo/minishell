@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 12:23:49 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/08/25 01:33:29 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/25 21:31:05 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ void	setup(t_data *data)
 	data->env_len = total_env_len(data->envll);
 	if (data->status == 963)
 		data->status = 2;
+	else if (data->no_cmd_flag == 1)
+		data->status = 127;
 }
 
 void	check_and_mark_empty_tokens(t_token *first_token)
@@ -62,6 +64,36 @@ void	check_and_mark_empty_tokens(t_token *first_token)
 	}
 }
 
+int	token_only_arg(t_data *data)
+{
+	t_token	*head;
+	int		expect_command;
+
+	head = data->token;
+	expect_command = 1;
+	data->no_cmd_flag = 0;
+	while (head)
+	{
+		if (head->type == PIPE)
+		{
+			expect_command = 1;
+			data->no_cmd_flag = 1;
+		}
+		else if (expect_command && head->type == ARG)
+			data->no_cmd_flag = 1;
+		else if (head->type == COMMAND || head->type == BUILTIN)
+		{
+			expect_command = 0;
+			data->no_cmd_flag = 0;
+		}
+		head = head->next;
+	}
+
+	return (SUCCESS);
+}
+
+
+
 /**
  * Here we are prompting the user to give input with the readline() and
  * tokenizing afterwards. After tokenizing, we are using the tokens to check
@@ -82,7 +114,6 @@ int	sniff_line(t_data *data)
 		free(data->line_read);
 		return (963);
 	}
-	data->status = 0;
 	check_and_mark_empty_tokens(data->token);
 	free(data->line_read);
 	if (syntax_check(data->token) == FAILURE)
@@ -90,6 +121,7 @@ int	sniff_line(t_data *data)
 		data->status = 2;
 		return (2);
 	}
+	token_only_arg(data);
 	data->piped = false;
 	data->heredoc_exist = false;
 	if (count_token(data->token, PIPE) >= 1)

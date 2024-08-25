@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: bposa <bposa@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/02 11:35:39 by lstorey           #+#    #+#             */
-/*   Updated: 2024/08/24 20:08:39 by bposa            ###   ########.fr       */
+/*   Created: 2024/07/15 16:27:10 by walnaimi          #+#    #+#             */
+/*   Updated: 2024/08/25 21:25:01 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,17 @@ typedef struct s_token
 	struct s_token	*prev;
 }		t_token;
 
+// typedef struct s_hdoc_exp
+// {
+// 	t_env *envll;
+// 	int		num_of_envs;
+// 	int		env_len;
+// 	int		s_quote_o;
+// 	int		dbl_q;
+	
+	
+// }
+
 typedef struct s_vars
 {
 	int	i;
@@ -104,6 +115,8 @@ char	*ft_strncpy(char *s1, const char *s2, int n);
 //* ---------------------------------------------- */
 t_token	*find_token(t_token *token, t_type type);
 int		search_token_type(t_token *token, t_type type);
+int		ft_isalpha_str(const char *str);
+
 
 //* ---------------------------------------------- */
 //              src/parse/init_token.c             //

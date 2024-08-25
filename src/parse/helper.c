@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 15:08:47 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/08/23 22:46:16 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/25 21:24:48 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,27 @@ int	search_token_type(t_token *token, t_type type)
 		if (head->type == type)
 			return (1);
 		head = head->next;
+	}
+	return (0);
+}
+
+/**
+ * Checks if a string contains only alphabetic characters.
+ *
+ * @param str The string to check.
+ *
+ * @return 1 if the string contains only alphabetic characters, 0 otherwise.
+ */
+int	ft_isalpha_str(const char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (ft_isalpha(str[i]))
+			return (1);
+		i++;
 	}
 	return (0);
 }

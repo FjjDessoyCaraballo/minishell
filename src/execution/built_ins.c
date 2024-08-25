@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 14:18:24 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/23 20:31:45 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/25 21:28:55 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,13 @@ void	get_the_hell_out(t_data *data, t_token *token, t_env **env_ll)
 	ft_printf("exit\n");
 	if (token->next != NULL && token->next->value != NULL)
 	{
+		if (ft_isalpha_str(token->next->value))
+		{
+			status = 2;
+			err_msg(token->next->value, SYNTAX_EXIT, status);
+			free_gang(data);
+			exit(status);
+		}
 		status = ft_atoi(token->next->value);
 		free_gang(data);
 		exit(status);
@@ -100,20 +107,18 @@ int	handle_flag_type(t_token *head)
 		if (head->value == NULL)
 			return (SUCCESS);
 	}
-	while (head->value != NULL)
+	while (head != NULL)
 	{
-		while (head->value != NULL && head->type == ARG
-			&& head->value[0] == '\0')
-			head = head->next;
-		if (head->value == NULL)
-			return (SUCCESS);
-		if (head->type == RED_IN || head->type == RED_OUT
-			|| head->type == APP || head->type == HEREDOC)
-			break ;
-		printf("%s", head->value);
-		if (head->next->value != NULL && head->next->empty == false)
-			printf(" ");
+		if (head->value != NULL && head->value[0] != '\0')
+		{
+			if (head->type == RED_IN || head->type == RED_OUT
+				|| head->type == APP || head->type == HEREDOC)
+				break ;
+			printf("%s", head->value);
+		}
 		head = head->next;
+		if (head != NULL && head->value != NULL && head->value[0] != '\0')
+			printf(" ");
 	}
 	return (SUCCESS);
 }
@@ -142,13 +147,14 @@ int	handle_arg_type(t_token *head)
 
 int	yodeling(t_token *token)
 {
-    t_token *head;
-    head = token;
-    if (head->next->value == NULL)
-        return (printf("\n"), SUCCESS);
-    if (head->next->type == FLAG)
-        return handle_flag_type(head);
-    if (head != NULL && head->next != NULL && head->next->type == ARG)
-        return handle_arg_type(head);
-    return (FAILURE);
+	t_token	*head;
+
+	head = token;
+	if (head->next->value == NULL)
+		return (printf("\n"), SUCCESS);
+	if (head->next->type == FLAG)
+		return (handle_flag_type(head));
+	if (head != NULL && head->next != NULL && head->next->type == ARG)
+		return (handle_arg_type(head));
+	return (FAILURE);
 }

@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 12:38:16 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/23 17:35:32 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/25 04:26:07 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,6 @@ void	initializer(t_data *data, t_env **env_ll, char **env)
 	data->status = 0;
 	data->envll = *env_ll;
 	data->in_quotes = 0;
-	data->echoed = false;
 	data->echoed = false;
 	data->ignore_cmd = false;
 }

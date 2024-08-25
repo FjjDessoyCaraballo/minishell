@@ -6,7 +6,7 @@
 /*   By: bposa <bposa@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/25 00:42:18 by bposa            ###   ########.fr       */
+/*   Updated: 2024/08/25 21:31:31 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@
 # define ERR "Error\n"
 # define MALLOC "Malloc failure"
 # define EXIT "Exit\n"
-# define NO_EXEC "Command not found"
+# define NO_EXEC ": command not found"
 # define NO_PERMISSION "Permission denied"
 # define HEREDOC_FAILURE "Unable to create temporary for here_doc"
 # define HEREDOC_FAILURE2 "Unable to read temporary for here_doc"
@@ -54,6 +54,7 @@
 # define ERR_ARG "Wrong number of arguments, Karen\n"
 # define ERR_EXP "export: not a valid identifier\n"
 # define EXEC_ENV_NULL "envir"
+# define SYNTAX_EXIT ": exit: numeric argument required"
 # define REDIRECT_OUT 222
 # define REDIRECT_IN 111
 # define HERE_DOC 333
@@ -104,6 +105,7 @@ typedef struct s_data
 	int			fd_out;
 	char		*home_pwd;
 	int			status;
+	int			no_cmd_flag;
 	char		**cmd;
 	t_token		*token;
 	t_token		*first_node;
@@ -167,7 +169,7 @@ int		syntax_check(t_token *token);
 /* in redirections.c */
 int		find_redirection(char **array);
 void	redirections_handling(t_data *data, char **array);
-int		here_doc(char *delimiter);
+int		here_doc(char *delimiter, t_data *data);
 
 /* in redirections_utils.c */
 void	input_redirection(t_data *data, char **array);
