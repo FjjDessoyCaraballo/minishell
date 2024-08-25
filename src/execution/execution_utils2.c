@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils2.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bposa <bposa@student.hive.fi>              +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 10:19:57 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/25 19:11:57 by bposa            ###   ########.fr       */
+/*   Updated: 2024/08/25 23:23:25 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ char	**cl_to_array(t_token *token)
 	pipe_array = ft_calloc((count_token(token, PIPE) + 2), sizeof(char *));
 	if (!pipe_array)
 		return (NULL);
-	while (head)
+	while (head->value)
 	{
 		pipe_array[i] = build_instruction(&head);
 		if (!pipe_array[i])

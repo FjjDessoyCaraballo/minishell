@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 10:03:43 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/25 19:53:36 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/25 22:12:25 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,12 @@ int	wow_loop(t_data *data, t_env **env_ll)
 			printf("boobs\n");
 			break ;
 		}
+		
 		else if (status == 0)
+		{
+			dprintf(2,"wowzies\n");
 			execution(data, env_ll);
+		}
 		free_gang(data);
 	}
 	return (status);

@@ -6,7 +6,11 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 16:27:10 by walnaimi          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2024/08/25 23:20:57 by walnaimi         ###   ########.fr       */
+=======
+/*   Updated: 2024/08/25 22:00:14 by walnaimi         ###   ########.fr       */
+>>>>>>> 922b2ba (testing array to token)
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,9 +110,7 @@ typedef struct s_index
 }	t_index;
 
 char	*ft_strncpy(char *s1, const char *s2, int n);
-/*****************************************
- * modify_str.c
- *****************************************/
+void	print_tokens(t_data *data);
 
 //* ---------------------------------------------- */
 //              src/parse/helper.c                 //
