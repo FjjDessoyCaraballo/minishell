@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/25 23:15:47 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/25 23:18:53 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	execution_prepping(t_data *data, t_token *token, t_env **env_ll)
 
 	cmd_a = cl_to_array(token);
 	if (!cmd_a)
-		return (FAILURE);
+		return (0);
 	if (pipe(data->sync_pipe) == -1)
 		return (err_msg(NULL, "Broken pipe\n", 141));
 	data->status = forking(data, env_ll, cmd_a, pids);
