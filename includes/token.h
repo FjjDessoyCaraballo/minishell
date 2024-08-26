@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 16:27:10 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/08/25 23:34:37 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/26 01:54:07 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,17 +71,6 @@ typedef struct s_token
 	struct s_token	*prev;
 }		t_token;
 
-// typedef struct s_hdoc_exp
-// {
-// 	t_env *envll;
-// 	int		num_of_envs;
-// 	int		env_len;
-// 	int		s_quote_o;
-// 	int		dbl_q;
-	
-	
-// }
-
 typedef struct s_vars
 {
 	int	i;
@@ -114,7 +103,6 @@ void	print_tokens(t_data *data);
 t_token	*find_token(t_token *token, t_type type);
 int		search_token_type(t_token *token, t_type type);
 int		ft_isalpha_str(const char *str);
-
 
 //* ---------------------------------------------- */
 //              src/parse/init_token.c             //
