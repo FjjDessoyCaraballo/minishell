@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 13:03:21 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/23 22:00:42 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/26 14:03:35 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,7 @@ int	find_redirection(char **array)
 
 void redirections_handling(t_data *data, char **array)
 {
-	int	last_heredoc_index;
-
-	last_heredoc_index = last_heredoc(array);
+	data->last_heredoc_index = last_heredoc(array);
 	data->index = 0;
 	while (array[data->index])
 	{
@@ -58,7 +56,7 @@ void redirections_handling(t_data *data, char **array)
 			&& ft_strlen(array[data->index]) == 1)
 			input_redirection(data, array);
 		else if (!ft_strncmp(array[data->index], ">", 1)
-			&& ft_strlen(array[data->index]) == 1)
+				&& ft_strlen(array[data->index]) == 1)
 			output_redirection(data, array);
 		else if (!ft_strncmp(array[data->index], ">>", 2)
 			&& ft_strlen(array[data->index]) == 2)
@@ -66,7 +64,7 @@ void redirections_handling(t_data *data, char **array)
 		else if (!ft_strncmp(array[data->index], "<<", 2)
 			&& ft_strlen(array[data->index]) == 2)
 		{
-			if (data->index == last_heredoc_index)
+			if (data->index == data->last_heredoc_index)
 			{
 				heredoc_redirection(data, array);
 				write(data->sync_pipe[1], "1", 1);
@@ -76,7 +74,7 @@ void redirections_handling(t_data *data, char **array)
 	}
 }
 
-int here_doc(char *delimiter)
+int here_doc(char *delimiter, t_data *data)
 {
     static char *input;
     int pipe_fd[2];
@@ -94,6 +92,7 @@ int here_doc(char *delimiter)
 		}
         if (!ft_strncmp(input, delimiter, ft_strlen(delimiter)))
             break ;
+		input = expand_env_variables(input, data);
         write(pipe_fd[1], input, ft_strlen(input));
         write(pipe_fd[1], "\n", 1);
         free(input);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils2.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bposa <bposa@student.hive.fi>              +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 10:19:57 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/24 22:52:44 by bposa            ###   ########.fr       */
+/*   Updated: 2024/08/26 14:09:14 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ int	fill_instr_loop(char **instruction, t_token **head)
 
 int	alloc_memory(char ***pipe_array, char **instruction, t_token **token)
 {
-	int		nb_of_instructions;
+	int	nb_of_instructions;
 
 	nb_of_instructions = count_token((*token), PIPE) + 1;
 	(*pipe_array) = (char **)malloc(sizeof(char *) * (nb_of_instructions + 1));
@@ -114,35 +114,35 @@ int	alloc_memory(char ***pipe_array, char **instruction, t_token **token)
  * RETURN VALUES: checking_access() either returns SUCCESS or FAILURE. If
  * FAILURE is returned, it means that your binary cannot be found in the
  * general concatenated paths in the environment pointers.
- */
-int	checking_access(t_data *data, char *instruction)
-{
-	int		i;
-	char	*binary_path;
-	char	*binary;
+ */ // DEPRECATED
+// int	checking_access(t_data *data, char *instruction)
+// {
+// 	int		i;
+// 	char	*binary_path;
+// 	char	*binary;
 
-	i = 0;
-	binary = get_binary(instruction);
-	while (data->binary_paths[i])
-	{
-		binary_path = ft_strsjoin(data->binary_paths[i++], binary, '/');
-		if (!access(binary_path, F_OK))
-		{
-			if (!access(binary_path, X_OK))
-			{
-				free(binary);
-				return (free_retstatus(binary_path, SUCCESS));
-			}
-			ft_putstr_fd(binary, 2);
-			ft_putstr_fd(": command not found\n", 2);
-			free(binary);
-			return (free_retstatus(binary_path, FAILURE));
-		}
-		free(binary_path);
-	}
-	free(binary);
-	return (FAILURE);
-}
+// 	i = 0;
+// 	binary = get_binary(instruction);
+// 	while (data->binary_paths[i])
+// 	{
+// 		binary_path = ft_strsjoin(data->binary_paths[i++], binary, '/');
+// 		if (!access(binary_path, F_OK))
+// 		{
+// 			if (!access(binary_path, X_OK))
+// 			{
+// 				free(binary);
+// 				return (free_retstatus(binary_path, SUCCESS));
+// 			}
+// 			ft_putstr_fd(binary, 2);
+// 			ft_putstr_fd(": command not found\n", 2);
+// 			free(binary);
+// 			return (free_retstatus(binary_path, FAILURE));
+// 		}
+// 		free(binary_path);
+// 	}
+// 	free(binary);
+// 	return (FAILURE);
+// }
 
 /**
  * At this point we have an instruction that should follow this syntax:
@@ -178,4 +178,22 @@ char	*get_binary(char *instruction)
 	}
 	free_array(split_instruction);
 	return (binary);
+}
+
+t_token	*find_redtok(t_token *token)
+{
+	t_token	*tmp;
+
+	tmp = token;
+	while (tmp)
+	{
+		if (find_token(token, RED_IN)
+			|| find_token(token, RED_OUT)
+			|| find_token(token, APPEND)
+			|| find_token(token, HEREDOC))
+			return (tmp);
+		tmp = tmp->next;
+	}
+	tmp = NULL;
+	return (NULL);
 }

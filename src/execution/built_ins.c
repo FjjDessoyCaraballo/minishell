@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 14:18:24 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/23 20:31:45 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/26 15:29:38 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,6 @@ int	built_ins(t_data *data, t_token *token, t_env **env_ll)
 	int	status;
 
 	status = 0;
-	if(token->value == NULL)
-		return (status);
-	data->home_pwd = get_home((*env_ll));
 	if (token->value == NULL)
 		return (status);
 	if (!ft_strncmp(token->value, "env", 4))
@@ -37,8 +34,6 @@ int	built_ins(t_data *data, t_token *token, t_env **env_ll)
 		status = export(token, env_ll);
 	else if (!ft_strncmp(token->value, "unset", 6))
 		status = unset(token, env_ll);
-	else
-		return(err_msg(token->value, NO_EXEC, 127));
 	return (status);
 }
 
@@ -108,7 +103,7 @@ int	handle_flag_type(t_token *head)
 		if (head->value == NULL)
 			return (SUCCESS);
 		if (head->type == RED_IN || head->type == RED_OUT
-			|| head->type == APP || head->type == HEREDOC)
+			|| head->type == APPEND || head->type == HEREDOC)
 			break ;
 		printf("%s", head->value);
 		if (head->next->value != NULL && head->next->empty == false)
@@ -123,12 +118,12 @@ int	handle_arg_type(t_token *head)
 	head = head->next;
 	while (head->value != NULL && head->value[0] == '\0')
 		head = head->next;
-	while (head != NULL)
+	while (head->next != NULL)
 	{
 		if (head->value != NULL && head->value[0] != '\0')
 		{
 			if (head->type == RED_IN || head->type == RED_OUT
-				|| head->type == APP || head->type == HEREDOC)
+				|| head->type == APPEND || head->type == HEREDOC)
 				break ;
 			printf("%s", head->value);
 		}

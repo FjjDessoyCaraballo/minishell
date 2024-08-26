@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 12:38:16 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/23 17:35:32 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/26 11:44:27 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ void	initializer(t_data *data, t_env **env_ll, char **env)
 	ll_env(env_ll, env);
 	find_bin(env_ll, data);
 	heredoc_fds_init(data);
+	data->home_pwd = get_home((*env_ll));
 	data->binary_paths = ft_split(data->bin, ':');
 	if (!data->binary_paths)
 	{

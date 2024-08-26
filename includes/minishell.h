@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bposa <bposa@student.hive.fi>              +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/25 00:42:18 by bposa            ###   ########.fr       */
+/*   Updated: 2024/08/26 15:31:38 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,10 +54,6 @@
 # define ERR_ARG "Wrong number of arguments, Karen\n"
 # define ERR_EXP "export: not a valid identifier\n"
 # define EXEC_ENV_NULL "envir"
-# define REDIRECT_OUT 222
-# define REDIRECT_IN 111
-# define HERE_DOC 333
-# define APP 444
 # define NO_FILE 100
 # define NULL_LINE 5
 # define DIRECTORY 69
@@ -96,6 +92,7 @@ typedef struct s_data
 	char		*bin;
 	int			index;
 	char		*path;
+	int			last_heredoc_index;
 	char		**binary_paths;
 	int			pipe_fd[2];
 	int			sync_pipe[2];
@@ -167,7 +164,7 @@ int		syntax_check(t_token *token);
 /* in redirections.c */
 int		find_redirection(char **array);
 void	redirections_handling(t_data *data, char **array);
-int		here_doc(char *delimiter);
+int		here_doc(char *delimiter, t_data *data);
 
 /* in redirections_utils.c */
 void	input_redirection(t_data *data, char **array);
@@ -184,9 +181,10 @@ void	execution_absolute_path(t_data *data, char **array);
 
 /* in execution_utils2.c */
 char	**cl_to_array(t_token *token);
-int		alloc_memory(char ***pipe_array, char **instruction, t_token **token);
 int		fill_instr_loop(char **instruction, t_token **head);
-int		checking_access(t_data *data, char *instruction);
+int		alloc_memory(char ***pipe_array, char **instruction, \
+					t_token **token);
+t_token	*find_redtok(t_token *token);
 char	*get_binary(char *instruction);
 
 /* in fd_dups.c */
@@ -257,9 +255,10 @@ void	*free_arr_retnull(char **array);
 int		free_retstatus(char *array, int status);
 void	free_tokens(t_token *head);
 void	free_gang(t_data *data);
-void	free_path(t_token *head);
+void	free_my_boi(char **paths);
 
 /* DEPRECATED FUNCTIONS */
+// int		checking_access(t_data *data, char *instruction);
 // int		built_in_or_garbage(t_data *data, t_env **env_ll, t_token *token);
 // int		single_execution(t_data *data, t_token *token, t_env **env_ll);
 // void		single_child(t_data *data, t_token *token, t_env **env_ll);

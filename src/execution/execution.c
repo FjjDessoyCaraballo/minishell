@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bposa <bposa@student.hive.fi>              +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/25 00:42:10 by bposa            ###   ########.fr       */
+/*   Updated: 2024/08/26 15:32:36 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,10 @@ int	execution(t_data *data, t_env **env_ll)
 	data->nb_cmds = count_token(token, PIPE) + 1;
 	if (data->nb_cmds == 0)
 		data->nb_cmds = 1;
-	if ((token->type == BUILTIN) && (!find_token(token, PIPE))
-		&& (ft_strncmp(token->value, "cd", 2)
-			|| ft_strncmp(token->value, "exit", 4)
-			|| ft_strncmp(token->value, "export", 6)))
+	if (!ft_strncmp(token->value, "cd", 2)
+		|| !ft_strncmp(token->value, "export", 6)
+		|| !ft_strncmp(token->value, "unset", 5)
+		|| !ft_strncmp(token->value, "exit", 4))
 		data->status = built_ins(data, token, env_ll);
 	else
 		data->status = execution_prepping(data, token, env_ll);
@@ -161,6 +161,7 @@ void	ft_exec(t_data *data, t_env **env_ll, char **cmd_array)
 		path = loop_path_for_binary(cmd_array[0], data->binary_paths);
 		if (!path)
 		{
+			err_msg(cmd_array[0], NO_EXEC, 0);
 			free_array(cmd_array);
 			free_all_ll(env_ll);
 			free_data(data, NULL, NULL);

@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 15:28:13 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/21 14:07:24 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/26 10:46:48 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,18 +63,9 @@ void        heredoc_redirection(t_data *data, char **array)
 {
 	if (array[data->index + 1])
 	{
-		if (data->piped == false)
-		{
-			data->fd_in = here_doc(array[data->index + 1]);
-			dup2(data->fd_in, STDIN_FILENO);
-			close(data->fd_in);
-		}
-		else if (data->piped == true)
-		{
-			data->fd_in = here_doc(array[data->index + 1]);
-			dup2(data->fd_in, STDIN_FILENO);
-			close(data->fd_in);
-		}
+		data->fd_in = here_doc(array[data->index + 1], data);
+		dup2(data->fd_in, STDIN_FILENO);
+		close(data->fd_in);
 	}
 	else
 		exit(err_msg("'newline'", SYNTAX, 2));        
