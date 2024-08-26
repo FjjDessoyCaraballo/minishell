@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 12:23:49 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/08/25 23:35:01 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/26 13:24:35 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,8 @@ int	sniff_line(t_data *data)
 		return (free_retstatus(data->line_read, 963));
 	data->status = 0;
 	check_and_mark_empty_tokens(data->token);
+	if(data->token->value != NULL)
+		print_tokens(data);
 	free(data->line_read);
 	if (syntax_check(data->token) == FAILURE)
 	{

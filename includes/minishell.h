@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/25 23:34:32 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/26 20:21:39 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,8 @@
 # define PERMISSION_DENIED 126
 # define COMMAND_NOT_FOUND 127
 # define MAX_HEREDOC 1024
+# define HEREDOC_SIG 1
+# define EXEC_SIG 2
 # define SUCCESS 0
 # define FAILURE 1
 

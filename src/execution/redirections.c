@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 13:03:21 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/26 03:21:30 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/26 18:25:34 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,8 +95,8 @@ int	here_doc(char *delimiter, t_data *data)
 
 	while (1)
 	{
-		g_exit_code = HEREDOC;
-		input = readline("8==D ");
+		g_exit_code = HEREDOC_SIG;
+		input = readline(":3 ");
 		if (!input)
 		{
 			close(pipe_fd[1]);

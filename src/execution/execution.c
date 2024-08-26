@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/26 01:33:53 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/26 20:18:11 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ int	execution_prepping(t_data *data, t_token *token, t_env **env_ll)
 	pids = wait(&data->status);
 	while (pids > 0)
 		pids = wait(&data->status);
+	g_exit_code = 0;
 	free_array(cmd_a);
 	return (WEXITSTATUS(data->status));
 }
@@ -96,6 +97,7 @@ int	forking(t_data *data, t_env **env_ll, char **all_cmds, pid_t pids)
 	char	sync_signal;
 
 	data->index = 0;
+	g_exit_code = EXEC_SIG;
 	while (data->index < data->nb_cmds)
 	{
 		if (data->piped == true && pipe(data->pipe_fd) == -1)
@@ -161,6 +163,7 @@ void	child_execution(t_data *data, t_env **env_ll, char *instr, int child)
 	}
 	if (builtin_filter(data->token, cmd_array[0]) == true)
 		ft_builtin_exec(data, find_token_exec(data->token, cmd_array), env_ll);
+	g_exit_code = EXEC_SIG;
 	ft_exec(data, env_ll, cmd_array);
 }
 

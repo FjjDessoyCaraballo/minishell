@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 15:29:42 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/25 23:34:26 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/26 19:14:11 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,8 @@ void	close_fds(t_data *data)
 
 void	execution_with_path(t_data *data, char **array, char *path)
 {
+	dprintf(2, "execution\n");
+	g_exit_code = EXEC_SIG;
 	if (execve(path, array, data->env) == -1)
 	{
 		err_msg(array[0], NO_EXEC, 127);

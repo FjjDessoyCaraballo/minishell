@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ll_utils.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 09:30:58 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/23 14:15:43 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/26 14:25:21 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,13 @@ t_env	*ft_listnew(void *content)
 	if (!node)
 		return (NULL);
 	node->content = ft_strdup(content);
+	// add a malloc check
 	tmp_array = ft_split(content, '=');
+	// add a malloc check
 	node->key = ft_strdup(tmp_array[0]);
+	// add a malloc check
 	node->value = ft_strdup(ft_strchr(content, '=') + 1);
+	// add a malloc check
 	node->next = NULL;
 	free_array(tmp_array);
 	return (node);
