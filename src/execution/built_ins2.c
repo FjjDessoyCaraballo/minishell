@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 15:26:27 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/26 14:25:19 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/27 00:04:15 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,6 @@ int	export(t_token *token, t_env **env_ll)
 		}
 		else
 		{
-			dprintf(2, "tmp_tok->value:[%s]\n", tmp_tok->value);
 			ft_listadd_back(env_ll, ft_listnew(tmp_tok->value));
 		}
 		tmp_tok = tmp_tok->next;

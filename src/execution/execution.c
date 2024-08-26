@@ -6,12 +6,14 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/26 23:43:32 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/27 00:03:43 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
+// this function turns space into underscore,
+// better used after echo and before cmd
 // void	replace_spaces_with_underscores(t_token *token_list)
 // {
 // 	t_token	*current_token;

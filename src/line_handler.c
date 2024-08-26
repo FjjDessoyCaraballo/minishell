@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 12:23:49 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/08/26 13:24:35 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/26 23:59:42 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,25 +43,6 @@ void	setup(t_data *data)
 		data->status = 2;
 	else if (data->no_cmd_flag == 1)
 		data->status = 127;
-}
-
-void	check_and_mark_empty_tokens(t_token *first_token)
-{
-	t_token	*current_token;
-
-	current_token = first_token;
-	while (current_token != NULL)
-	{
-		if (current_token->value == NULL || current_token->value[0] == '\0')
-		{
-			current_token->empty = true;
-		}
-		else
-		{
-			current_token->empty = false;
-		}
-		current_token = current_token->next;
-	}
 }
 
 int	token_only_arg(t_data *data)
@@ -110,9 +91,6 @@ int	sniff_line(t_data *data)
 	if (data->status == 963)
 		return (free_retstatus(data->line_read, 963));
 	data->status = 0;
-	check_and_mark_empty_tokens(data->token);
-	if(data->token->value != NULL)
-		print_tokens(data);
 	free(data->line_read);
 	if (syntax_check(data->token) == FAILURE)
 	{
