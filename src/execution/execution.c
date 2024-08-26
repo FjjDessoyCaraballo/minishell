@@ -6,31 +6,30 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/26 20:18:11 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/26 23:43:32 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	replace_spaces_with_underscores(t_token *token_list)
-{
-	t_token	*current_token;
-	int		i;
-
-	current_token = token_list;
-	while (current_token != NULL && current_token->value != NULL)
-	{
-		i = 0;
-		while (current_token->value[i] != '\0')
-		{
-			if (current_token->value[i] == ' ')
-				current_token->value[i] = '_';
-			i++;
-		}
-		current_token = current_token->next;
-	}
-}
-
+// void	replace_spaces_with_underscores(t_token *token_list)
+// {
+// 	t_token	*current_token;
+// 	int		i;
+//
+// 	current_token = token_list;
+// 	while (current_token != NULL && current_token->value != NULL)
+// 	{
+// 		i = 0;
+// 		while (current_token->value[i] != '\0')
+// 		{
+// 			if (current_token->value[i] == ' ')
+// 				current_token->value[i] = '_';
+// 			i++;
+// 		}
+// 		current_token = current_token->next;
+// 	}
+// }
 
 /**
  * Execution and execution prepping are just the same function broke
@@ -56,20 +55,10 @@ int	execution(t_data *data, t_env **env_ll)
 		data->status = built_ins(data, token, env_ll);
 	else
 	{
-		replace_spaces_with_underscores(data->token);
+		//replace_spaces_with_underscores(data->token);
 		data->status = execution_prepping(data, token, env_ll);
 	}
 	return (data->status);
-}
-
-void print_string_array(char **str) {
-    int i = 0;
-    printf("Array:\n");
-    // Iterate through each string in the array until you find a NULL pointer
-    while (str[i] != NULL) {
-        printf("[%s] [%d]\n", str[i], i);
-        i++;
-    }
 }
 
 int	execution_prepping(t_data *data, t_token *token, t_env **env_ll)
