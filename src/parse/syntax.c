@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 17:18:12 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/23 17:30:43 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/27 10:13:57 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ static int	incorrect_syntax(t_token *token, t_type token_type)
 				|| (head->type == token_type && head->next->type == RED_OUT)
 				|| (head->type == token_type && head->next->type == HEREDOC)
 				|| (head->type == token_type && head->next->type == APPEND)
-				|| (head->type == token_type && head->next->type == FLAG))
+				|| (head->type == token_type && head->next->type == FLAG)
+				|| (head->type == token_type && head->next->value == NULL))
 				return (FAILURE);
 		}
 		head = head->next;
