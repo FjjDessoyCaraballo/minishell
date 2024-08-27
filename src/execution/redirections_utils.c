@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections_utils.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lstorey <lstorey@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fdessoy <fdessoy@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 15:28:13 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/27 10:55:20 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/27 20:52:28 by fdessoy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,11 +55,11 @@ void	append_redirection(t_data *data, char **array)
 		exit(err_msg("'newline'", SYNTAX, 2));
 }
 
-void	heredoc_redirection(t_data *data, char **array)
+void	heredoc_redirection(t_data *data, char **array, t_env **env_ll)
 {
 	if (array[data->index + 1])
 	{
-		data->fd_in = here_doc(array[data->index + 1], data);
+		data->fd_in = here_doc(array[data->index + 1], data, env_ll);
 		dup2(data->fd_in, STDIN_FILENO);
 		close(data->fd_in);
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strtok.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy <fdessoy@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:34:00 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/25 01:22:11 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/27 20:44:07 by fdessoy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	init_strtok(t_data *data)
  *
  * @return A pointer to the tokenized string or NULL on failure.
  */
-char	*ft_strtok(char *str, t_data *data, t_token *cur_tok)
+char	*ft_strtok(char *str, t_data *data, t_token *cur_tok, t_env **env_ll)
 {
 	static char	*target;
 	char		*token;
@@ -58,7 +58,7 @@ char	*ft_strtok(char *str, t_data *data, t_token *cur_tok)
 		data->status = 963;
 		return (NULL);
 	}
-	token = substr_and_expand(target, data);
+	token = substr_and_expand(target, data, env_ll);
 	if (!handle_tok(token, cur_tok, data, &target))
 		return (NULL);
 	free_null(token);

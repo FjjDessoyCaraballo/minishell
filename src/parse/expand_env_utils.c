@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_env_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fdessoy <fdessoy@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 14:53:29 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/08/26 09:48:59 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/27 20:47:45 by fdessoy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,9 @@ void	copy_env_value(char *result, const char *env_value, t_index *num)
  * @param res The result string where the character will be appended.
  * @param num A pointer to the index of the current position in the input string.
  */
-void	setup_env_variables(const char *input, t_data *data)
+void	setup_env_variables(const char *input, t_data *data, t_env **env_ll)
 {
-	data->num_of_envs = count_matching_keys(data->envll, input);
+	data->num_of_envs = count_matching_keys(*env_ll, input);
 	if (data->num_of_envs == 0)
 		data->num_of_envs = 1;
 	data->s_quote_o = 0;

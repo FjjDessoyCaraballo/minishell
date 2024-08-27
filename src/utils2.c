@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fdessoy <fdessoy@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 10:03:43 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/27 12:03:40 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/27 20:32:29 by fdessoy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	wow_loop(t_data *data, t_env **env_ll)
 	status = 0;
 	while (666)
 	{
-		status = sniff_line(data);
+		status = sniff_line(data, env_ll);
 		if (status == NULL_LINE)
 		{
 			printf("exit\n");

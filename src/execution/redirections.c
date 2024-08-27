@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lstorey <lstorey@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fdessoy <fdessoy@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 13:03:21 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/27 11:12:38 by lstorey          ###   ########.fr       */
+/*   Updated: 2024/08/27 20:53:19 by fdessoy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	find_redirection(char **array)
 	return (FAILURE);
 }
 
-void	redirections_handling(t_data *data, char **array)
+void	redirections_handling(t_data *data, char **array, t_env **env_ll)
 {
 	data->last_heredoc_index = last_heredoc(array);
 	data->index = 0;
@@ -66,7 +66,7 @@ void	redirections_handling(t_data *data, char **array)
 		{
 			if (data->index == data->last_heredoc_index)
 			{
-				heredoc_redirection(data, array);
+				heredoc_redirection(data, array, env_ll);
 				write(data->sync_pipe[1], "1", 1);
 			}
 		}
@@ -74,7 +74,7 @@ void	redirections_handling(t_data *data, char **array)
 	}
 }
 
-int	here_doc(char *delimiter, t_data *data)
+int	here_doc(char *delimiter, t_data *data, t_env **env_ll)
 {
 	static char	*input;
 	int			pipe_fd[2];
@@ -92,7 +92,7 @@ int	here_doc(char *delimiter, t_data *data)
 		}
 		if (!ft_strncmp(input, delimiter, ft_strlen(delimiter)))
 			break ;
-		input = expand_env_variables(input, data);
+		input = expand_env_variables(input, data, env_ll);
 		write(pipe_fd[1], input, ft_strlen(input));
 		write(pipe_fd[1], "\n", 1);
 		free(input);

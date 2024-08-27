@@ -6,7 +6,7 @@
 /*   By: fdessoy <fdessoy@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/27 17:12:33 by fdessoy          ###   ########.fr       */
+/*   Updated: 2024/08/27 20:53:56 by fdessoy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,13 +163,13 @@ int		syntax_check(t_token *token);
 
 /* in redirections.c */
 int		find_redirection(char **array);
-void	redirections_handling(t_data *data, char **array);
-int		here_doc(char *delimiter, t_data *data);
+void	redirections_handling(t_data *data, char **array, t_env **env_ll);
+int		here_doc(char *delimiter, t_data *data, t_env **env_ll);
 
 /* in redirections_utils.c */
 void	input_redirection(t_data *data, char **array);
 void	output_redirection(t_data *data, char **array);
-void	heredoc_redirection(t_data *data, char **array);
+void	heredoc_redirection(t_data *data, char **array, t_env **env_ll);
 void	append_redirection(t_data *data, char **array);
 
 /* in execution_utils1.c */
@@ -188,7 +188,7 @@ t_token	*find_redtok(t_token *token);
 char	*get_binary(char *instruction);
 
 /* in fd_dups.c */
-void	dup_fds(t_data *data, int child, char **array);
+void	dup_fds(t_data *data, int child, char **array, t_env **env_ll);
 void	open_fdin(t_data *data, char *infile);
 void	open_fdout(t_data *data, char *outfile, int flag);
 void	exit_child(char *file, int err_code);
@@ -218,7 +218,7 @@ void	super_free(t_data *data, t_env **env_ll, char **env);
 char	**add_shell_lvl(char **env);
 
 /* in line_handler.c */
-int		sniff_line(t_data *data);
+int		sniff_line(t_data *data, t_env **env_ll);
 
 /* in ll_utils.c */
 t_env	*ft_listnew(void *content);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lstorey <lstorey@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fdessoy <fdessoy@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/27 12:06:14 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/27 20:50:03 by fdessoy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ void	child_execution(t_data *data, t_env **env_ll, char *instr, int child)
 		free_data(data, NULL, NULL);
 		exit (err_msg(NULL, MALLOC, -1));
 	}
-	dup_fds(data, child, cmd_array);
+	dup_fds(data, child, cmd_array, env_ll);
 	if (data->redirections == true)
 	{
 		cmd_array = parse_instruction(data, cmd_array);
