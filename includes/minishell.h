@@ -6,7 +6,7 @@
 /*   By: fdessoy <fdessoy@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/27 20:53:56 by fdessoy          ###   ########.fr       */
+/*   Updated: 2024/08/27 21:12:40 by fdessoy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -275,8 +275,5 @@ int		free_retstatus(char *array, int status);
 void	free_tokens(t_token *head);
 void	free_gang(t_data *data);
 void	free_my_boi(char **paths);
-
-
-
 
 #endif

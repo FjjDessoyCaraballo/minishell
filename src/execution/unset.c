@@ -6,7 +6,7 @@
 /*   By: fdessoy <fdessoy@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 17:04:40 by fdessoy           #+#    #+#             */
-/*   Updated: 2024/08/27 20:30:13 by fdessoy          ###   ########.fr       */
+/*   Updated: 2024/08/27 21:09:33 by fdessoy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 int	unset(t_token *token, t_env **env_ll)
 {
-	t_token *head;
-	
+	t_token	*head;
+
 	if (should_skip_unset(token, env_ll))
 		return (SUCCESS);
 	head = token->next;
@@ -34,7 +34,7 @@ int	should_skip_unset(t_token *token, t_env **env_ll)
 
 int	remove_first_env_var(t_token *head, t_env **env_ll)
 {
-	t_env *tmp;
+	t_env	*tmp;
 
 	tmp = *env_ll;
 	if (!ft_strncmp(head->value, tmp->content, ft_strlen(head->value)))
@@ -48,18 +48,19 @@ int	remove_first_env_var(t_token *head, t_env **env_ll)
 
 void	remove_env_var(t_token *head, t_env **env_ll)
 {
-	t_env *tmp;
-	t_env *del;
+	t_env	*tmp;
+	t_env	*del;
 
 	tmp = *env_ll;
 	while (tmp->next != NULL)
 	{
-		if (!ft_strncmp(head->value, tmp->next->content, ft_strlen(head->value)))
+		if (!ft_strncmp(head->value, tmp->next->content, \
+			ft_strlen(head->value)))
 		{
 			del = tmp->next;
 			tmp->next = tmp->next->next;
 			free_env_var(del);
-			return;
+			return ;
 		}
 		tmp = tmp->next;
 	}
@@ -68,7 +69,7 @@ void	remove_env_var(t_token *head, t_env **env_ll)
 void	free_env_var(t_env *env_var)
 {
 	if (!env_var)
-		return;
+		return ;
 	free_null(env_var->key);
 	free_null(env_var->value);
 	free_null(env_var->content);

@@ -6,7 +6,7 @@
 /*   By: fdessoy <fdessoy@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 17:01:34 by fdessoy           #+#    #+#             */
-/*   Updated: 2024/08/27 17:01:39 by fdessoy          ###   ########.fr       */
+/*   Updated: 2024/08/27 21:07:34 by fdessoy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,10 @@ int	should_skip_token(t_token *token)
 
 void	process_tokens(t_token *token, t_env **env_ll)
 {
-	t_token	*tmp_tok = token;
+	t_token	*tmp_tok;
 	int		found;
 
+	tmp_tok = token;
 	while (tmp_tok != NULL)
 	{
 		found = process_token(tmp_tok, env_ll);
@@ -62,7 +63,6 @@ int	process_token(t_token *tmp_tok, t_env **env_ll)
 		array = ft_split(tmp_tok->value, '=');
 		if (!array)
 			return (FAILURE);
-
 		if (!ft_strncmp(tmp_ll->key, array[0], ft_strlen(tmp_ll->key)))
 		{
 			update_env_variable(tmp_ll, tmp_tok, array);
@@ -90,6 +90,6 @@ void	update_env_variable(t_env *tmp_ll, t_token *tmp_tok, char **array)
 	if (!tmp_ll->value)
 	{
 		free_null(tmp_ll->key);
-		return;
+		return ;
 	}
 }
