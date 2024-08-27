@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: lstorey <lstorey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 10:31:53 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/23 10:53:45 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/27 11:48:16 by lstorey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,11 +53,11 @@ static int	change_to_absolute_directory(t_token *token)
 
 int shell_cd(t_token *token, t_data *data)
 {
-    if (!token->next || !token->next->value)
-        return change_to_home_directory(data);
-    token = token->next;
-    if (ft_strchr(token->value, '/') == NULL)
-        return change_to_relative_directory(token);
-    else
-        return change_to_absolute_directory(token);
+	if (!token->next || !token->next->value)
+		return (change_to_home_directory(data));
+	token = token->next;
+	if (ft_strchr(token->value, '/') == NULL)
+		return (change_to_relative_directory(token));
+	else
+		return (change_to_absolute_directory(token));
 }
