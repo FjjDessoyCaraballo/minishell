@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lstorey <lstorey@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fdessoy <fdessoy@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 15:26:27 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/27 10:59:30 by lstorey          ###   ########.fr       */
+/*   Updated: 2024/08/27 17:12:24 by fdessoy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,75 +35,6 @@ void alphabetical_printer(char **env_array)
     }
 }
 
-/* export puts variables declared by user in the env */
-int	export(t_token *token, t_env **env_ll)
-{
-	t_token *tmp_tok;
-	t_env	*tmp_ll;
-	char	**array;
-	int		found;
-
-	if (find_token(token, APPEND)
-	|| find_token(token, HEREDOC)
-	|| find_token(token, RED_IN)
-	|| find_token(token, RED_OUT))
-		return (SUCCESS);
-	if (token->next->value == NULL)
-	{
-		print_export(env_ll);
-		return (SUCCESS);
-	}
-	token = token->next;
-	tmp_tok = token;
-	while (tmp_tok->next != NULL)
-	{
-		found = 0;
-		if (!ft_strchr(tmp_tok->value, '='))
-			tmp_tok = tmp_tok->next;
-		tmp_ll = (*env_ll);
-		while (tmp_ll != NULL)
-		{
-			array = ft_split(tmp_tok->value, '=');
-			if (!array)
-				return (FAILURE);
-			if (!ft_strncmp(tmp_ll->key, array[0], ft_strlen(tmp_ll->key)))
-			{
-				found = 1;
-				free_array(array);
-				break;
-			}
-			free_array(array);
-			tmp_ll = tmp_ll->next;
-		}
-		if (found)
-		{
-			free_null(tmp_ll->value);
-			free_null(tmp_ll->key);
-			free_null(tmp_ll->content);
-			tmp_ll->content = ft_strdup(tmp_tok->value);
-			array = ft_split(tmp_tok->value, '=');
-			tmp_ll->key = ft_strdup(array[0]);
-			if (!tmp_ll)
-			{
-				free_array(array);
-				return (FAILURE);
-			}
-			tmp_ll->value = ft_strdup(ft_strchr(tmp_tok->value, '='));
-			if (!tmp_ll->value)
-			{
-				free_array(array);
-				free_null(tmp_ll->key);
-				return (FAILURE);
-			}
-			free_array(array);
-		}
-		else
-			ft_listadd_back(env_ll, ft_listnew(tmp_tok->value));
-		tmp_tok = tmp_tok->next;
-	}
-	return (SUCCESS);
-}
-
 // when someone types EXPORT only, it prints all env variables
 // IN ALPHABETICAL ORDER!!! <- still needs to be implemented (not really necessary)
 int	print_export(t_env **env_ll)
@@ -121,46 +52,48 @@ int	print_export(t_env **env_ll)
 }
 
 /* this function unsets whatever argument given after unset in the command line */
-int	unset(t_token *token, t_env **env_ll)
-{
-	t_env	*tmp;
-	t_env	*del;
-	t_token	*head;
 
-	head = token;
-	if (!head->next->value || !*env_ll || !env_ll)
-		return (SUCCESS);
-	tmp = *env_ll;
-	head = head->next;
-	while (!ft_strncmp(head->value, tmp->content, ft_strlen(head->value)))
-	{
-		tmp = tmp->next;
-		free_null(tmp->key);
-		free_null(tmp->value);
-		free_null(tmp->content);
-		free(tmp);
-		tmp = NULL;
-		return (SUCCESS);
-	}
-	tmp = *env_ll;
-	while (tmp->next != NULL)
-	{
-		if (!ft_strncmp(head->value, tmp->next->content,
-				ft_strlen(head->value)))
-		{
-			del = tmp->next;
-			tmp->next = tmp->next->next;
-			free_null(del->key);
-			free_null(del->value);
-			free_null(del->content);
-			free(del);
-			del = NULL;
-			return (SUCCESS);
-		}
-		tmp = tmp->next;
-	}
-	//*env_ll = tmp;
-	tmp = NULL;
-	head = NULL;
-	return (SUCCESS);
-}
+
+// int	unset(t_token *token, t_env **env_ll)
+// {
+// 	t_env	*tmp;
+// 	t_env	*del;
+// 	t_token	*head;
+
+// 	head = token;
+// 	if (!head->next->value || !*env_ll || !env_ll)
+// 		return (SUCCESS);
+// 	tmp = *env_ll;
+// 	head = head->next;
+// 	while (!ft_strncmp(head->value, tmp->content, ft_strlen(head->value)))
+// 	{
+// 		tmp = tmp->next;
+// 		free_null(tmp->key);
+// 		free_null(tmp->value);
+// 		free_null(tmp->content);
+// 		free(tmp);
+// 		tmp = NULL;
+// 		return (SUCCESS);
+// 	}
+// 	tmp = *env_ll;
+// 	while (tmp->next != NULL)
+// 	{
+// 		if (!ft_strncmp(head->value, tmp->next->content,
+// 				ft_strlen(head->value)))
+// 		{
+// 			del = tmp->next;
+// 			tmp->next = tmp->next->next;
+// 			free_null(del->key);
+// 			free_null(del->value);
+// 			free_null(del->content);
+// 			free(del);
+// 			del = NULL;
+// 			return (SUCCESS);
+// 		}
+// 		tmp = tmp->next;
+// 	}
+// 	//*env_ll = tmp;
+// 	tmp = NULL;
+// 	head = NULL;
+// 	return (SUCCESS);
+// }

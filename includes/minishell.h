@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lstorey <lstorey@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fdessoy <fdessoy@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/27 12:04:12 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/27 17:12:33 by fdessoy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -241,15 +241,30 @@ int		print_pwd(void);
 int		yodeling(t_token *token);
 
 /* in built_ins2.c */
-int		shell_cd(t_token *token, t_data *data);
-int		export(t_token *token, t_env **env_ll);
 int		print_export(t_env **env_ll);
-int		unset(t_token *token, t_env **env_ll);
 void	alphabetical_printer(char **env_array);
+int		unset(t_token *token, t_env **env_ll);
 
 /* in built_ins3.c */
 void	get_the_hell_out(t_data *data, t_token *token, t_env **env_ll);
 int		handle_flag_type(t_token *head);
+
+/* in cd.c */
+int		shell_cd(t_token *token, t_data *data);
+
+/* in export.c */
+int		export(t_token *token, t_env **env_ll);
+int		should_skip_token(t_token *token);
+void	process_tokens(t_token *token, t_env **env_ll);
+int		process_token(t_token *tmp_tok, t_env **env_ll);
+void	update_env_variable(t_env *tmp_ll, t_token *tmp_tok, char **array);
+
+/* in unset.c */
+int		unset(t_token *token, t_env **env_ll);
+int		should_skip_unset(t_token *token, t_env **env_ll);
+int		remove_first_env_var(t_token *head, t_env **env_ll);
+void	remove_env_var(t_token *head, t_env **env_ll);
+void	free_env_var(t_env *env_var);
 
 /* signals.c */
 void	handler(int sig);
@@ -261,14 +276,7 @@ void	free_tokens(t_token *head);
 void	free_gang(t_data *data);
 void	free_my_boi(char **paths);
 
-/* DEPRECATED FUNCTIONS */
-// int		checking_access(t_data *data, char *instruction);
-// int		built_in_or_garbage(t_data *data, t_env **env_ll, t_token *token);
-// int		single_execution(t_data *data, t_token *token, t_env **env_ll);
-// void		single_child(t_data *data, t_token *token, t_env **env_ll);
-// int		single_parent(pid_t pid, int status);
-// int 		lonely_execution(t_data *data, t_token *token, t_env **env_ll);
-// int		how_many_children(t_token *token);
-// void		handle_heredoc(t_data *data, char *delimiter);
+
+
 
 #endif

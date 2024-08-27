@@ -24,9 +24,11 @@ SRC_FILES = main.c\
 			ll_utils2.c\
 			line_handler.c\
 			src/execution/cd.c\
+			src/execution/unset.c\
 			src/execution/built_ins.c\
 			src/execution/built_ins2.c\
 			src/execution/built_ins3.c\
+			src/execution/export.c\
 			src/execution/execution.c\
 			src/execution/execution2.c\
 			src/execution/redirections.c\
