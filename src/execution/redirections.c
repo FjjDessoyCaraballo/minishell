@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lstorey <lstorey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 13:03:21 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/26 14:03:35 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/27 11:12:38 by lstorey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	find_redirection(char **array)
 	return (FAILURE);
 }
 
-void redirections_handling(t_data *data, char **array)
+void	redirections_handling(t_data *data, char **array)
 {
 	data->last_heredoc_index = last_heredoc(array);
 	data->index = 0;
@@ -56,7 +56,7 @@ void redirections_handling(t_data *data, char **array)
 			&& ft_strlen(array[data->index]) == 1)
 			input_redirection(data, array);
 		else if (!ft_strncmp(array[data->index], ">", 1)
-				&& ft_strlen(array[data->index]) == 1)
+			&& ft_strlen(array[data->index]) == 1)
 			output_redirection(data, array);
 		else if (!ft_strncmp(array[data->index], ">>", 2)
 			&& ft_strlen(array[data->index]) == 2)
@@ -74,29 +74,29 @@ void redirections_handling(t_data *data, char **array)
 	}
 }
 
-int here_doc(char *delimiter, t_data *data)
+int	here_doc(char *delimiter, t_data *data)
 {
-    static char *input;
-    int pipe_fd[2];
-    
-    if(pipe(pipe_fd) == -1)
-        exit(err_msg(NULL, "pipe error", 1));
-    while (1)
-    {
+	static char	*input;
+	int			pipe_fd[2];
+
+	if (pipe(pipe_fd) == -1)
+		exit(err_msg(NULL, "pipe error", 1));
+	while (1)
+	{
 		g_exit_code = HEREDOC;
-        input = readline("8==D ");
+		input = readline("8==D ");
 		if (!input)
 		{
 			close(pipe_fd[1]);
 			return (pipe_fd[0]);
 		}
-        if (!ft_strncmp(input, delimiter, ft_strlen(delimiter)))
-            break ;
+		if (!ft_strncmp(input, delimiter, ft_strlen(delimiter)))
+			break ;
 		input = expand_env_variables(input, data);
-        write(pipe_fd[1], input, ft_strlen(input));
-        write(pipe_fd[1], "\n", 1);
-        free(input);
-    }
-    close(pipe_fd[1]);
-    return(pipe_fd[0]);
+		write(pipe_fd[1], input, ft_strlen(input));
+		write(pipe_fd[1], "\n", 1);
+		free(input);
+	}
+	close(pipe_fd[1]);
+	return (pipe_fd[0]);
 }

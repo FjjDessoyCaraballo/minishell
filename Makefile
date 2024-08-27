@@ -26,6 +26,7 @@ SRC_FILES = main.c\
 			src/execution/cd.c\
 			src/execution/built_ins.c\
 			src/execution/built_ins2.c\
+			src/execution/built_ins3.c\
 			src/execution/execution.c\
 			src/execution/execution2.c\
 			src/execution/redirections.c\
