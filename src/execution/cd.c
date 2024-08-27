@@ -14,44 +14,39 @@
 
 static int	change_to_home_directory(t_data *data)
 {
-    if (chdir(data->home_pwd) < 0)
-        return err_msg(data->home_pwd, FILE_ERROR, 1);
-    return (SUCCESS);
+	if (chdir(data->home_pwd) < 0)
+		return (err_msg(data->home_pwd, FILE_ERROR, 1));
+	return (SUCCESS);
 }
 
 static int	change_to_relative_directory(t_token *token)
 {
-    static char	*curr_pwd;
-    static char	*new_pwd;
-    int		result;
+	static char	*curr_pwd;
+	static char	*new_pwd;
+	int			result;
 
 	curr_pwd = getcwd(NULL, 0);
-    if (!curr_pwd)
-        return (err_msg(token->value, "Failed to get current directory\n", 1));
-
-    new_pwd = ft_strsjoin(curr_pwd, token->value, '/');
-    free(curr_pwd);
-
-    if (!new_pwd)
-        return err_msg(NULL, MALLOC, -1);
-
-    result = chdir(new_pwd);
-    free(new_pwd);
-
-    if (result < 0)
-        return err_msg(token->value, FILE_ERROR, 1);
-
-    return (SUCCESS);
+	if (!curr_pwd)
+		return (err_msg(token->value, "Failed to get current directory\n", 1));
+	new_pwd = ft_strsjoin(curr_pwd, token->value, '/');
+	free_null(curr_pwd);
+	if (!new_pwd)
+		return (err_msg(NULL, MALLOC, -1));
+	result = chdir(new_pwd);
+	free_null(new_pwd);
+	if (result < 0)
+		return (err_msg(token->value, FILE_ERROR, 1));
+	return (SUCCESS);
 }
 
 static int	change_to_absolute_directory(t_token *token)
 {
-    if (chdir(token->value) < 0)
-        return err_msg(token->value, FILE_ERROR, 1);
-    return (SUCCESS);
+	if (chdir(token->value) < 0)
+		return (err_msg(token->value, FILE_ERROR, 1));
+	return (SUCCESS);
 }
 
-int shell_cd(t_token *token, t_data *data)
+int	shell_cd(t_token *token, t_data *data)
 {
 	if (!token->next || !token->next->value)
 		return (change_to_home_directory(data));

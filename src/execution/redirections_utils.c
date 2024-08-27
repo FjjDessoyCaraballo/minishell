@@ -20,7 +20,7 @@ void	input_redirection(t_data *data, char **array)
 		{
 			open_fdin(data, array[data->index + 1]);
 			dup2(data->fd_in, STDIN_FILENO);
-			close(data->fd_in);			
+			close(data->fd_in);
 		}
 		else
 			exit(err_msg(array[data->index + 1], FILE_ERROR, 2));

@@ -76,7 +76,7 @@ void	lstadd_front(t_env **lst, t_env *new)
 void	free_stupid_element(char **env)
 {
 	int	i;
-	
+
 	i = 0;
 	while (env[i])
 	{

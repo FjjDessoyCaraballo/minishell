@@ -36,7 +36,6 @@ void	super_free(t_data *data, t_env **env_ll, char **env)
 	free(data);
 }
 
-
 int	wow_loop(t_data *data, t_env **env_ll)
 {
 	int	status;

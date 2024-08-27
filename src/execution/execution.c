@@ -152,7 +152,7 @@ void	ft_exec(t_data *data, t_env **env_ll, char **cmd_array)
 	static char	*path;
 
 	if (cmd_array[0] == NULL)
-		exit(0);
+		exit(err_msg(NULL, NO_EXEC, 127));
 	if (check_path_unset(env_ll))
 		exit(err_msg(cmd_array[0], NO_EXEC, 127));
 	data->env = env_arr_updater(env_ll);
@@ -164,9 +164,8 @@ void	ft_exec(t_data *data, t_env **env_ll, char **cmd_array)
 		if (!path)
 		{
 			err_msg(cmd_array[0], NO_EXEC, 0);
-			free_array(cmd_array);
 			free_all_ll(env_ll);
-			free_data(data, NULL, NULL);
+			free_data(data, NULL, cmd_array);
 			exit(127);
 		}
 	}

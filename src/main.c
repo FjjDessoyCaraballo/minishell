@@ -37,6 +37,6 @@ int	main(int argc, char **argv, char **env)
 	}
 	initializer(data, env_ll, env);
 	status = wow_loop(data, env_ll);
-	super_free(data, env_ll, env);		
+	super_free(data, env_ll, env);
 	return (status);
 }

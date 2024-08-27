@@ -42,7 +42,7 @@ char	*access_path(char **path, char *cmd)
 * NEVER NULL THE FIRST PARAMETER!
 */
 int	err_msg(char *obj, char *msg, int err_code)
-{	
+{
 	if (!obj && *msg)
 		printf("%s\n", msg);
 	else if (*obj && *msg)

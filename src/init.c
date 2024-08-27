@@ -59,7 +59,7 @@ char	*bin_extract(char *path)
 	i = 0;
 	if (!path)
 		return (NULL);
-	while (path)
+	while (path[i])
 	{
 		if (!ft_strncmp(path, "PATH=", 5))
 			return (path + 5);

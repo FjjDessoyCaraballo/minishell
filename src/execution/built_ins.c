@@ -90,13 +90,14 @@ int	handle_arg_type(t_token *head)
 
 int	yodeling(t_token *token)
 {
-    t_token *head;
-    head = token;
-    if (head->next->value == NULL)
-        return (printf("\n"), SUCCESS);
-    if (head->next->type == FLAG)
-        return (handle_flag_type(head));
-    if (head != NULL && head->next != NULL && head->next->type == ARG)
-        return handle_arg_type(head);
-    return (FAILURE);
+	t_token	*head;
+
+	head = token;
+	if (head->next->value == NULL)
+		return (printf("\n"), SUCCESS);
+	if (head->next->type == FLAG)
+		return (handle_flag_type(head));
+	if (head != NULL && head->next != NULL && head->next->type == ARG)
+		return (handle_arg_type(head));
+	return (FAILURE);
 }

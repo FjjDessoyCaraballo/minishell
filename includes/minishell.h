@@ -143,7 +143,7 @@ typedef struct s_data
 /*************************************************/
 /* functions *************************************/
 /*************************************************/
-void 	update_shlvl(t_env *node);
+
 /* in execution.c */
 int		execution(t_data *data, t_env **env_ll);
 int		execution_prepping(t_data *data, t_token *token, t_env **env_ll);
