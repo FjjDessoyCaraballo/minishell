@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:12:51 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/27 11:09:07 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/27 11:58:28 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ int	main(int argc, char **argv, char **env)
 
 	if (argc != 1)
 		return (err_msg(NULL, ERR_ARG, 1));
+	env = add_shell_lvl(env);
 	(void)argv;
 	status = 0;
 	if (!env || !*env)
@@ -35,8 +36,7 @@ int	main(int argc, char **argv, char **env)
 		return (1);
 	}
 	initializer(data, env_ll, env);
-	env = add_shell_lvl(env);
 	status = wow_loop(data, env_ll);
-	super_free(data, env_ll);		
+	super_free(data, env_ll, env);		
 	return (status);
 }
