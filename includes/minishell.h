@@ -6,7 +6,7 @@
 /*   By: lstorey <lstorey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/27 11:57:09 by lstorey          ###   ########.fr       */
+/*   Updated: 2024/08/27 12:04:12 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@
 # define HEREDOC_FAILURE2 "Unable to read temporary for here_doc"
 # define FILE_ERROR "No such file or directory"
 # define SYNTAX "syntax error near unexpected token "
-# define ERR_ARG "Wrong number of arguments, Karen\n"
+# define ERR_ARG "Wrong number of arguments, Karen"
 # define ERR_EXP "export: not a valid identifier\n"
 # define EXEC_ENV_NULL "envir"
 # define NO_FILE 100
@@ -211,10 +211,11 @@ int		check_bin_path(char *binary, char **paths);
 int		is_file(char *binary, char *path);
 
 /* in utils2.c */
-void	malloc_check_message(void *ptr);
 void	free_null(void *ptr);
-void	super_free(t_data *data, t_env **env_ll);
+void	malloc_check_message(void *ptr);
 int		wow_loop(t_data *data, t_env **env_ll);
+void	super_free(t_data *data, t_env **env_ll, char **env);
+char	**add_shell_lvl(char **env);
 
 /* in line_handler.c */
 int		sniff_line(t_data *data);
@@ -230,8 +231,8 @@ void	free_ll(t_env *env_ll);
 char	**env_arr_updater(t_env **env_ll);
 int		ll_size(t_env **env_ll);
 void	free_all_ll(t_env **env_ll);
-char	**add_shell_lvl(char **env);
 void	lstadd_front(t_env **lst, t_env *new);
+void	free_stupid_element(char **env);
 
 /* in built_ins.c */
 int		built_ins(t_data *data, t_token *token, t_env **env_ll);

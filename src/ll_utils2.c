@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ll_utils2.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lstorey <lstorey@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 11:35:09 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/27 10:52:00 by lstorey          ###   ########.fr       */
+/*   Updated: 2024/08/27 12:04:04 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,5 +70,20 @@ void	lstadd_front(t_env **lst, t_env *new)
 		if (*lst)
 			new -> next = *lst;
 		*lst = new;
+	}
+}
+
+void	free_stupid_element(char **env)
+{
+	int	i;
+	
+	i = 0;
+	while (env[i])
+	{
+		if (!ft_strncmp(env[i], "SHLVL=", 6))
+		{
+			free_null(env[i]);
+		}
+		i++;
 	}
 }

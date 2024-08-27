@@ -6,7 +6,7 @@
 /*   By: lstorey <lstorey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 14:18:24 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/27 11:05:33 by lstorey          ###   ########.fr       */
+/*   Updated: 2024/08/27 12:06:04 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,6 @@ int	built_ins(t_data *data, t_token *token, t_env **env_ll)
 	int	status;
 
 	status = 0;
-	if (token->value == NULL)
-		return (status);
 	if (!ft_strncmp(token->value, "env", 4))
 		status = print_env((*env_ll));
 	else if (!ft_strncmp(token->value, "pwd", 4))

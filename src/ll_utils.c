@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ll_utils.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lstorey <lstorey@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 09:30:58 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/27 12:03:22 by lstorey          ###   ########.fr       */
+/*   Updated: 2024/08/27 11:51:00 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,16 @@ t_env	*ft_listnew(void *content)
 	tmp_array = ft_split(content, '=');
 	node->key = ft_strdup(tmp_array[0]);
 	node->value = ft_strdup(ft_strchr(content, '=') + 1);
+	if (!tmp_array || !node->key || !node->value)
+	{
+		if (!node->key || !node->value)
+		{
+			if (!node->value)
+				free_null(node->key);
+			free_array(tmp_array);
+			return (NULL);
+		}
+	}
 	node->next = NULL;
 	free_array(tmp_array);
 	return (node);
