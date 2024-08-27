@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/26 15:31:38 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/27 11:09:43 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@
 # define HEREDOC_FAILURE2 "Unable to read temporary for here_doc"
 # define FILE_ERROR "No such file or directory"
 # define SYNTAX "syntax error near unexpected token "
-# define ERR_ARG "Wrong number of arguments, Karen\n"
+# define ERR_ARG "Wrong number of arguments, Karen"
 # define ERR_EXP "export: not a valid identifier\n"
 # define EXEC_ENV_NULL "envir"
 # define NO_FILE 100

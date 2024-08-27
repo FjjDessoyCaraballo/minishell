@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 10:03:43 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/23 17:36:13 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/27 11:10:46 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	wow_loop(t_data *data, t_env **env_ll)
 		status = sniff_line(data);
 		if (status == NULL_LINE)
 		{
-			printf("boobs\n");
+			printf("exit\n");
 			break ;
 		}
 		else if (status == 0)

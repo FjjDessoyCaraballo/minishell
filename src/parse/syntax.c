@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 17:18:12 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/27 10:09:25 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/27 10:43:01 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,26 @@ static int	incorrect_syntax(t_token *token, t_type token_type)
 				|| (head->type == token_type && head->next->type == HEREDOC)
 				|| (head->type == token_type && head->next->type == APPEND)
 				|| (head->type == token_type && head->next->type == FLAG)
-				|| (head->next == NULL))
+				|| (head->type == token_type && head->next->value == NULL))
+				return (FAILURE);
+		}
+		head = head->next;
+	}
+	head = NULL;
+	return (SUCCESS);
+}
+
+static int	incorrect_pipe_syntax(t_token *token)
+{
+	t_token	*head;
+
+	head = token;
+	while (head)
+	{
+		if (head->next != NULL)
+		{
+			if ((head->type == PIPE && head->next->value == NULL)
+				|| (head->type == PIPE && head->next->type == PIPE))
 				return (FAILURE);
 		}
 		head = head->next;
@@ -51,7 +70,7 @@ static int	incorrect_syntax(t_token *token, t_type token_type)
  */
 int	syntax_check(t_token *token)
 {
-	if (incorrect_syntax(token, PIPE) == FAILURE
+	if (incorrect_pipe_syntax(token) == FAILURE
 		|| incorrect_syntax(token, RED_OUT) == FAILURE
 		|| incorrect_syntax(token, RED_IN) == FAILURE
 		|| incorrect_syntax(token, HEREDOC) == FAILURE
