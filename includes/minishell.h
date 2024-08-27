@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lstorey <lstorey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/26 15:31:38 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/27 11:57:09 by lstorey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,7 +143,7 @@ typedef struct s_data
 /*************************************************/
 /* functions *************************************/
 /*************************************************/
-
+void 	update_shlvl(t_env *node);
 /* in execution.c */
 int		execution(t_data *data, t_env **env_ll);
 int		execution_prepping(t_data *data, t_token *token, t_env **env_ll);
@@ -237,7 +237,6 @@ void	lstadd_front(t_env **lst, t_env *new);
 int		built_ins(t_data *data, t_token *token, t_env **env_ll);
 int		print_env(t_env *env_ll);
 int		print_pwd(void);
-void	get_the_hell_out(t_data *data, t_token *token, t_env **env_ll);
 int		yodeling(t_token *token);
 
 /* in built_ins2.c */
@@ -246,6 +245,10 @@ int		export(t_token *token, t_env **env_ll);
 int		print_export(t_env **env_ll);
 int		unset(t_token *token, t_env **env_ll);
 void	alphabetical_printer(char **env_array);
+
+/* in built_ins3.c */
+void	get_the_hell_out(t_data *data, t_token *token, t_env **env_ll);
+int		handle_flag_type(t_token *head);
 
 /* signals.c */
 void	handler(int sig);

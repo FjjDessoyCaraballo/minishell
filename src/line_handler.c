@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   line_handler.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: lstorey <lstorey@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 12:23:49 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/08/25 01:33:29 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/27 10:46:29 by lstorey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,10 +78,7 @@ int	sniff_line(t_data *data)
 	setup(data);
 	line_tokenization(data);
 	if (data->status == 963)
-	{
-		free(data->line_read);
-		return (963);
-	}
+		return (free(data->line_read), 963);
 	data->status = 0;
 	check_and_mark_empty_tokens(data->token);
 	free(data->line_read);
