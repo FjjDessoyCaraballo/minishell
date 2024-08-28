@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy <fdessoy@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/27 21:12:40 by fdessoy          ###   ########.fr       */
+/*   Updated: 2024/08/28 11:15:46 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,17 +43,20 @@
 /* macros ****************************************/
 /*************************************************/
 # define ERR "Error\n"
-# define MALLOC "Malloc failure"
+# define MALLOC ": malloc failure"
 # define EXIT "Exit\n"
-# define NO_EXEC "Command not found"
-# define NO_PERMISSION "Permission denied"
+# define NO_EXEC ": command not found"
+# define NO_PERMISSION ": permission denied"
 # define HEREDOC_FAILURE "Unable to create temporary for here_doc"
 # define HEREDOC_FAILURE2 "Unable to read temporary for here_doc"
-# define FILE_ERROR "No such file or directory"
+# define FILE_ERROR ": no such file or directory"
 # define SYNTAX "syntax error near unexpected token "
 # define ERR_ARG "Wrong number of arguments, Karen"
+# define SYNTAX_EXIT ": exit: numeric argument required"
 # define ERR_EXP "export: not a valid identifier\n"
 # define EXEC_ENV_NULL "envir"
+# define HEREDOC_SIG 1
+# define EXEC_SIG 2
 # define NO_FILE 100
 # define NULL_LINE 5
 # define DIRECTORY 69

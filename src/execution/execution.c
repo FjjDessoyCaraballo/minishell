@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy <fdessoy@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/27 20:50:03 by fdessoy          ###   ########.fr       */
+/*   Updated: 2024/08/28 11:15:31 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ int	execution_prepping(t_data *data, t_token *token, t_env **env_ll)
 	data->status = forking(data, env_ll, cmd_a, pids);
 	close_fds(data);
 	pids = wait(&data->status);
+	g_exit_code = 0;
 	while (pids > 0)
 		pids = wait(&data->status);
 	free_array(cmd_a);
@@ -65,6 +66,7 @@ int	forking(t_data *data, t_env **env_ll, char **all_cmds, pid_t pids)
 	char	sync_signal;
 
 	data->index = 0;
+	g_exit_code = EXEC_SIG;
 	while (data->index < data->nb_cmds)
 	{
 		if (data->piped == true && pipe(data->pipe_fd) == -1)
