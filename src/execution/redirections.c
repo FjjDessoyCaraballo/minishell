@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy <fdessoy@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 13:03:21 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/27 20:53:19 by fdessoy          ###   ########.fr       */
+/*   Updated: 2024/08/28 12:26:04 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static int	last_heredoc(char **array)
+static int	last_heredoc(char **array, t_data *data)
 {
 	int	i;
 	int	last_index;
@@ -26,6 +26,8 @@ static int	last_heredoc(char **array)
 			last_index = i;
 		i++;
 	}
+	if (!last_index)
+		data->heredoc_exist = true;
 	return (last_index);
 }
 
@@ -48,7 +50,7 @@ int	find_redirection(char **array)
 
 void	redirections_handling(t_data *data, char **array, t_env **env_ll)
 {
-	data->last_heredoc_index = last_heredoc(array);
+	data->last_heredoc_index = last_heredoc(array, data);
 	data->index = 0;
 	while (array[data->index])
 	{

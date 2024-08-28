@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/28 11:15:31 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/28 12:20:00 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,8 @@ int	execution_prepping(t_data *data, t_token *token, t_env **env_ll)
 	cmd_a = cl_to_array(token);
 	if (!cmd_a)
 		return (FAILURE);
-	if (pipe(data->sync_pipe) == -1)
-		return (err_msg(NULL, "Broken pipe\n", 141));
+	if (data->heredoc_exist == true && pipe(data->sync_pipe) == -1)
+			return (err_msg(NULL, "Broken pipe\n", 141));
 	data->status = forking(data, env_ll, cmd_a, pids);
 	close_fds(data);
 	pids = wait(&data->status);
