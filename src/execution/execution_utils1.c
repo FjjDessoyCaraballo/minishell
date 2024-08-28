@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 15:29:42 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/27 10:56:44 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/28 11:18:28 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,13 +42,17 @@ char	*access_path(char **path, char *cmd)
 * NEVER NULL THE FIRST PARAMETER!
 */
 int	err_msg(char *obj, char *msg, int err_code)
-{
+{	
 	if (!obj && *msg)
-		printf("%s\n", msg);
+		ft_putendl_fd(msg, 2);
 	else if (*obj && *msg)
-		printf("%s: %s\n", obj, msg);
+	{
+		ft_putstr_fd(obj, 2);
+		ft_putendl_fd(msg, 2);
+	}
 	return (err_code);
 }
+
 
 void	close_fds(t_data *data)
 {
