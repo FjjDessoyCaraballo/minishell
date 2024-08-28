@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 10:19:57 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/26 14:09:14 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/28 11:34:41 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,47 +102,6 @@ int	alloc_memory(char ***pipe_array, char **instruction, t_token **token)
 	}
 	return (SUCCESS);
 }
-
-/** checking_access() is mainly a last check for general binaries that
- * the original shell uses. If the user inputs a binary of his own making
- * it will fail this check, since it uses the paths that were stablished
- * in the environment variable.
- * 
- * USAGE: pass the struct data and the instruction and it will find the
- * binary by itself and check for existence (F_OK) and executability (X_OK)
- * 
- * RETURN VALUES: checking_access() either returns SUCCESS or FAILURE. If
- * FAILURE is returned, it means that your binary cannot be found in the
- * general concatenated paths in the environment pointers.
- */ // DEPRECATED
-// int	checking_access(t_data *data, char *instruction)
-// {
-// 	int		i;
-// 	char	*binary_path;
-// 	char	*binary;
-
-// 	i = 0;
-// 	binary = get_binary(instruction);
-// 	while (data->binary_paths[i])
-// 	{
-// 		binary_path = ft_strsjoin(data->binary_paths[i++], binary, '/');
-// 		if (!access(binary_path, F_OK))
-// 		{
-// 			if (!access(binary_path, X_OK))
-// 			{
-// 				free(binary);
-// 				return (free_retstatus(binary_path, SUCCESS));
-// 			}
-// 			ft_putstr_fd(binary, 2);
-// 			ft_putstr_fd(": command not found\n", 2);
-// 			free(binary);
-// 			return (free_retstatus(binary_path, FAILURE));
-// 		}
-// 		free(binary_path);
-// 	}
-// 	free(binary);
-// 	return (FAILURE);
-// }
 
 /**
  * At this point we have an instruction that should follow this syntax:
