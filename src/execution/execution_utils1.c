@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 15:29:42 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/28 11:18:28 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/28 11:21:49 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ int	err_msg(char *obj, char *msg, int err_code)
 	}
 	return (err_code);
 }
-
 
 void	close_fds(t_data *data)
 {

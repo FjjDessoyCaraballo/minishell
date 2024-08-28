@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 10:37:35 by lstorey           #+#    #+#             */
-/*   Updated: 2024/08/28 11:14:54 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/28 11:21:32 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	handler(int sig)
 		{
 			printf("\n");
 			rl_on_new_line();
-			rl_replace_line("", 0);		
+			rl_replace_line("", 0);
 		}
 		else
 		{
@@ -40,6 +40,7 @@ void	handler(int sig)
 		kill(getpid(), sig);
 	}
 }
+
 char	*get_home(t_env *env_ll)
 {
 	t_env	*tmp;
