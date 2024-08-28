@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy <fdessoy@student.42.fr>            +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 10:03:43 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/27 20:32:29 by fdessoy          ###   ########.fr       */
+/*   Updated: 2024/08/23 17:36:13 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,11 @@ void	malloc_check_message(void *ptr)
 		return ;
 }
 
-void	super_free(t_data *data, t_env **env_ll, char **env)
+void	super_free(t_data *data, t_env **env_ll)
 {
 	free_null(data->fin_tok);
 	free_array(data->binary_paths);
 	free_all_ll(env_ll);
-	free_stupid_element(env);
 	free(data);
 }
 
@@ -43,10 +42,10 @@ int	wow_loop(t_data *data, t_env **env_ll)
 	status = 0;
 	while (666)
 	{
-		status = sniff_line(data, env_ll);
+		status = sniff_line(data);
 		if (status == NULL_LINE)
 		{
-			printf("exit\n");
+			printf("boobs\n");
 			break ;
 		}
 		else if (status == 0)

@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/28 11:15:46 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/26 15:31:38 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,20 +43,17 @@
 /* macros ****************************************/
 /*************************************************/
 # define ERR "Error\n"
-# define MALLOC ": malloc failure"
+# define MALLOC "Malloc failure"
 # define EXIT "Exit\n"
-# define NO_EXEC ": command not found"
-# define NO_PERMISSION ": permission denied"
+# define NO_EXEC "Command not found"
+# define NO_PERMISSION "Permission denied"
 # define HEREDOC_FAILURE "Unable to create temporary for here_doc"
 # define HEREDOC_FAILURE2 "Unable to read temporary for here_doc"
-# define FILE_ERROR ": no such file or directory"
+# define FILE_ERROR "No such file or directory"
 # define SYNTAX "syntax error near unexpected token "
-# define ERR_ARG "Wrong number of arguments, Karen"
-# define SYNTAX_EXIT ": exit: numeric argument required"
+# define ERR_ARG "Wrong number of arguments, Karen\n"
 # define ERR_EXP "export: not a valid identifier\n"
 # define EXEC_ENV_NULL "envir"
-# define HEREDOC_SIG 1
-# define EXEC_SIG 2
 # define NO_FILE 100
 # define NULL_LINE 5
 # define DIRECTORY 69
@@ -166,13 +163,13 @@ int		syntax_check(t_token *token);
 
 /* in redirections.c */
 int		find_redirection(char **array);
-void	redirections_handling(t_data *data, char **array, t_env **env_ll);
-int		here_doc(char *delimiter, t_data *data, t_env **env_ll);
+void	redirections_handling(t_data *data, char **array);
+int		here_doc(char *delimiter, t_data *data);
 
 /* in redirections_utils.c */
 void	input_redirection(t_data *data, char **array);
 void	output_redirection(t_data *data, char **array);
-void	heredoc_redirection(t_data *data, char **array, t_env **env_ll);
+void	heredoc_redirection(t_data *data, char **array);
 void	append_redirection(t_data *data, char **array);
 
 /* in execution_utils1.c */
@@ -191,7 +188,7 @@ t_token	*find_redtok(t_token *token);
 char	*get_binary(char *instruction);
 
 /* in fd_dups.c */
-void	dup_fds(t_data *data, int child, char **array, t_env **env_ll);
+void	dup_fds(t_data *data, int child, char **array);
 void	open_fdin(t_data *data, char *infile);
 void	open_fdout(t_data *data, char *outfile, int flag);
 void	exit_child(char *file, int err_code);
@@ -214,14 +211,13 @@ int		check_bin_path(char *binary, char **paths);
 int		is_file(char *binary, char *path);
 
 /* in utils2.c */
-void	free_null(void *ptr);
 void	malloc_check_message(void *ptr);
+void	free_null(void *ptr);
+void	super_free(t_data *data, t_env **env_ll);
 int		wow_loop(t_data *data, t_env **env_ll);
-void	super_free(t_data *data, t_env **env_ll, char **env);
-char	**add_shell_lvl(char **env);
 
 /* in line_handler.c */
-int		sniff_line(t_data *data, t_env **env_ll);
+int		sniff_line(t_data *data);
 
 /* in ll_utils.c */
 t_env	*ft_listnew(void *content);
@@ -234,40 +230,22 @@ void	free_ll(t_env *env_ll);
 char	**env_arr_updater(t_env **env_ll);
 int		ll_size(t_env **env_ll);
 void	free_all_ll(t_env **env_ll);
+char	**add_shell_lvl(char **env);
 void	lstadd_front(t_env **lst, t_env *new);
-void	free_stupid_element(char **env);
 
 /* in built_ins.c */
 int		built_ins(t_data *data, t_token *token, t_env **env_ll);
 int		print_env(t_env *env_ll);
 int		print_pwd(void);
+void	get_the_hell_out(t_data *data, t_token *token, t_env **env_ll);
 int		yodeling(t_token *token);
 
 /* in built_ins2.c */
-int		print_export(t_env **env_ll);
-void	alphabetical_printer(char **env_array);
-int		unset(t_token *token, t_env **env_ll);
-
-/* in built_ins3.c */
-void	get_the_hell_out(t_data *data, t_token *token, t_env **env_ll);
-int		handle_flag_type(t_token *head);
-
-/* in cd.c */
 int		shell_cd(t_token *token, t_data *data);
-
-/* in export.c */
 int		export(t_token *token, t_env **env_ll);
-int		should_skip_token(t_token *token);
-void	process_tokens(t_token *token, t_env **env_ll);
-int		process_token(t_token *tmp_tok, t_env **env_ll);
-void	update_env_variable(t_env *tmp_ll, t_token *tmp_tok, char **array);
-
-/* in unset.c */
+int		print_export(t_env **env_ll);
 int		unset(t_token *token, t_env **env_ll);
-int		should_skip_unset(t_token *token, t_env **env_ll);
-int		remove_first_env_var(t_token *head, t_env **env_ll);
-void	remove_env_var(t_token *head, t_env **env_ll);
-void	free_env_var(t_env *env_var);
+void	alphabetical_printer(char **env_array);
 
 /* signals.c */
 void	handler(int sig);
@@ -278,5 +256,15 @@ int		free_retstatus(char *array, int status);
 void	free_tokens(t_token *head);
 void	free_gang(t_data *data);
 void	free_my_boi(char **paths);
+
+/* DEPRECATED FUNCTIONS */
+// int		checking_access(t_data *data, char *instruction);
+// int		built_in_or_garbage(t_data *data, t_env **env_ll, t_token *token);
+// int		single_execution(t_data *data, t_token *token, t_env **env_ll);
+// void		single_child(t_data *data, t_token *token, t_env **env_ll);
+// int		single_parent(pid_t pid, int status);
+// int 		lonely_execution(t_data *data, t_token *token, t_env **env_ll);
+// int		how_many_children(t_token *token);
+// void		handle_heredoc(t_data *data, char *delimiter);
 
 #endif

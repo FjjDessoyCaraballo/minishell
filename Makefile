@@ -10,7 +10,7 @@ VPATH = src:libft:includes
 O_FLAGS = -lreadline -L${HOME}/.brew/opt/readline/lib
 
 # Compiler flags
-CFLAGS = -Wall -Wextra -Werror -I${HOME}/.brew/opt/readline/include #-fsanitize=address #-g
+CFLAGS = -Wall -Wextra -Werror -I${HOME}/.brew/opt/readline/include -fsanitize=address #-g
 INCFLAGS = -Iincludes -Ilibft/includes
 
 # Main project files
@@ -24,11 +24,8 @@ SRC_FILES = main.c\
 			ll_utils2.c\
 			line_handler.c\
 			src/execution/cd.c\
-			src/execution/unset.c\
 			src/execution/built_ins.c\
 			src/execution/built_ins2.c\
-			src/execution/built_ins3.c\
-			src/execution/export.c\
 			src/execution/execution.c\
 			src/execution/execution2.c\
 			src/execution/redirections.c\

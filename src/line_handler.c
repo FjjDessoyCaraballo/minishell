@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   line_handler.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/28 11:39:41 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/28 11:39:43 by fdessoy-         ###   ########.fr       */
+/*   Created: 2024/05/13 12:23:49 by walnaimi          #+#    #+#             */
+/*   Updated: 2024/08/25 01:33:29 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,13 @@ int	total_env_len(t_env *head)
 	while (current != NULL)
 	{
 		if (current->value)
-			total_length += ft_strlen(current->value);
+			total_length += strlen(current->value);
 		current = current->next;
 	}
 	return (total_length);
 }
 
-void	setup(t_data *data, t_env **env_ll)
+void	setup(t_data *data)
 {
 	data->deli = "  \t\n";
 	data->id = 0;
@@ -38,8 +38,7 @@ void	setup(t_data *data, t_env **env_ll)
 	data->echo_flag = false;
 	data->redirections = false;
 	data->piped = false;
-	if (data->envll != NULL)
-		data->env_len = total_env_len((*env_ll));
+	data->env_len = total_env_len(data->envll);
 	if (data->status == 963)
 		data->status = 2;
 }
@@ -52,9 +51,13 @@ void	check_and_mark_empty_tokens(t_token *first_token)
 	while (current_token != NULL)
 	{
 		if (current_token->value == NULL || current_token->value[0] == '\0')
+		{
 			current_token->empty = true;
+		}
 		else
+		{
 			current_token->empty = false;
+		}
 		current_token = current_token->next;
 	}
 }
@@ -64,7 +67,7 @@ void	check_and_mark_empty_tokens(t_token *first_token)
  * tokenizing afterwards. After tokenizing, we are using the tokens to check
  * for invalid inputs. More information in closed issue #19 in the repository.
  */
-int	sniff_line(t_data *data, t_env **env_ll)
+int	sniff_line(t_data *data)
 {
 	data->line_read = readline("\e[1;45m[I can't believe this is"
 			" not shell]\e[0m ");
@@ -72,13 +75,16 @@ int	sniff_line(t_data *data, t_env **env_ll)
 		return (NULL_LINE);
 	if (*data->line_read)
 		add_history(data->line_read);
-	setup(data, env_ll);
-	line_tokenization(data, env_ll);
+	setup(data);
+	line_tokenization(data);
 	if (data->status == 963)
-		return (free(data->line_read), 963);
+	{
+		free(data->line_read);
+		return (963);
+	}
 	data->status = 0;
 	check_and_mark_empty_tokens(data->token);
-	free_null(data->line_read);
+	free(data->line_read);
 	if (syntax_check(data->token) == FAILURE)
 	{
 		data->status = 2;

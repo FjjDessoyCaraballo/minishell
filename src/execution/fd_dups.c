@@ -6,66 +6,33 @@
 /*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 10:06:30 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/28 12:30:34 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/26 10:33:10 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	dup_fds(t_data *data, int child, char **array, t_env **env_ll)
+void	dup_fds(t_data *data, int child, char **array)
 {
-	if (data->piped == true)
-	{
-		if (child != 0 && data->piped == true)
-			dup2(data->read_end, STDIN_FILENO);
-		if (child != data->nb_cmds - 1)
-			dup2(data->pipe_fd[1], STDOUT_FILENO);
-		if (data->piped)
-		{
-			close(data->pipe_fd[0]);
-			close(data->pipe_fd[1]);
-		}
-	}
 	if (find_redirection(array) == SUCCESS)
 		data->redirections = true;
 	if (data->redirections == true)
-		redirections_handling(data, array, env_ll);
-	if (data->heredoc_exist == true)
+		redirections_handling(data, array);
+	else
 	{
-		dprintf(2, "we are closing them1\n");
-		close(data->sync_pipe[0]);
-		close(data->sync_pipe[1]);
+		if (child == 0 && data->piped == true)
+			dup2(data->pipe_fd[0], STDIN_FILENO);
+		else
+			dup2(data->read_end, STDIN_FILENO);
+	}
+	if (child != data->nb_cmds - 1)
+		dup2(data->pipe_fd[1], STDOUT_FILENO);
+	if (data->piped == true)
+	{
+		close(data->pipe_fd[0]);
+		close(data->pipe_fd[1]);
 	}
 }
-
-// void	dup_fds(t_data *data, int child, char **array, t_env **env_ll)
-// {
-// 	if (data->piped == true)
-// 	{
-// 		if (child == 0 && data->piped == true)
-// 			dup2(data->pipe_fd[0], STDIN_FILENO);
-// 		else
-// 			dup2(data->read_end, STDIN_FILENO);
-// 	}
-// 	if (child != data->nb_cmds - 1 && data->piped == true)
-// 		dup2(data->pipe_fd[1], STDOUT_FILENO);
-// 	if (data->piped == true)
-// 	{
-// 		dprintf(2, "we are closing them2\n");
-// 		close(data->pipe_fd[0]);
-// 		close(data->pipe_fd[1]);
-// 	}
-// 	if (find_redirection(array) == SUCCESS)
-// 		data->redirections = true;
-// 	if (data->redirections == true)
-// 		redirections_handling(data, array, env_ll);
-// 	if (data->heredoc_exist == true)
-// 	{
-// 		dprintf(2, "we are closing them1\n");
-// 		close(data->sync_pipe[0]);
-// 		close(data->sync_pipe[1]);
-// 	}
-// }
 
 void	open_fdin(t_data *data, char *infile)
 {

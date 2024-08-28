@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy <fdessoy@student.42.fr>            +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:34:16 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/27 20:54:31 by fdessoy          ###   ########.fr       */
+/*   Updated: 2024/08/23 16:43:41 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,10 +98,10 @@ t_token	*initialize_tokens(t_data *data)
  * 
  * @return 0 on successful tokenization, 1 otherwise.
  */
-int	line_tokenization(t_data *data, t_env **env_ll)
+int	line_tokenization(t_data *data)
 {
 	data->first_node = initialize_tokens(data);
-	data->tok_res = ft_strtok(data->line_read, data, data->cur_tok, env_ll);
+	data->tok_res = ft_strtok(data->line_read, data, data->cur_tok);
 	data->tok_str = NULL;
 	while (data->tok_res != NULL)
 	{
@@ -115,7 +115,7 @@ int	line_tokenization(t_data *data, t_env **env_ll)
 			data->cur_tok = create_and_link_next_token(data->cur_tok, data);
 			data->prev_token = data->cur_tok->prev;
 		}
-		data->tok_res = ft_strtok(NULL, data, data->cur_tok, env_ll);
+		data->tok_res = ft_strtok(NULL, data, data->cur_tok);
 	}
 	data->token = data->first_node;
 	return (0);

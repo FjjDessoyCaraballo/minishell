@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils1.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bposa <bposa@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 15:29:42 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/28 11:21:49 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/24 23:18:42 by bposa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,9 @@ char	*access_path(char **path, char *cmd)
 int	err_msg(char *obj, char *msg, int err_code)
 {	
 	if (!obj && *msg)
-		ft_putendl_fd(msg, 2);
+		printf("%s\n", msg);
 	else if (*obj && *msg)
-	{
-		ft_putstr_fd(obj, 2);
-		ft_putendl_fd(msg, 2);
-	}
+		printf("%s: %s\n", obj, msg);
 	return (err_code);
 }
 

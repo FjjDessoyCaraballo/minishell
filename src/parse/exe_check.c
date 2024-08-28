@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exe_check.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/28 11:36:36 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/28 11:38:16 by fdessoy-         ###   ########.fr       */
+/*   Created: 2024/08/23 04:08:46 by walnaimi          #+#    #+#             */
+/*   Updated: 2024/08/23 22:44:49 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,3 +84,16 @@ int	handle_cmd_exe(char *token, t_token *current_token, t_data *data)
 	free_my_boi(paths);
 	return (1);
 }
+
+// void	print_binary_paths(t_data *data)
+// {
+// 	for (int i = 0; data->binary_paths[i] != NULL; i++)
+// 	{
+// 		printf("Path %d: %s\n", i, data->binary_paths[i]);
+// 	}
+// 	if (!data->binary_paths)
+// 	{
+// 		printf("Binary paths are NULL\n");
+// 		return ;
+// 	}
+// }
