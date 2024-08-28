@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 15:26:27 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/26 15:20:42 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/27 00:04:15 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,9 @@ int	export(t_token *token, t_env **env_ll)
 	t_token *tmp_tok;
 	t_env	*tmp_ll;
 	char	**array;
-	int		found;
 
 	if (find_token(token, APPEND)
-	|| find_token(token, HEREDOC)
+	|| find_token(token, HERE_DOC)
 	|| find_token(token, RED_IN)
 	|| find_token(token, RED_OUT))
 		return (SUCCESS);
@@ -58,9 +57,7 @@ int	export(t_token *token, t_env **env_ll)
 	tmp_tok = token;
 	while (tmp_tok->next != NULL)
 	{
-		found = 0;
-		if (!ft_strchr(tmp_tok->value, '='))
-			tmp_tok = tmp_tok->next;
+		int found = 0;
 		tmp_ll = (*env_ll);
 		while (tmp_ll != NULL)
 		{
@@ -99,7 +96,9 @@ int	export(t_token *token, t_env **env_ll)
 			free_array(array);
 		}
 		else
+		{
 			ft_listadd_back(env_ll, ft_listnew(tmp_tok->value));
+		}
 		tmp_tok = tmp_tok->next;
 	}
 	return (SUCCESS);

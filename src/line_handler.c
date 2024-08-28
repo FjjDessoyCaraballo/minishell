@@ -6,7 +6,7 @@
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 12:23:49 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/08/25 01:33:29 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/26 23:59:42 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,25 +41,36 @@ void	setup(t_data *data)
 	data->env_len = total_env_len(data->envll);
 	if (data->status == 963)
 		data->status = 2;
+	else if (data->no_cmd_flag == 1)
+		data->status = 127;
 }
 
-void	check_and_mark_empty_tokens(t_token *first_token)
+int	token_only_arg(t_data *data)
 {
-	t_token	*current_token;
+	t_token	*head;
+	int		expect_command;
 
-	current_token = first_token;
-	while (current_token != NULL)
+	head = data->token;
+	expect_command = 1;
+	data->no_cmd_flag = 0;
+	while (head)
 	{
-		if (current_token->value == NULL || current_token->value[0] == '\0')
+		if (head->type == PIPE)
 		{
-			current_token->empty = true;
+			expect_command = 1;
+			data->no_cmd_flag = 1;
 		}
-		else
+		else if (expect_command && head->type == ARG)
+			data->no_cmd_flag = 1;
+		else if (head->type == COMMAND || head->type == BUILTIN)
 		{
-			current_token->empty = false;
+			expect_command = 0;
+			data->no_cmd_flag = 0;
 		}
-		current_token = current_token->next;
+		head = head->next;
 	}
+
+	return (SUCCESS);
 }
 
 /**
@@ -78,18 +89,15 @@ int	sniff_line(t_data *data)
 	setup(data);
 	line_tokenization(data);
 	if (data->status == 963)
-	{
-		free(data->line_read);
-		return (963);
-	}
+		return (free_retstatus(data->line_read, 963));
 	data->status = 0;
-	check_and_mark_empty_tokens(data->token);
 	free(data->line_read);
 	if (syntax_check(data->token) == FAILURE)
 	{
 		data->status = 2;
 		return (2);
 	}
+	token_only_arg(data);
 	data->piped = false;
 	data->heredoc_exist = false;
 	if (count_token(data->token, PIPE) >= 1)

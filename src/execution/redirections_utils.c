@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   redirections_utils.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 15:28:13 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/26 10:46:48 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/26 00:03:12 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+
 
 void	input_redirection(t_data *data, char **array)
 {
@@ -22,7 +24,7 @@ void	input_redirection(t_data *data, char **array)
 			dup2(data->fd_in, STDIN_FILENO);
 			close(data->fd_in);
 			if (data->piped == true)
-				dup2(data->pipe_fd[1], STDOUT_FILENO);				
+				dup2(data->pipe_fd[1], STDOUT_FILENO);
 		}
 		else
 			exit(err_msg(array[data->index + 1], FILE_ERROR, 2));
@@ -56,17 +58,26 @@ void	append_redirection(t_data *data, char **array)
 		close(data->fd_out);
 	}
 	else
-		exit(err_msg("'newline'", SYNTAX, 2));		
+		exit(err_msg("'newline'", SYNTAX, 2));
 }
-	
-void        heredoc_redirection(t_data *data, char **array)
+
+void	heredoc_redirection(t_data *data, char **array)
 {
 	if (array[data->index + 1])
 	{
-		data->fd_in = here_doc(array[data->index + 1], data);
-		dup2(data->fd_in, STDIN_FILENO);
-		close(data->fd_in);
+		if (data->piped == false)
+		{
+			data->fd_in = here_doc(array[data->index + 1], data);
+			dup2(data->fd_in, STDIN_FILENO);
+			close(data->fd_in);
+		}
+		else if (data->piped == true)
+		{
+			data->fd_in = here_doc(array[data->index + 1], data);
+			dup2(data->fd_in, STDIN_FILENO);
+			close(data->fd_in);
+		}
 	}
 	else
-		exit(err_msg("'newline'", SYNTAX, 2));        
+		exit(err_msg("'newline'", SYNTAX, 2));
 }

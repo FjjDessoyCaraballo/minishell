@@ -3,14 +3,35 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:58:07 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/26 16:31:53 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/27 00:38:05 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+// this function turns space into underscore,
+// better used after echo and before cmd
+// void	replace_spaces_with_underscores(t_token *token_list)
+// {
+// 	t_token	*current_token;
+// 	int		i;
+//
+// 	current_token = token_list;
+// 	while (current_token != NULL && current_token->value != NULL)
+// 	{
+// 		i = 0;
+// 		while (current_token->value[i] != '\0')
+// 		{
+// 			if (current_token->value[i] == ' ')
+// 				current_token->value[i] = '_';
+// 			i++;
+// 		}
+// 		current_token = current_token->next;
+// 	}
+// }
 
 /**
  * Execution and execution prepping are just the same function broke
@@ -26,18 +47,19 @@ int	execution(t_data *data, t_env **env_ll)
 	t_token	*token;
 
 	token = data->token;
-	if (token->value == NULL)
-		return (0);
 	data->nb_cmds = count_token(token, PIPE) + 1;
 	if (data->nb_cmds == 0)
 		data->nb_cmds = 1;
-	if (!ft_strncmp(token->value, "cd", 2)
-		|| !ft_strncmp(token->value, "export", 6)
-		|| !ft_strncmp(token->value, "unset", 5)
-		|| !ft_strncmp(token->value, "exit", 4))
+	if ((token->type == BUILTIN) && (!find_token(token, PIPE))
+		&& (ft_strncmp(token->value, "cd", 2)
+			|| ft_strncmp(token->value, "exit", 4)
+			|| ft_strncmp(token->value, "export", 6)))
 		data->status = built_ins(data, token, env_ll);
 	else
+	{
+		//replace_spaces_with_underscores(data->token);
 		data->status = execution_prepping(data, token, env_ll);
+	}
 	return (data->status);
 }
 
@@ -48,7 +70,7 @@ int	execution_prepping(t_data *data, t_token *token, t_env **env_ll)
 
 	cmd_a = cl_to_array(token);
 	if (!cmd_a)
-		return (FAILURE);
+		return (0);
 	if (pipe(data->sync_pipe) == -1)
 		return (err_msg(NULL, "Broken pipe\n", 141));
 	data->status = forking(data, env_ll, cmd_a, pids);
@@ -56,6 +78,7 @@ int	execution_prepping(t_data *data, t_token *token, t_env **env_ll)
 	pids = wait(&data->status);
 	while (pids > 0)
 		pids = wait(&data->status);
+	g_exit_code = 0;
 	free_array(cmd_a);
 	return (WEXITSTATUS(data->status));
 }
@@ -65,6 +88,7 @@ int	forking(t_data *data, t_env **env_ll, char **all_cmds, pid_t pids)
 	char	sync_signal;
 
 	data->index = 0;
+	g_exit_code = EXEC_SIG;
 	while (data->index < data->nb_cmds)
 	{
 		if (data->piped == true && pipe(data->pipe_fd) == -1)
@@ -163,11 +187,11 @@ void	ft_exec(t_data *data, t_env **env_ll, char **cmd_array)
 		path = loop_path_for_binary(cmd_array[0], data->binary_paths);
 		if (!path)
 		{
-			err_msg(cmd_array[0], NO_EXEC, 0);
+			err_msg(cmd_array[0], NO_EXEC, 127);
 			free_array(cmd_array);
 			free_all_ll(env_ll);
 			free_data(data, NULL, NULL);
-			exit(127);
+			exit(0);
 		}
 	}
 	free_tokens(data->token);

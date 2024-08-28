@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/26 15:31:38 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/27 00:10:07 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@
 # define ERR "Error\n"
 # define MALLOC "Malloc failure"
 # define EXIT "Exit\n"
-# define NO_EXEC "Command not found"
+# define NO_EXEC ": command not found"
 # define NO_PERMISSION "Permission denied"
 # define HEREDOC_FAILURE "Unable to create temporary for here_doc"
 # define HEREDOC_FAILURE2 "Unable to read temporary for here_doc"
@@ -54,6 +54,11 @@
 # define ERR_ARG "Wrong number of arguments, Karen\n"
 # define ERR_EXP "export: not a valid identifier\n"
 # define EXEC_ENV_NULL "envir"
+# define SYNTAX_EXIT ": exit: numeric argument required"
+# define REDIRECT_OUT 222
+# define REDIRECT_IN 111
+# define HERE_DOC 333
+# define APP 444
 # define NO_FILE 100
 # define NULL_LINE 5
 # define DIRECTORY 69
@@ -63,6 +68,8 @@
 # define PERMISSION_DENIED 126
 # define COMMAND_NOT_FOUND 127
 # define MAX_HEREDOC 1024
+# define HEREDOC_SIG 1
+# define EXEC_SIG 2
 # define SUCCESS 0
 # define FAILURE 1
 
@@ -92,7 +99,6 @@ typedef struct s_data
 	char		*bin;
 	int			index;
 	char		*path;
-	int			last_heredoc_index;
 	char		**binary_paths;
 	int			pipe_fd[2];
 	int			sync_pipe[2];
@@ -101,6 +107,7 @@ typedef struct s_data
 	int			fd_out;
 	char		*home_pwd;
 	int			status;
+	int			no_cmd_flag;
 	char		**cmd;
 	t_token		*token;
 	t_token		*first_node;
@@ -181,10 +188,8 @@ void	execution_absolute_path(t_data *data, char **array);
 
 /* in execution_utils2.c */
 char	**cl_to_array(t_token *token);
-int		fill_instr_loop(char **instruction, t_token **head);
-int		alloc_memory(char ***pipe_array, char **instruction, \
-					t_token **token);
-t_token	*find_redtok(t_token *token);
+char	*build_instruction(t_token **head);
+int		checking_access(t_data *data, char *instruction);
 char	*get_binary(char *instruction);
 
 /* in fd_dups.c */
@@ -258,7 +263,6 @@ void	free_gang(t_data *data);
 void	free_my_boi(char **paths);
 
 /* DEPRECATED FUNCTIONS */
-// int		checking_access(t_data *data, char *instruction);
 // int		built_in_or_garbage(t_data *data, t_env **env_ll, t_token *token);
 // int		single_execution(t_data *data, t_token *token, t_env **env_ll);
 // void		single_child(t_data *data, t_token *token, t_env **env_ll);

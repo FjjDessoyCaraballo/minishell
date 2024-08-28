@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 10:37:35 by lstorey           #+#    #+#             */
-/*   Updated: 2024/08/22 16:35:42 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/26 20:52:15 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,22 @@ void	handler(int sig)
 {
 	if (sig == SIGINT)
 	{
-		if (g_exit_code == HEREDOC)
+		if (g_exit_code == HEREDOC_SIG) {
 			handler(SIGQUIT);
-		printf("\n");
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
+		}
+		else if (g_exit_code == EXEC_SIG)
+		{
+			printf("\n");
+			rl_on_new_line();
+			rl_replace_line("", 0);		
+		}
+		else
+		{
+			printf("\n");
+			rl_on_new_line();
+			rl_replace_line("", 0);
+			rl_redisplay();
+		}
 	}
 	else if (sig == SIGQUIT)
 	{
