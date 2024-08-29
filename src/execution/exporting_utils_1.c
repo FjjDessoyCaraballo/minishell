@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exporting_utils_1.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/28 11:32:01 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/08/28 12:30:21 by walnaimi         ###   ########.fr       */
+/*   Created: 2024/08/29 13:51:24 by fdessoy-          #+#    #+#             */
+/*   Updated: 2024/08/29 13:51:26 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

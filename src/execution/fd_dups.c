@@ -3,34 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   fd_dups.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/13 10:06:30 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/28 13:04:06 by walnaimi         ###   ########.fr       */
+/*   Created: 2024/08/29 13:51:45 by fdessoy-          #+#    #+#             */
+/*   Updated: 2024/08/29 13:56:21 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-// void	dup_fds(t_data *data, int child, char **array)
-// {
-// 	if (find_redirection(array) == SUCCESS)
-// 		data->redirections = true;
-// 	if (data->redirections == true)
-// 		redirections_handling(data, array);
-// 	else
-// 	{
-// 		if (child != 0 && data->piped == true)
-// 			dup2(data->read_end, STDIN_FILENO);
-// 		if (child != data->nb_cmds - 1)
-// 			dup2(data->pipe_fd[1], STDOUT_FILENO);
-// 		if (data->piped)
-// 		{
-// 			close(data->pipe_fd[0]);
-// 			close(data->pipe_fd[1]);
-// 		}
-// 	}
-// }
 
 void	dup_fds(t_data *data, int child, char **array)
 {

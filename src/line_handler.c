@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/13 12:23:49 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/08/29 13:03:21 by fdessoy-         ###   ########.fr       */
+/*   Created: 2024/08/29 13:54:33 by fdessoy-          #+#    #+#             */
+/*   Updated: 2024/08/29 13:58:38 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	total_env_len(t_env *head)
 	while (current != NULL)
 	{
 		if (current->value != NULL)
-			total_length += strlen(current->value);
+			total_length += ft_strlen(current->value);
 		current = current->next;
 	}
 	return (total_length);

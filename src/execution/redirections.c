@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 13:03:21 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/29 13:03:37 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/08/29 13:52:05 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,36 +66,6 @@ void	redirections_handling(t_data *data, char **array)
 		data->index++;
 	}
 }
-
-// void	redirections_handling(t_data *data, char **array)
-// {
-// 	int	last_heredoc_index;
-
-// 	last_heredoc_index = last_heredoc(array);
-// 	data->index = 0;
-// 	while (array[data->index])
-// 	{
-// 		if (!ft_strncmp(array[data->index], "<", 1)
-// 			&& ft_strlen(array[data->index]) == 1)
-// 			input_redirection(data, array);
-// 		else if (!ft_strncmp(array[data->index], ">", 1)
-// 			&& ft_strlen(array[data->index]) == 1)
-// 			output_redirection(data, array);
-// 		else if (!ft_strncmp(array[data->index], ">>", 2)
-// 			&& ft_strlen(array[data->index]) == 2)
-// 			append_redirection(data, array);
-// 		else if (!ft_strncmp(array[data->index], "<<", 2)
-// 			&& ft_strlen(array[data->index]) == 2)
-// 		{
-// 			if (data->index == last_heredoc_index)
-// 			{
-// 				heredoc_redirection(data, array);
-// 				write(data->sync_pipe[1], "1", 1);
-// 			}
-// 		}
-// 		data->index++;
-// 	}
-// }
 
 void	process_and_write_input(char *input, int *pipe_fd, t_data *data)
 {

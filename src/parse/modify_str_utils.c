@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   modify_str_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/22 21:33:17 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/08/25 01:35:00 by walnaimi         ###   ########.fr       */
+/*   Created: 2024/08/29 13:53:32 by fdessoy-          #+#    #+#             */
+/*   Updated: 2024/08/29 13:53:33 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
