@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/15 16:27:10 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/08/26 23:59:43 by walnaimi         ###   ########.fr       */
+/*   Created: 2024/08/29 09:05:32 by fdessoy-          #+#    #+#             */
+/*   Updated: 2024/08/29 09:05:34 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ t_token	*init_token(void);
 //* ---------------------------------------------- */
 //              src/parse/tokenizer.c              //
 //* ---------------------------------------------- */
-int		line_tokenization(t_data *data);
+int		line_tokenization(t_data *data, t_env **env_ll);
 t_token	*initialize_tokens(t_data *data);
 t_token	*create_and_link_next_token(t_token *current_token, t_data *data);
 int		chunky_checker(char *token, t_token *current_token, t_data *data);
@@ -119,7 +119,7 @@ int		chunky_checker(char *token, t_token *current_token, t_data *data);
 //* ---------------------------------------------- */
 //              src/parse/ft_strtok.c              //
 /** ---------------------------------------------- */
-char	*ft_strtok(char *str, t_data *data, t_token *cur_tok);
+char	*ft_strtok(char *str, t_data *data, t_token *cur_tok, t_env **env_ll);
 void	init_strtok(t_data *data);
 
 //* ---------------------------------------------- */
@@ -153,14 +153,14 @@ int		handle_tok(char *tok, t_token *c_t, t_data *d, char **tgt);
 //* ---------------------------------------------- */
 int		ft_charinstr(char c, const char *str);
 void	handle_quote(const char *target, t_data *data);
-char	*substr_and_expand(const char *target, t_data *data);
+char	*substr_and_expand(const char *target, t_data *data, t_env **env_ll);
 void	quoted_segment(const char *str, char *n_str, t_data *data, char qt_c);
 char	*remove_quotes(const char *str, t_data *data);
 
 //*---------------------------------------------- */
 //              src/parse/expand_env.c            //
 //*---------------------------------------------- */
-char	*expand_env_variables(const char *input, t_data *data);
+char	*expand_env_variables(const char *input, t_data *data, t_env **env_ll);
 void	dollar_sign(const char *str, t_index *num, t_data *data, char *result);
 void	handle_status_variable(t_data *data, char *result, t_index *num);
 char	*fetching_env(const char *str, t_index *num, t_data *data);
@@ -170,7 +170,7 @@ char	*get_env_value(const char *input, size_t v_s, size_t v_l, t_data *data);
 //              src/parse/expand_env_utils.c     //
 //*----------------------------------------------*/
 void	copy_env_value(char *result, const char *env_value, t_index *num);
-void	setup_env_variables(const char *input, t_data *data);
+void	setup_env_variables(const char *input, t_data *data, t_env **env_ll);
 void	single_q(const char *input, t_data *data, char *res, t_index *num);
 void	double_q(const char *input, t_data *data, char *res, t_index *num);
 void	handle_env_var(const char *str, t_index *num, t_data *data, char *res);

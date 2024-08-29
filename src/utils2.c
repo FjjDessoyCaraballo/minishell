@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/13 10:03:43 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/26 20:52:12 by walnaimi         ###   ########.fr       */
+/*   Created: 2024/08/29 09:11:40 by fdessoy-          #+#    #+#             */
+/*   Updated: 2024/08/29 09:11:42 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	wow_loop(t_data *data, t_env **env_ll)
 	status = 0;
 	while (666)
 	{
-		status = sniff_line(data);
+		status = sniff_line(data, env_ll);
 		if (status == NULL_LINE)
 		{
 			printf("bye bye!\n");

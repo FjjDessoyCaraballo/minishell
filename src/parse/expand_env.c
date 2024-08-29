@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_env.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/22 21:55:38 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/08/25 19:44:52 by walnaimi         ###   ########.fr       */
+/*   Created: 2024/08/29 09:09:52 by fdessoy-          #+#    #+#             */
+/*   Updated: 2024/08/29 09:09:53 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,12 +147,12 @@ void	dollar_sign(const char *str, t_index *num, t_data *data, char *result)
  * @return A dynamically allocated string containing the expanded input string,
  *         or NULL if memory allocation fails.
  */
-char	*expand_env_variables(const char *input, t_data *data)
+char	*expand_env_variables(const char *input, t_data *data, t_env **env_ll)
 {
 	char	*result;
 	t_index	num;
 
-	setup_env_variables(input, data);
+	setup_env_variables(input, data, env_ll);
 	result = (char *)malloc(data->env_len * data->num_of_envs * sizeof(char));
 	if (!result)
 		return (NULL);

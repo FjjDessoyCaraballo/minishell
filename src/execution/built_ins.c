@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/15 14:18:24 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/25 22:56:24 by walnaimi         ###   ########.fr       */
+/*   Created: 2024/08/29 09:07:41 by fdessoy-          #+#    #+#             */
+/*   Updated: 2024/08/29 09:07:43 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,6 @@ int	built_ins(t_data *data, t_token *token, t_env **env_ll)
 	int	status;
 
 	status = 0;
-	if(token->value == NULL)
-		return (status);
 	data->home_pwd = get_home((*env_ll));
 	if (token->value == NULL)
 		return (status);
@@ -38,7 +36,7 @@ int	built_ins(t_data *data, t_token *token, t_env **env_ll)
 	else if (!ft_strncmp(token->value, "unset", 6))
 		status = unset(token, env_ll);
 	else
-		return(err_msg(token->value, NO_EXEC, 127));
+		return (err_msg(token->value, NO_EXEC, 127));
 	return (status);
 }
 
@@ -77,7 +75,8 @@ int	print_pwd(void)
 an exit code that was manually inserted after exit */
 void	get_the_hell_out(t_data *data, t_token *token, t_env **env_ll)
 {
-	int status;
+	int	status;
+
 	status = 0;
 	free_all_ll(env_ll);
 	ft_printf("exit\n");
@@ -96,55 +95,6 @@ void	get_the_hell_out(t_data *data, t_token *token, t_env **env_ll)
 	}
 	free_gang(data);
 	exit(data->status);
-}
-
-int	handle_flag_type(t_token *head)
-{
-	head = head->next;
-	while (head->type == FLAG)
-	{
-		head = head->next;
-		if (head->value == NULL)
-			return (SUCCESS);
-	}
-	while (head->value != NULL && head->value[0] == '\0')
-		head = head->next;
-	while (head != NULL)
-	{
-		if (head->value != NULL && head->value[0] != '\0')
-		{
-			if (head->type == RED_IN || head->type == RED_OUT
-				|| head->type == APP || head->type == HEREDOC)
-				break ;
-			printf("%s", head->value);
-		}
-		head = head->next;
-		if (head != NULL && head->value != NULL && head->value[0] != '\0')
-			printf(" ");
-	}
-	return (SUCCESS);
-}
-
-int	handle_arg_type(t_token *head)
-{
-	head = head->next;
-	while (head->value != NULL && head->value[0] == '\0')
-		head = head->next;
-	while (head != NULL)
-	{
-		if (head->value != NULL && head->value[0] != '\0')
-		{
-			if (head->type == RED_IN || head->type == RED_OUT
-				|| head->type == APP || head->type == HEREDOC)
-				break ;
-			printf("%s", head->value);
-		}
-		head = head->next;
-		if (head != NULL && head->value != NULL && head->value[0] != '\0')
-			printf(" ");
-	}
-	printf("\n");
-	return (SUCCESS);
 }
 
 int	yodeling(t_token *token)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bposa <bposa@student.hive.fi>              +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/24 11:23:58 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/22 23:34:32 by bposa            ###   ########.fr       */
+/*   Created: 2024/08/29 09:11:35 by fdessoy-          #+#    #+#             */
+/*   Updated: 2024/08/29 12:13:03 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,15 +70,16 @@ int	check_bin_local(char *binary)
 	{
 		if (!access(binary_with_path, X_OK))
 		{
-			free(binary_with_path);
-			free(cwd);
+			free_null(binary_with_path);
+			free_null(cwd);
 			return (EXECUTABLE);
 		}
-		free(cwd);
+		free_null(binary_with_path);
+		free_null(cwd);
 		return (FILE);
 	}
-	free(cwd);
-	free(binary_with_path);
+	free_null(cwd);
+	free_null(binary_with_path);
 	return (FAILURE);
 }
 

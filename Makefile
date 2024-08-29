@@ -31,6 +31,8 @@ SRC_FILES = main.c\
 			src/execution/redirections.c\
 			src/execution/redirections_utils.c\
 			src/execution/fd_dups.c\
+			src/execution/unset.c\
+			src/execution/export.c\
 			src/execution/redirect_parse.c\
 			src/execution/execution_utils1.c\
 			src/execution/execution_utils2.c\

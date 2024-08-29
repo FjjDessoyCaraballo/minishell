@@ -3,16 +3,36 @@
 /*                                                        :::      ::::::::   */
 /*   redirections_utils.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/19 15:28:13 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/26 00:03:12 by walnaimi         ###   ########.fr       */
+/*   Created: 2024/08/29 09:08:39 by fdessoy-          #+#    #+#             */
+/*   Updated: 2024/08/29 09:08:41 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-
+void	redirect_helper(t_data *data, char **array, int heredoc, t_env **env)
+{
+	if (!ft_strncmp(array[data->index], "<", 1)
+		&& ft_strlen(array[data->index]) == 1)
+		input_redirection(data, array);
+	else if (!ft_strncmp(array[data->index], ">", 1)
+		&& ft_strlen(array[data->index]) == 1)
+		output_redirection(data, array);
+	else if (!ft_strncmp(array[data->index], ">>", 2)
+		&& ft_strlen(array[data->index]) == 2)
+		append_redirection(data, array);
+	else if (!ft_strncmp(array[data->index], "<<", 2)
+		&& ft_strlen(array[data->index]) == 2)
+	{
+		if (data->index == heredoc)
+		{
+			heredoc_redirection(data, array, env);
+			write(data->sync_pipe[1], "1", 1);
+		}
+	}
+}
 
 void	input_redirection(t_data *data, char **array)
 {
@@ -61,22 +81,13 @@ void	append_redirection(t_data *data, char **array)
 		exit(err_msg("'newline'", SYNTAX, 2));
 }
 
-void	heredoc_redirection(t_data *data, char **array)
+void	heredoc_redirection(t_data *data, char **array, t_env **env_ll)
 {
 	if (array[data->index + 1])
 	{
-		if (data->piped == false)
-		{
-			data->fd_in = here_doc(array[data->index + 1], data);
-			dup2(data->fd_in, STDIN_FILENO);
-			close(data->fd_in);
-		}
-		else if (data->piped == true)
-		{
-			data->fd_in = here_doc(array[data->index + 1], data);
-			dup2(data->fd_in, STDIN_FILENO);
-			close(data->fd_in);
-		}
+		data->fd_in = here_doc(array[data->index + 1], data, env_ll);
+		dup2(data->fd_in, STDIN_FILENO);
+		close(data->fd_in);
 	}
 	else
 		exit(err_msg("'newline'", SYNTAX, 2));

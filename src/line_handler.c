@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   line_handler.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/13 12:23:49 by walnaimi          #+#    #+#             */
-/*   Updated: 2024/08/26 23:59:42 by walnaimi         ###   ########.fr       */
+/*   Created: 2024/08/29 09:11:10 by fdessoy-          #+#    #+#             */
+/*   Updated: 2024/08/29 09:22:38 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,13 @@ int	total_env_len(t_env *head)
 	while (current != NULL)
 	{
 		if (current->value)
-			total_length += strlen(current->value);
+			total_length += ft_strlen(current->value);
 		current = current->next;
 	}
 	return (total_length);
 }
 
-void	setup(t_data *data)
+void	setup(t_data *data, t_env **env_ll)
 {
 	data->deli = "  \t\n";
 	data->id = 0;
@@ -38,7 +38,7 @@ void	setup(t_data *data)
 	data->echo_flag = false;
 	data->redirections = false;
 	data->piped = false;
-	data->env_len = total_env_len(data->envll);
+	data->env_len = total_env_len(*env_ll);
 	if (data->status == 963)
 		data->status = 2;
 	else if (data->no_cmd_flag == 1)
@@ -69,7 +69,6 @@ int	token_only_arg(t_data *data)
 		}
 		head = head->next;
 	}
-
 	return (SUCCESS);
 }
 
@@ -78,7 +77,7 @@ int	token_only_arg(t_data *data)
  * tokenizing afterwards. After tokenizing, we are using the tokens to check
  * for invalid inputs. More information in closed issue #19 in the repository.
  */
-int	sniff_line(t_data *data)
+int	sniff_line(t_data *data, t_env **env_ll)
 {
 	data->line_read = readline("\e[1;45m[I can't believe this is"
 			" not shell]\e[0m ");
@@ -86,8 +85,8 @@ int	sniff_line(t_data *data)
 		return (NULL_LINE);
 	if (*data->line_read)
 		add_history(data->line_read);
-	setup(data);
-	line_tokenization(data);
+	setup(data, env_ll);
+	line_tokenization(data, env_ll);
 	if (data->status == 963)
 		return (free_retstatus(data->line_read, 963));
 	data->status = 0;

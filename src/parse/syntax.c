@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/23 17:18:12 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/25 21:23:05 by walnaimi         ###   ########.fr       */
+/*   Created: 2024/08/29 09:10:49 by fdessoy-          #+#    #+#             */
+/*   Updated: 2024/08/29 09:19:53 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,24 @@ static int	incorrect_syntax(t_token *token, t_type token_type)
 	return (SUCCESS);
 }
 
+static int	incorrect_syntax_pipe(t_token *token)
+{
+	t_token	*head;
+
+	head = token;
+	while (head)
+	{
+		if (head->next != NULL)
+		{
+			if (head->type == PIPE && head->next->type == PIPE)
+				return (err_msg(head->next->value, SYNTAX, 1));
+		}
+		head = head->next;
+	}
+	head = NULL;
+	return (SUCCESS);
+}
+
 /**
  * As we run through the tokens (nodes in a linked list) we check
  * if the next token type is valid for the token type that the user
@@ -50,7 +68,7 @@ static int	incorrect_syntax(t_token *token, t_type token_type)
  */
 int	syntax_check(t_token *token)
 {
-	if (incorrect_syntax(token, PIPE) == FAILURE
+	if (incorrect_syntax_pipe(token) == FAILURE
 		|| incorrect_syntax(token, RED_OUT) == FAILURE
 		|| incorrect_syntax(token, RED_IN) == FAILURE
 		|| incorrect_syntax(token, HEREDOC) == FAILURE
