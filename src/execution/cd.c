@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/29 09:07:51 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/29 09:07:53 by fdessoy-         ###   ########.fr       */
+/*   Created: 2024/08/23 10:31:53 by fdessoy-          #+#    #+#             */
+/*   Updated: 2024/08/28 12:56:08 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,19 +21,19 @@ static int	change_to_home_directory(t_data *data)
 
 static int	change_to_relative_directory(t_token *token)
 {
-	static char		*curr_pwd;
-	static char		*new_pwd;
-	int				result;
+	static char	*curr_pwd;
+	static char	*new_pwd;
+	int			result;
 
 	curr_pwd = getcwd(NULL, 0);
 	if (!curr_pwd)
 		return (err_msg(token->value, "Failed to get current directory\n", 1));
 	new_pwd = ft_strsjoin(curr_pwd, token->value, '/');
-	free_null(curr_pwd);
+	free(curr_pwd);
 	if (!new_pwd)
 		return (err_msg(NULL, MALLOC, -1));
 	result = chdir(new_pwd);
-	free_null(new_pwd);
+	free(new_pwd);
 	if (result < 0)
 		return (err_msg(token->value, FILE_ERROR, 1));
 	return (SUCCESS);

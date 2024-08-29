@@ -1,36 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init_token.c                                       :+:      :+:    :+:   */
+/*   freeing_1.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/15 17:34:04 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/23 14:18:13 by walnaimi         ###   ########.fr       */
+/*   Created: 2024/08/28 11:46:35 by walnaimi          #+#    #+#             */
+/*   Updated: 2024/08/28 13:04:16 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-/**
- * Initializes a new token.
- *
- * @return A pointer to the newly created token,
- * or NULL if memory allocation fails.
- */
-t_token	*init_token(void)
+void	free_ll(t_env *env_ll)
 {
-	t_token	*token;
+	t_env	*tmp;
 
-	token = (t_token *)ft_calloc(1, sizeof(t_token));
-	if (!token)
-		return (NULL);
-	token->type = UNKNOWN;
-	token->value = NULL;
-	token->path = NULL;
-	token->next = NULL;
-	token->prev = NULL;
-	token->id = 0;
-	token->echo = false;
-	return (token);
+	while (env_ll != NULL)
+	{
+		tmp = env_ll;
+		free(env_ll->key);
+		free(env_ll->value);
+		free(env_ll->content);
+		env_ll = env_ll->next;
+		free(tmp);
+		tmp = NULL;
+	}
+}
+
+void	cleanup_node(t_env *node, char **tmp_array)
+{
+	if (tmp_array)
+		free_array(tmp_array);
+	if (node)
+	{
+		free_null(node->key);
+		free_null(node->value);
+		free_null(node->content);
+		free(node);
+	}
 }

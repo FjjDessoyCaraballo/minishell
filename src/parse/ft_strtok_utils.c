@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strtok_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/29 09:10:02 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/29 09:10:04 by fdessoy-         ###   ########.fr       */
+/*   Created: 2024/08/22 15:11:11 by walnaimi          #+#    #+#             */
+/*   Updated: 2024/08/23 13:55:51 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

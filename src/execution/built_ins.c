@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/29 09:07:41 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/29 09:07:43 by fdessoy-         ###   ########.fr       */
+/*   Created: 2024/05/15 14:18:24 by fdessoy-          #+#    #+#             */
+/*   Updated: 2024/08/28 12:26:00 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ int	built_ins(t_data *data, t_token *token, t_env **env_ll)
 	int	status;
 
 	status = 0;
+	if (token->value == NULL)
+		return (status);
 	data->home_pwd = get_home((*env_ll));
 	if (token->value == NULL)
 		return (status);
@@ -26,23 +28,20 @@ int	built_ins(t_data *data, t_token *token, t_env **env_ll)
 	else if (!ft_strncmp(token->value, "pwd", 4))
 		status = print_pwd();
 	else if (!ft_strncmp(token->value, "exit", 5))
-		get_the_hell_out(data, token, env_ll);
+		status = get_the_hell_out(data, token, env_ll);
 	else if (!ft_strncmp(token->value, "echo", 5))
-		status = yodeling(token);
+		status = yodeling(data->token);
 	else if (!ft_strncmp(token->value, "cd", 3))
 		status = shell_cd(token, data);
 	else if (!ft_strncmp(token->value, "export", 7))
 		status = export(token, env_ll);
 	else if (!ft_strncmp(token->value, "unset", 6))
-		status = unset(token, env_ll);
+		status = unset(token, env_ll, data);
 	else
 		return (err_msg(token->value, NO_EXEC, 127));
 	return (status);
 }
 
-/* The printing of the environment changes in conformity to the use of
-export and unset. The command 'env' itself does not take arguments.
-e.g. $> env || $> pwd (no white spaces or anything like caps)*/
 int	print_env(t_env *env_ll)
 {
 	t_env	*tmp;
@@ -52,10 +51,12 @@ int	print_env(t_env *env_ll)
 	tmp = env_ll;
 	while (tmp)
 	{
-		ft_printf("%s\n", tmp->content);
+		if (ft_strchr(tmp->content, '='))
+		{
+			ft_printf("%s\n", tmp->content);
+		}
 		tmp = tmp->next;
 	}
-	env_ll = tmp;
 	return (SUCCESS);
 }
 
@@ -73,7 +74,7 @@ int	print_pwd(void)
 
 /* This is the exit function, it needs to take, if inputted,
 an exit code that was manually inserted after exit */
-void	get_the_hell_out(t_data *data, t_token *token, t_env **env_ll)
+int	get_the_hell_out(t_data *data, t_token *token, t_env **env_ll)
 {
 	int	status;
 
@@ -95,18 +96,4 @@ void	get_the_hell_out(t_data *data, t_token *token, t_env **env_ll)
 	}
 	free_gang(data);
 	exit(data->status);
-}
-
-int	yodeling(t_token *token)
-{
-	t_token	*head;
-
-	head = token;
-	if (head->next->value == NULL)
-		return (printf("\n"), SUCCESS);
-	if (head->next->type == FLAG)
-		return (handle_flag_type(head));
-	if (head != NULL && head->next != NULL && head->next->type == ARG)
-		return (handle_arg_type(head));
-	return (FAILURE);
 }

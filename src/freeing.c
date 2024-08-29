@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   freeing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/29 09:11:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/29 09:11:02 by fdessoy-         ###   ########.fr       */
+/*   Created: 2024/08/22 22:21:18 by bposa             #+#    #+#             */
+/*   Updated: 2024/08/27 01:31:36 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,9 @@ void	free_tokens(t_token *head)
 	{
 		tmp = head;
 		if (tmp->value)
-		{
 			free_null(tmp->value);
-			tmp->value = NULL;
-		}
+		if (tmp->value_us)
+			free_null(tmp->value_us);
 		if (tmp->path)
 			free_null(tmp->path);
 		head = head->next;

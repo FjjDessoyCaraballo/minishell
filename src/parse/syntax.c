@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/29 09:10:49 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/29 09:19:53 by fdessoy-         ###   ########.fr       */
+/*   Created: 2024/08/23 17:18:12 by fdessoy-          #+#    #+#             */
+/*   Updated: 2024/08/27 01:03:24 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,25 +32,8 @@ static int	incorrect_syntax(t_token *token, t_type token_type)
 				|| (head->type == token_type && head->next->type == RED_OUT)
 				|| (head->type == token_type && head->next->type == HEREDOC)
 				|| (head->type == token_type && head->next->type == APPEND)
-				|| (head->type == token_type && head->next->type == FLAG))
-				return (err_msg(head->next->value, SYNTAX, 1));
-		}
-		head = head->next;
-	}
-	head = NULL;
-	return (SUCCESS);
-}
-
-static int	incorrect_syntax_pipe(t_token *token)
-{
-	t_token	*head;
-
-	head = token;
-	while (head)
-	{
-		if (head->next != NULL)
-		{
-			if (head->type == PIPE && head->next->type == PIPE)
+				|| (head->type == token_type && head->next->type == FLAG)
+				|| (head->type == token_type && head->next->value == NULL))
 				return (err_msg(head->next->value, SYNTAX, 1));
 		}
 		head = head->next;
@@ -68,7 +51,7 @@ static int	incorrect_syntax_pipe(t_token *token)
  */
 int	syntax_check(t_token *token)
 {
-	if (incorrect_syntax_pipe(token) == FAILURE
+	if (incorrect_syntax(token, PIPE) == FAILURE
 		|| incorrect_syntax(token, RED_OUT) == FAILURE
 		|| incorrect_syntax(token, RED_IN) == FAILURE
 		|| incorrect_syntax(token, HEREDOC) == FAILURE

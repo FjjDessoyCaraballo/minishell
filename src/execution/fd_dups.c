@@ -3,21 +3,41 @@
 /*                                                        :::      ::::::::   */
 /*   fd_dups.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/29 09:08:56 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/29 09:08:58 by fdessoy-         ###   ########.fr       */
+/*   Created: 2024/08/13 10:06:30 by fdessoy-          #+#    #+#             */
+/*   Updated: 2024/08/28 13:04:06 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	dup_fds(t_data *data, int child, char **array, t_env **env_ll)
+// void	dup_fds(t_data *data, int child, char **array)
+// {
+// 	if (find_redirection(array) == SUCCESS)
+// 		data->redirections = true;
+// 	if (data->redirections == true)
+// 		redirections_handling(data, array);
+// 	else
+// 	{
+// 		if (child != 0 && data->piped == true)
+// 			dup2(data->read_end, STDIN_FILENO);
+// 		if (child != data->nb_cmds - 1)
+// 			dup2(data->pipe_fd[1], STDOUT_FILENO);
+// 		if (data->piped)
+// 		{
+// 			close(data->pipe_fd[0]);
+// 			close(data->pipe_fd[1]);
+// 		}
+// 	}
+// }
+
+void	dup_fds(t_data *data, int child, char **array)
 {
 	if (find_redirection(array) == SUCCESS)
 		data->redirections = true;
 	if (data->redirections == true)
-		redirections_handling(data, array, env_ll);
+		redirections_handling(data, array);
 	else
 	{
 		if (child == 0 && data->piped == true)

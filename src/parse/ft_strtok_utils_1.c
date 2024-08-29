@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strtok_utils_1.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/29 09:09:58 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/29 09:09:59 by fdessoy-         ###   ########.fr       */
+/*   Created: 2024/08/23 00:32:24 by walnaimi          #+#    #+#             */
+/*   Updated: 2024/08/25 01:22:00 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	handle_quote(const char *target, t_data *data)
  * @return The expanded substring, or NULL if an error occurs or no token is
  * found.
  */
-char	*substr_and_expand(const char *target, t_data *data, t_env **env_ll)
+char	*substr_and_expand(const char *target, t_data *data)
 {
 	if (data->in_quotes)
 	{
@@ -77,7 +77,7 @@ char	*substr_and_expand(const char *target, t_data *data, t_env **env_ll)
 	data->ctoken = ft_substr(target, data->tok_srt, data->i - data->tok_srt);
 	if (!data->ctoken)
 		return (NULL);
-	data->cnew_token = expand_env_variables(data->ctoken, data, env_ll);
+	data->cnew_token = expand_env_variables(data->ctoken, data);
 	if (data->cnew_token)
 	{
 		free_null(data->ctoken);

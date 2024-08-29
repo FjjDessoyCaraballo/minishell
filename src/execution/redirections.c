@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/29 09:09:02 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/29 09:12:27 by fdessoy-         ###   ########.fr       */
+/*   Created: 2024/08/09 13:03:21 by fdessoy-          #+#    #+#             */
+/*   Updated: 2024/08/29 13:03:37 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	find_redirection(char **array)
 	return (FAILURE);
 }
 
-void	redirections_handling(t_data *data, char **array, t_env **env_ll)
+void	redirections_handling(t_data *data, char **array)
 {
 	int	last_heredoc_index;
 
@@ -54,21 +54,59 @@ void	redirections_handling(t_data *data, char **array, t_env **env_ll)
 	data->index = 0;
 	while (array[data->index])
 	{
-		redirect_helper(data, array, last_heredoc_index, env_ll);
+		check_and_handle_redirection(data, array);
+		if (!ft_strncmp(array[data->index], "<<", 2)
+			&& ft_strlen(array[data->index]) == 2)
+		{
+			if (data->index == last_heredoc_index)
+			{
+				write(data->sync_pipe[1], "1", 1);
+			}
+		}
 		data->index++;
 	}
 }
 
-void	process_write_input(char *inp, int *pp_fd, t_data *data, t_env **env)
+// void	redirections_handling(t_data *data, char **array)
+// {
+// 	int	last_heredoc_index;
+
+// 	last_heredoc_index = last_heredoc(array);
+// 	data->index = 0;
+// 	while (array[data->index])
+// 	{
+// 		if (!ft_strncmp(array[data->index], "<", 1)
+// 			&& ft_strlen(array[data->index]) == 1)
+// 			input_redirection(data, array);
+// 		else if (!ft_strncmp(array[data->index], ">", 1)
+// 			&& ft_strlen(array[data->index]) == 1)
+// 			output_redirection(data, array);
+// 		else if (!ft_strncmp(array[data->index], ">>", 2)
+// 			&& ft_strlen(array[data->index]) == 2)
+// 			append_redirection(data, array);
+// 		else if (!ft_strncmp(array[data->index], "<<", 2)
+// 			&& ft_strlen(array[data->index]) == 2)
+// 		{
+// 			if (data->index == last_heredoc_index)
+// 			{
+// 				heredoc_redirection(data, array);
+// 				write(data->sync_pipe[1], "1", 1);
+// 			}
+// 		}
+// 		data->index++;
+// 	}
+// }
+
+void	process_and_write_input(char *input, int *pipe_fd, t_data *data)
 {
 	char	*exp_input;
 
-	exp_input = expand_env_variables(inp, data, env);
-	write(pp_fd[1], exp_input, ft_strlen(exp_input));
+	exp_input = expand_env_variables(input, data);
+	write(pipe_fd[1], exp_input, ft_strlen(exp_input));
 	free_null(exp_input);
 }
 
-int	here_doc(char *delimiter, t_data *data, t_env **env_ll)
+int	here_doc(char *delimiter, t_data *data)
 {
 	static char	*input;
 	int			pipe_fd[2];
@@ -78,7 +116,7 @@ int	here_doc(char *delimiter, t_data *data, t_env **env_ll)
 	while (1)
 	{
 		g_exit_code = HEREDOC_SIG;
-		input = readline(":3 ");
+		input = readline("8==D ");
 		if (!input)
 		{
 			close(pipe_fd[1]);
@@ -86,7 +124,7 @@ int	here_doc(char *delimiter, t_data *data, t_env **env_ll)
 		}
 		if (!ft_strncmp(input, delimiter, ft_strlen(delimiter)))
 			break ;
-		process_write_input(input, pipe_fd, data, env_ll);
+		process_and_write_input(input, pipe_fd, data);
 		write(pipe_fd[1], "\n", 1);
 		free_null(input);
 	}

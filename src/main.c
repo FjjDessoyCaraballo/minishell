@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/29 09:11:26 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/29 09:24:22 by fdessoy-         ###   ########.fr       */
+/*   Created: 2024/05/13 10:12:51 by fdessoy-          #+#    #+#             */
+/*   Updated: 2024/08/22 18:02:04 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,7 @@ int	main(int argc, char **argv, char **env)
 	int		status;
 
 	status = 0;
-	if (argc != 1)
-		return (err_msg(NULL, ERR_ARG, 1));
+	(void)argc;
 	(void)argv;
 	if (!env || !*env)
 		return (1);

@@ -3,15 +3,36 @@
 /*                                                        :::      ::::::::   */
 /*   exe_check.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/29 09:09:37 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/29 09:12:46 by fdessoy-         ###   ########.fr       */
+/*   Created: 2024/08/23 04:08:46 by walnaimi          #+#    #+#             */
+/*   Updated: 2024/08/28 15:49:57 by walnaimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
+int	handle_relative_path(char *token, t_token *current_token)
+{
+	if (ft_strncmp(token, "./", 2) == 0)
+	{
+		current_token->path = NULL;
+		current_token->value = ft_strdup(token);
+		free_null(token);
+		current_token->type = COMMAND;
+		return (0);
+	}
+	return (1);
+}
+
+/**
+ * Handles absolute path token.
+ *
+ * @param token The token to be handled.
+ * @param current_token The current token being processed.
+ *
+ * @return 0 if the token is an absolute path token, 1 otherwise.
+ */
 int	handle_absolute_path(char *token, t_token *current_token)
 {
 	char	*last_slash;
@@ -36,6 +57,8 @@ int	handle_absolute_path(char *token, t_token *current_token)
 		current_token->type = COMMAND;
 		return (0);
 	}
+	else if (handle_relative_path(token, current_token) == 0)
+		return (0);
 	return (1);
 }
 
@@ -84,3 +107,16 @@ int	handle_cmd_exe(char *token, t_token *current_token, t_data *data)
 	free_my_boi(paths);
 	return (1);
 }
+
+// void	print_binary_paths(t_data *data)
+// {
+// 	for (int i = 0; data->binary_paths[i] != NULL; i++)
+// 	{
+// 		printf("Path %d: %s\n", i, data->binary_paths[i]);
+// 	}
+// 	if (!data->binary_paths)
+// 	{
+// 		printf("Binary paths are NULL\n");
+// 		return ;
+// 	}
+// }
