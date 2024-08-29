@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:13:01 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/28 13:00:33 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/29 13:25:32 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,11 @@
 # define MALLOC "Malloc failure"
 # define EXIT "Exit\n"
 # define NO_EXEC ": command not found"
-# define NO_PERMISSION "Permission denied"
+# define NO_PERMISSION ": permission denied"
 # define HEREDOC_FAILURE "Unable to create temporary for here_doc"
 # define HEREDOC_FAILURE2 "Unable to read temporary for here_doc"
-# define FILE_ERROR " No such file or directory"
-# define SYNTAX "syntax error near unexpected token "
+# define FILE_ERROR ": No such file or directory"
+# define SYNTAX ": syntax error near unexpected token "
 # define ERR_ARG "Wrong number of arguments, Karen\n"
 # define ERR_EXP "export: not a valid identifier\n"
 # define EXEC_ENV_NULL "envir"

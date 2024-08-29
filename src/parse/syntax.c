@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: walnaimi <walnaimi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 17:18:12 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/27 01:03:24 by walnaimi         ###   ########.fr       */
+/*   Updated: 2024/08/29 13:29:52 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,26 @@ static int	incorrect_syntax(t_token *token, t_type token_type)
 				|| (head->type == token_type && head->next->type == APPEND)
 				|| (head->type == token_type && head->next->type == FLAG)
 				|| (head->type == token_type && head->next->value == NULL))
-				return (err_msg(head->next->value, SYNTAX, 1));
+				return (FAILURE);
+		}
+		head = head->next;
+	}
+	head = NULL;
+	return (SUCCESS);
+}
+
+static int	incorrect_pipe_syntax(t_token *token)
+{
+	t_token	*head;
+
+	head = token;
+	while (head)
+	{
+		if (head->next != NULL)
+		{
+			if ((head->type == PIPE && head->next->value == NULL)
+				|| (head->type == PIPE && head->next->type == PIPE))
+				return (FAILURE);
 		}
 		head = head->next;
 	}
@@ -51,12 +70,12 @@ static int	incorrect_syntax(t_token *token, t_type token_type)
  */
 int	syntax_check(t_token *token)
 {
-	if (incorrect_syntax(token, PIPE) == FAILURE
+	if (incorrect_pipe_syntax(token) == FAILURE
 		|| incorrect_syntax(token, RED_OUT) == FAILURE
 		|| incorrect_syntax(token, RED_IN) == FAILURE
 		|| incorrect_syntax(token, HEREDOC) == FAILURE
 		|| incorrect_syntax(token, APPEND) == FAILURE)
-		return (FAILURE);
+		return (err_msg(token->value, SYNTAX, 1));
 	else
 		return (SUCCESS);
 }
