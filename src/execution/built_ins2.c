@@ -39,7 +39,7 @@ void	delete_subsequent_nodes(t_env *env_ll, t_token *head)
 	while (tmp && tmp->next != NULL)
 	{
 		if (!ft_strncmp(head->value, tmp->next->content,
-				ft_strlen(head->value) + 1))
+				ft_strlen(head->value)))
 		{
 			del = tmp->next;
 			tmp->next = tmp->next->next;
