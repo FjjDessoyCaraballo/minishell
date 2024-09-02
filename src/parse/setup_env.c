@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 13:53:52 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/09/02 09:24:10 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/09/02 10:47:07 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,12 +99,11 @@ void	skip_non_word_characters(const char **ptr)
  *
  * @return The number of matching keys found in the environment list.
  */
-int    count_matching_keys(t_env *env_list, const char *input)
+int    count_matching_keys(const char *input)
 {
     int            count;
     const char    *ptr;
 
-    (void) env_list;
     count = 0;
     ptr = input;
     while (*ptr != '\0')
