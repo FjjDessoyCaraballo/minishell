@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 13:52:13 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/29 13:52:15 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/09/02 10:22:02 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ char	*loop_path_for_binary(char *binary, char **paths)
 	char	*token_with_path;
 	int		i;
 
+	if (!paths)
+		return (NULL);
 	i = 0;
 	while (paths && paths[i])
 	{

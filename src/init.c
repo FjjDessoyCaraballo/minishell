@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 13:54:29 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/29 13:54:30 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/09/02 09:37:51 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,8 +82,7 @@ void	initializer(t_data *data, t_env **env_ll, char **env)
 	{
 		free_null(data);
 		free_all_ll(env_ll);
-		printf("no path is found exiting...\n");
-		exit(1);
+		printf("no path found previously...\n");
 	}
 	data->status = 0;
 	data->envll = *env_ll;

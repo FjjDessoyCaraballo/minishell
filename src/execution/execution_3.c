@@ -6,7 +6,7 @@
 /*   By: fdessoy- <fdessoy-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 13:48:23 by fdessoy-          #+#    #+#             */
-/*   Updated: 2024/08/29 13:48:25 by fdessoy-         ###   ########.fr       */
+/*   Updated: 2024/09/02 10:25:10 by fdessoy-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,18 @@ void	cleanup_and_exit(t_data *data, t_env **env_ll, char **cmd_array,
 	exit(exit_code);
 }
 
+static void	update_path(t_env **env_ll, t_data *data)
+{
+	if (data->binary_paths)
+		free_array(data->binary_paths);
+	if (!*env_ll || !env_ll)
+		return ;
+	find_bin(env_ll, data);
+	data->binary_paths = ft_split(data->bin, ':');
+	if (!data->binary_paths)
+		return ;
+}
+
 /**
  * This is the second part of the execution where we are going to
  * check if we have the redirection flag (int redirect) and we are
@@ -122,6 +134,7 @@ void	ft_exec(t_data *data, t_env **env_ll, char **cmd_array)
 		exit (1);
 	if (ft_strchr(cmd_array[0], '/') == NULL)
 	{
+		update_path(env_ll, data);
 		path = loop_path_for_binary(cmd_array[0], data->binary_paths);
 		if (!path)
 		{
