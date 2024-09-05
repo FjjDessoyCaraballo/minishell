@@ -86,7 +86,7 @@ int	here_doc(char *delimiter, t_data *data)
 	while (1)
 	{
 		g_exit_code = HEREDOC_SIG;
-		input = readline("8==D ");
+		input = readline("-> ");
 		if (!input)
 		{
 			close(pipe_fd[1]);
