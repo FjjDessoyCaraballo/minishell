@@ -8,8 +8,8 @@ This project is meant to replicate some basic core parts of bash shell.
 2. Utilize the shell as you would use a proper shell
 
 ## Result:
-- Status: <span style="color:red">Incomplete</span>
-- Result: <span style="color:red">0%</span>
+- Status: <span style="color:red">Compelte</span>
+- Result: <span style="color:red">100%</span>
 
 ## Contact: 
 Felipe
