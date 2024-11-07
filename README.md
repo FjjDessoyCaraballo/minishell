@@ -1,7 +1,7 @@
-# minishell
+# Minishell
 
 ## Description
-This project is meant to replicate some basic core parts of bash shell.
+This project is meant to replicate some basic core parts of bash shell. In this minimal version one can execute commands with pipes and redirections.
 
 ## Usage
 1. Initialize the program with ```./minishell```
