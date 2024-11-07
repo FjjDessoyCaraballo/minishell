@@ -1,17 +1,17 @@
 # minishell
 
-## Description:
+## Description
 This project is meant to replicate some basic core parts of bash shell.
 
-## Usage:
+## Usage
 1. Initialize the program with ```./minishell```
 2. Utilize the shell as you would use a proper shell
 
-## Result:
+## Result
 - Status: <span style="color:red">Compelte</span>
 - Result: <span style="color:red">100%</span>
 
-## Contact: 
+## Contact
 Felipe
 - 42-email: fdessoy-@student.hive.fi
 - 42-profile: [https://profile.intra.42.fr/users/fdessoy-](https://profile.intra.42.fr/users/fdessoy-)
@@ -46,7 +46,7 @@ ALWAYS remember to pull from main to have the latest version of minishell before
 11. git checkout BranchName
 ```
 
-## Process of building the code:
+## Process of building the code
 1. Tokenization
     - convert input command line into a linked list
         - built-ins.
