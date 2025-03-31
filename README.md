@@ -16,15 +16,6 @@ Felipe
 - 42-email: fdessoy-@student.hive.fi
 - 42-profile: [https://profile.intra.42.fr/users/fdessoy-](https://profile.intra.42.fr/users/fdessoy-)
 
-Waleed
-- 42-email: walnaimi@student.hive.fi
-- 42-profile: https://profile.intra.42.fr/users/walnaimi
-- discord: torutu.
-
-Bruno
-- 42-email: bposa@student.hive.fi
-- 42-profile: https://profile.intra.42.fr/users/bposa
-
 Leo
 - 42-email: lstorey@student.hive.fi
 - 42-profile: https://profile.intra.42.fr/users/lstorey
