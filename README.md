@@ -64,7 +64,7 @@ Minishell is a simplified shell interpreter that provides a command-line interfa
 
 ```bash
 # Clone the repository
-git clone [repository-url]
+git clone https://github.com/FjjDessoyCaraballo/minishell
 cd minishell
 
 # Compile the project
